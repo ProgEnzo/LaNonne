@@ -35,12 +35,19 @@ public class playerMovement : MonoBehaviour
 
     public void Update()
     {
-        ManageMove();
+        if (Input.GetKeyDown(KeyCode.Space) && m_timerDash < -0.5f)
+        {
+            m_timerDash = SO_Movement.m_durationDash;
+        }
+        
+        m_timerDash -= Time.deltaTime;
+
     }
 
     public void FixedUpdate()
     {
         m_rigidbody.drag = SO_Movement.dragDeceleration * SO_Movement.dragMultiplier;
+        ManageMove();
     }
 
     private void ManageMove()
@@ -53,30 +60,24 @@ public class playerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Z))
         {
-            m_rigidbody.AddForce(new Vector2(0,SO_Movement.m_speed));
+            m_rigidbody.AddForce(Vector2.up*speed);
         }
 
         if (Input.GetKey(KeyCode.Q))
         {
-            m_rigidbody.AddForce(new Vector2(-SO_Movement.m_speed,0));
+            m_rigidbody.AddForce(Vector2.left*speed);
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            m_rigidbody.AddForce(new Vector2(0,-SO_Movement.m_speed));
+            m_rigidbody.AddForce(Vector2.down*speed);
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            m_rigidbody.AddForce(new Vector2(SO_Movement.m_speed,0));
+            m_rigidbody.AddForce(Vector2.right*speed);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && m_timerDash < -0.5f)
-        {
-            m_timerDash = SO_Movement.m_durationDash;
-        }
-        
-        m_timerDash -= Time.deltaTime;
-
+       
     }
 }
