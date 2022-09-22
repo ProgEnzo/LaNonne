@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "playerMovement", menuName = "ScriptableObjects/new player Movement", order = 1)]
+[CreateAssetMenu(fileName = "playerController", menuName = "ScriptableObjects/new player Controller", order = 1)]
 
-public class SO_Movement : ScriptableObject
+public class SO_Controller : ScriptableObject
 {
     [Header("Mouvement")]
     public float m_speed;
@@ -11,4 +11,8 @@ public class SO_Movement : ScriptableObject
     public float m_durationDash = 0.35f;
     public float dragDeceleration = 12f;
     public float dragMultiplier = 12f;
+
+    [Header("lifeManager")] 
+    public int m_lifePoint = 3;
+    public int m_currentLife;
 }

@@ -2,15 +2,15 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class playerMovement : MonoBehaviour
+public class playerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D m_rigidbody;
     
-    public SO_Movement SO_Movement;
+    public SO_Controller SO_Controller;
     
     [SerializeField] private float m_timerDash = 0f;
 
-    public static playerMovement instance;
+    public static playerController instance;
 
     private void Awake()
     {
@@ -31,13 +31,15 @@ public class playerMovement : MonoBehaviour
     public void ReInit()
     {
         transform.position = Vector3.zero;
+        SO_Controller.m_currentLife = SO_Controller.m_lifePoint;
+        //LifeManager.Instance.UpdateLife(SO_Controller.m_currentLife); //faire le systeme de vie des que possible (nécessite un life manager)
     }
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && m_timerDash < -0.5f)
         {
-            m_timerDash = SO_Movement.m_durationDash;
+            m_timerDash = SO_Controller.m_durationDash;
         }
         
         m_timerDash -= Time.deltaTime;
@@ -46,13 +48,13 @@ public class playerMovement : MonoBehaviour
 
     public void FixedUpdate()
     {
-        m_rigidbody.drag = SO_Movement.dragDeceleration * SO_Movement.dragMultiplier;
+        m_rigidbody.drag = SO_Controller.dragDeceleration * SO_Controller.dragMultiplier;
         ManageMove();
     }
 
     private void ManageMove()
     {
-        var speed = m_timerDash <= 0 ? SO_Movement.m_speed : SO_Movement.m_dashSpeed;
+        var speed = m_timerDash <= 0 ? SO_Controller.m_speed : SO_Controller.m_dashSpeed;
 
         int nbInputs = (Input.GetKey(KeyCode.Z) ? 1 : 0) + (Input.GetKey(KeyCode.Q) ? 1 : 0) +
                        (Input.GetKey(KeyCode.S) ? 1 : 0) + (Input.GetKey(KeyCode.D) ? 1 : 0);
@@ -77,7 +79,6 @@ public class playerMovement : MonoBehaviour
         {
             m_rigidbody.AddForce(Vector2.right*speed);
         }
-
-       
     }
+  
 }
