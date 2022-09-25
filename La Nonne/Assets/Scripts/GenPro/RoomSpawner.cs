@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,8 +13,11 @@ public class RoomSpawner : MonoBehaviour
    private int rand;
    private bool spawned = false;
 
+   public float waitTime = 4f; 
+
    private void Start()
    {
+      Destroy(gameObject, waitTime);
       templates = GameObject.FindGameObjectWithTag("Rooms").GetComponent<RoomTemplates>();
       Invoke("Spawn", 2f);
    }
@@ -51,7 +55,14 @@ public class RoomSpawner : MonoBehaviour
    {
       if (other.CompareTag("SpawnPoint"))
       {
-         Destroy(gameObject);
+         if (other.GetComponent<RoomSpawner>().spawned == false && spawned == false)
+         {
+            Instantiate(templates.closedRooms, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+         }
+         
+         spawned = true;
       }
    }
+   
 }
