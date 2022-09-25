@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class Ennemy : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D col)
+    private void OnCollisionEnter2D(Collision2D col) //c'est debile mais c'est juste pour au moins le degager cet enfoiré
     {
         if (col.gameObject.CompareTag("Player"))
         {
             Destroy(gameObject);
-            Debug.Log("t'es con fdp");
         }
     }
 }

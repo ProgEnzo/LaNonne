@@ -31,8 +31,6 @@ public class playerController : MonoBehaviour
     public void ReInit()
     {
         transform.position = Vector3.zero;
-        SO_Controller.m_currentLife = SO_Controller.m_lifePoint;
-        //LifeManager.Instance.UpdateLife(SO_Controller.m_currentLife); //faire le systeme de vie des que possible (nécessite un life manager)
     }
 
     public void Update()

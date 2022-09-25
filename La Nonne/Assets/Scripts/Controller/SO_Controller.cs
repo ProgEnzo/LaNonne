@@ -11,8 +11,4 @@ public class SO_Controller : ScriptableObject
     public float m_durationDash = 0.35f;
     public float dragDeceleration = 12f;
     public float dragMultiplier = 12f;
-
-    [Header("lifeManager")] 
-    public int m_lifePoint = 3;
-    public int m_currentLife;
 }
