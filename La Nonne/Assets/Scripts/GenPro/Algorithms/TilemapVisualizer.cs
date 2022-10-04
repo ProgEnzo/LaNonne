@@ -5,11 +5,9 @@ using UnityEngine.Tilemaps;
 
 public class TilemapVisualizer : MonoBehaviour
 {
-   [SerializeField]
-   private Tilemap floorTilemap;
+   [SerializeField] private Tilemap floorTilemap, wallTilemap; //diférentes tilemap utilisables (Si tu veux changer de tilemepa en fonction des salles et autres tu peux)
 
-   [SerializeField]
-   private TileBase floorTile;
+   [SerializeField] private TileBase floorTile, wallTop;
 
    public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
    {
@@ -33,5 +31,11 @@ public class TilemapVisualizer : MonoBehaviour
    public void Clear()
    {
       floorTilemap.ClearAllTiles();
+      wallTilemap.ClearAllTiles();
+   }
+
+   public void PaintSingleBasicWall(Vector2Int positions)
+   {
+      PaintSingleTile(wallTilemap, wallTop, positions); //walltilemap référe à la tilemap qu'on utilise pour peindre, walltop référe à quelle tile on utilise et position référe à l'endroit où on peint (position est dséfini dans un autre script)
    }
 }
