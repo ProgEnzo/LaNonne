@@ -53,6 +53,11 @@ public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
         }
     }
 
+    /*private Vector2Int roger(HashSet<Vector2Int> roomPos)
+    {
+        return roomPos[0];
+    }*/
+
     private List<Vector2Int> FindAllDeadEnds(HashSet<Vector2Int> floorPositions)
     {
         List<Vector2Int> deadEnds = new List<Vector2Int>();
@@ -73,7 +78,7 @@ public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
         return deadEnds;
     }
 
-    private HashSet<Vector2Int> CreateRooms(HashSet<Vector2Int> potentialRoomPositions)
+    public HashSet<Vector2Int> CreateRooms(HashSet<Vector2Int> potentialRoomPositions)
     {
         HashSet<Vector2Int> roomPositions = new HashSet<Vector2Int>(); //position we return
         int roomToCreateCount = Mathf.RoundToInt(potentialRoomPositions.Count * roomPercent); //nombre de rooms à créer

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,6 +12,8 @@ public class playerController : MonoBehaviour
     [SerializeField] private float m_timerDash = 0f;
 
     public static playerController instance;
+
+    public CorridorsFirstDungeonGenerator cfg;
 
     private void Awake()
     {
@@ -25,12 +28,12 @@ public class playerController : MonoBehaviour
 
     private void Start()
     {
-        ReInit();
+        //ReInit();
     }
     
     public void ReInit()
     {
-        transform.position = Vector3.zero;
+        //transform.position = roger;
     }
 
     public void Update()
