@@ -31,10 +31,11 @@ public class playerController : MonoBehaviour
         //ReInit();
     }
     
-    public void ReInit()
+    /*public void ReInit()
     {
-        //transform.position = roger;
-    }
+        Debug.Log(cfg.playerSpawnPosition());
+        transform.position = (Vector2) cfg.playerSpawnPosition();
+    }*/
 
     public void Update()
     {

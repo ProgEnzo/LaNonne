@@ -5,8 +5,10 @@ using UnityEngine.Tilemaps;
 
 public class TilemapVisualizer : MonoBehaviour
 {
+   [Header("Tilemaps Used")]
    [SerializeField] private Tilemap floorTilemap, wallTilemap; //diférentes tilemap utilisables (Si tu veux changer de tilemepa en fonction des salles et autres tu peux)
 
+   [Header("Tiles Used")]
    [SerializeField] private TileBase floorTile, wallTop;
 
    public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)

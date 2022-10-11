@@ -5,14 +5,13 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-//using Guid = Pathfinding.Util.Guid;
 
 
 public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
 {
+    [Header("PCG Parameters")]
     [SerializeField] 
     private int corridorLength = 14, corridorCount = 5; //Longueur et nombre de couloirs
-    
     [SerializeField]
     [Range(0.1f, 1f)] 
     private float roomPercent = 0.8f; //permet de générer les rooms en fin de couloirs
@@ -53,12 +52,15 @@ public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
         }
     }
 
-    /*private Vector2Int roger(HashSet<Vector2Int> roomPos)
+    /*public Vector2Int playerSpawnPosition (HashSet<Vector2Int> SpawnPosition)
     {
-        return roomPos[0];
+        List<Vector2Int> deadEnds = new List<Vector2Int>();
+        
+        
+        return SpawnPosition [0];
     }*/
 
-    private List<Vector2Int> FindAllDeadEnds(HashSet<Vector2Int> floorPositions)
+    public List<Vector2Int> FindAllDeadEnds(HashSet<Vector2Int> floorPositions)
     {
         List<Vector2Int> deadEnds = new List<Vector2Int>();
 
@@ -67,6 +69,7 @@ public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
             int neighboursCount = 0;
             foreach (var direction in Direction2D.CardinalDirectionsList)
             {
+                Debug.Log("ca se lis pas ?");
                 if (floorPositions.Contains(position + direction))
                     neighboursCount++;
             }
