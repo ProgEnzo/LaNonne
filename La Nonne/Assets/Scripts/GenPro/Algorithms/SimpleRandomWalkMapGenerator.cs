@@ -30,6 +30,7 @@ public class SimpleRandomWalkMapGenerator : AbstractDungeonGenerator
         }
 
         return floorPositions;
+        
     }
 }
  

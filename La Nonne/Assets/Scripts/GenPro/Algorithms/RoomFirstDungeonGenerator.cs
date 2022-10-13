@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Apple;
 using Random = UnityEngine.Random;
@@ -19,8 +20,10 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
    {
       CreateRooms();
    }
+   
+   public List<Vector2Int> roomCenters = new List<Vector2Int>(); //Creating rooms first
 
-   private void CreateRooms()
+   public void CreateRooms()
    {
       var roomsList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(
          new BoundsInt((Vector3Int)startPosition, new Vector3Int(dungeonWidth, dungeonHeight, 0)), minRoomWidth,
@@ -36,11 +39,17 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
       {
          floor = CreateSimpleRooms(roomsList);
       }
+      
+      //List<Vector2Int> roomCenters = new List<Vector2Int>(); //Creating romms first
 
-      List<Vector2Int> roomCenters = new List<Vector2Int>(); //Creating romms first
       foreach (var room in roomsList)
       {
          roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
+      }
+      
+      if(playerController.instance is not null)
+      {
+         playerController.instance.ReInit();
       }
 
       HashSet<Vector2Int> corridors = ConnectRooms(roomCenters);
@@ -49,6 +58,11 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
       tilemapVisualizer.PaintFloorTiles(floor);
       WallGenerators.CreateWalls(floor, tilemapVisualizer);
    }
+
+   /*public Vector2Int PlayerSpawnPosition()
+   {
+      roomCenters
+   }*/
    
    private HashSet<Vector2Int> CreateRoomsRandomly(List<BoundsInt> roomsList)
    {
@@ -72,7 +86,7 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
       return floor;
    }
 
-   private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
+   public HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenters)
    {
       HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();
       var currentRoomCenter = roomCenters[Random.Range(0, roomCenters.Count)];
