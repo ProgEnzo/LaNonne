@@ -56,8 +56,7 @@ public class TrashMobRange : MonoBehaviour
         
         yield return new WaitForSeconds(timeBetweenShots);
         Instantiate(bullet, transform.position, Quaternion.identity);
-        bullet.transform.position =
-            Vector3.MoveTowards(new Vector3(transform.position.x, transform.position.y, transform.position.z),
+        
     }
     private void OnDrawGizmos()
     {
