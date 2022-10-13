@@ -14,15 +14,13 @@ public class TrashMobRange : MonoBehaviour
     [SerializeField] float shootingRange;
     [SerializeField] float aggroRange;
     [SerializeField] float cooldownBetweenShots;
-    [SerializeField] float cooldownTimer;
-    [SerializeField] float bulletSpeed;
+    private float cooldownTimer;
     
     [Header("Enemy Components")]
     
     [SerializeField] Transform player;
     private AIPath scriptAIPath;
     [SerializeField] GameObject bullet;
-    [SerializeField] Rigidbody2D bulletRigidbody2D;
     
 
     private void Start()
@@ -71,10 +69,8 @@ public class TrashMobRange : MonoBehaviour
             return;
         }
         cooldownTimer = cooldownBetweenShots;
-        
-        
+
         Instantiate(bullet, transform.position, Quaternion.identity);
-        bulletRigidbody2D.velocity = new Vector2(player.position.x, player.position.y) * bulletSpeed;
 
     }
     private void OnDrawGizmos()
