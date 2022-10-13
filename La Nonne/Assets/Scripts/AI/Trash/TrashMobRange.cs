@@ -12,6 +12,7 @@ public class TrashMobRange : MonoBehaviour
    
     private float distanceToPlayer;
     public float shootingRange;
+    public float aggroRange;
     public float timeBetweenShots;
     public float bulletSpeed;
     private Vector3 currentPlayerPosition;
@@ -37,30 +38,33 @@ public class TrashMobRange : MonoBehaviour
 
     void StopAndShoot()
     {
-        distanceToPlayer = Vector2.Distance(transform.position, player.transform.position); //Ca chope la distance entre le joueur et l'enemy
+        distanceToPlayer = (player.transform.position - transform.position).magnitude; //Ca chope la distance entre le joueur et l'enemy
         
         if (distanceToPlayer <= shootingRange) //si le joueur EST dans la range de tir du trashMob
         {
-            scriptAIPath.maxSpeed = 0;
+            scriptAIPath.maxSpeed = 3;
             StartCoroutine(Shoot());
+            Debug.Log("putain marche stp");
+
 
         }
         else if (distanceToPlayer >= shootingRange) //si le joueur N'EST PAS dans la range de tir du trashMob
         {
-            scriptAIPath.maxSpeed = 10;
+            scriptAIPath.maxSpeed = 6;
         }
     }
 
     private IEnumerator Shoot()
     {
-        
+
         yield return new WaitForSeconds(timeBetweenShots);
-        Instantiate(bullet, transform.position, Quaternion.identity);
-        
+        Instantiate(bullet, currentEnemyPosition, Quaternion.identity);
+
     }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, shootingRange);
+        Gizmos.DrawWireSphere(transform.position, aggroRange);
     }
     
 }
