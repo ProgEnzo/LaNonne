@@ -1700,12 +1700,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distanceToPlayer: 0
-  shootingRange: 4.5
-  aggroRange: 9
-  timeBetweenShots: 1
-  bulletSpeed: 1
+  shootingRange: 8
+  aggroRange: 12
+  cooldownBetweenShots: 1
+  cooldownTimer: 0
+  bulletSpeed: 2.67
   player: {fileID: 2108878044}
   bullet: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
+  bulletRigidbody2D: {fileID: 7338364423186696290, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
 --- !u!114 &1387081575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1784,7 +1786,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1387081569}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.9, y: -8.9, z: 0}
+  m_LocalPosition: {x: 31.1, y: -8.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []

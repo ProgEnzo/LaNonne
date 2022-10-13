@@ -13,26 +13,21 @@ public class TrashMobRange : MonoBehaviour
     [SerializeField] float distanceToPlayer;
     [SerializeField] float shootingRange;
     [SerializeField] float aggroRange;
-    [SerializeField] float timeBetweenShots;
+    [SerializeField] float cooldownBetweenShots;
+    [SerializeField] float cooldownTimer;
     [SerializeField] float bulletSpeed;
-    private Vector3 currentPlayerPosition;
-    private Vector3 currentEnemyPosition;
-    
     
     [Header("Enemy Components")]
     
     [SerializeField] Transform player;
     private AIPath scriptAIPath;
     [SerializeField] GameObject bullet;
+    [SerializeField] Rigidbody2D bulletRigidbody2D;
     
 
     private void Start()
     {
         scriptAIPath = GetComponent<AIPath>();
-        currentPlayerPosition = player.transform.position;
-        currentEnemyPosition = transform.position;
-
-
     }
     private void Update()
     {
@@ -43,29 +38,43 @@ public class TrashMobRange : MonoBehaviour
     {
         distanceToPlayer = Vector2.Distance(player.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
         
-        if (distanceToPlayer <= shootingRange) //si le joueur EST dans la shootingRange du trashMob
+        if (distanceToPlayer <= shootingRange) //si le joueur est dans la SHOOTING RANGE du trashMob and canShoot
+        {
+            scriptAIPath.maxSpeed = 3;
+            Shoot();
+            
+
+            Debug.Log("DANS LA SHOOTING RANGE");
+        }
+        else if (distanceToPlayer <= aggroRange) //si le joueur est dans l'AGGRO RANGE du trashMob
         {
             scriptAIPath.maxSpeed = 6;
             
-            Debug.Log("DANS LA SHOOTING RANGE");
-            Debug.Log(distanceToPlayer);
-        }
-        else if (distanceToPlayer <= aggroRange) //si le joueur EST dans l'aggroRange du trashMob
-        {
-            scriptAIPath.maxSpeed = 3;
-            StartCoroutine(Shoot());
-            
             Debug.Log("DANS LAGGRO RANGE");
+        }
+        else if (distanceToPlayer > aggroRange) //si le joueur est HORS de l'AGGRO RANGE
+        {
+            scriptAIPath.maxSpeed = 0;
+
         }
         
         
     }
 
-    private IEnumerator Shoot()
+    private void Shoot()
     {
-
-        yield return new WaitForSeconds(timeBetweenShots);
-        //Instantiate(bullet, currentEnemyPosition, Quaternion.identity);
+        
+        //Timer for firing bullets
+        cooldownTimer -= Time.deltaTime;
+        if (cooldownTimer > 0)
+        {
+            return;
+        }
+        cooldownTimer = cooldownBetweenShots;
+        
+        
+        Instantiate(bullet, transform.position, Quaternion.identity);
+        bulletRigidbody2D.velocity = new Vector2(player.position.x, player.position.y) * bulletSpeed;
 
     }
     private void OnDrawGizmos()
