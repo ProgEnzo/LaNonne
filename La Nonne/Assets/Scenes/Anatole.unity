@@ -999,6 +999,7 @@ MonoBehaviour:
   dungeonHeight: 200
   offSet: 2
   randomWalkRooms: 1
+  roomCenters: []
 --- !u!4 &871104477
 Transform:
   m_ObjectHideFlags: 0
@@ -1698,11 +1699,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 112054a0866ac3c4cbb61e52b158cbcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distanceToPlayer: 0
   shootingRange: 4.5
   aggroRange: 9
   timeBetweenShots: 1
   bulletSpeed: 1
-  player: {fileID: 4401665247276526673, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
+  player: {fileID: 2108878044}
   bullet: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
 --- !u!114 &1387081575
 MonoBehaviour:
@@ -1720,7 +1722,7 @@ MonoBehaviour:
   radius: 2
   height: 1.89
   canMove: 1
-  maxSpeed: 1.5
+  maxSpeed: 3
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
