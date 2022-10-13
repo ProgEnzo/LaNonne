@@ -42,7 +42,7 @@ public class TrashMobRange : MonoBehaviour
         if (distanceToPlayer <= shootingRange) //si le joueur EST dans la range de tir du trashMob
         {
             scriptAIPath.maxSpeed = 0;
-            //StartCoroutine(Shoot());
+            StartCoroutine(Shoot());
 
         }
         else if (distanceToPlayer >= shootingRange) //si le joueur N'EST PAS dans la range de tir du trashMob
@@ -51,14 +51,13 @@ public class TrashMobRange : MonoBehaviour
         }
     }
 
-    /*private IEnumerator Shoot()
+    private IEnumerator Shoot()
     {
         
         yield return new WaitForSeconds(timeBetweenShots);
         Instantiate(bullet, transform.position, Quaternion.identity);
-        bullet.transform.position =
-            Vector3.MoveTowards(new Vector3(transform.position.x, transform.position.y, transform.position.z),
-    }*/
+        
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, shootingRange);
