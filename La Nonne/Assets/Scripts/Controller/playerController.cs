@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +14,7 @@ public class playerController : MonoBehaviour
 
     public static playerController instance;
 
-    public CorridorsFirstDungeonGenerator cfg;
+    public RoomFirstDungeonGenerator rfg;
 
     private void Awake()
     {
@@ -26,16 +27,15 @@ public class playerController : MonoBehaviour
         m_rigidbody.velocity = Vector2.zero;
     }
 
-    private void Start()
+    public void ReInit()
     {
-        //ReInit();
+        transform.position = new Vector3(rfg.roomCenters[0].x, rfg.roomCenters[0].y, 0);
     }
     
-    /*public void ReInit()
+    void OnDestroy()
     {
-        Debug.Log(cfg.playerSpawnPosition());
-        transform.position = (Vector2) cfg.playerSpawnPosition();
-    }*/
+        instance = null;
+    }
 
     public void Update()
     {

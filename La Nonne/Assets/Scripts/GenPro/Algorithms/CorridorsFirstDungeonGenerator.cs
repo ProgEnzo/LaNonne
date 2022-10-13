@@ -52,14 +52,6 @@ public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
         }
     }
 
-    /*public Vector2Int playerSpawnPosition (HashSet<Vector2Int> SpawnPosition)
-    {
-        List<Vector2Int> deadEnds = new List<Vector2Int>();
-        
-        
-        return SpawnPosition [0];
-    }*/
-
     public List<Vector2Int> FindAllDeadEnds(HashSet<Vector2Int> floorPositions)
     {
         List<Vector2Int> deadEnds = new List<Vector2Int>();
