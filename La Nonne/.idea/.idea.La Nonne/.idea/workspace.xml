@@ -38,6 +38,7 @@
   &quot;keyToString&quot;: {
     &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.17260788&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -72,10 +73,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="17396">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="14664">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="17396" />
+      <option name="pid" value="14664" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -111,7 +112,8 @@
       <workItem from="1665559051167" duration="25000" />
       <workItem from="1665559101410" duration="4164000" />
       <workItem from="1665686304535" duration="5189000" />
-      <workItem from="1665693866918" duration="935000" />
+      <workItem from="1665693866918" duration="1108000" />
+      <workItem from="1665735372840" duration="2022000" />
     </task>
     <servers />
   </component>
@@ -134,37 +136,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Algorithms/RoomFirstDungeonGenerator.cs</url>
-          <line>54</line>
-          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Algorithms\RoomFirstDungeonGenerator.cs" initialLine="49" containingFunctionPresentation="method 'CreateRooms'">
-            <startOffsets>
-              <option value="1721" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1779" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Controller/playerController.cs</url>
-          <line>30</line>
-          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\Controller\playerController.cs" initialLine="30" containingFunctionPresentation="method 'Start'">
-            <startOffsets>
-              <option value="643" />
-            </startOffsets>
-            <endOffsets>
-              <option value="643" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
