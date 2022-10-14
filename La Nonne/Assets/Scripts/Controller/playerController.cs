@@ -63,7 +63,7 @@ public class playerController : MonoBehaviour
         
         m_timerDash -= Time.deltaTime;
         
-        Attack1();
+        //Attack1();
 
     }
 
@@ -130,15 +130,15 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region AttackPlayer
-    void Attack1()
+    /*void Attack1()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                trashMobRange.TakeDamageFromPlayer(SO_Controller.attackDamage);
-                Debug.Log("TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + trashMobRange.currentHealth);
+            trashMobRange.TakeDamageFromPlayer(SO_Controller.attackDamage);
+            Debug.Log("TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + trashMobRange.currentHealth);
 
-            }
         }
+    }*/
 
     #endregion
     
