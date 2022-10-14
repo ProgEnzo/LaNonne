@@ -93,7 +93,6 @@ public class TrashMobRange : MonoBehaviour
     public void TakeDamageFromPlayer(int damage)
     {
         currentHealth -= damage;
-        Debug.Log("TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + currentHealth);
 
         if (currentHealth <= 0)
         {

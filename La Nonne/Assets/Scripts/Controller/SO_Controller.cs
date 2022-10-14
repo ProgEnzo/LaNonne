@@ -17,5 +17,5 @@ public class SO_Controller : ScriptableObject
     public int currentHealth;
 
     [Header("Attack Values")] 
-    public int attackDamage;
+    public int playerAttackDamage;
 }

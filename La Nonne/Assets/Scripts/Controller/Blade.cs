@@ -84,8 +84,8 @@ namespace Controller
         {
             if (other.gameObject.CompareTag("Enemy"))
             {
-                trashMobRange.TakeDamageFromPlayer(SO_Controller.attackDamage);
-                Debug.Log("TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + trashMobRange.currentHealth);
+                other.gameObject.GetComponent<TrashMobRange>().TakeDamageFromPlayer(SO_Controller.playerAttackDamage);
+                Debug.Log("TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
         }
     }

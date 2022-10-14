@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class playerController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D m_rigidbody;
+    [SerializeField] public Rigidbody2D m_rigidbody;
     
     public SO_Controller SO_Controller;
     
@@ -17,9 +17,8 @@ public class playerController : MonoBehaviour
     public static playerController instance;
 
     public RoomFirstDungeonGenerator rfg;
-
-    public TrashMobRange trashMobRange;
-
+    
+    
     private void Start()
     {
         SO_Controller.currentHealth = SO_Controller.maxHealth;
@@ -72,7 +71,7 @@ public class playerController : MonoBehaviour
         m_rigidbody.drag = SO_Controller.dragDeceleration * SO_Controller.dragMultiplier;
         ManageMove();
     }
-
+    
     #region MovementPlayer
     private void ManageMove()
     {
