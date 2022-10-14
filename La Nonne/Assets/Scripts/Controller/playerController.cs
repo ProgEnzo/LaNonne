@@ -28,7 +28,14 @@ public class playerController : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        if (instance != null)
+        {
+            DestroyImmediate(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
         m_rigidbody = GetComponent<Rigidbody2D>();
     }
 
