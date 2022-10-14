@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 4401665247276526677}
   - component: {fileID: 4401665247276526678}
   - component: {fileID: 4401665247276526667}
-  - component: {fileID: 111380663605427298}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -184,6 +183,7 @@ MonoBehaviour:
   SO_Controller: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
   m_timerDash: 0
   rfg: {fileID: 0}
+  trashMobRange: {fileID: 9071314407910337646, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}
 --- !u!96 &4401665247276526667
 TrailRenderer:
   serializedVersion: 2
@@ -301,15 +301,3 @@ TrailRenderer:
   m_MinVertexDistance: 0.2
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &111380663605427298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4401665247276526673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a562777d28fde574793f9e22fd285404, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

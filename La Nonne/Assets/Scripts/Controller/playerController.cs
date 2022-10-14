@@ -66,6 +66,7 @@ public class playerController : MonoBehaviour
         ManageMove();
     }
 
+    #region MovementPlayer
     private void ManageMove()
     {
         var speed = m_timerDash <= 0 ? SO_Controller.m_speed : SO_Controller.m_dashSpeed;
@@ -95,6 +96,10 @@ public class playerController : MonoBehaviour
         }
     }
     
+
+    #endregion
+
+    #region HealthPlayer
     public void TakeDamage(int damage)
     {
         
@@ -113,9 +118,11 @@ public class playerController : MonoBehaviour
         Debug.Log("PLAYER IS NOW DEAD");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    
+
+    #endregion
 
     #region AttackPlayer
-
     void Attack1()
         {
             if (Input.GetKeyDown(KeyCode.A))
