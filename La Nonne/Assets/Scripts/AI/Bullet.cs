@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
         {
             player.GetComponent<playerController>().TakeDamage(bulletDamage);
             Destroy(gameObject);
-            Debug.Log("PLAYER HAS BEEN HIT, DMG : " + bulletDamage);
+            Debug.Log("PLAYER HAS BEEN HIT, FOR THIS AMOUNT OF DMG : " + bulletDamage);
             
         }
     }

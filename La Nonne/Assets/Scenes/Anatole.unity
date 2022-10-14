@@ -851,6 +851,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: player
       objectReference: {fileID: 0}
+    - target: {fileID: 4401665247276526678, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
+      propertyPath: trashMobRange
+      value: 
+      objectReference: {fileID: 1387081574}
     - target: {fileID: 4401665247276526679, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1713,8 +1717,11 @@ MonoBehaviour:
   aggroRange: 18
   cooldownBetweenShots: 0.5
   bulletSpeed: 1.5
+  damageTaken: 0
   player: {fileID: 13147440}
   bulletPrefab: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
+  currentHealth: 100
+  maxHealth: 100
 --- !u!114 &1387081575
 MonoBehaviour:
   m_ObjectHideFlags: 0

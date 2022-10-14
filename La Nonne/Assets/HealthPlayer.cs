@@ -5,10 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class HealthPlayer : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
-
+    
     
 }
