@@ -15,4 +15,7 @@ public class SO_Controller : ScriptableObject
     [Header("Life")] 
     public int maxHealth;
     public int currentHealth;
+
+    [Header("Attack Values")] 
+    public int attackDamage;
 }

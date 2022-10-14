@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class playerController : MonoBehaviour
@@ -17,10 +18,11 @@ public class playerController : MonoBehaviour
 
     public RoomFirstDungeonGenerator rfg;
 
+    public TrashMobRange trashMobRange;
+
     private void Start()
     {
         SO_Controller.currentHealth = SO_Controller.maxHealth;
-        Debug.Log(" CURRENT HEALTH AT START : " + SO_Controller.currentHealth);
         ReInit();
     }
 
@@ -53,6 +55,8 @@ public class playerController : MonoBehaviour
         }
         
         m_timerDash -= Time.deltaTime;
+        
+        Attack1();
 
     }
 
@@ -62,6 +66,7 @@ public class playerController : MonoBehaviour
         ManageMove();
     }
 
+    #region MovementPlayer
     private void ManageMove()
     {
         var speed = m_timerDash <= 0 ? SO_Controller.m_speed : SO_Controller.m_dashSpeed;
@@ -91,6 +96,10 @@ public class playerController : MonoBehaviour
         }
     }
     
+
+    #endregion
+
+    #region HealthPlayer
     public void TakeDamage(int damage)
     {
         
@@ -109,5 +118,22 @@ public class playerController : MonoBehaviour
         Debug.Log("PLAYER IS NOW DEAD");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    
+
+    #endregion
+
+    #region AttackPlayer
+    void Attack1()
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                trashMobRange.TakeDamageFromPlayer(SO_Controller.attackDamage);
+                Debug.Log("TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + trashMobRange.currentHealth);
+
+            }
+        }
+
+    #endregion
+    
   
 }

@@ -8,26 +8,31 @@ using UnityEngine;
 
 public class TrashMobRange : MonoBehaviour
 {
-    [Header("Enemy Values")]
-   
+    [Header("Enemy Detection")]
     [SerializeField] float distanceToPlayer;
     [SerializeField] float shootingRange;
     [SerializeField] float aggroRange;
-    [SerializeField] float cooldownBetweenShots;
-    [SerializeField] float bulletSpeed;
-    
     private float cooldownTimer;
     
+    [Header("Enemy Attack Values")]
+    [SerializeField] float cooldownBetweenShots;
+    [SerializeField] float bulletSpeed;
+    [SerializeField] float damageTaken;
+
     [Header("Enemy Components")]
-    
     [SerializeField] GameObject player;
     private AIPath scriptAIPath;
     [SerializeField] GameObject bulletPrefab;
+
+    [Header("Enemy Health")] 
+    [SerializeField] public float currentHealth;
+    [SerializeField] public float maxHealth;
     
 
     private void Start()
     {
         scriptAIPath = GetComponent<AIPath>();
+        currentHealth = maxHealth;
     }
     private void Update()
     {
@@ -43,13 +48,11 @@ public class TrashMobRange : MonoBehaviour
             scriptAIPath.maxSpeed = 3;
             Shoot();
             
-            Debug.Log("DANS LA SHOOTING RANGE");
         }
         else if (distanceToPlayer <= aggroRange) //si le joueur est dans l'AGGRO RANGE du trashMob
         {
             scriptAIPath.maxSpeed = 6;
             
-            Debug.Log("DANS LAGGRO RANGE");
         }
         else if (distanceToPlayer > aggroRange) //si le joueur est HORS de l'AGGRO RANGE
         {
@@ -87,4 +90,19 @@ public class TrashMobRange : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, aggroRange);
     }
     
+    public void TakeDamageFromPlayer(int damage)
+    {
+        currentHealth -= damage;
+        Debug.Log("TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + currentHealth);
+
+        if (currentHealth <= 0)
+        {
+            TrashMobRangeDie();
+        }
+    }
+
+    private void TrashMobRangeDie()
+    {
+        Destroy(gameObject);
+    }
 }
