@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class playerController : MonoBehaviour
@@ -15,6 +16,13 @@ public class playerController : MonoBehaviour
     public static playerController instance;
 
     public RoomFirstDungeonGenerator rfg;
+
+    private void Start()
+    {
+        SO_Controller.currentHealth = SO_Controller.maxHealth;
+        Debug.Log(" CURRENT HEALTH AT START : " + SO_Controller.currentHealth);
+        ReInit();
+    }
 
     private void Awake()
     {
@@ -81,6 +89,25 @@ public class playerController : MonoBehaviour
         {
             m_rigidbody.AddForce(Vector2.right*speed);
         }
+    }
+    
+    public void TakeDamage(int damage)
+    {
+        
+        SO_Controller.currentHealth -= damage;
+        Debug.Log("PLAYER HAS BEEN HIT, HEALTH REMAINING : " + SO_Controller.currentHealth);
+
+        if (SO_Controller.currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        //Destroy(gameObject);
+        Debug.Log("PLAYER IS NOW DEAD");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
   
 }
