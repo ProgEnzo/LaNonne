@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    
+
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("Player"))
@@ -13,4 +13,6 @@ public class Bullet : MonoBehaviour
             Debug.Log("PLAYER HAS BEEN HIT");
         }
     }
+
+ 
 }

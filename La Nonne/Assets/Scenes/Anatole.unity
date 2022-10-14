@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &13147440 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4401665247276526673, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
+  m_PrefabInstance: {fileID: 673721705}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &137901885
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,7 +453,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456407908}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000071525574, y: 0.00000023841858, z: -10}
+  m_LocalPosition: {x: 0.00000047683716, y: 0.00000023841858, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1703,11 +1708,9 @@ MonoBehaviour:
   shootingRange: 8
   aggroRange: 12
   cooldownBetweenShots: 1
-  cooldownTimer: 0
-  bulletSpeed: 2.67
-  player: {fileID: 2108878044}
-  bullet: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
-  bulletRigidbody2D: {fileID: 7338364423186696290, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
+  bulletSpeed: 5
+  player: {fileID: 13147440}
+  bulletPrefab: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
 --- !u!114 &1387081575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1819,7 +1822,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656192447}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000071525574, y: 0.00000023841858, z: -10}
+  m_LocalPosition: {x: 0.00000047683716, y: 0.00000023841858, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2450,12 +2453,12 @@ MonoBehaviour:
   m_ScreenX: 0.5
   m_ScreenY: 0.5
   m_CameraDistance: 10
-  m_DeadZoneWidth: 0.108
+  m_DeadZoneWidth: 0.101
   m_DeadZoneHeight: 0.2
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
-  m_SoftZoneWidth: 0.47
-  m_SoftZoneHeight: 0.678
+  m_SoftZoneWidth: 0.101
+  m_SoftZoneHeight: 0.364
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
