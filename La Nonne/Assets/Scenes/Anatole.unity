@@ -453,7 +453,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456407908}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.00000047683716, y: 0.00000023841858, z: -10}
+  m_LocalPosition: {x: 0.00000059604645, y: 0.00000023841858, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -835,6 +835,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 111380663605427298, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 3311853266417754381, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -1705,10 +1709,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distanceToPlayer: 0
-  shootingRange: 8
-  aggroRange: 12
-  cooldownBetweenShots: 1
-  bulletSpeed: 5
+  shootingRange: 12
+  aggroRange: 18
+  cooldownBetweenShots: 0.5
+  bulletSpeed: 1.5
   player: {fileID: 13147440}
   bulletPrefab: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
 --- !u!114 &1387081575
@@ -1822,7 +1826,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656192447}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.00000047683716, y: 0.00000023841858, z: -10}
+  m_LocalPosition: {x: 0.00000059604645, y: 0.00000023841858, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
