@@ -11,6 +11,7 @@ public class TrashMobClose : MonoBehaviour
     
     [Header("Enemy Attack")]
     [SerializeField] private int trashMobCloseDamage;
+    [SerializeField] private float knockbackPower;
 
     [Header("Enemy Components")]
     public playerController playerController;
@@ -46,6 +47,12 @@ public class TrashMobClose : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             playerController.TakeDamage(trashMobCloseDamage); //Player takes damage
+
+            Collider2D collider2D = col.collider; //the incoming collider2D (celle du player en l'occurence)
+            Vector2 direction = (collider2D.transform.position - transform.position).normalized;
+            Vector2 knockback = direction * knockbackPower;
+            
+            playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
         }
     }
     
