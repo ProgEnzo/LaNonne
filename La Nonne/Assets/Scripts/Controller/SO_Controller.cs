@@ -18,4 +18,7 @@ public class SO_Controller : ScriptableObject
 
     [Header("Attack Values")] 
     public int playerAttackDamage;
+
+    [Header("EP")] 
+    public int epAmount;
 }
