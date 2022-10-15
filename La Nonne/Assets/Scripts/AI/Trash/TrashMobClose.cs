@@ -46,6 +46,7 @@ public class TrashMobClose : MonoBehaviour
         //Si le TrashMobClose touche le player
         if (col.gameObject.CompareTag("Player"))
         {
+            StartCoroutine(PlayerIsHit());
             playerController.TakeDamage(trashMobCloseDamage); //Player takes damage
 
             Collider2D collider2D = col.collider; //the incoming collider2D (celle du player en l'occurence)
@@ -55,5 +56,13 @@ public class TrashMobClose : MonoBehaviour
             playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
         }
     }
-    
+
+
+    IEnumerator PlayerIsHit()
+    {
+        playerController.GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
+
+    }
 }
