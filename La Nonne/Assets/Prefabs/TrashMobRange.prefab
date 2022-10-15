@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 9071314407910337644}
   - component: {fileID: 9071314407910337643}
   - component: {fileID: 9071314407910337642}
+  - component: {fileID: 3411500643908186702}
   m_Layer: 0
   m_Name: TrashMobRange
   m_TagString: TrashMobRange
@@ -32,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 9071314407910337641}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 31.1, y: -8.05, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 5}
+  m_LocalScale: {x: 2, y: 2, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -55,7 +56,6 @@ MonoBehaviour:
   aggroRange: 18
   cooldownBetweenShots: 0.5
   bulletSpeed: 1.5
-  damageTaken: 0
   player: {fileID: 0}
   bulletPrefab: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
   currentHealth: 100
@@ -171,8 +171,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.6037736, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 659777678, guid: 322acd6f4e61d384d885ed2dbf54a750, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -243,3 +243,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.008631, y: 1.009412}
   m_EdgeRadius: 0
+--- !u!95 &3411500643908186702
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9071314407910337641}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1860b6f7ced23fd4f9e1d65217798b0a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
