@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Controller
 {
@@ -15,9 +16,7 @@ namespace Controller
         public Quaternion finalRotation2;
         private Camera camera1;
     
-        public SO_Controller SO_Controller;
-
-        public TrashMobRange trashMobRange;
+        [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
         // Start is called before the first frame update
         void Start()
@@ -85,21 +84,21 @@ namespace Controller
             //DMG du player sur le TrashMobClose
             if (other.gameObject.CompareTag("TrashMobClose"))
             {
-                other.gameObject.GetComponent<TrashMobClose>().TakeDamageFromPlayer(SO_Controller.playerAttackDamage);
+                other.gameObject.GetComponent<TrashMobClose>().TakeDamageFromPlayer(soController.playerAttackDamage);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
             }
 
             //DMG du player sur le TrashMobRange
             if (other.gameObject.CompareTag("TrashMobRange"))
             {
-                other.gameObject.GetComponent<TrashMobRange>().TakeDamageFromPlayer(SO_Controller.playerAttackDamage);
+                other.gameObject.GetComponent<TrashMobRange>().TakeDamageFromPlayer(soController.playerAttackDamage);
                 //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
             
             //DMG du player sur le TDI
             if (other.gameObject.CompareTag("TDI"))
             {
-                other.gameObject.GetComponent<TDI>().TakeDamageFromPlayer(SO_Controller.playerAttackDamage);
+                other.gameObject.GetComponent<TDI>().TakeDamageFromPlayer(soController.playerAttackDamage);
                 //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
         }
