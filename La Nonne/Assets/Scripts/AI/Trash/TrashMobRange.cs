@@ -17,7 +17,6 @@ public class TrashMobRange : MonoBehaviour
     [Header("Enemy Attack Values")]
     [SerializeField] float cooldownBetweenShots;
     [SerializeField] float bulletSpeed;
-    [SerializeField] float damageTaken;
 
     [Header("Enemy Components")]
     [SerializeField] GameObject player;
@@ -39,6 +38,7 @@ public class TrashMobRange : MonoBehaviour
         StopAndShoot();
     }
 
+    #region EnemyRangeBehavior
     void StopAndShoot()
     {
         distanceToPlayer = Vector2.Distance(player.transform.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
@@ -58,10 +58,8 @@ public class TrashMobRange : MonoBehaviour
         {
             scriptAIPath.maxSpeed = 0;
         }
-        
-        
     }
-
+    
     private void Shoot()
     {
         
@@ -72,24 +70,24 @@ public class TrashMobRange : MonoBehaviour
             return;
         }
         cooldownTimer = cooldownBetweenShots;
-
-       
-        Vector3 direction = player.transform.position - transform.position;
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();
-        rbBullet.AddForce(direction * bulletSpeed, ForceMode2D.Impulse);
         
-        Destroy(bullet, 4f);
-
+        Vector3 direction = player.transform.position - transform.position; // direction entre player et enemy
+        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity); // spawn bullet
+        Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>(); // chope le rb de la bullet 
+        rbBullet.AddForce(direction * bulletSpeed, ForceMode2D.Impulse); // Addforce avec la direction + le rb
         
-
+        Destroy(bullet, 3f);
     }
+    
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, shootingRange);
         Gizmos.DrawWireSphere(transform.position, aggroRange);
     }
+
+    #endregion
     
+    #region HealthEnemyRange
     public void TakeDamageFromPlayer(int damage)
     {
         currentHealth -= damage;
@@ -104,4 +102,6 @@ public class TrashMobRange : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    #endregion
 }

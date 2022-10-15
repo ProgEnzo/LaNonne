@@ -907,6 +907,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4705087171367236571, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
+      propertyPath: m_TagString
+      value: Blade
+      objectReference: {fileID: 0}
     - target: {fileID: 6519355346758503765, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -2189,6 +2193,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 652931f6e6e512a4185a5407c69fb861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHealth: 100
+  maxHealth: 100
+  trashMobCloseDamage: 20
+  playerController: {fileID: 2108878046}
 --- !u!1 &2080590973
 GameObject:
   m_ObjectHideFlags: 3
@@ -2282,6 +2290,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4401665247276526679, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
   m_PrefabInstance: {fileID: 673721705}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2108878046 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4401665247276526678, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
+  m_PrefabInstance: {fileID: 673721705}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13147440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df078b996a24d6743b360f9950a4e431, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &9071314407145718536
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2345,5 +2364,9 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 13147440}
+    - target: {fileID: 9071314407910337646, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}
+      propertyPath: damageTaken
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}

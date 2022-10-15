@@ -65,7 +65,6 @@ public class playerController : MonoBehaviour
         //Attack1();
 
     }
-
     public void FixedUpdate()
     {
         m_rigidbody.drag = SO_Controller.dragDeceleration * SO_Controller.dragMultiplier;
@@ -110,7 +109,7 @@ public class playerController : MonoBehaviour
     {
         
         SO_Controller.currentHealth -= damage;
-        Debug.Log("PLAYER HAS BEEN HIT, HEALTH REMAINING : " + SO_Controller.currentHealth);
+        Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + SO_Controller.currentHealth);
 
         if (SO_Controller.currentHealth <= 0)
         {
@@ -121,7 +120,7 @@ public class playerController : MonoBehaviour
     void Die()
     {
         //Destroy(gameObject);
-        Debug.Log("PLAYER IS NOW DEAD");
+        Debug.Log("<color=green>PLAYER</color> IS NOW DEAD");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     
