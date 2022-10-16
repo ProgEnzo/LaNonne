@@ -4,15 +4,65 @@ using UnityEngine;
 
 public class CareTaker : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Enemy Health")] 
+    [SerializeField] public float currentHealth;
+    
+    [Header("Enemy Attack")]
+    [SerializeField] private int caretakerbodyDamage;
+    [SerializeField] private float knockbackPower;
+
+    [Header("Enemy Components")]
+    public playerController playerController;
+
+    public SO_Enemy SO_Enemy;
+
+
+    private void Start()
     {
-        
+        currentHealth = SO_Enemy.maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    #region HealthEnemyClose
+    public void TakeDamageFromPlayer(int damage)
     {
-        
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            TrashMobCloseDie();
+        }
     }
+    
+    private void TrashMobCloseDie()
+    {
+        Destroy(gameObject);
+    }
+    
+    #endregion
+    
+
+    private void OnCollisionEnter2D(Collision2D col) 
+    {
+        //Si le caretaker touche le player
+        if (col.gameObject.CompareTag("Player"))
+        {
+            StartCoroutine(PlayerIsHit());
+            playerController.TakeDamage(caretakerbodyDamage); //Player takes damage
+
+            Collider2D collider2D = col.collider; //the incoming collider2D (celle du player en l'occurence)
+            Vector2 direction = (collider2D.transform.position - transform.position).normalized;
+            Vector2 knockback = direction * knockbackPower;
+            
+            playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
+        }
+    }
+
+
+    IEnumerator PlayerIsHit()
+    {
+        playerController.GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
+    }
+    
 }

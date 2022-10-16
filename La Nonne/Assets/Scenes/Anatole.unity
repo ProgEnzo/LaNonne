@@ -222,38 +222,21 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 238902293}
+  - component: {fileID: 238902294}
   - component: {fileID: 238902292}
   - component: {fileID: 238902291}
   - component: {fileID: 238902290}
   - component: {fileID: 238902289}
   - component: {fileID: 238902288}
   - component: {fileID: 238902287}
-  - component: {fileID: 238902286}
+  - component: {fileID: 238902295}
   m_Layer: 0
   m_Name: Caretaker
-  m_TagString: TDI
+  m_TagString: Caretaker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &238902286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 238902285}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea927aaacea1f06468d6ce92b9cd5729, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentHealth: 0
-  maxHealth: 0
-  bullyDamage: 0
-  knockbackPower: 0
-  playerController: {fileID: 0}
-  enemyStats: {fileID: 0}
 --- !u!61 &238902287
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -267,7 +250,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00056385994, y: -0.0018756092}
+  m_Offset: {x: -0.0049465, y: -0.0347448}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -278,7 +261,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.008631, y: 1.009412}
+  m_Size: {x: 0.7632069, y: 0.94367373}
   m_EdgeRadius: 0
 --- !u!50 &238902288
 Rigidbody2D:
@@ -314,7 +297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  target: {fileID: 2108878044}
+  target: {fileID: 2037201847}
 --- !u!114 &238902290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,7 +314,7 @@ MonoBehaviour:
   radius: 2
   height: 1.89
   canMove: 1
-  maxSpeed: 1.5
+  maxSpeed: 4.54
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
@@ -426,8 +409,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 1, b: 0.85213137, a: 1}
+  m_Sprite: {fileID: 735733513, guid: f7d733df804826144abe98c469fe389c, type: 3}
+  m_Color: {r: 0.2216981, g: 1, b: 0.5149645, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -452,6 +435,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &238902294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238902285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2dd2e38e18d7a43a2f6a5903a0c9fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 100
+  caretakerbodyDamage: 20
+  knockbackPower: 50
+  playerController: {fileID: 2108878046}
+  SO_Enemy: {fileID: 11400000, guid: df8a88526cafc9f4f8cb5e0ac56aae0a, type: 2}
+--- !u!95 &238902295
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238902285}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b5947db52480ceb408d41dcfb380ebd8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &431778753
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,6 +1186,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6784976164906201620, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
+      propertyPath: chainBladeDamage
+      value: 
+      objectReference: {fileID: 1779802559}
     m_RemovedComponents:
     - {fileID: 4401665247276526666, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
@@ -1907,6 +1931,17 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 3411500643908186702, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}
   m_PrefabInstance: {fileID: 9071314407145718536}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1779802559 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 248765316, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
+  m_PrefabInstance: {fileID: 673721705}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4a1c5cda15f5b498c88c8f41440c85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1841568290
 GameObject:
   m_ObjectHideFlags: 0
@@ -2112,7 +2147,7 @@ GameObject:
   - component: {fileID: 2037201848}
   m_Layer: 0
   m_Name: Bully
-  m_TagString: TDI
+  m_TagString: Bully
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2130,11 +2165,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 100
-  maxHealth: 100
   bullyDamage: 20
   knockbackPower: 70
   playerController: {fileID: 2108878046}
-  enemyStats: {fileID: 11400000, guid: 64aed33986fc5ff4ba0fe14bfa4249f3, type: 2}
+  SO_Enemy: {fileID: 11400000, guid: 64aed33986fc5ff4ba0fe14bfa4249f3, type: 2}
 --- !u!61 &2037201841
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2212,7 +2246,7 @@ MonoBehaviour:
   radius: 2
   height: 1.89
   canMove: 1
-  maxSpeed: 1.5
+  maxSpeed: 2.12
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
@@ -2308,7 +2342,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 2019162751, guid: f7d733df804826144abe98c469fe389c, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.33490568, b: 0.33490568, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2602,7 +2636,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 1, b: 0.85213137, a: 1}
+  m_Color: {r: 0.8207547, g: 0.23616053, b: 0.269783, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2648,7 +2682,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1006157618702431391}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.43, y: 5.33, z: 0}
+  m_LocalPosition: {x: -12.72, y: 13.45, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2664,20 +2698,20 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1006157618702431390}
+  - component: {fileID: 1006157618702431392}
   - component: {fileID: 1006157618702431380}
   - component: {fileID: 1006157618702431381}
   - component: {fileID: 1006157618702431378}
   - component: {fileID: 1006157618702431379}
   - component: {fileID: 1006157618702431376}
   - component: {fileID: 1006157618702431377}
-  - component: {fileID: 1006157618702431392}
   m_Layer: 0
   m_Name: TDI
   m_TagString: TDI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1006157618702431392
 MonoBehaviour:
   m_ObjectHideFlags: 0
