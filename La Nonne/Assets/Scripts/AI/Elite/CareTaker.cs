@@ -22,8 +22,10 @@ namespace AI.Elite
 
         [Header("Enemy Components")]
         public PlayerController playerController;
-        private CircleCollider2D circle;
         public SO_Controller soController;
+        [SerializeField] private CircleCollider2D circle;
+        [SerializeField] private GameObject circleDamageSprite;
+        [SerializeField] private GameObject circleHealSprite;
 
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
         public List<GameObject> y;
@@ -37,6 +39,11 @@ namespace AI.Elite
         {
             currentHealth = soEnemy.maxHealth;
             GoToTheNearestMob();
+            
+            //Zones de heal / dégâts
+            circle.enabled = false;
+            circleDamageSprite.SetActive(false);
+            circleHealSprite.SetActive(false);
         }
 
         private void Update()
@@ -45,10 +52,23 @@ namespace AI.Elite
             {
                 gameObject.GetComponent<AIDestinationSetter>().enabled = true;
                 CheckIfTargetIsDead();
+
+                //Timer for spawning circles
+                cooldownTimer -= Time.deltaTime;
+                if (cooldownTimer > 0)
+                {
+                    return;
+                }
+
+                cooldownTimer = timeBetweenCircleSpawn;
+                
+                StartCoroutine(BlinkCircle());
             }
             else
             {
                 gameObject.GetComponent<AIDestinationSetter>().enabled = false;
+                
+                
             }
         }
 
@@ -64,19 +84,24 @@ namespace AI.Elite
 
                 if (col.gameObject.CompareTag("Player"))
                 {
-                    //Timer for firing bullets
-                    cooldownTimer -= Time.deltaTime;
-                    if (cooldownTimer > 0)
-                    {
-                        return;
-                    }
+                    
 
-                    cooldownTimer = timeBetweenCircleSpawn;
+                    
 
                     playerController.TakeDamage(circleDamage); //Player takes damage
 
                 }
             }
+        }
+
+        IEnumerator BlinkCircle()
+        {
+            circle.enabled = true;
+            circleDamageSprite.SetActive(true);
+            yield return new WaitForSeconds(1);
+            circle.enabled = false;
+            circleDamageSprite.SetActive(false);
+
         }
 
         public void GoToTheNearestMob()
