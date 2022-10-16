@@ -5,6 +5,7 @@ using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Apple;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 using Vector2 = UnityEngine.Vector2;
 
@@ -15,6 +16,8 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
    [SerializeField] [Range(0, 10)] private int offSet = 1; //To not directly connect every rooms
    
    [SerializeField] private bool randomWalkRooms = false;
+   
+   public UnityEvent OnFinishedGeneration;
 
    protected override void RunProceduralGeneration()
    {
