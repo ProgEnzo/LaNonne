@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,8 @@ namespace AI.Elite
         {
             if (!isStunned)
             {
+                
+                
                 gameObject.GetComponent<AIDestinationSetter>().enabled = true;
                 CheckIfTargetIsDead();
 
@@ -62,7 +65,7 @@ namespace AI.Elite
 
                 cooldownTimer = timeBetweenCircleSpawn;
                 
-                StartCoroutine(BlinkCircle());
+                StartCoroutine(BlinkDamageCircle());
             }
             else
             {
@@ -84,17 +87,14 @@ namespace AI.Elite
 
                 if (col.gameObject.CompareTag("Player"))
                 {
-                    
-
-                    
-
                     playerController.TakeDamage(circleDamage); //Player takes damage
-
+                    StartCoroutine(PlayerIsHitByCircle());
                 }
             }
         }
+        
 
-        IEnumerator BlinkCircle()
+        IEnumerator BlinkDamageCircle()
         {
             circle.enabled = true;
             circleDamageSprite.SetActive(true);
@@ -102,6 +102,13 @@ namespace AI.Elite
             circle.enabled = false;
             circleDamageSprite.SetActive(false);
 
+        }
+        
+        IEnumerator PlayerIsHitByCircle()
+        {
+            playerController.GetComponent<SpriteRenderer>().color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
         }
 
         public void GoToTheNearestMob()
