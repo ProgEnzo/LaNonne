@@ -25,10 +25,17 @@ namespace Controller
                 Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
             
-            //DMG du player sur le TDI
-            if (other.gameObject.CompareTag("TDI"))
+            //DMG du player sur le Bully
+            if (other.gameObject.CompareTag("Bully"))
             {
-                other.gameObject.GetComponent<TDI>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
+                other.gameObject.GetComponent<Bully>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
+                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
+            }
+            
+            //DMG du player sur le caretaker
+            if (other.gameObject.CompareTag("Caretaker"))
+            {
+                other.gameObject.GetComponent<CareTaker>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
                 //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
         }

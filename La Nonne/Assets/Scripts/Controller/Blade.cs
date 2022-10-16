@@ -15,6 +15,8 @@ namespace Controller
         public Quaternion finalRotation1;
         public Quaternion finalRotation2;
         private Camera camera1;
+
+        public ChainBladeDamage chainBladeDamage;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
@@ -99,6 +101,13 @@ namespace Controller
             if (other.gameObject.CompareTag("Bully"))
             {
                 other.gameObject.GetComponent<Bully>().TakeDamageFromPlayer(soController.playerAttackDamage);
+                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
+            }
+            
+            //DMG du player sur le caretaker
+            if (other.gameObject.CompareTag("Caretaker"))
+            {
+                other.gameObject.GetComponent<CareTaker>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * chainBladeDamage.damageMultiplier));
                 //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
         }

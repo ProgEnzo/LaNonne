@@ -64,6 +64,5 @@ public class TrashMobClose : MonoBehaviour
         playerController.GetComponent<SpriteRenderer>().color = Color.red;
         yield return new WaitForSeconds(0.1f);
         playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
-
     }
 }
