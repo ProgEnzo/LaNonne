@@ -56,14 +56,10 @@ MonoBehaviour:
   aggroRange: 18
   cooldownBetweenShots: 1
   bulletSpeed: 0.9
-  knockbackBodyContact: 50
-  bodyDamage: 50
   player: {fileID: 4401665247276526673, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
-  playerController: {fileID: 4401665247276526678, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
   bulletPrefab: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
-  animator: {fileID: 3411500643908186702}
+  enemyStats: {fileID: 11400000, guid: 3d266add0c81b1e4b96d5eb236504880, type: 2}
   currentHealth: 100
-  maxHealth: 100
 --- !u!114 &9071314407910337632
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22,16 +22,17 @@ public class TrashMobRange : MonoBehaviour
     [SerializeField] GameObject player;
     private AIPath scriptAIPath;
     [SerializeField] GameObject bulletPrefab;
+    public SO_Enemy SO_Enemy;
+
 
     [Header("Enemy Health")] 
     [SerializeField] public float currentHealth;
-    [SerializeField] public float maxHealth;
     
 
     private void Start()
     {
         scriptAIPath = GetComponent<AIPath>();
-        currentHealth = maxHealth;
+        currentHealth = SO_Enemy.maxHealth;
     }
     private void Update()
     {

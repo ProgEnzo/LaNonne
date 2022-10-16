@@ -253,6 +253,7 @@ MonoBehaviour:
   bullyDamage: 0
   knockbackPower: 0
   playerController: {fileID: 0}
+  enemyStats: {fileID: 0}
 --- !u!61 &238902287
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2108,6 +2109,7 @@ GameObject:
   - component: {fileID: 2037201843}
   - component: {fileID: 2037201842}
   - component: {fileID: 2037201841}
+  - component: {fileID: 2037201848}
   m_Layer: 0
   m_Name: Bully
   m_TagString: TDI
@@ -2132,6 +2134,7 @@ MonoBehaviour:
   bullyDamage: 20
   knockbackPower: 70
   playerController: {fileID: 2108878046}
+  enemyStats: {fileID: 11400000, guid: 64aed33986fc5ff4ba0fe14bfa4249f3, type: 2}
 --- !u!61 &2037201841
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2145,7 +2148,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00056385994, y: -0.0018756092}
+  m_Offset: {x: -0.013689011, y: -0.032272816}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2156,7 +2159,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.008631, y: 1.009412}
+  m_Size: {x: 0.7442934, y: 0.9486177}
   m_EdgeRadius: 0
 --- !u!50 &2037201842
 Rigidbody2D:
@@ -2304,8 +2307,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 1, b: 0.85213137, a: 1}
+  m_Sprite: {fileID: 2019162751, guid: f7d733df804826144abe98c469fe389c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2330,6 +2333,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2037201848
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037201839}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0abd00c11df60704abe3cc401dfc0040, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2080590973
 GameObject:
   m_ObjectHideFlags: 3

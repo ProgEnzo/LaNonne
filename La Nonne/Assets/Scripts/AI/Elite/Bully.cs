@@ -6,7 +6,6 @@ public class Bully : MonoBehaviour
 {
     [Header("Enemy Health")] 
     [SerializeField] public float currentHealth;
-    [SerializeField] public float maxHealth;
     
     [Header("Enemy Attack")]
     [SerializeField] private int bullyDamage;
@@ -15,10 +14,12 @@ public class Bully : MonoBehaviour
     [Header("Enemy Components")]
     public playerController playerController;
 
+    public SO_Enemy SO_Enemy;
+
 
     private void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = SO_Enemy.maxHealth;
     }
 
     #region HealthEnemyClose
