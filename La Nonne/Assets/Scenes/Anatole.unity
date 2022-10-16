@@ -248,6 +248,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea927aaacea1f06468d6ce92b9cd5729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHealth: 0
+  maxHealth: 0
+  bullyDamage: 0
+  knockbackPower: 0
+  playerController: {fileID: 0}
 --- !u!61 &238902287
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2096,15 +2101,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2037201847}
+  - component: {fileID: 2037201840}
   - component: {fileID: 2037201846}
   - component: {fileID: 2037201845}
   - component: {fileID: 2037201844}
   - component: {fileID: 2037201843}
   - component: {fileID: 2037201842}
   - component: {fileID: 2037201841}
-  - component: {fileID: 2037201840}
   m_Layer: 0
-  m_Name: "Pers\xE9cuteur"
+  m_Name: Bully
   m_TagString: TDI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2122,6 +2127,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea927aaacea1f06468d6ce92b9cd5729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHealth: 100
+  maxHealth: 100
+  bullyDamage: 20
+  knockbackPower: 70
+  playerController: {fileID: 2108878046}
 --- !u!61 &2037201841
 BoxCollider2D:
   m_ObjectHideFlags: 0
