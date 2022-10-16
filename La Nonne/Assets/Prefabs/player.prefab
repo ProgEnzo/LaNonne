@@ -582,9 +582,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_rigidbody: {fileID: 4401665247276526676}
-  SO_Controller: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
+  soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
   m_timerDash: 0
   rfg: {fileID: 0}
+  isHitting: 0
+  hitSpeed: 500
+  revealingDashDetectionRadius: 20
+  revealingDashEpCost: 0
+  revealingDashAimedEnemy: {fileID: 0}
+  toleranceDistance: 0.1
+  newPosition: {x: 0, y: 0, z: 0}
 --- !u!96 &4401665247276526667
 TrailRenderer:
   serializedVersion: 2
@@ -757,6 +764,7 @@ MonoBehaviour:
   boxCollider: {fileID: 0}
   finalRotation1: {x: 0, y: 0, z: 0, w: 0}
   finalRotation2: {x: 0, y: 0, z: 0, w: 0}
+  chainBladeDamage: {fileID: 0}
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
 --- !u!61 &1923280825
 BoxCollider2D:

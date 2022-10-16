@@ -35,6 +35,7 @@ namespace Controller
         {
             if (Input.GetMouseButtonDown(1) && !isHitting && soController.epAmount >= epCost)
             {
+                soController.epAmount -= epCost;
                 Vector3 newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
