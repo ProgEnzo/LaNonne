@@ -52,10 +52,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distanceToPlayer: 0
-  shootingRange: 12
-  aggroRange: 18
+  shootingRange: 4.5
+  aggroRange: 10
   cooldownBetweenShots: 1
-  bulletSpeed: 0.9
+  bulletSpeed: 2
   player: {fileID: 0}
   bulletPrefab: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
   SO_Enemy: {fileID: 11400000, guid: 3d266add0c81b1e4b96d5eb236504880, type: 2}
@@ -230,7 +230,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00056385994, y: -0.0018756092}
+  m_Offset: {x: 0.002872467, y: 0.005002022}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -241,7 +241,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.008631, y: 1.009412}
+  m_Size: {x: 0.9054642, y: 0.899374}
   m_EdgeRadius: 0
 --- !u!95 &3411500643908186702
 Animator:

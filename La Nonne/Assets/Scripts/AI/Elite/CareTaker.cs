@@ -11,17 +11,57 @@ public class CareTaker : MonoBehaviour
     [SerializeField] public float currentHealth;
     
     [Header("Enemy Attack")]
-    [SerializeField] private int caretakerbodyDamage;
+    [SerializeField] private int caretakerBodyDamage;
+    [SerializeField] private int circleDamage;
     [SerializeField] private float knockbackPower;
+    [SerializeField] private float cooldownTimer;
+    [SerializeField] private float timeBetweenCircleSpawn;
 
     [Header("Enemy Components")]
     public playerController playerController;
+    private CircleCollider2D circle;
+    public SO_Controller soController;
 
     public SO_Enemy SO_Enemy;
     public List<GameObject> y;
 
 
-    public void SetNewMobToHeal()
+    
+
+    private void Start()
+    {
+        currentHealth = SO_Enemy.maxHealth;
+        GoToTheNearestMob();
+    }
+
+    private void Update()
+    {
+        CheckIfTargetIsDead();
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Bully") || col.gameObject.CompareTag("TrashMobClose") || col.gameObject.CompareTag("TrashMobRange"))
+        {
+            
+        }
+
+        if (col.gameObject.CompareTag("Player"))
+        {
+            //Timer for firing bullets
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer > 0)
+            {
+                return;
+            }
+            cooldownTimer = timeBetweenCircleSpawn;
+            
+            playerController.TakeDamage(circleDamage); //Player takes damage
+
+        }
+    }
+
+    public void GoToTheNearestMob()
     {
         // y = liste de tous les gameobjects mobs/enemy
         
@@ -46,24 +86,12 @@ public class CareTaker : MonoBehaviour
             GetComponent<AIDestinationSetter>().target = y[0].transform;
         }
     }
-
     void CheckIfTargetIsDead()
     {
         if (GetComponent<AIDestinationSetter>().target == null)
         {
-            SetNewMobToHeal();
+            GoToTheNearestMob();
         }
-    }
-
-    private void Start()
-    {
-        currentHealth = SO_Enemy.maxHealth;
-        SetNewMobToHeal();
-    }
-
-    private void Update()
-    {
-        CheckIfTargetIsDead();
     }
 
     #region HealthEnemyClose
@@ -93,7 +121,7 @@ public class CareTaker : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             StartCoroutine(PlayerIsHit());
-            playerController.TakeDamage(caretakerbodyDamage); //Player takes damage
+            playerController.TakeDamage(caretakerBodyDamage); //Player takes damage
 
             Collider2D collider2D = col.collider; //the incoming collider2D (celle du player en l'occurence)
             Vector2 direction = (collider2D.transform.position - transform.position).normalized;
