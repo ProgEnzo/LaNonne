@@ -148,7 +148,11 @@ namespace Controller
             {
                 List<RaycastHit2D> enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, revealingDashDetectionRadius, Vector2.zero, new ContactFilter2D(), enemiesInArea);
-                enemiesInArea.Sort((x, y) => x.distance.CompareTo(y.distance));
+                enemiesInArea.Sort((x, y) =>
+                {
+                    Vector3 position = transform.position;
+                    return (Vector3.Distance(position, x.transform.position).CompareTo(Vector3.Distance(position, y.transform.position)));
+                });
                 foreach (RaycastHit2D enemy in enemiesInArea)
                 {
                     if (enemy.collider.CompareTag("TrashMobClose") || enemy.collider.CompareTag("TrashMobRange") || enemy.collider.CompareTag("Bully") || enemy.collider.CompareTag("Caretaker"))
