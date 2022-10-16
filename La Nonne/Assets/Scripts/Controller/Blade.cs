@@ -43,7 +43,7 @@ namespace Controller
         {
             if (Input.GetMouseButtonDown(0) && !isHitting)
             {
-                Vector3 newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+                Vector3 newDirection = camera1.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
                 Quaternion newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);

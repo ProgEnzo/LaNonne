@@ -29,6 +29,7 @@ namespace Controller
         public float toleranceDistance = 0.1f;
         public Vector3 newPosition;
         public float stunDuration = 1f;
+        Dictionary<GameObject, Coroutine> runningCoroutines = new();
 
         private void Awake()
         {
@@ -166,8 +167,16 @@ namespace Controller
                 transform.position = Vector2.MoveTowards(transform.position, newPosition, hitSpeed * Time.deltaTime);
                 if (Vector3.Distance(transform.position, newPosition) < toleranceDistance)
                 {
-                    StopCoroutine(StunEnemy(revealingDashAimedEnemy));
-                    StartCoroutine(StunEnemy(revealingDashAimedEnemy));
+                    foreach (GameObject enemy in runningCoroutines.Keys)
+                    {
+                        if (enemy == revealingDashAimedEnemy)
+                        {
+                            StopCoroutine(runningCoroutines[enemy]);
+                            runningCoroutines.Remove(enemy);
+                            break;
+                        }
+                    }
+                    runningCoroutines.Add(revealingDashAimedEnemy, StartCoroutine(StunEnemy(revealingDashAimedEnemy)));
                 
                     //DMG du player sur le TrashMobClose
                     if (revealingDashAimedEnemy.CompareTag("TrashMobClose"))
@@ -208,28 +217,43 @@ namespace Controller
             {
                 enemy.GetComponent<TrashMobClose>().isStunned = true;
                 yield return new WaitForSeconds(stunDuration);
-                enemy.GetComponent<TrashMobClose>().isStunned = false;
+                if (enemy != null)
+                {
+                    enemy.GetComponent<TrashMobClose>().isStunned = false;
+                }
+                yield break;
             }
 
             if (enemy.CompareTag("TrashMobRange"))
             {
                 enemy.GetComponent<TrashMobRange>().isStunned = true;
                 yield return new WaitForSeconds(stunDuration);
-                enemy.GetComponent<TrashMobRange>().isStunned = false;
+                if (enemy != null)
+                {
+                    enemy.GetComponent<TrashMobRange>().isStunned = false;
+                }
+                yield break;
             }
         
             if (enemy.CompareTag("Bully"))
             {
                 enemy.GetComponent<Bully>().isStunned = true;
                 yield return new WaitForSeconds(stunDuration);
-                enemy.GetComponent<Bully>().isStunned = false;
+                if (enemy != null)
+                {
+                    enemy.GetComponent<Bully>().isStunned = false;
+                }
+                yield break;
             }
             
             if (enemy.CompareTag("Caretaker"))
             {
                 enemy.GetComponent<CareTaker>().isStunned = true;
                 yield return new WaitForSeconds(stunDuration);
-                enemy.GetComponent<CareTaker>().isStunned = false;
+                if (enemy != null)
+                {
+                    enemy.GetComponent<CareTaker>().isStunned = false;
+                }
             }
         }
 

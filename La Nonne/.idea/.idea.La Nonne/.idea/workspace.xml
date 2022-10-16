@@ -6,17 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="627b33af-daf3-4df2-a9a1-c8a3e8fe18aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.La Nonne/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.La Nonne/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Valentin.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Valentin.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AI/Bullet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/AI/Bullet.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AI/Elite/Bully.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/AI/Elite/Bully.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AI/Elite/CareTaker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/AI/Elite/CareTaker.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AI/Trash/TrashMobClose.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/AI/Trash/TrashMobClose.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AI/Trash/TrashMobRange.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/AI/Trash/TrashMobRange.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/Blade.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller/Blade.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/ChainBladeDamage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller/ChainBladeDamage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/playerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/playerController.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GenPro/Algorithms/RoomFirstDungeonGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GenPro/Algorithms/RoomFirstDungeonGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller/PlayerController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,10 +74,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="21384">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="21384" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -149,5 +140,24 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Controller/PlayerController.cs</url>
+          <line>214</line>
+          <properties documentPath="C:\Users\v.rousselle\Documents\GitHub\LaNonne\La Nonne\Assets\Scripts\Controller\PlayerController.cs" initialLine="214" containingFunctionPresentation="method 'StunEnemy'">
+            <startOffsets>
+              <option value="7939" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7940" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
