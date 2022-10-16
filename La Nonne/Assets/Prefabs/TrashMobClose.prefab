@@ -31,7 +31,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1593806974005075729}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -8.5, y: 0.7, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 5}
   m_ConstrainProportionsScale: 0
@@ -54,8 +54,8 @@ MonoBehaviour:
   currentHealth: 100
   trashMobCloseDamage: 20
   knockbackPower: 50
-  playerController: {fileID: 4401665247276526678, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
-  enemyStats: {fileID: 11400000, guid: 97f1fa4b4eadc844d8e0d5343ed990f3, type: 2}
+  playerController: {fileID: 0}
+  SO_Enemy: {fileID: 11400000, guid: 97f1fa4b4eadc844d8e0d5343ed990f3, type: 2}
 --- !u!212 &1593806974005075738
 SpriteRenderer:
   m_ObjectHideFlags: 0
