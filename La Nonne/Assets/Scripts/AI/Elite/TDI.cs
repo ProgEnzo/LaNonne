@@ -1,30 +1,30 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class TDI : MonoBehaviour
+namespace AI.Elite
 {
-    [Header("Enemy Health")] 
-    [SerializeField] public float currentHealth;
-    [SerializeField] public float maxHealth;
-    private void Start()
+    public class TDI : MonoBehaviour
     {
-        currentHealth = maxHealth;
-    }
-    
-    public void TakeDamageFromPlayer(int damage)
-    {
-        currentHealth -= damage;
-
-        if (currentHealth <= 0)
+        [Header("Enemy Health")] 
+        [SerializeField] public float currentHealth;
+        [SerializeField] public float maxHealth;
+        private void Start()
         {
-            TDIDie();
+            currentHealth = maxHealth;
         }
-    }
+    
+        public void TakeDamageFromPlayer(int damage)
+        {
+            currentHealth -= damage;
 
-    private void TDIDie()
-    {
-        Destroy(gameObject);
+            if (currentHealth <= 0)
+            {
+                TDIDie();
+            }
+        }
+
+        private void TDIDie()
+        {
+            Destroy(gameObject);
+        }
     }
 }

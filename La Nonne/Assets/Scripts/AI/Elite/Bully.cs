@@ -1,68 +1,75 @@
 using System.Collections;
-using System.Collections.Generic;
+using Controller;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Bully : MonoBehaviour
+namespace AI.Elite
 {
-    [Header("Enemy Health")] 
-    [SerializeField] public float currentHealth;
+    public class Bully : MonoBehaviour
+    {
+        [Header("Enemy Health")] 
+        [SerializeField] public float currentHealth;
     
-    [Header("Enemy Attack")]
-    [SerializeField] private int bullyDamage;
-    [SerializeField] private float knockbackPower;
+        [Header("Enemy Attack")]
+        [SerializeField] private int bullyDamage;
+        [SerializeField] private float knockbackPower;
 
-    [Header("Enemy Components")]
-    public playerController playerController;
+        [Header("Enemy Components")]
+        public PlayerController playerController;
 
-    public SO_Enemy SO_Enemy;
+        [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
+    
+        public bool isStunned;
 
 
-    private void Start()
-    {
-        currentHealth = SO_Enemy.maxHealth;
-    }
-
-    #region HealthEnemyClose
-    public void TakeDamageFromPlayer(int damage)
-    {
-        currentHealth -= damage;
-
-        if (currentHealth <= 0)
+        private void Start()
         {
-            BullyDie();
+            currentHealth = soEnemy.maxHealth;
+            isStunned = false;
         }
-    }
-    
-    private void BullyDie()
-    {
-        Destroy(gameObject);
-    }
-    
-    #endregion
-    
 
-    private void OnCollisionEnter2D(Collision2D col) 
-    {
-        //Si le bully touche le player
-        if (col.gameObject.CompareTag("Player"))
+        #region HealthEnemyClose
+        public void TakeDamageFromPlayer(int damage)
         {
-            StartCoroutine(PlayerIsHit());
-            playerController.TakeDamage(bullyDamage); //Player takes damage
+            currentHealth -= damage;
 
-            Collider2D collider2D = col.collider; //the incoming collider2D (celle du player en l'occurence)
-            Vector2 direction = (collider2D.transform.position - transform.position).normalized;
-            Vector2 knockback = direction * knockbackPower;
+            if (currentHealth <= 0)
+            {
+                BullyDie();
+            }
+        }
+    
+        private void BullyDie()
+        {
+            Destroy(gameObject);
+        }
+    
+        #endregion
+    
+
+        private void OnCollisionEnter2D(Collision2D col) 
+        {
+            //Si le bully touche le player
+            if (col.gameObject.CompareTag("Player") && !isStunned)
+            {
+                StartCoroutine(PlayerIsHit());
+                playerController.TakeDamage(bullyDamage); //Player takes damage
+
+                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                Vector2 direction = (colCollider.transform.position - transform.position).normalized;
+                Vector2 knockback = direction * knockbackPower;
             
-            playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
+            }
         }
-    }
 
 
-    IEnumerator PlayerIsHit()
-    {
-        playerController.GetComponent<SpriteRenderer>().color = Color.red;
-        yield return new WaitForSeconds(0.1f);
-        playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
+        IEnumerator PlayerIsHit()
+        {
+            playerController.GetComponent<SpriteRenderer>().color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
 
+        }
     }
 }

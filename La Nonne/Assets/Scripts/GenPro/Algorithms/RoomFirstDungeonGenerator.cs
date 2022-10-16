@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Controller;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Apple;
@@ -50,9 +51,9 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
          roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
       }
       
-      if(playerController.instance is not null)
+      if(PlayerController.instance is not null)
       {
-         playerController.instance.ReInit();
+         PlayerController.instance.ReInit();
       }
 
       HashSet<Vector2Int> corridors = ConnectRooms(roomCenters);
