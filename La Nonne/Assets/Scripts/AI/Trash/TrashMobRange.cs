@@ -17,8 +17,8 @@ public class TrashMobRange : MonoBehaviour
         [SerializeField] float bulletSpeed;
         [SerializeField] float knockbackBody;
 
-        [Header("Enemy Health")] 
-        [SerializeField] public float currentHealth;
+        [Header("Enemy Health")]
+        [SerializeField] private float currentHealth;
         
         [Header("Enemy Components")]
         [SerializeField] GameObject player;
@@ -26,18 +26,14 @@ public class TrashMobRange : MonoBehaviour
         [SerializeField] GameObject bulletPrefab;
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
         public PlayerController playerController;
-
-
-
         
-    
         public bool isStunned;
     
 
         private void Start()
         {
             scriptAIPath = GetComponent<AIPath>();
-            currentHealth = soEnemy.maxHealth;
+            soEnemy.currentHealth = soEnemy.maxHealth;
             isStunned = false;
         }
         private void Update()
@@ -128,9 +124,9 @@ public class TrashMobRange : MonoBehaviour
         #region HealthEnemyRange
         public void TakeDamageFromPlayer(int damage)
         {
-            currentHealth -= damage;
+            soEnemy.currentHealth -= damage;
 
-            if (currentHealth <= 0)
+            if (soEnemy.currentHealth <= 0)
             {
                 TrashMobRangeDie();
             }

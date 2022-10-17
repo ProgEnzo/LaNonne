@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
+  soEnemy: {fileID: 0}
 --- !u!61 &248765315
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -275,6 +276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageMultiplier: 1
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
+  soEnemy: {fileID: 0}
 --- !u!61 &1935050333
 BoxCollider2D:
   m_ObjectHideFlags: 0

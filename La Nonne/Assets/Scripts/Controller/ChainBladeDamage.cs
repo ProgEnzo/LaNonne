@@ -10,6 +10,7 @@ namespace Controller
         public float damageMultiplier = 1f;
 
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
+        [FormerlySerializedAs("SO_Controller")] public SO_Enemy soEnemy;
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -24,7 +25,7 @@ namespace Controller
             if (other.gameObject.CompareTag("TrashMobRange"))
             {
                 other.gameObject.GetComponent<TrashMobRange>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
-                Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
+                Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().soEnemy.currentHealth);
             }
             
             //DMG du player sur le Bully

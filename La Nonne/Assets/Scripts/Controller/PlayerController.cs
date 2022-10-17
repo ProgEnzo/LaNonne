@@ -14,6 +14,7 @@ namespace Controller
         [SerializeField] public Rigidbody2D m_rigidbody;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
+        [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
     
         [SerializeField] private float m_timerDash;
 
@@ -202,7 +203,7 @@ namespace Controller
                     if (revealingDashAimedEnemy.CompareTag("TrashMobRange"))
                     {
                         revealingDashAimedEnemy.GetComponent<TrashMobRange>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
-                        Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
+                        Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + soEnemy.currentHealth);
                     }
             
                     //DMG du player sur le Bully

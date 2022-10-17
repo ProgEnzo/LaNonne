@@ -44,7 +44,7 @@ namespace AI.Elite
 
         private void Start()
         {
-            currentHealth = soEnemy.maxHealth;
+            soEnemy.currentHealth = soEnemy.maxHealth;
             GoToTheNearestMob();
             
             //Zones de heal / dégâts
@@ -82,6 +82,8 @@ namespace AI.Elite
                 if (col.gameObject.CompareTag("Bully") || col.gameObject.CompareTag("TrashMobClose") ||
                     col.gameObject.CompareTag("TrashMobRange"))
                 {
+                    soEnemy.currentHealth += healAmount;
+                    Debug.Log("LE MOB EST HEAL DE " + gameObject.GetComponent<TrashMobRange>().soEnemy.currentHealth);
 
                 }
 
@@ -90,8 +92,6 @@ namespace AI.Elite
                     playerController.TakeDamage(circleDamage); //Player takes damage
                     StartCoroutine(PlayerIsHitByCircle());
                 }
-
-
             }
         }
         
@@ -228,11 +228,6 @@ namespace AI.Elite
                 Vector2 knockback = direction * knockbackPower;
             
                 playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
-            }
-
-            if (col.gameObject.CompareTag("TrashMobRange") || col.gameObject.CompareTag("TrashMobClose") || col.gameObject.CompareTag("Bully"))
-            {
-                soEnemy.maxHealth += healAmount;
             }
         }
 
