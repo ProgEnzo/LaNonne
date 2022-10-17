@@ -14,7 +14,7 @@ namespace Controller
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
     
-        [SerializeField] private float m_timerDash = 0f;
+        [SerializeField] private float m_timerDash;
 
         public static PlayerController instance;
 
@@ -22,14 +22,17 @@ namespace Controller
 
         [Header("Revealing Dash")]
         public bool isHitting;
-        public float hitSpeed = 1f;
-        public float revealingDashDetectionRadius = 1f;
-        public int revealingDashEpCost;
+        [SerializeField] public float hitSpeed = 1f;
+        [SerializeField] public float revealingDashDetectionRadius = 1f;
+        [SerializeField] public int revealingDashEpCost;
         public GameObject revealingDashAimedEnemy;
-        public float toleranceDistance = 0.1f;
+        [SerializeField] public float toleranceDistance = 0.1f;
         public Vector3 newPosition;
-        public float stunDuration = 1f;
+        [SerializeField] public float stunDuration = 1f;
         Dictionary<GameObject, Coroutine> runningCoroutines = new();
+        [SerializeField] public float damageMultiplier = 1f;
+        [SerializeField] public float revealingDashTimer = 5f;
+        public float revealingDashTimerCount;
 
         private void Awake()
         {
@@ -144,7 +147,7 @@ namespace Controller
         #region AttackPlayer
         void RevealingDash()
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !isHitting && soController.epAmount >= revealingDashEpCost)
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !isHitting && soController.epAmount >= revealingDashEpCost && revealingDashTimerCount <= 0)
             {
                 List<RaycastHit2D> enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, revealingDashDetectionRadius, Vector2.zero, new ContactFilter2D(), enemiesInArea);
@@ -161,9 +164,14 @@ namespace Controller
                         revealingDashAimedEnemy = enemy.collider.gameObject;
                         newPosition = revealingDashAimedEnemy.transform.position;
                         isHitting = true;
+                        revealingDashTimerCount = revealingDashTimer;
                         break;
                     }
                 }
+            }
+            else if (revealingDashTimerCount > 0)
+            {
+                revealingDashTimerCount -= Time.deltaTime;
             }
 
             if (isHitting)
@@ -185,28 +193,28 @@ namespace Controller
                     //DMG du player sur le TrashMobClose
                     if (revealingDashAimedEnemy.CompareTag("TrashMobClose"))
                     {
-                        revealingDashAimedEnemy.GetComponent<TrashMobClose>().TakeDamageFromPlayer(soController.playerAttackDamage);
+                        revealingDashAimedEnemy.GetComponent<TrashMobClose>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
                         //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobClose>().currentHealth);
                     }
 
                     //DMG du player sur le TrashMobRange
                     if (revealingDashAimedEnemy.CompareTag("TrashMobRange"))
                     {
-                        revealingDashAimedEnemy.GetComponent<TrashMobRange>().TakeDamageFromPlayer(soController.playerAttackDamage);
+                        revealingDashAimedEnemy.GetComponent<TrashMobRange>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
                         Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
                     }
             
                     //DMG du player sur le Bully
                     if (revealingDashAimedEnemy.CompareTag("Bully"))
                     {
-                        revealingDashAimedEnemy.GetComponent<Bully>().TakeDamageFromPlayer(soController.playerAttackDamage);
+                        revealingDashAimedEnemy.GetComponent<Bully>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
                         //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
                     }
             
                     //DMG du player sur le caretaker
                     if (revealingDashAimedEnemy.CompareTag("Caretaker"))
                     {
-                        revealingDashAimedEnemy.GetComponent<CareTaker>().TakeDamageFromPlayer(soController.playerAttackDamage);
+                        revealingDashAimedEnemy.GetComponent<CareTaker>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
                         //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
                     }
                 
