@@ -11,7 +11,6 @@ namespace AI.Trash
         [SerializeField] public float currentHealth;
     
         [Header("Enemy Attack")]
-        [SerializeField] private int trashMobCloseDamage;
         [SerializeField] private float knockbackPower;
 
         [Header("Enemy Components")]

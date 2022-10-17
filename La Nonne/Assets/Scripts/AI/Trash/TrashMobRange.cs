@@ -17,18 +17,19 @@ public class TrashMobRange : MonoBehaviour
         [SerializeField] float bulletSpeed;
         [SerializeField] float knockbackBody;
 
+        [Header("Enemy Health")] 
+        [SerializeField] public float currentHealth;
+        
         [Header("Enemy Components")]
         [SerializeField] GameObject player;
         private AIPath scriptAIPath;
         [SerializeField] GameObject bulletPrefab;
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
         public PlayerController playerController;
-        public SO_Enemy so_Enemy;
 
 
 
-        [Header("Enemy Health")] 
-        [SerializeField] public float currentHealth;
+        
     
         public bool isStunned;
     
@@ -88,6 +89,30 @@ public class TrashMobRange : MonoBehaviour
         
             Destroy(bullet, 3f);
         }
+        
+        private void OnCollisionEnter2D(Collision2D col) 
+        {
+            //Si le TrashMobRange touche le player
+            if (col.gameObject.CompareTag("Player") && !isStunned)
+            {
+                StartCoroutine(PlayerIsHit());
+                playerController.TakeDamage(soEnemy.bodyDamage); //Player takes damage
+
+                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                Vector2 direction = (colCollider.transform.position - transform.position).normalized;
+                Vector2 knockback = direction * knockbackBody;
+            
+                playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                Debug.Log("Ca se lit mais tout ce qui est au dessus ne se lit pas...");
+            }
+        }
+
+        IEnumerator PlayerIsHit()
+        {
+            playerController.GetComponent<SpriteRenderer>().color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
+        }
     
         private void OnDrawGizmos()
         {
@@ -96,28 +121,7 @@ public class TrashMobRange : MonoBehaviour
             Gizmos.DrawWireSphere(position, aggroRange);
         }
         
-        private void OnCollisionEnter2D(Collision2D col) 
-        {
-            //Si le TrashMobClose touche le player
-            if (col.gameObject.CompareTag("Player") && !isStunned)
-            {
-                StartCoroutine(PlayerIsHitByRangeMob());
-                playerController.TakeDamage(so_Enemy.bodyDamage); //Player takes damage
-
-                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
-                Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockback = direction * knockbackBody;
-            
-                playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
-            }
-        }
         
-        IEnumerator PlayerIsHitByRangeMob()
-        {
-            playerController.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
-        }
 
         #endregion
     
