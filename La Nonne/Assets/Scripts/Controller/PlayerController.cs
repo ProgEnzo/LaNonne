@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using AI.Elite;
@@ -21,18 +22,18 @@ namespace Controller
         public RoomFirstDungeonGenerator rfg;
 
         [Header("Revealing Dash")]
-        public bool isHitting;
+        [NonSerialized] public bool isHitting;
         [SerializeField] public float hitSpeed = 1f;
         [SerializeField] public float revealingDashDetectionRadius = 1f;
         [SerializeField] public int revealingDashEpCost;
-        public GameObject revealingDashAimedEnemy;
+        [NonSerialized] public GameObject revealingDashAimedEnemy;
         [SerializeField] public float toleranceDistance = 0.1f;
-        public Vector3 newPosition;
+        [NonSerialized] public Vector3 newPosition;
         [SerializeField] public float stunDuration = 1f;
-        Dictionary<GameObject, Coroutine> runningCoroutines = new();
+        [NonSerialized] Dictionary<GameObject, Coroutine> runningCoroutines = new();
         [SerializeField] public float damageMultiplier = 1f;
         [SerializeField] public float revealingDashTimer = 5f;
-        public float revealingDashTimerCount;
+        [NonSerialized] public float revealingDashTimerCount;
 
         private void Awake()
         {
