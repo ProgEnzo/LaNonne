@@ -54,8 +54,9 @@ MonoBehaviour:
   currentHealth: 100
   trashMobCloseDamage: 20
   knockbackPower: 50
-  playerController: {fileID: 0}
-  SO_Enemy: {fileID: 11400000, guid: 97f1fa4b4eadc844d8e0d5343ed990f3, type: 2}
+  playerController: {fileID: 4401665247276526678, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
+  soEnemy: {fileID: 11400000, guid: 97f1fa4b4eadc844d8e0d5343ed990f3, type: 2}
+  isStunned: 0
 --- !u!212 &1593806974005075738
 SpriteRenderer:
   m_ObjectHideFlags: 0

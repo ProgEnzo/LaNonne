@@ -1,10 +1,10 @@
+using System.Collections;
+using Controller;
 using Pathfinding;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace AI.Trash
-{
-    public class TrashMobRange : MonoBehaviour
+public class TrashMobRange : MonoBehaviour
     {
         [Header("Enemy Detection")]
         [SerializeField] float distanceToPlayer;
@@ -15,12 +15,16 @@ namespace AI.Trash
         [Header("Enemy Attack Values")]
         [SerializeField] float cooldownBetweenShots;
         [SerializeField] float bulletSpeed;
+        [SerializeField] float knockbackBody;
 
         [Header("Enemy Components")]
         [SerializeField] GameObject player;
         private AIPath scriptAIPath;
         [SerializeField] GameObject bulletPrefab;
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
+        public PlayerController playerController;
+        public SO_Enemy so_Enemy;
+
 
 
         [Header("Enemy Health")] 
@@ -91,6 +95,29 @@ namespace AI.Trash
             Gizmos.DrawWireSphere(position, shootingRange);
             Gizmos.DrawWireSphere(position, aggroRange);
         }
+        
+        private void OnCollisionEnter2D(Collision2D col) 
+        {
+            //Si le TrashMobClose touche le player
+            if (col.gameObject.CompareTag("Player") && !isStunned)
+            {
+                StartCoroutine(PlayerIsHitByRangeMob());
+                playerController.TakeDamage(so_Enemy.bodyDamage); //Player takes damage
+
+                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                Vector2 direction = (colCollider.transform.position - transform.position).normalized;
+                Vector2 knockback = direction * knockbackBody;
+            
+                playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
+            }
+        }
+        
+        IEnumerator PlayerIsHitByRangeMob()
+        {
+            playerController.GetComponent<SpriteRenderer>().color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
+        }
 
         #endregion
     
@@ -112,4 +139,4 @@ namespace AI.Trash
 
         #endregion
     }
-}
+

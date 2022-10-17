@@ -8,7 +8,7 @@ public class SO_Enemy : ScriptableObject
     public float maxHealth;
     
     [Header("Attack Values")] 
-    public float attackDamage;
+    public int bodyDamage;
     
    
 }

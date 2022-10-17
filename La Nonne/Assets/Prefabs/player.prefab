@@ -512,7 +512,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.99765027, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -585,14 +585,13 @@ MonoBehaviour:
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
   m_timerDash: 0
   rfg: {fileID: 0}
-  isHitting: 0
   hitSpeed: 500
   revealingDashDetectionRadius: 20
   revealingDashEpCost: 0
-  revealingDashAimedEnemy: {fileID: 0}
   toleranceDistance: 0.1
-  newPosition: {x: 0, y: 0, z: 0}
   stunDuration: 3
+  damageMultiplier: 1
+  revealingDashTimer: 5
 --- !u!96 &4401665247276526667
 TrailRenderer:
   serializedVersion: 2

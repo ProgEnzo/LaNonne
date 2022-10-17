@@ -172,7 +172,7 @@ namespace AI.Elite
             if (col.gameObject.CompareTag("Player") && !isStunned)
             {
                 StartCoroutine(PlayerIsHit());
-                playerController.TakeDamage(caretakerBodyDamage); //Player takes damage
+                playerController.TakeDamage(soEnemy.bodyDamage); //Player takes damage
 
                 Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
