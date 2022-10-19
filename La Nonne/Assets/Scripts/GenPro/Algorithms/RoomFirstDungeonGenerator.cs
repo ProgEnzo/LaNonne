@@ -62,6 +62,13 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
       
       //List<Vector2Int> roomCenters = new List<Vector2Int>(); //Creating romms first
 
+      //for (int i = 0; i < roomsList.Count; i++)
+      //{
+         //roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(roomsList[i].center));
+         //dungeonData.Rooms.Add(new Room(roomsList[i].center, floor)); //A voir si ca marche (je ne suis pas sur)
+         //OnFinishedRoomGeneration?.Invoke();
+      //}
+
       foreach (var room in roomsList)
       {
           roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
@@ -178,9 +185,12 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
 
       return closest;
    }
+   
+   //public Dictionary<Room, HashSet<Vector2Int>> roomFloors = new Dictionary<Room, HashSet<Vector2Int>>();
 
    private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomsList)
    {
+      //roomFloors.Add(new Room(), new HashSet<Vector2Int>());
       HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
       foreach (var room in roomsList)
       {

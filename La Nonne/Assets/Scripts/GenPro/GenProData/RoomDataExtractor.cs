@@ -17,6 +17,7 @@ public class RoomDataExtractor : MonoBehaviour
     {
         dungeonData = FindObjectOfType<DungeonData>();
     }
+    
     public void ProcessRooms()
     {
         if (dungeonData == null)
@@ -24,7 +25,7 @@ public class RoomDataExtractor : MonoBehaviour
 
         foreach (Room room in dungeonData.Rooms)
         {
-            //find corener, near wall and inner tiles
+            //find corner, near wall and inner tiles
             foreach (Vector2Int tilePosition in room.FloorTiles)
             {
                 int neighboursCount = 4;
