@@ -18,7 +18,7 @@ public class TrashMobRange : MonoBehaviour
         [SerializeField] float knockbackBody;
 
         [Header("Enemy Health")]
-        [SerializeField] private float currentHealth;
+        [SerializeField] public float currentHealth;
         
         [Header("Enemy Components")]
         [SerializeField] GameObject player;
@@ -33,7 +33,7 @@ public class TrashMobRange : MonoBehaviour
         private void Start()
         {
             scriptAIPath = GetComponent<AIPath>();
-            soEnemy.currentHealth = soEnemy.maxHealth;
+            currentHealth = soEnemy.maxHealth;
             isStunned = false;
         }
         private void Update()
@@ -42,6 +42,7 @@ public class TrashMobRange : MonoBehaviour
             {
                 StopAndShoot();
             }
+            HealCeiling();
         }
 
         #region EnemyRangeBehavior
@@ -99,7 +100,6 @@ public class TrashMobRange : MonoBehaviour
                 Vector2 knockback = direction * knockbackBody;
             
                 playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
-                Debug.Log("Ca se lit mais tout ce qui est au dessus ne se lit pas...");
             }
         }
 
@@ -124,9 +124,9 @@ public class TrashMobRange : MonoBehaviour
         #region HealthEnemyRange
         public void TakeDamageFromPlayer(int damage)
         {
-            soEnemy.currentHealth -= damage;
+            currentHealth -= damage;
 
-            if (soEnemy.currentHealth <= 0)
+            if (currentHealth <= 0)
             {
                 TrashMobRangeDie();
             }
@@ -135,6 +135,14 @@ public class TrashMobRange : MonoBehaviour
         private void TrashMobRangeDie()
         {
             Destroy(gameObject);
+        }
+
+        private void HealCeiling()
+        {
+            if (currentHealth > soEnemy.maxHealth)
+            {
+                currentHealth = soEnemy.maxHealth;
+            }
         }
 
         #endregion

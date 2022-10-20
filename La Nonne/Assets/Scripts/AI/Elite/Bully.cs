@@ -27,6 +27,11 @@ namespace AI.Elite
             currentHealth = soEnemy.maxHealth;
             isStunned = false;
         }
+        
+        private void Update()
+        {
+            HealCeiling();
+        }
 
         #region HealthEnemyClose
         public void TakeDamageFromPlayer(int damage)
@@ -42,6 +47,14 @@ namespace AI.Elite
         private void BullyDie()
         {
             Destroy(gameObject);
+        }
+
+        private void HealCeiling()
+        {
+            if (currentHealth > soEnemy.maxHealth)
+            {
+                currentHealth = soEnemy.maxHealth;
+            }
         }
     
         #endregion

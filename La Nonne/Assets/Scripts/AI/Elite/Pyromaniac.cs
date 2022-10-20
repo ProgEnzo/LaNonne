@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 namespace AI.Elite
 {
-    public class Pyromane : MonoBehaviour
+    public class Pyromaniac : MonoBehaviour
     {
         [Header("Enemy Health")]
         [SerializeField] public float currentHealth;
@@ -57,7 +57,7 @@ namespace AI.Elite
             projectile.transform.position = transform1.position;
             projectile.SetActive(true);
             projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
-            projectile.GetComponent<PyromaneProjectile>().destination = destination;
+            projectile.GetComponent<PyromaniacProjectile>().destination = destination;
         }
 
         private void OnDrawGizmos()
