@@ -11,7 +11,6 @@ public abstract class AbstractDungeonGenerator : MonoBehaviour
    {
       tilemapVisualizer.Clear();
       RunProceduralGeneration();
-      RoomFirstDungeonGenerator.Generate();
    }
 
    protected abstract void RunProceduralGeneration();

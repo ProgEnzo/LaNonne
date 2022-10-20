@@ -17,24 +17,6 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
    [SerializeField] [Range(0, 10)] private int offSet = 1; //To not directly connect every rooms
    
    [SerializeField] private bool randomWalkRooms = false;
-   
-   public UnityEvent OnFinishedRoomGeneration;
-
-   private static DungeonData dungeonData;
-
-   private void Awake()
-   {
-      dungeonData = FindObjectOfType<DungeonData>();
-      if (dungeonData == null)
-         dungeonData = gameObject.AddComponent<DungeonData>();
-   }
-   
-   public static void Generate()
-   {
-      dungeonData.Reset();
-      
-      //dungeonData.Rooms.Add(new Room(new Vector2Int(0, 0), new HashSet<Vector2Int>()));
-   }
 
    protected override void RunProceduralGeneration()
    {
@@ -72,8 +54,6 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
       foreach (var room in roomsList)
       {
           roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
-          dungeonData.Rooms.Add(new Room(room.center, floor)); //A voir si ca marche (je ne suis pas sur)
-          OnFinishedRoomGeneration?.Invoke();
       }
 
       if(PlayerController.instance is not null)
