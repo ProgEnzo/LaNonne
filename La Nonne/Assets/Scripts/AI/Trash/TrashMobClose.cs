@@ -7,7 +7,8 @@ namespace AI.Trash
 {
     public class TrashMobClose : MonoBehaviour
     {
-        [Header("Enemy Health")] 
+        [Header("Enemy Health")]
+        public float currentHealth;
     
         [Header("Enemy Attack")]
         [SerializeField] private float knockbackPower;
@@ -24,16 +25,21 @@ namespace AI.Trash
 
         private void Start()
         {
-            soEnemy.currentHealth = soEnemy.maxHealth;
+            currentHealth = soEnemy.maxHealth;
             isStunned = false;
+        }
+        
+        private void Update()
+        {
+            HealCeiling();
         }
 
         #region HealthEnemyClose
         public void TakeDamageFromPlayer(int damage)
         {
-            soEnemy.currentHealth -= damage;
+            currentHealth -= damage;
 
-            if (soEnemy.currentHealth <= 0)
+            if (currentHealth <= 0)
             {
                 TrashMobCloseDie();
             }
@@ -42,6 +48,14 @@ namespace AI.Trash
         private void TrashMobCloseDie()
         {
             Destroy(gameObject);
+        }
+
+        private void HealCeiling()
+        {
+            if (currentHealth > soEnemy.maxHealth)
+            {
+                currentHealth = soEnemy.maxHealth;
+            }
         }
     
         #endregion

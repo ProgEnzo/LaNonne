@@ -203,7 +203,7 @@ namespace Controller
                     if (revealingDashAimedEnemy.CompareTag("TrashMobRange"))
                     {
                         revealingDashAimedEnemy.GetComponent<TrashMobRange>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
-                        Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + soEnemy.currentHealth);
+                        // Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
                     }
             
                     //DMG du player sur le Bully

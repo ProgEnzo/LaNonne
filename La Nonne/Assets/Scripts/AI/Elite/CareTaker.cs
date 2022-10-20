@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AI.Trash;
 using Controller;
 using Pathfinding;
 using UnityEngine;
@@ -17,11 +18,9 @@ namespace AI.Elite
         [Header("Enemy Attack")]
         [SerializeField] private int circleDamage;
         [SerializeField] private int healAmount;
-        [SerializeField] private float knockbackPower;
-        [SerializeField] private float cooldownTimerDamage;
-        [SerializeField] private float cooldownTimerHeal;
-        [SerializeField] private float timeBetweenCircleDamageSpawn;
-        [SerializeField] private float timeBetweenCircleHealSpawn;
+        [SerializeField] private float knockBackPower;
+        [SerializeField] private float cooldownTimer;
+        [SerializeField] private float timeBetweenCircleSpawn;
         [SerializeField] private bool isInCircle;
         [SerializeField] private float attackRange;
         private float distanceToPlayer;
@@ -30,8 +29,7 @@ namespace AI.Elite
         public PlayerController playerController;
         public SO_Controller soController;
         [SerializeField] private CircleCollider2D circle;
-        [SerializeField] private GameObject circleDamageSprite;
-        [SerializeField] private GameObject circleHealSprite;
+        [SerializeField] private GameObject circleSprite;
         [SerializeField] private GameObject player;
 
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
@@ -44,28 +42,23 @@ namespace AI.Elite
 
         private void Start()
         {
-            soEnemy.currentHealth = soEnemy.maxHealth;
+            currentHealth = soEnemy.maxHealth;
             GoToTheNearestMob();
             
             //Zones de heal / dégâts
             circle.enabled = false;
-            circleDamageSprite.SetActive(false);
-            circleHealSprite.SetActive(false);
+            circleSprite.SetActive(false);
         }
 
         private void Update()
         {
             DistanceBetweenPlayer();
+            HealCeiling();
             
             if (!isStunned)
             {
                 gameObject.GetComponent<AIDestinationSetter>().enabled = true;
                 CheckIfTargetIsDead();
-
-                if (isInCircle)
-                {
-                    
-                }
                
             }
             else
@@ -79,12 +72,32 @@ namespace AI.Elite
             
             if (!isStunned)
             {
-                if (col.gameObject.CompareTag("Bully") || col.gameObject.CompareTag("TrashMobClose") ||
-                    col.gameObject.CompareTag("TrashMobRange"))
+                //Heal le TrashMobCLose
+                if (col.gameObject.CompareTag("TrashMobClose"))
                 {
-                    soEnemy.currentHealth += healAmount;
-                    Debug.Log("LE MOB EST HEAL DE " + gameObject.GetComponent<TrashMobRange>().soEnemy.currentHealth);
+                    col.gameObject.GetComponent<TrashMobClose>().currentHealth += healAmount;
+                    //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobClose>().currentHealth);
+                }
 
+                //DMG du player sur le TrashMobRange
+                if (col.gameObject.CompareTag("TrashMobRange"))
+                {
+                    col.gameObject.GetComponent<TrashMobRange>().currentHealth += healAmount;
+                    // Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
+                }
+            
+                //DMG du player sur le Bully
+                if (col.gameObject.CompareTag("Bully"))
+                {
+                    col.gameObject.GetComponent<Bully>().currentHealth += healAmount;
+                    //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
+                }
+            
+                //DMG du player sur le caretaker
+                if (col.gameObject.CompareTag("Caretaker"))
+                {
+                    col.gameObject.GetComponent<CareTaker>().currentHealth += healAmount;
+                    //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
                 }
 
                 if (col.gameObject.CompareTag("Player"))
@@ -99,33 +112,15 @@ namespace AI.Elite
         void DistanceBetweenPlayer()
         {
             distanceToPlayer = Vector2.Distance(player.transform.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
-        
-            if (distanceToPlayer <= attackRange) //si le joueur est dans la range d'attaque du Caretaker
+            //Timer for spawning circles
+            cooldownTimer -= Time.deltaTime; // cooldowntimer = -1 toutes les secondes
+            if (cooldownTimer > 0)
             {
-                //Timer for spawning circles
-                cooldownTimerDamage -= Time.deltaTime; // cooldowntimer = -1 toutes les secondes
-                if (cooldownTimerDamage > 0)
-                {
-                    return;
-                }
-
-                cooldownTimerDamage = timeBetweenCircleDamageSpawn;
-                StartCoroutine(BlinkDamageCircle());
-
+                return;
             }
-            else
-            {
-                //Timer for spawning circles
-                cooldownTimerHeal -= Time.deltaTime;
-                if (cooldownTimerHeal > 0)
-                {
-                    return;
-                }
 
-                cooldownTimerHeal = timeBetweenCircleHealSpawn;
-                StartCoroutine(BlinkHealCircle());
-
-            }
+            cooldownTimer = timeBetweenCircleSpawn;
+            StartCoroutine(BlinkCircle());
         }
 
         private void OnDrawGizmos()
@@ -134,23 +129,14 @@ namespace AI.Elite
             Gizmos.DrawWireSphere(position, attackRange);
         }
 
-        IEnumerator BlinkDamageCircle()
+        IEnumerator BlinkCircle()
         {
             circle.enabled = true;
-            circleDamageSprite.SetActive(true);
+            circleSprite.SetActive(true);
+            currentHealth += healAmount;
             yield return new WaitForSeconds(2);
             circle.enabled = false;
-            circleDamageSprite.SetActive(false);
-        }
-
-        IEnumerator BlinkHealCircle()
-        {
-            circle.enabled = true;
-            circleHealSprite.SetActive(true);
-            yield return new WaitForSeconds(2);
-            circle.enabled = false;
-            circleHealSprite.SetActive(false);
-
+            circleSprite.SetActive(false);
         }
         
         IEnumerator PlayerIsHitByCircle()
@@ -211,6 +197,14 @@ namespace AI.Elite
         {
             Destroy(gameObject);
         }
+
+        private void HealCeiling()
+        {
+            if (currentHealth > soEnemy.maxHealth)
+            {
+                currentHealth = soEnemy.maxHealth;
+            }
+        }
     
         #endregion
     
@@ -225,9 +219,9 @@ namespace AI.Elite
 
                 Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockback = direction * knockbackPower;
+                Vector2 knockBack = direction * knockBackPower;
             
-                playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.m_rigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
         }
 

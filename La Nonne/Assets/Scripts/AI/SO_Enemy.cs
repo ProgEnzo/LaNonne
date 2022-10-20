@@ -6,7 +6,6 @@ public class SO_Enemy : ScriptableObject
 {
     [Header("Enemy Health")] 
     public float maxHealth;
-    public float currentHealth;
     
     [Header("Attack Values")] 
     public int bodyDamage;
