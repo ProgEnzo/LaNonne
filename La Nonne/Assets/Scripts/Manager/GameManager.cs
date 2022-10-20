@@ -6,8 +6,5 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public AbstractDungeonGenerator générationDeMap;
-    private void Start()
-    {
-        générationDeMap.GenerateDungeon();
-    }
+    private void Start() => générationDeMap.GenerateDungeon();
 }

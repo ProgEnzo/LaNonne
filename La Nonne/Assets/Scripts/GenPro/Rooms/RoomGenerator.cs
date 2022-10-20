@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomGenerator : MonoBehaviour
+public abstract class RoomGenerator : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract List<GameObject> ProcessRoom(
+        Vector2Int roomCenter, 
+        HashSet<Vector2Int> roomFloor, 
+        HashSet<Vector2Int> corridors);
 }
