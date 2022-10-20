@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2111184171189557223}
+  - component: {fileID: 1961255753625137962}
   - component: {fileID: 2111184171189557222}
   - component: {fileID: 2111184171189557221}
   - component: {fileID: 1261268802095198479}
-  - component: {fileID: 1961255753625137962}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -36,6 +36,23 @@ Transform:
   m_Father: {fileID: 5813854497670849600}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1961255753625137962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2111184171189557220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07019be1e4051ef498bc939c3f50ba4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionRadius: 3
+  tolerance: 0.001
+  destination: {x: 0, y: 0, z: 0}
+  knockBackPower: 0.2
+  soEnemy: {fileID: 11400000, guid: e10e890db14ac3945b0b1d9d70c2cd51, type: 2}
 --- !u!212 &2111184171189557222
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -125,21 +142,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1961255753625137962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2111184171189557220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07019be1e4051ef498bc939c3f50ba4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  explosionRadius: 5
-  tolerance: 0
-  destination: {x: 0, y: 0, z: 0}
 --- !u!1 &5813854497670849624
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,10 +195,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   cooldownTimer: 0
-  detectionRadius: 0
-  throwRadius: 0
-  projectileSpeed: 0
-  soEnemy: {fileID: 0}
+  detectionRadius: 10
+  throwRadius: 5
+  projectileSpeed: 1
+  soEnemy: {fileID: 11400000, guid: e10e890db14ac3945b0b1d9d70c2cd51, type: 2}
   isStunned: 0
 --- !u!212 &5813854497670849601
 SpriteRenderer:

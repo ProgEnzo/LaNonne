@@ -18,6 +18,12 @@ namespace AI.Elite
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
 
         public bool isStunned;
+        
+        private void Start()
+        {
+            currentHealth = soEnemy.maxHealth;
+            timer = cooldownTimer;
+        }
 
         private void Update()
         {
@@ -34,7 +40,7 @@ namespace AI.Elite
                 //Si le timer n'est pas écoulé, on le décrémente
                 if (timer > 0f)
                 {
-                    timer -= Time.deltaTime;
+                    //timer -= Time.deltaTime;
                 }
                 //Sinon, le pyromane lance sa zone de feu
                 else
@@ -43,10 +49,10 @@ namespace AI.Elite
                     var newPositionVector = (playerPosition - position).normalized * distanceToCross; //On calcule le vecteur de déplacement du projectile
                     var newPosition = position + newPositionVector; //On calcule la nouvelle position du projectile
                     ThrowProjectile(newPosition, newPositionVector.normalized); //On lance le projectile à la nouvelle position, avec la nouvelle direction
-                }
                 
-                //Réinitialisation du timer
-                timer = cooldownTimer;
+                    //Réinitialisation du timer
+                    timer = 10f;
+                }
             }
         }
 
@@ -64,6 +70,7 @@ namespace AI.Elite
         {
             var position = transform.position;
             Gizmos.DrawWireSphere(position, detectionRadius);
+            Gizmos.DrawWireSphere(position, throwRadius);
         }
     }
 }

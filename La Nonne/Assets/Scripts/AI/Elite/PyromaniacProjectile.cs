@@ -23,9 +23,6 @@ namespace AI.Elite
         {
             circleGameObject = transform.GetChild(0).gameObject; //Initialisation de l'accès au cercle
             circleGameObject.SetActive(false); //On le désactive pour le moment
-            /*var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
-            var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
-            circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.25f); //Initialisation de la transparence du cercle*/
         }
 
         private void Update()
@@ -46,12 +43,13 @@ namespace AI.Elite
             if (position.x-tolerance < transform.position.x && transform.position.x < position.x+tolerance && position.y-tolerance < transform.position.y && transform.position.y < position.y+tolerance)
             {
                 var playerRef = PlayerController.instance;
-                /*SpriteRenderer circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>();
-                var color = circleSpriteRenderer.color;
-                circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f);*/
-                var objectsInArea = new List<RaycastHit2D>();
-                Physics2D.CircleCast(transform.position, explosionRadius, Vector2.zero, new ContactFilter2D(), objectsInArea);
-                if (objectsInArea != new List<RaycastHit2D>())
+                circleGameObject.SetActive(true); //On active le cercle
+                SpriteRenderer circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
+                var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
+                circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle
+                var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'explosion
+                Physics2D.CircleCast(transform.position, explosionRadius, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
+                if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
                 {
                     foreach (var hit in objectsInArea)
                     {
@@ -68,10 +66,6 @@ namespace AI.Elite
 
                             playerRef.m_rigidbody.AddForce(knockBack, ForceMode2D.Impulse);
                         }
-                        
-                        /*Vector3 dir = hit.transform.position - playerRef.transform.position;
-                        Vector3 dirNormalized = dir.normalized;
-                        hit.transform.position = new Vector2(hit.transform.position.x + dirNormalized.x * so.knockBack, hit.transform.position.y + dirNormalized.y * so.knockBack);*/
                     }
                 }
                 yield return new WaitForSeconds(0.1f);
