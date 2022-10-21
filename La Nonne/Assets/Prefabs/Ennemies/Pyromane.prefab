@@ -48,10 +48,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07019be1e4051ef498bc939c3f50ba4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionRadius: 3
-  tolerance: 0.001
+  explosionRadiusIndicator: 5
+  tolerance: 0.1
   destination: {x: 0, y: 0, z: 0}
+  isExploded: 0
   knockBackPower: 0.2
+  fireCooldown: 1
   soEnemy: {fileID: 11400000, guid: e10e890db14ac3945b0b1d9d70c2cd51, type: 2}
 --- !u!212 &2111184171189557222
 SpriteRenderer:
@@ -197,7 +199,8 @@ MonoBehaviour:
   cooldownTimer: 0
   detectionRadius: 10
   throwRadius: 5
-  projectileSpeed: 1
+  projectileSpeed: 3
+  dashSpeed: 500
   soEnemy: {fileID: 11400000, guid: e10e890db14ac3945b0b1d9d70c2cd51, type: 2}
   isStunned: 0
 --- !u!212 &5813854497670849601
