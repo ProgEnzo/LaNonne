@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Controller;
 using Pathfinding;
@@ -18,6 +19,8 @@ namespace AI.Elite
         [SerializeField] public float projectileSpeed;
         [SerializeField] public float dashSpeed = 10f;
         private Coroutine currentCoroutine;
+        private AIPath scriptAIPath;
+        private bool isDashing;
 
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
 
@@ -25,8 +28,10 @@ namespace AI.Elite
         
         private void Start()
         {
+            scriptAIPath = GetComponent<AIPath>();
             currentHealth = soEnemy.maxHealth;
             timer = cooldownTimer;
+            isDashing = false;
         }
 
         private void Update()
@@ -47,35 +52,26 @@ namespace AI.Elite
                 //Si le joueur est dans le rayon de détection
                 if (Vector3.Distance(position, playerPosition) <= detectionRadius)
                 {
-                    //Si le timer n'est pas écoulé, on le décrémente
-                    if (timer > 0f)
-                    {
-                        //timer -= Time.deltaTime;
-                    }
+                    scriptAIPath.maxSpeed = 0f;
+                    GetComponent<AIDestinationSetter>().enabled = false;
+                    scriptAIPath.enabled = false;
                     //Sinon, le pyromane lance sa zone de feu
-                    else
-                    {
-                        var distanceToCross = Mathf.Min(Vector3.Distance(position, playerPosition), throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
-                        var newPositionVector = (playerPosition - position).normalized * distanceToCross; //On calcule le vecteur de déplacement du projectile
-                        var newPosition = position + newPositionVector; //On calcule la nouvelle position du projectile
-                        ThrowProjectile(newPosition, newPositionVector.normalized); //On lance le projectile à la nouvelle position, avec la nouvelle direction
-                
-                        //Réinitialisation du timer
-                        timer = 10f;
-                    }
+                    var distanceToCross = Mathf.Min(Vector3.Distance(position, playerPosition), throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
+                    var newPositionVector = (playerPosition - position).normalized * distanceToCross; //On calcule le vecteur de déplacement du projectile
+                    var newPosition = position + newPositionVector; //On calcule la nouvelle position du projectile
+                    ThrowProjectile(newPosition, newPositionVector.normalized); //On lance le projectile à la nouvelle position, avec la nouvelle direction
                 }
                 else
                 {
                     //Déplacement du pyromane
+                    scriptAIPath.maxSpeed = 3f;
                 }
             }
             //Une fois que le projectile a explosé
             else
             {
-                //Constat du feu
-                currentCoroutine ??= StartCoroutine(WaitToDash());
-                
                 //Dash vers la zone de feu
+                currentCoroutine ??= StartCoroutine(DashToFireZone());
             }
         }
 
@@ -89,14 +85,13 @@ namespace AI.Elite
             projectile.GetComponent<PyromaniacProjectile>().destination = destination;
         }
         
-        private IEnumerator WaitToDash()
+        private IEnumerator DashToFireZone()
         {
             yield return new WaitForSeconds(0.5f);
-            GetComponent<AIDestinationSetter>().enabled = false;
-            GetComponent<AIPath>().enabled = false;
             var transform1 = transform;
             var position = transform1.position; //Position du pyromane
             var projectile = transform1.GetChild(0).gameObject;
+            isDashing = true;
             GetComponent<Rigidbody2D>().AddForce((projectile.transform.position - position).normalized * dashSpeed);
         }
 
@@ -105,6 +100,15 @@ namespace AI.Elite
             var position = transform.position;
             Gizmos.DrawWireSphere(position, detectionRadius);
             Gizmos.DrawWireSphere(position, throwRadius);
+        }
+
+        private void OnCollisionEnter2D(Collision2D col)
+        {
+            if (isDashing)
+            {
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                isDashing = false;
+            }
         }
     }
 }
