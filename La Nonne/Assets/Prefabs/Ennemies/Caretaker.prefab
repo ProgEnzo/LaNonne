@@ -32,7 +32,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6272501254927288805}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -56.28, y: 50.350002, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 5}
   m_ConstrainProportionsScale: 0
@@ -55,12 +55,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 100
   circleDamage: 20
-  healAmount: 0
-  knockBackPower: 0
+  healAmount: 50
+  knockBackPower: 50
   cooldownTimer: 2
   timeBetweenCircleSpawn: 1
   isInCircle: 0
-  attackRange: 0
+  attackRange: 5
   playerController: {fileID: 0}
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
   circle: {fileID: 6272501254927288816}
@@ -165,7 +165,7 @@ MonoBehaviour:
   radius: 2
   height: 1.89
   canMove: 1
-  maxSpeed: 2
+  maxSpeed: 3
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
@@ -287,7 +287,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 3.3
 --- !u!1 &6272501255602388926
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,8 +313,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6272501255602388926}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.2, z: 0}
-  m_LocalScale: {x: 0.56452495, y: 0.56452495, z: 0.16935748}
+  m_LocalPosition: {x: 0, y: 0.33999938, z: 0}
+  m_LocalScale: {x: 0.9513471, y: 0.9513471, z: 0.2854041}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6272501254927288829}

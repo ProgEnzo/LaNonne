@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Controller;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace AI.Elite
 
         [Header("Enemy Components")]
         public PlayerController playerController;
+
+        public Rigidbody2D rbBully;
 
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
     
@@ -58,7 +61,7 @@ namespace AI.Elite
         }
     
         #endregion
-    
+        
 
         private void OnCollisionEnter2D(Collision2D col) 
         {
@@ -74,6 +77,8 @@ namespace AI.Elite
             
                 playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
+
+            
         }
 
 

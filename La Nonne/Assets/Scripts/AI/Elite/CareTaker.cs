@@ -79,21 +79,21 @@ namespace AI.Elite
                     //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobClose>().currentHealth);
                 }
 
-                //DMG du player sur le TrashMobRange
+                //Heal le TrashMobRange
                 if (col.gameObject.CompareTag("TrashMobRange"))
                 {
                     col.gameObject.GetComponent<TrashMobRange>().currentHealth += healAmount;
                     // Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
                 }
             
-                //DMG du player sur le Bully
+                //Heal le Bully
                 if (col.gameObject.CompareTag("Bully"))
                 {
                     col.gameObject.GetComponent<Bully>().currentHealth += healAmount;
                     //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
                 }
             
-                //DMG du player sur le caretaker
+                //Heal le Caretaker
                 if (col.gameObject.CompareTag("Caretaker"))
                 {
                     col.gameObject.GetComponent<CareTaker>().currentHealth += healAmount;
