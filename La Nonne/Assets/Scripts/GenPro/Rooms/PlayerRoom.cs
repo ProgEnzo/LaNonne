@@ -12,12 +12,8 @@ public class PlayerRoom : RoomGenerator
     [SerializeField]
     private PrefabPlacer prefabPlacer;
 
-    public override List<GameObject> ProcessRoom(
-        Vector2Int roomCenter, 
-        HashSet<Vector2Int> roomFloor, 
-        HashSet<Vector2Int> roomFloorNoCorridors)
+    public override List<GameObject> ProcessRoom(Vector2Int roomCenter, HashSet<Vector2Int> roomFloor, HashSet<Vector2Int> roomFloorNoCorridors)
     {
-
         ItemPlacementHelper itemPlacementHelper = 
             new ItemPlacementHelper(roomFloor, roomFloorNoCorridors);
 
@@ -40,7 +36,7 @@ public abstract class PlacementData
     [Min(0)]
     public int minQuantity = 0;
     [Min(0)]
-    [Tooltip("Max is inclusive")]
+    [Tooltip("Le maximum est inclusif")]
     public int maxQuantity = 0;
     public int Quantity
         => UnityEngine.Random.Range(minQuantity, maxQuantity + 1);

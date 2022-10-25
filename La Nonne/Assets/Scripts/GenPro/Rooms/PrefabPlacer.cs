@@ -25,7 +25,6 @@ public class PrefabPlacer : MonoBehaviour
                     );
                 if (possiblePlacementSpot.HasValue)
                 {
-
                     placedObjects.Add(CreateObject(placementData.enemyPrefab, possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f))); //Instantiate(placementData.enemyPrefab,possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f), Quaternion.identity)
                 }
             }
