@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c1cf48c2065146438007a728d884ce6, type: 3}
-  m_Name: BookShelf
+  m_Name: Torch
   m_EditorClassIdentifier: 
-  sprite: {fileID: 696843062, guid: 86d599aff8391914293b4071e91d190d, type: 3}
+  sprite: {fileID: 5860325458425312261, guid: a0d3fbbc155eb404a87f827b40a48dfe, type: 3}
   size: {x: 1, y: 1}
   placementType: 1
   addOffset: 0
-  health: 2
-  nonDestructible: 0
+  health: -1
+  nonDestructible: 1
