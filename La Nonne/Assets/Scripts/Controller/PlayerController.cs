@@ -54,7 +54,7 @@ namespace Controller
         {
             soController.currentHealth = soController.maxHealth;
             isHitting = false;
-            ReInit();
+            //ReInit();
         }
 
         public void ResetVelocity()
@@ -62,10 +62,10 @@ namespace Controller
             m_rigidbody.velocity = Vector2.zero;
         }
 
-        public void ReInit()
+        /*public void ReInit()
         {
             transform.position = new Vector3(rfg.roomCenters[0].x, rfg.roomCenters[0].y, 0);
-        }
+        }*/
     
         void OnDestroy()
         {

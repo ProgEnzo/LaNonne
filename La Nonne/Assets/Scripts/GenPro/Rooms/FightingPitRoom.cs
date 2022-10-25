@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightingPitRoom : MonoBehaviour
+public class FightingPitRoom : RoomGenerator
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private PrefabPlacer prefabPlacer;
 
-    // Update is called once per frame
-    void Update()
+    public List<EnemyPlacementData> enemyPlacementData;
+    public List<ItemPlacementData> itemData;
+
+    public override List<GameObject> ProcessRoom(Vector2Int roomCenter, HashSet<Vector2Int> roomFloor, HashSet<Vector2Int> roomFloorNoCorridors)
     {
-        
+        ItemPlacementHelper itemPlacementHelper =
+            new ItemPlacementHelper(roomFloor, roomFloorNoCorridors);
+
+        List<GameObject> placedObjects =
+            prefabPlacer.PlaceAllItems(itemData, itemPlacementHelper);
+
+        placedObjects.AddRange(prefabPlacer.PlaceEnemies(enemyPlacementData, itemPlacementHelper));
+
+        return placedObjects;
     }
 }

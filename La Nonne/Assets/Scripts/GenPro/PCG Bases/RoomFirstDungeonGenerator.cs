@@ -56,10 +56,10 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
           roomCenters.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
       }
 
-      if(PlayerController.instance is not null)
+      /*if(PlayerController.instance is not null)
       {
          PlayerController.instance.ReInit();
-      }
+      }*/
 
       HashSet<Vector2Int> corridors = ConnectRooms(roomCenters);
       floor.UnionWith(corridors); //to spawn floor tiles for corridors as well
