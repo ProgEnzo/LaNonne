@@ -18,8 +18,8 @@ public class RoomContentGenerator : MonoBehaviour
 
     public Transform itemParent;
 
-    [SerializeField]
-    private CinemachineVirtualCamera cinemachineCamera;
+    //[SerializeField]
+    //private CinemachineVirtualCamera cinemachineCamera;
 
     public UnityEvent RegenerateDungeon;
 
@@ -74,11 +74,11 @@ public class RoomContentGenerator : MonoBehaviour
         dungeonData.roomsDictionary.Remove(playerSpawnPoint);
     }
 
-    private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas
+    /*private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas
     {
         cinemachineCamera.LookAt = playerTransform;
         cinemachineCamera.Follow = playerTransform;
-    }
+    }*/
 
     private void SelectEnemySpawnPoints(DungeonData dungeonData)
     {
