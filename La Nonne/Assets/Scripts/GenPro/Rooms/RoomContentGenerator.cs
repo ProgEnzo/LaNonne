@@ -74,7 +74,7 @@ public class RoomContentGenerator : MonoBehaviour
         dungeonData.roomsDictionary.Remove(playerSpawnPoint);
     }
 
-    /*private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas
+    /*private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas 
     {
         cinemachineCamera.LookAt = playerTransform;
         cinemachineCamera.Follow = playerTransform;
@@ -84,14 +84,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary)
         { 
-            spawnedObjects.AddRange(
-                defaultRoom.ProcessRoom(
-                    roomData.Key,
-                    roomData.Value, 
-                    dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)
-                    )
-            );
-
+            spawnedObjects.AddRange(defaultRoom.ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
         }
     }
 }

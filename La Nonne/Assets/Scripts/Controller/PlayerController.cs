@@ -21,6 +21,8 @@ namespace Controller
         public static PlayerController instance;
 
         public RoomFirstDungeonGenerator rfg;
+        
+        public DijkstraAlgorithm dijkstraAlgorithm;
 
         [Header("Revealing Dash")]
         [NonSerialized] public bool isHitting;
@@ -64,7 +66,7 @@ namespace Controller
 
         /*public void ReInit()
         {
-            transform.position = new Vector3(rfg.roomCenters[0].x, rfg.roomCenters[0].y, 0);
+            transform.position = dijkstraAlgorithm.startingPoint.transform.position;
         }*/
     
         void OnDestroy()
