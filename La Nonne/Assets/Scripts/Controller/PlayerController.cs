@@ -6,6 +6,7 @@ using AI.Trash;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace Controller
 {
@@ -37,6 +38,9 @@ namespace Controller
         [SerializeField] public float damageMultiplier = 1f;
         [SerializeField] public float revealingDashTimer = 5f;
         [NonSerialized] public float revealingDashTimerCount;
+        
+        [SerializeField] public Slider hpSlider;
+
 
         private void Awake()
         {
@@ -56,6 +60,9 @@ namespace Controller
         {
             soController.currentHealth = soController.maxHealth;
             isHitting = false;
+            hpSlider.maxValue = soController.maxHealth;
+            hpSlider.value = soController.maxHealth;
+
             //ReInit();
         }
 
@@ -130,6 +137,7 @@ namespace Controller
         {
         
             soController.currentHealth -= damage;
+            hpSlider.value -= damage;
             Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
 
             if (soController.currentHealth <= 0)
