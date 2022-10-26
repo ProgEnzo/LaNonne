@@ -9,7 +9,7 @@ public class SimpleRandomWalkMapGenerator : AbstractDungeonGenerator
 {
     [SerializeField] protected SimpleRandomWalkSO randomWalkParameters;
 
-    protected override void RunProceduralGeneration() //vérifier ce que fait réellement "override" ! (ce commentaire reste tant que ce n'est pas fait)
+    protected override void RunProceduralGeneration() 
     {
         HashSet<Vector2Int> floorPositions = RunRandomWalk(randomWalkParameters, startPosition);
         tilemapVisualizer.Clear();

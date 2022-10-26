@@ -23,7 +23,7 @@ public class RoomContentGenerator : MonoBehaviour
 
     public UnityEvent RegenerateDungeon;
 
-    private void Update()
+    /*private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -33,7 +33,7 @@ public class RoomContentGenerator : MonoBehaviour
             }
             RegenerateDungeon?.Invoke();
         }
-    }
+    }*/
     public void GenerateRoomContent(DungeonData dungeonData)
     {
         foreach (GameObject item in spawnedObjects)
