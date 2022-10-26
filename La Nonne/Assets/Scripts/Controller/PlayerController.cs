@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AI.Elite;
 using AI.Trash;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -39,7 +40,10 @@ namespace Controller
         [SerializeField] public float revealingDashTimer = 5f;
         [NonSerialized] public float revealingDashTimerCount;
         
+        [Header("UI elements")]
+
         [SerializeField] public Slider hpSlider;
+        [SerializeField] public int currentEp;
 
 
         private void Awake()
@@ -65,6 +69,9 @@ namespace Controller
 
             //ReInit();
         }
+        
+
+        
 
         public void ResetVelocity()
         {
@@ -97,6 +104,11 @@ namespace Controller
         {
             m_rigidbody.drag = soController.dragDeceleration * soController.dragMultiplier;
             ManageMove();
+        }
+        
+        public void AddEP(int epGain)
+        {
+            currentEp += epGain;
         }
     
         #region MovementPlayer
@@ -135,7 +147,6 @@ namespace Controller
         #region HealthPlayer
         public void TakeDamage(int damage)
         {
-        
             soController.currentHealth -= damage;
             hpSlider.value -= damage;
             Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
