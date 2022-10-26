@@ -66,6 +66,7 @@ namespace Controller
             isHitting = false;
             hpSlider.maxValue = soController.maxHealth;
             hpSlider.value = soController.maxHealth;
+            currentEp = 0;
 
             //ReInit();
         }
@@ -240,6 +241,15 @@ namespace Controller
                         revealingDashAimedEnemy.GetComponent<CareTaker>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
                         //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
                     }
+                    
+                    //DMG du player sur le TDI
+                    if (revealingDashAimedEnemy.CompareTag("TDI"))
+                    {
+                        revealingDashAimedEnemy.GetComponent<TDI>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
+                        //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
+                    }
+                    
+                    
                 
                     isHitting = false;
                 }

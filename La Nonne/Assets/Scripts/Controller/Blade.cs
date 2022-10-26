@@ -112,6 +112,13 @@ namespace Controller
                 other.gameObject.GetComponent<CareTaker>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * chainBladeDamage.damageMultiplier));
                 //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
+            
+            //DMG du player sur le TDI
+            if (other.gameObject.CompareTag("TDI"))
+            {
+                other.gameObject.GetComponent<TDI>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * chainBladeDamage.damageMultiplier));
+                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
+            }
         }
     }
 }

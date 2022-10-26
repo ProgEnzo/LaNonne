@@ -1,3 +1,5 @@
+using Controller;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace AI.Elite
@@ -7,6 +9,11 @@ namespace AI.Elite
         [Header("Enemy Health")] 
         [SerializeField] public float currentHealth;
         [SerializeField] public float maxHealth;
+        
+        [Header("Components")] 
+        [SerializeField] public GameObject bully;
+        [SerializeField] public GameObject caretaker;
+        public PlayerController playerController;
         private void Start()
         {
             currentHealth = maxHealth;
@@ -16,15 +23,17 @@ namespace AI.Elite
         {
             currentHealth -= damage;
 
-            if (currentHealth <= 0)
+            if (currentHealth <= 50)
             {
-                TDIDie();
+                Dissociate();
             }
         }
 
-        private void TDIDie()
+        private void Dissociate()
         {
             Destroy(gameObject);
+            Instantiate(bully, transform.position, quaternion.identity);
+            Instantiate(caretaker, transform.position, quaternion.identity);
         }
     }
 }

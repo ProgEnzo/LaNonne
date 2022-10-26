@@ -13,7 +13,7 @@ public class EPCount : MonoBehaviour
 
     void Start()
     {
-        epCount.text = "EP COUNT : " + playerController.currentEp;
+        epCount.text = "EP COUNT : " + 0;
     }        
 
 
