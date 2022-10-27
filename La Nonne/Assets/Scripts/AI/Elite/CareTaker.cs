@@ -17,8 +17,9 @@ namespace AI.Elite
     
         [Header("Enemy Attack")]
         [SerializeField] private int circleDamage;
+        [SerializeField] private int bodyDamage;
         [SerializeField] private int healAmount;
-        [SerializeField] private float knockBackPower;
+        [SerializeField] private float bodyKnockback;
         [SerializeField] private float cooldownTimer;
         [SerializeField] private float timeBetweenCircleSpawn;
         [SerializeField] private bool isInCircle;
@@ -110,13 +111,12 @@ namespace AI.Elite
 
                 if (col.gameObject.CompareTag("Player"))
                 {
-                    playerController.TakeDamage(circleDamage); //Player takes damage
-                    StartCoroutine(PlayerIsHitByCircle());
+                    col.GetComponent<PlayerController>().TakeDamage(circleDamage); //Player takes damage
+                    StartCoroutine(PlayerIsHit());
                 }
             }
         }
         
-
         void DistanceBetweenPlayer()
         {
             distanceToPlayer = Vector2.Distance(player.transform.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
@@ -147,12 +147,7 @@ namespace AI.Elite
             circleSprite.SetActive(false);
         }
         
-        IEnumerator PlayerIsHitByCircle()
-        {
-            playerController.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
-        }
+        
 
         public void GoToTheNearestMob()
         {
@@ -219,26 +214,25 @@ namespace AI.Elite
 
         private void OnCollisionEnter2D(Collision2D col) 
         {
-            //Si le caretaker touche le player
-            if (col.gameObject.CompareTag("Player") && !isStunned)
+            //Si le bully touche le player
+            if (col.gameObject.CompareTag("Player"))
             {
                 StartCoroutine(PlayerIsHit());
-                playerController.TakeDamage(soEnemy.bodyDamage); //Player takes damage
+                playerController.TakeDamage(bodyDamage); //Player takes damage
 
                 Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockBack = direction * knockBackPower;
+                Vector2 knockback = direction * bodyKnockback;
             
-                playerController.m_rigidbody.AddForce(knockBack, ForceMode2D.Impulse);
+                playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
         }
-
+        
         IEnumerator PlayerIsHit()
         {
             playerController.GetComponent<SpriteRenderer>().color = Color.red;
             yield return new WaitForSeconds(0.1f);
-            playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
+            playerController.GetComponent<SpriteRenderer>().color = Color.white;
         }
-    
     }
 }

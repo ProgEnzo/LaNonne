@@ -84,8 +84,6 @@ namespace AI.Elite
             
                 playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
-
-            
         }
 
 
@@ -93,8 +91,7 @@ namespace AI.Elite
         {
             playerController.GetComponent<SpriteRenderer>().color = Color.red;
             yield return new WaitForSeconds(0.1f);
-            playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
-
+            playerController.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
 }
