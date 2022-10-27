@@ -411,7 +411,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6519355346758503765}
-  - component: {fileID: 295013419}
+  - component: {fileID: 952559438}
   m_Layer: 6
   m_Name: MinimapIcon
   m_TagString: Untagged
@@ -434,7 +434,7 @@ Transform:
   m_Father: {fileID: 4401665247276526679}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &295013419
+--- !u!212 &952559438
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -516,7 +516,7 @@ Transform:
   m_GameObject: {fileID: 4401665247276526673}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.6, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6519355346758503765}
@@ -566,7 +566,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 185514731136046895, guid: 4a463eeba8b4d394ea6414a074460896, type: 3}
   m_Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -615,7 +615,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 8.34, y: 9.19}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -732,7 +732,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.9921569, g: 0.9960785, b: 0, a: 1}
+      key0: {r: 0.21960786, g: 0.058823533, b: 0.003921569, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -782,7 +782,7 @@ GameObject:
   - component: {fileID: 1923280827}
   m_Layer: 0
   m_Name: Blade
-  m_TagString: Untagged
+  m_TagString: Blade
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -823,7 +823,7 @@ MonoBehaviour:
   boxCollider: {fileID: 0}
   finalRotation1: {x: 0, y: 0, z: 0, w: 0}
   finalRotation2: {x: 0, y: 0, z: 0, w: 0}
-  chainBladeDamage: {fileID: 0}
+  chainBladeDamage: {fileID: 248765316}
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
 --- !u!61 &1923280825
 BoxCollider2D:

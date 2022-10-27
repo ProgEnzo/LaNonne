@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class RoomContentGenerator : MonoBehaviour
 {
     [SerializeField]
-    private RoomGenerator playerRoom, defaultRoom, bossRoom;
+    private RoomGenerator playerRoom, defaultRoom, bossRoom, shopRoom;
 
     List<GameObject> spawnedObjects = new List<GameObject>();
 
@@ -30,6 +32,8 @@ public class RoomContentGenerator : MonoBehaviour
 
         SelectPlayerSpawnPoint(dungeonData);
         SelectEnemySpawnPoints(dungeonData);
+        SelectBossSpawnPoints(dungeonData);
+        //SelectShopSpawnPoints(dungeonData);
 
         foreach (GameObject item in spawnedObjects)
         {
@@ -37,7 +41,12 @@ public class RoomContentGenerator : MonoBehaviour
                 item.transform.SetParent(itemParent, false);
         }
     }
-
+    private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas 
+    {
+        cinemachineCamera.LookAt = playerTransform;
+        cinemachineCamera.Follow = playerTransform;
+    }
+    
     private void SelectPlayerSpawnPoint(DungeonData dungeonData)
     {
         int randomRoomIndex = UnityEngine.Random.Range(0, dungeonData.roomsDictionary.Count);
@@ -59,13 +68,7 @@ public class RoomContentGenerator : MonoBehaviour
 
         dungeonData.roomsDictionary.Remove(playerSpawnPoint);
     }
-
-    private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas 
-    {
-        cinemachineCamera.LookAt = playerTransform;
-        cinemachineCamera.Follow = playerTransform;
-    }
-
+   
     private void SelectEnemySpawnPoints(DungeonData dungeonData)
     {
         foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary)
@@ -73,4 +76,29 @@ public class RoomContentGenerator : MonoBehaviour
             spawnedObjects.AddRange(defaultRoom.ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
         }
     }
+
+    private void SelectBossSpawnPoints(DungeonData dungeonData)
+    {
+       //DijkstraAlgorithm.Dijkstra(Graph, dungeonData.roomsDictionary.Keys.ElementAt(0));
+    }
+    
+    /*private void SelectShopSpawnPoints(DungeonData dungeonData)
+    {
+        int randomRoomIndex = UnityEngine.Random.Range(5, dungeonData.roomsDictionary.Count);
+        Vector2Int bossSpawnPoint = dungeonData.roomsDictionary.Keys.ElementAt(randomRoomIndex);
+        
+        graphTest.RunDijkstraAlgorithm(bossSpawnPoint, dungeonData.floorPositions);
+        
+        Vector2Int roomIndex = dungeonData.roomsDictionary.Keys.ElementAt(randomRoomIndex);
+        
+        List<GameObject> placedPrefabs = bossRoom.ProcessRoom(
+            bossSpawnPoint,
+            dungeonData.roomsDictionary.Values.ElementAt(randomRoomIndex),
+            dungeonData.GetRoomFloorWithoutCorridors(roomIndex)
+        );
+
+        spawnedObjects.AddRange(placedPrefabs);
+
+        dungeonData.roomsDictionary.Remove(bossSpawnPoint);
+    }*/
 }
