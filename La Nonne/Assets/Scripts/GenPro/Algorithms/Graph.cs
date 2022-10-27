@@ -30,7 +30,6 @@ public class Graph : MonoBehaviour
     public Graph(IEnumerable<Vector2Int> vertices)
     {
         graph = new List<Vector2Int>(vertices);
-
     }
     public List<Vector2Int> GetNeighbours4Directions(Vector2Int startPosition)
     {
