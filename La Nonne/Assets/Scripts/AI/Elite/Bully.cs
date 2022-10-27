@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Controller;
+using Pathfinding;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,9 +18,7 @@ namespace AI.Elite
 
         [Header("Enemy Components")]
         public PlayerController playerController;
-
-        public Rigidbody2D rbBully;
-
+        
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
     
         public bool isStunned;
@@ -30,7 +29,15 @@ namespace AI.Elite
             currentHealth = soEnemy.maxHealth;
             isStunned = false;
         }
-        
+
+        private void Awake()
+        {
+            //Assignation du script au prefab ON SPAWN
+            playerController = PlayerController.instance;
+            GetComponent<AIDestinationSetter>().target = playerController.transform;
+
+        }
+
         private void Update()
         {
             HealCeiling();

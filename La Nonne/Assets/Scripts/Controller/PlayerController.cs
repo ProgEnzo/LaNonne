@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AI.Elite;
 using AI.Trash;
+using Core.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +12,7 @@ using UnityEngine.UI;
 
 namespace Controller
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoSingleton<PlayerController>
     {
         [SerializeField] public Rigidbody2D m_rigidbody;
     
