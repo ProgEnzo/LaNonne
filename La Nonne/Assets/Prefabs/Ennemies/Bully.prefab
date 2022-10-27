@@ -55,7 +55,9 @@ MonoBehaviour:
   bullyDamage: 20
   knockbackPower: 50
   playerController: {fileID: 0}
-  SO_Enemy: {fileID: 11400000, guid: 64aed33986fc5ff4ba0fe14bfa4249f3, type: 2}
+  rbBully: {fileID: 0}
+  soEnemy: {fileID: 11400000, guid: 64aed33986fc5ff4ba0fe14bfa4249f3, type: 2}
+  isStunned: 0
 --- !u!212 &5813854497670849601
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -96,7 +98,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 2019162751, guid: f7d733df804826144abe98c469fe389c, type: 3}
   m_Color: {r: 1, g: 0.33490568, b: 0.33490568, a: 1}
   m_FlipX: 0

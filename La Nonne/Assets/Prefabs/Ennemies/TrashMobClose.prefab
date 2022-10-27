@@ -52,7 +52,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 100
-  trashMobCloseDamage: 20
   knockbackPower: 50
   playerController: {fileID: 4401665247276526678, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
   soEnemy: {fileID: 11400000, guid: 97f1fa4b4eadc844d8e0d5343ed990f3, type: 2}
@@ -97,7 +96,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 713484634, guid: b8a65c6ee9b458245802dc8935ba7b30, type: 3}
   m_Color: {r: 1, g: 0.7319846, b: 0, a: 1}
   m_FlipX: 0

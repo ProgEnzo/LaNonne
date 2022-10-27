@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class RoomContentGenerator : MonoBehaviour
 {
     [SerializeField]
-    private RoomGenerator playerRoom, defaultRoom;
+    private RoomGenerator playerRoom, defaultRoom, bossRoom;
 
     List<GameObject> spawnedObjects = new List<GameObject>();
 
@@ -18,22 +18,8 @@ public class RoomContentGenerator : MonoBehaviour
 
     public Transform itemParent;
 
-    //[SerializeField]
-    //private CinemachineVirtualCamera cinemachineCamera;
-
-    public UnityEvent RegenerateDungeon;
-
-    /*private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            foreach (var item in spawnedObjects)
-            {
-                Destroy(item);
-            }
-            RegenerateDungeon?.Invoke();
-        }
-    }*/
+    [SerializeField]
+    private CinemachineVirtualCamera cinemachineCamera;
     public void GenerateRoomContent(DungeonData dungeonData)
     {
         foreach (GameObject item in spawnedObjects)
@@ -67,18 +53,18 @@ public class RoomContentGenerator : MonoBehaviour
             dungeonData.GetRoomFloorWithoutCorridors(roomIndex)
             );
 
-        //FocusCameraOnThePlayer(placedPrefabs[placedPrefabs.Count - 1].transform);
+        FocusCameraOnThePlayer(placedPrefabs[placedPrefabs.Count - 1].transform);
 
         spawnedObjects.AddRange(placedPrefabs);
 
         dungeonData.roomsDictionary.Remove(playerSpawnPoint);
     }
 
-    /*private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas 
+    private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas 
     {
         cinemachineCamera.LookAt = playerTransform;
         cinemachineCamera.Follow = playerTransform;
-    }*/
+    }
 
     private void SelectEnemySpawnPoints(DungeonData dungeonData)
     {
