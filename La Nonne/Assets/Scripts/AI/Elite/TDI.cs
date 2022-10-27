@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using Controller;
+using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -18,22 +21,31 @@ namespace AI.Elite
         {
             currentHealth = maxHealth;
         }
-    
+
+        private void Awake()
+        {
+            //Assignation du script au prefab ON SPAWN
+            playerController = PlayerController.instance;
+        }
+
         public void TakeDamageFromPlayer(int damage)
         {
             currentHealth -= damage;
 
             if (currentHealth <= 50)
             {
-                Dissociate();
+                StartCoroutine(DieAndSpawn());
             }
         }
-
-        private void Dissociate()
+        
+        IEnumerator DieAndSpawn()
         {
+            transform.DOScale(new Vector3(3, 0, 3), 0.1f);
+            yield return new WaitForSeconds(0.1f);
             Destroy(gameObject);
             Instantiate(bully, transform.position, quaternion.identity);
             Instantiate(caretaker, transform.position, quaternion.identity);
+            
         }
     }
 }

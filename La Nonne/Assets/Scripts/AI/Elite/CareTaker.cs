@@ -50,6 +50,14 @@ namespace AI.Elite
             circleSprite.SetActive(false);
         }
 
+        private void Awake()
+        {
+            //Assignation du script au prefab ON SPAWN
+            playerController = PlayerController.instance;
+            player = GameObject.FindWithTag("Player");
+
+        }
+
         private void Update()
         {
             DistanceBetweenPlayer();
