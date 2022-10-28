@@ -82,9 +82,9 @@ public class RoomContentGenerator : MonoBehaviour
        //DijkstraAlgorithm.Dijkstra(Graph, dungeonData.roomsDictionary.Keys.ElementAt(0));
     }
     
-    /*private void SelectShopSpawnPoints(DungeonData dungeonData)
+    private void SelectShopSpawnPoints(DungeonData dungeonData)
     {
-        int randomRoomIndex = UnityEngine.Random.Range(5, dungeonData.roomsDictionary.Count);
+        /*int randomRoomIndex = UnityEngine.Random.Range(5, dungeonData.roomsDictionary.Count);
         Vector2Int bossSpawnPoint = dungeonData.roomsDictionary.Keys.ElementAt(randomRoomIndex);
         
         graphTest.RunDijkstraAlgorithm(bossSpawnPoint, dungeonData.floorPositions);
@@ -99,6 +99,6 @@ public class RoomContentGenerator : MonoBehaviour
 
         spawnedObjects.AddRange(placedPrefabs);
 
-        dungeonData.roomsDictionary.Remove(bossSpawnPoint);
-    }*/
+        dungeonData.roomsDictionary.Remove(bossSpawnPoint);*/
+    }
 }

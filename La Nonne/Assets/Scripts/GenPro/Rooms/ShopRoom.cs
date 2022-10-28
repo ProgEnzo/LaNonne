@@ -2,17 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopRoom : MonoBehaviour
+public class ShopRoom : RoomGenerator
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public GameObject shopKeeper;
+    
+    public List<ItemPlacementData> itemData;
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField]
+    private PrefabPlacer prefabPlacer;
+    
+    public override List<GameObject> ProcessRoom(Vector2Int roomCenter, HashSet<Vector2Int> roomFloor, HashSet<Vector2Int> roomFloorNoCorridors)
     {
-        
+        ItemPlacementHelper itemPlacementHelper = 
+            new ItemPlacementHelper(roomFloor, roomFloorNoCorridors);
+
+        List<GameObject> placedObjects = 
+            prefabPlacer.PlaceAllItems(itemData, itemPlacementHelper);
+
+        Vector2Int shopKeeperSpawnPoint = roomCenter;
+
+        GameObject playerObject 
+            = prefabPlacer.CreateObject(shopKeeper, shopKeeperSpawnPoint + new Vector2(0.5f, 0.5f));
+ 
+        placedObjects.Add(playerObject);
+
+        return placedObjects;
     }
 }
