@@ -53,4 +53,5 @@ public class EnemyPlacementData : PlacementData
 {
     public GameObject enemyPrefab;
     public Vector2Int enemySize = Vector2Int.one;
+    public Vector2Int bossSize = Vector2Int.one;
 }
