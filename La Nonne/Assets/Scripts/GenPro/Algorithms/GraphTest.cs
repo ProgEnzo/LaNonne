@@ -9,7 +9,7 @@ public class GraphTest : MonoBehaviour
 
     bool graphReady = false;
 
-    Dictionary<Vector2Int, int> dijkstraResult;
+    Dictionary<Vector2Int, int> dijkstraResult; //Donne les resultats de l'algorithme de Dijkstra dans un dictionnaire
     int highestValue;
 
     public void RunDijkstraAlgorithm(Vector2Int playerPosition,IEnumerable<Vector2Int> floorPositions)
@@ -20,9 +20,8 @@ public class GraphTest : MonoBehaviour
         highestValue = dijkstraResult.Values.Max();
         graphReady = true;
     }
-
-
-    private void OnDrawGizmosSelected()
+    
+    private void OnDrawGizmosSelected() //Permet de visualiser l'algo (de vert vers le rouge) //ca ne touche pas à son utilité
     {
         if (graphReady && dijkstraResult != null)
         {

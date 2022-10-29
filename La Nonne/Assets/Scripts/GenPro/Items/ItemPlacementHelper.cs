@@ -97,5 +97,5 @@ public class ItemPlacementHelper
 public enum PlacementType
 {
     OpenSpace,
-    NearWall
+    NearWall,
 }

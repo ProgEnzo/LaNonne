@@ -26,12 +26,14 @@ public class DijkstraAlgorithm : MonoBehaviour
             int newDistance = distanceDictionary[parentDictionary[vertex]]+1;
             if (distanceDictionary.ContainsKey(vertex) && distanceDictionary[vertex] <= newDistance)
                 continue;
+            
             distanceDictionary[vertex] = newDistance;
 
             foreach (Vector2Int neighbour in graph.GetNeighbours4Directions(vertex))
             {
                 if (distanceDictionary.ContainsKey(neighbour))
                     continue;
+                
                 unfinishedVertices.Enqueue(neighbour);
                 parentDictionary[neighbour] = vertex;
             }

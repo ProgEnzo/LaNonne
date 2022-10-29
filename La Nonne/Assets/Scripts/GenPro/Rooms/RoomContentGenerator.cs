@@ -33,7 +33,7 @@ public class RoomContentGenerator : MonoBehaviour
         SelectPlayerSpawnPoint(dungeonData);
         SelectEnemySpawnPoints(dungeonData);
         SelectBossSpawnPoints(dungeonData);
-        //SelectShopSpawnPoints(dungeonData);
+        SelectShopSpawnPoints(dungeonData);
 
         foreach (GameObject item in spawnedObjects)
         {

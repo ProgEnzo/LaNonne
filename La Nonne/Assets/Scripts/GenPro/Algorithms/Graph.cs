@@ -42,15 +42,15 @@ public class Graph : MonoBehaviour
     }
 
 
-    private List<Vector2Int> GetNeighbours(Vector2Int startPosition, 
-        List<Vector2Int> neighboursOffsetList)
+    private List<Vector2Int> GetNeighbours(Vector2Int startPosition, List<Vector2Int> neighboursOffsetList)
     {
         List<Vector2Int> neighbours = new List<Vector2Int>();
-        foreach (var neighboiurDirection in neighboursOffsetList)
+        
+        foreach (var neighbourDirection in neighboursOffsetList)
         {
-            Vector2Int potentialNeoghbour = startPosition + neighboiurDirection;
-            if (graph.Contains(potentialNeoghbour))
-                neighbours.Add(potentialNeoghbour);
+            Vector2Int potentialNeighbour = startPosition + neighbourDirection;
+            if (graph.Contains(potentialNeighbour))
+                neighbours.Add(potentialNeighbour);
         }
         return neighbours;
     }

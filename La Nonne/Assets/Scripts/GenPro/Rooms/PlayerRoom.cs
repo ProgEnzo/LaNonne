@@ -14,16 +14,13 @@ public class PlayerRoom : RoomGenerator
 
     public override List<GameObject> ProcessRoom(Vector2Int roomCenter, HashSet<Vector2Int> roomFloor, HashSet<Vector2Int> roomFloorNoCorridors)
     {
-        ItemPlacementHelper itemPlacementHelper = 
-            new ItemPlacementHelper(roomFloor, roomFloorNoCorridors);
+        ItemPlacementHelper itemPlacementHelper = new ItemPlacementHelper(roomFloor, roomFloorNoCorridors);
 
-        List<GameObject> placedObjects = 
-            prefabPlacer.PlaceAllItems(itemData, itemPlacementHelper);
+        List<GameObject> placedObjects = prefabPlacer.PlaceAllItems(itemData, itemPlacementHelper);
 
-        Vector2Int playerSpawnPoint = roomCenter;
+        Vector2Int playerSpawnPoint = roomCenter; //apparition du joueur au milieu de la salle
 
-        GameObject playerObject 
-            = prefabPlacer.CreateObject(player, playerSpawnPoint + new Vector2(0.5f, 0.5f));
+        GameObject playerObject = prefabPlacer.CreateObject(player, playerSpawnPoint + new Vector2(0.5f, 0.5f));
  
         placedObjects.Add(playerObject);
 
@@ -31,7 +28,7 @@ public class PlayerRoom : RoomGenerator
     }
 }
 
-public abstract class PlacementData
+public abstract class PlacementData //class de base pour toutes les données de placements
 {
     [Min(0)]
     public int minQuantity = 0;

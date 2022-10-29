@@ -61,7 +61,7 @@ public class PrefabPlacer : MonoBehaviour
     private GameObject PlaceItem(ItemData item, Vector2 placementPosition)
     {
         GameObject newItem = CreateObject(itemPrefab,placementPosition);
-        //GameObject newItem = Instantiate(itemPrefab, placementPosition, Quaternion.identity);
+        //GameObject newItem = Instantiate(itemPrefab, placementPosition, Quaternion.identity); //je sais plus à quoi sert cette ligne sorry
         newItem.GetComponent<Item>().Initialize(item);
         return newItem;
     }
@@ -70,6 +70,7 @@ public class PrefabPlacer : MonoBehaviour
     {
         if (prefab == null)
             return null;
+        
         GameObject newItem;
         if (Application.isPlaying)
         {
