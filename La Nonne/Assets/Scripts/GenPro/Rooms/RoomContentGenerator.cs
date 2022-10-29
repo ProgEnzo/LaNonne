@@ -79,7 +79,7 @@ public class RoomContentGenerator : MonoBehaviour
         }
     }
 
-    private Vector2Int GetMapFromTilePosition(Vector2Int tilePosition, DungeonData dungeonData)
+    private Vector2Int GetMapFromTilePosition(Vector2Int tilePosition, DungeonData dungeonData) //prend la position des "map" soit des salles en fonction des tiles qui les composent
     {
         Vector2Int nearthestRoom = playerSpawnRoomPosition;
         foreach (var salle in dungeonData.roomsDictionary.Keys)
@@ -111,15 +111,34 @@ public class RoomContentGenerator : MonoBehaviour
     
     private void SelectShopSpawnPoints(DungeonData dungeonData)
     {
-        //foreach (var salle in dungeonData.roomsDictionnary.Keys)
-        //foreach (var salle in dungeonData.roomsDictionnary.Keys)
-        //{
-            /*check la pos apres spawn
+        Vector2Int playerRoom = playerSpawnRoomPosition;
+        foreach (var shop in dungeonData.roomsDictionary.Keys) 
+        {
+            if (DijkstraAlgorithm.distanceDictionary [shop] > DijkstraAlgorithm.distanceDictionary[playerRoom])
+            {
+                playerRoom = shop;
+                
+                var firstShop = GetMapFromTilePosition(playerRoom, dungeonData);
+            
+                spawnedObjects.AddRange(shopRoom.ProcessRoom(firstShop, dungeonData.roomsDictionary[firstShop], dungeonData.GetRoomFloorWithoutCorridors(firstShop)));
+                dungeonData.roomsDictionary.Remove(firstShop);
+            }
+            break;
+        }
+    }
+    
+    /*private void SelectShopSpawnPoints(DungeonData dungeonData)
+    {
+        foreach (var salle in dungeonData.roomsDictionnary.Keys)
+        foreach (var salle in dungeonData.roomsDictionnary.Keys)
+        {
+            check la pos apres spawn
              spawnedObject (spawn le shop)
              
              remove la salle*/ //comme ca rien d'autre ne spawn dessus sans les conno d'ennemis
+    
 //}
-        // foreach (var salle in dungeonData.roomsDictionnary.Keys) //faire un break une fois trouvé
+         //foreach (var salle in dungeonData.roomsDictionnary.Keys) //faire un break une fois trouvé
         //{
             /*check la pos avant boss spawn
              
@@ -130,8 +149,8 @@ public class RoomContentGenerator : MonoBehaviour
     faire un compteur pour la distance souhaitée actuelle (intervalle de 10, donc compteur à 10, une fois le shop spawn, compteur à 20, etc) // si le compteur depasse la salle max en distance (salle du boss) on break pour arreter l algo
     
     foreach (salle in dungeonData.roomsDictionnary.Keys)
-    {*/
+    {
         
-   }
+   }*/
     
 }
