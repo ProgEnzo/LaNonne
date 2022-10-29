@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class DijkstraAlgorithm : MonoBehaviour
 {
+    
+    public static Dictionary<Vector2Int, int> distanceDictionary = new Dictionary<Vector2Int, int>();
     public static Dictionary<Vector2Int, int> Dijkstra(Graph graph, Vector2Int startposition)
     {
+        distanceDictionary.Clear();
         Queue<Vector2Int> unfinishedVertices = new Queue<Vector2Int>();
-
-        Dictionary<Vector2Int, int> distanceDictionary = new Dictionary<Vector2Int, int>();
+        
         Dictionary<Vector2Int, Vector2Int> parentDictionary = new Dictionary<Vector2Int, Vector2Int>();
 
         distanceDictionary[startposition] = 0;

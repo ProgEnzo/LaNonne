@@ -25,9 +25,9 @@ public class Graph : MonoBehaviour
         new Vector2Int(-1,-1) // Diagonal
     };
 
-    List<Vector2Int> graph;
+    List<Vector2Int> graph;     
 
-    public Graph(IEnumerable<Vector2Int> vertices)
+    public Graph(IEnumerable<Vector2Int> vertices)      
     {
         graph = new List<Vector2Int>(vertices);
     }

@@ -31,9 +31,10 @@ public class RoomContentGenerator : MonoBehaviour
         spawnedObjects.Clear();
 
         SelectPlayerSpawnPoint(dungeonData);
-        SelectEnemySpawnPoints(dungeonData);
         SelectBossSpawnPoints(dungeonData);
         SelectShopSpawnPoints(dungeonData);
+        SelectEnemySpawnPoints(dungeonData);
+        
 
         foreach (GameObject item in spawnedObjects)
         {
@@ -46,7 +47,8 @@ public class RoomContentGenerator : MonoBehaviour
         cinemachineCamera.LookAt = playerTransform;
         cinemachineCamera.Follow = playerTransform;
     }
-    
+
+    private Vector2Int playerSpawnRoomPosition;
     private void SelectPlayerSpawnPoint(DungeonData dungeonData)
     {
         int randomRoomIndex = UnityEngine.Random.Range(0, dungeonData.roomsDictionary.Count);
@@ -54,12 +56,12 @@ public class RoomContentGenerator : MonoBehaviour
 
         graphTest.RunDijkstraAlgorithm(playerSpawnPoint, dungeonData.floorPositions);
 
-        Vector2Int roomIndex = dungeonData.roomsDictionary.Keys.ElementAt(randomRoomIndex);
+        playerSpawnRoomPosition = dungeonData.roomsDictionary.Keys.ElementAt(randomRoomIndex);
 
         List<GameObject> placedPrefabs = playerRoom.ProcessRoom(
             playerSpawnPoint,
             dungeonData.roomsDictionary.Values.ElementAt(randomRoomIndex),
-            dungeonData.GetRoomFloorWithoutCorridors(roomIndex)
+            dungeonData.GetRoomFloorWithoutCorridors(playerSpawnRoomPosition)
             );
 
         FocusCameraOnThePlayer(placedPrefabs[placedPrefabs.Count - 1].transform);
@@ -77,28 +79,59 @@ public class RoomContentGenerator : MonoBehaviour
         }
     }
 
+    private Vector2Int GetMapFromTilePosition(Vector2Int tilePosition, DungeonData dungeonData)
+    {
+        Vector2Int nearthestRoom = playerSpawnRoomPosition;
+        foreach (var salle in dungeonData.roomsDictionary.Keys)
+        {
+            if (Vector2Int.Distance(nearthestRoom, tilePosition) > Vector2Int.Distance(salle, tilePosition))
+            {
+                nearthestRoom = salle;
+            }
+        }
+
+        return nearthestRoom;
+    }
     private void SelectBossSpawnPoints(DungeonData dungeonData)
     {
-       //DijkstraAlgorithm.Dijkstra(Graph, dungeonData.roomsDictionary.Keys.ElementAt(0));
+        Vector2Int currentFurthestRoom = playerSpawnRoomPosition;
+        foreach (var room in DijkstraAlgorithm.distanceDictionary.Keys) //vérification de toutes les pos à l'intérieur
+        {
+            if (DijkstraAlgorithm.distanceDictionary[room] >
+                DijkstraAlgorithm.distanceDictionary[currentFurthestRoom]);
+            {
+                currentFurthestRoom = room;
+            }
+        }
+        var furthestRoom = GetMapFromTilePosition(currentFurthestRoom, dungeonData);
+        spawnedObjects.AddRange(bossRoom.ProcessRoom(furthestRoom, dungeonData.roomsDictionary[furthestRoom], dungeonData.GetRoomFloorWithoutCorridors(furthestRoom)));
+        
+        dungeonData.roomsDictionary.Remove(furthestRoom);
     }
     
     private void SelectShopSpawnPoints(DungeonData dungeonData)
     {
-        /*int randomRoomIndex = UnityEngine.Random.Range(5, dungeonData.roomsDictionary.Count);
-        Vector2Int bossSpawnPoint = dungeonData.roomsDictionary.Keys.ElementAt(randomRoomIndex);
-        
-        graphTest.RunDijkstraAlgorithm(bossSpawnPoint, dungeonData.floorPositions);
-        
-        Vector2Int roomIndex = dungeonData.roomsDictionary.Keys.ElementAt(randomRoomIndex);
-        
-        List<GameObject> placedPrefabs = bossRoom.ProcessRoom(
-            bossSpawnPoint,
-            dungeonData.roomsDictionary.Values.ElementAt(randomRoomIndex),
-            dungeonData.GetRoomFloorWithoutCorridors(roomIndex)
-        );
-
-        spawnedObjects.AddRange(placedPrefabs);
-
-        dungeonData.roomsDictionary.Remove(bossSpawnPoint);*/
+        //foreach (var salle in dungeonData.roomsDictionnary.Keys)
+        //foreach (var salle in dungeonData.roomsDictionnary.Keys)
+        //{
+            /*check la pos apres spawn
+             spawnedObject (spawn le shop)
+             
+             remove la salle*/ //comme ca rien d'autre ne spawn dessus sans les conno d'ennemis
+//}
+        // foreach (var salle in dungeonData.roomsDictionnary.Keys) //faire un break une fois trouvé
+        //{
+            /*check la pos avant boss spawn
+             
+             spawnedObject (spawn le shop)
+        }
     }
+    
+    faire un compteur pour la distance souhaitée actuelle (intervalle de 10, donc compteur à 10, une fois le shop spawn, compteur à 20, etc) // si le compteur depasse la salle max en distance (salle du boss) on break pour arreter l algo
+    
+    foreach (salle in dungeonData.roomsDictionnary.Keys)
+    {*/
+        
+   }
+    
 }
