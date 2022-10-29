@@ -111,17 +111,17 @@ public class RoomContentGenerator : MonoBehaviour
     
     private void SelectShopSpawnPoints(DungeonData dungeonData)
     {
-        Vector2Int playerRoom = playerSpawnRoomPosition;
+        Vector2Int shopRoomPosition = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] > DijkstraAlgorithm.distanceDictionary[playerRoom])
+            if (DijkstraAlgorithm.distanceDictionary [shop] > DijkstraAlgorithm.distanceDictionary[shopRoomPosition])
             {
-                playerRoom = shop;
+                shopRoomPosition = shop;
                 
-                var firstShop = GetMapFromTilePosition(playerRoom, dungeonData);
-            
+                var firstShop = GetMapFromTilePosition(shopRoomPosition, dungeonData);
+
                 spawnedObjects.AddRange(shopRoom.ProcessRoom(firstShop, dungeonData.roomsDictionary[firstShop], dungeonData.GetRoomFloorWithoutCorridors(firstShop)));
-                dungeonData.roomsDictionary.Remove(firstShop);
+                dungeonData.roomsDictionary.Remove(firstShop); 
             }
             break;
         }
