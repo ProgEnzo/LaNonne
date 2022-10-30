@@ -93,7 +93,7 @@ public class RoomContentGenerator : MonoBehaviour
         return nearthestRoom;
     }
 
-    public Vector2Int mapBoss;
+    public Vector2Int mapBoss; //Position de ma salle de boss
     private void SelectBossSpawnPoints(DungeonData dungeonData)
     {
         Vector2Int currentFurthestRoom = playerSpawnRoomPosition;
@@ -106,7 +106,7 @@ public class RoomContentGenerator : MonoBehaviour
             }
         }
         var furthestRoom = GetMapFromTilePosition(currentFurthestRoom, dungeonData);
-        mapBoss = furthestRoom;
+        mapBoss = furthestRoom; //Récupération de la position de la salle de boss pour la définir comme la salle la plus éloignée du hub par les couloirs
         spawnedObjects.AddRange(bossRoom.ProcessRoom(mapBoss, dungeonData.roomsDictionary[mapBoss], dungeonData.GetRoomFloorWithoutCorridors(mapBoss)));
         
         dungeonData.roomsDictionary.Remove(mapBoss);
@@ -147,26 +147,7 @@ public class RoomContentGenerator : MonoBehaviour
         }
     }
     
-    /*private void SelectShopSpawnPoints(DungeonData dungeonData)
-    {
-        foreach (var salle in dungeonData.roomsDictionnary.Keys)
-        foreach (var salle in dungeonData.roomsDictionnary.Keys)
-        {
-            check la pos apres spawn
-             spawnedObject (spawn le shop)
-             
-             remove la salle*/ //comme ca rien d'autre ne spawn dessus sans les conno d'ennemis
-    
-//}
-         //foreach (var salle in dungeonData.roomsDictionnary.Keys) //faire un break une fois trouvé
-        //{
-            /*check la pos avant boss spawn
-             
-             spawnedObject (spawn le shop)
-        }
-    }
-    
-    faire un compteur pour la distance souhaitée actuelle (intervalle de 10, donc compteur à 10, une fois le shop spawn, compteur à 20, etc) // si le compteur depasse la salle max en distance (salle du boss) on break pour arreter l algo
+    /*faire un compteur pour la distance souhaitée actuelle (intervalle de 10, donc compteur à 10, une fois le shop spawn, compteur à 20, etc) // si le compteur depasse la salle max en distance (salle du boss) on break pour arreter l algo
     
     foreach (salle in dungeonData.roomsDictionnary.Keys)
     {
