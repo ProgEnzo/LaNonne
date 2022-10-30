@@ -114,7 +114,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] > DijkstraAlgorithm.distanceDictionary[shopRoomPosition])
+            if (DijkstraAlgorithm.distanceDictionary [shop] == 30)
             {
                 shopRoomPosition = shop;
                 
@@ -122,8 +122,9 @@ public class RoomContentGenerator : MonoBehaviour
 
                 spawnedObjects.AddRange(shopRoom.ProcessRoom(firstShop, dungeonData.roomsDictionary[firstShop], dungeonData.GetRoomFloorWithoutCorridors(firstShop)));
                 dungeonData.roomsDictionary.Remove(firstShop); 
+                
+                break;
             }
-            break;
         }
     }
     
