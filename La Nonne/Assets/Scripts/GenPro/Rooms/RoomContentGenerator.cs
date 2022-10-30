@@ -92,6 +92,8 @@ public class RoomContentGenerator : MonoBehaviour
 
         return nearthestRoom;
     }
+
+    public Vector2Int mapBoss;
     private void SelectBossSpawnPoints(DungeonData dungeonData)
     {
         Vector2Int currentFurthestRoom = playerSpawnRoomPosition;
@@ -104,9 +106,10 @@ public class RoomContentGenerator : MonoBehaviour
             }
         }
         var furthestRoom = GetMapFromTilePosition(currentFurthestRoom, dungeonData);
-        spawnedObjects.AddRange(bossRoom.ProcessRoom(furthestRoom, dungeonData.roomsDictionary[furthestRoom], dungeonData.GetRoomFloorWithoutCorridors(furthestRoom)));
+        mapBoss = furthestRoom;
+        spawnedObjects.AddRange(bossRoom.ProcessRoom(mapBoss, dungeonData.roomsDictionary[mapBoss], dungeonData.GetRoomFloorWithoutCorridors(mapBoss)));
         
-        dungeonData.roomsDictionary.Remove(furthestRoom);
+        dungeonData.roomsDictionary.Remove(mapBoss);
     }
     
     private void SelectShopSpawnPoints(DungeonData dungeonData)
@@ -122,6 +125,22 @@ public class RoomContentGenerator : MonoBehaviour
 
                 spawnedObjects.AddRange(shopRoom.ProcessRoom(firstShop, dungeonData.roomsDictionary[firstShop], dungeonData.GetRoomFloorWithoutCorridors(firstShop)));
                 dungeonData.roomsDictionary.Remove(firstShop); 
+                
+                break;
+            }
+        }
+        
+        Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
+        foreach (var shop in dungeonData.roomsDictionary.Keys) 
+        {
+            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 30)
+            {
+                shopRoomPosition2 = shop;
+                
+                var secondShop = GetMapFromTilePosition(shopRoomPosition2, dungeonData);
+
+                spawnedObjects.AddRange(shopRoom.ProcessRoom(secondShop, dungeonData.roomsDictionary[secondShop], dungeonData.GetRoomFloorWithoutCorridors(secondShop)));
+                dungeonData.roomsDictionary.Remove(secondShop); 
                 
                 break;
             }
