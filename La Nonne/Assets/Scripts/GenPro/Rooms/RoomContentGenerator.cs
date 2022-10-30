@@ -153,7 +153,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 30)
+            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 30) //30 étant la longueur des couloirs ou "corridors Length" dans l'IDE
             {
                 shopRoomPosition2 = shop;
                 
@@ -167,10 +167,25 @@ public class RoomContentGenerator : MonoBehaviour
             }
         }
 
-        Vector2Int currentShopPosition;
-        foreach (var shop in dungeonData.roomsDictionary.Keys) 
+        Vector2Int currentShopPosition = firstShopPosition;
+        
+        while (DijkstraAlgorithm.distanceDictionary [lastShopPosition] - DijkstraAlgorithm.distanceDictionary [currentShopPosition] > 90)
         {
-           
+            currentShopPosition = firstShopPosition;
+            
+            foreach (var newShop in dungeonData.roomsDictionary.Keys) 
+            {
+                if (DijkstraAlgorithm.distanceDictionary [newShop] == DijkstraAlgorithm.distanceDictionary[currentShopPosition] + 90)
+                {
+                    currentShopPosition = newShop;
+                    
+                    var shopPosition = GetMapFromTilePosition(currentShopPosition, dungeonData);
+                    spawnedObjects.AddRange(shopRoom.ProcessRoom(shopPosition, dungeonData.roomsDictionary[shopPosition], dungeonData.GetRoomFloorWithoutCorridors(shopPosition)));
+                    dungeonData.roomsDictionary.Remove(shopPosition);
+                }
+            }
+
+            break;
         }
     }
     
