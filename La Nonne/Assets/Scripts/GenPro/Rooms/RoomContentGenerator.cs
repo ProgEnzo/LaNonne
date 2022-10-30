@@ -169,7 +169,7 @@ public class RoomContentGenerator : MonoBehaviour
 
         Vector2Int currentShopPosition = firstShopPosition;
         
-        while (DijkstraAlgorithm.distanceDictionary [lastShopPosition] - DijkstraAlgorithm.distanceDictionary [currentShopPosition] > 90)
+        while (DijkstraAlgorithm.distanceDictionary [lastShopPosition] - DijkstraAlgorithm.distanceDictionary [currentShopPosition] >= 90)
         {
             currentShopPosition = firstShopPosition;
             
@@ -181,6 +181,7 @@ public class RoomContentGenerator : MonoBehaviour
                     
                     var shopPosition = GetMapFromTilePosition(currentShopPosition, dungeonData);
                     spawnedObjects.AddRange(shopRoom.ProcessRoom(shopPosition, dungeonData.roomsDictionary[shopPosition], dungeonData.GetRoomFloorWithoutCorridors(shopPosition)));
+                    
                     dungeonData.roomsDictionary.Remove(shopPosition);
                 }
             }
