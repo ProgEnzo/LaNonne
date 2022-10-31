@@ -79,17 +79,6 @@ public class RoomContentGenerator : MonoBehaviour
 
     #endregion
     
-    #region DefaultRoom
-    private void SelectEnemySpawnPoints(DungeonData dungeonData)
-    {
-        foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary)
-        { 
-            spawnedObjects.AddRange(defaultRoom.ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-        }
-    }
-    
-    #endregion
-
     #region BossRoom
     private Vector2Int GetMapFromTilePosition(Vector2Int tilePosition, DungeonData dungeonData) //prend la position des "map" soit des salles en fonction des tiles qui les composent
         {
@@ -167,19 +156,19 @@ public class RoomContentGenerator : MonoBehaviour
             }
         }
 
-        Vector2Int currentShopPosition = firstShopPosition;
+        Vector2Int shopRoomPositionsIntervalles = firstShopPosition;
         
-        while (DijkstraAlgorithm.distanceDictionary [lastShopPosition] - DijkstraAlgorithm.distanceDictionary [currentShopPosition] >= 90)
+        while (DijkstraAlgorithm.distanceDictionary [lastShopPosition] - DijkstraAlgorithm.distanceDictionary [shopRoomPositionsIntervalles] >= 90)
         {
-            currentShopPosition = firstShopPosition;
+            shopRoomPositionsIntervalles = firstShopPosition;
             
-            foreach (var newShop in dungeonData.roomsDictionary.Keys) 
+            foreach (var shop in dungeonData.roomsDictionary.Keys)  
             {
-                if (DijkstraAlgorithm.distanceDictionary [newShop] == DijkstraAlgorithm.distanceDictionary[currentShopPosition] + 90)
+                if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[shopRoomPositionsIntervalles] + 90)
                 {
-                    currentShopPosition = newShop;
+                    shopRoomPositionsIntervalles = shop;
                     
-                    var shopPosition = GetMapFromTilePosition(currentShopPosition, dungeonData);
+                    var shopPosition = GetMapFromTilePosition(shopRoomPositionsIntervalles, dungeonData);
                     spawnedObjects.AddRange(shopRoom.ProcessRoom(shopPosition, dungeonData.roomsDictionary[shopPosition], dungeonData.GetRoomFloorWithoutCorridors(shopPosition)));
                     
                     dungeonData.roomsDictionary.Remove(shopPosition);
@@ -189,14 +178,17 @@ public class RoomContentGenerator : MonoBehaviour
             break;
         }
     }
-    
-    /*faire un compteur pour la distance souhaitée actuelle (intervalle de 10, donc compteur à 10, une fois le shop spawn, compteur à 20, etc) // si le compteur depasse la salle max en distance (salle du boss) on break pour arreter l algo
-    
-    foreach (salle in dungeonData.roomsDictionnary.Keys)
-    {
-        
-   }*/
-    
+
     #endregion
     
+     #region DefaultRoom
+        private void SelectEnemySpawnPoints(DungeonData dungeonData)
+        {
+            foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary)
+            { 
+                spawnedObjects.AddRange(defaultRoom.ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+            }
+        }
+        
+        #endregion
 }
