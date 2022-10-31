@@ -119,6 +119,7 @@ public class RoomContentGenerator : MonoBehaviour
     
     public Vector2Int firstShopPosition;
     public Vector2Int lastShopPosition;
+    public Vector2Int shopIntervallesPositions;
     private void SelectShopSpawnPoints(DungeonData dungeonData)
     {
         Vector2Int shopRoomPosition = playerSpawnRoomPosition;
@@ -169,14 +170,15 @@ public class RoomContentGenerator : MonoBehaviour
                     shopRoomPositionsIntervalles = shop;
                     
                     var shopPosition = GetMapFromTilePosition(shopRoomPositionsIntervalles, dungeonData);
-                    spawnedObjects.AddRange(shopRoom.ProcessRoom(shopPosition, dungeonData.roomsDictionary[shopPosition], dungeonData.GetRoomFloorWithoutCorridors(shopPosition)));
+                    shopIntervallesPositions = shopPosition;
                     
-                    dungeonData.roomsDictionary.Remove(shopPosition);
+                    spawnedObjects.AddRange(shopRoom.ProcessRoom(shopIntervallesPositions, dungeonData.roomsDictionary[shopIntervallesPositions], dungeonData.GetRoomFloorWithoutCorridors(shopIntervallesPositions)));
+                    dungeonData.roomsDictionary.Remove(shopIntervallesPositions);
                 }
             }
-
             break;
         }
+        
     }
 
     #endregion
