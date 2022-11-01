@@ -119,7 +119,6 @@ public class RoomContentGenerator : MonoBehaviour
     
     public Vector2Int firstShopPosition;
     public Vector2Int lastShopPosition;
-    public Vector2Int shopIntervallesPositions;
     private void SelectShopSpawnPoints(DungeonData dungeonData)
     {
         Vector2Int shopRoomPosition = playerSpawnRoomPosition;
@@ -156,8 +155,36 @@ public class RoomContentGenerator : MonoBehaviour
                 break;
             }
         }
+        
+        Vector2Int interShopPosition = firstShopPosition;
+        bool hasShop;
+        int intervalle = 90;
+        
+        do
+        {
+            foreach (var shop in dungeonData.roomsDictionary.Keys)
+            {
+                if (DijkstraAlgorithm.distanceDictionary[shop] == DijkstraAlgorithm.distanceDictionary[interShopPosition] + intervalle)
+                {
+                    interShopPosition = shop;
+                    
+                    var interShop = GetMapFromTilePosition(interShopPosition, dungeonData);
+                    
+                    spawnedObjects.AddRange(shopRoom.ProcessRoom(interShop, dungeonData.roomsDictionary[interShop], dungeonData.GetRoomFloorWithoutCorridors(interShop)));
+                    dungeonData.roomsDictionary.Remove(lastShopPosition);
 
-        Vector2Int shopRoomPositionsIntervalles = firstShopPosition;
+                    hasShop = true;
+                    intervalle += 90;
+
+                    break;
+                }
+                
+            }
+            
+        } while (intervalle <= 90);
+        
+
+        /*Vector2Int shopRoomPositionsIntervalles = firstShopPosition;
         
         while (DijkstraAlgorithm.distanceDictionary [lastShopPosition] - DijkstraAlgorithm.distanceDictionary [shopRoomPositionsIntervalles] >= 90)
         {
@@ -176,9 +203,9 @@ public class RoomContentGenerator : MonoBehaviour
                     dungeonData.roomsDictionary.Remove(shopIntervallesPositions);
                 }
             }
-            break;
-        }
-        
+            break; //pds terrible de break le while de cette maniere
+        }*/
+
     }
 
     #endregion
