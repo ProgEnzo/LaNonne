@@ -23,8 +23,12 @@ public class RoomContentGenerator : MonoBehaviour
     
         [SerializeField]
         private CinemachineVirtualCamera cinemachineCamera;
+        
+        List<Vector2Int> shopRoomPos = new();
+        
+        [SerializeField] private List<float> multiplierPerDistance = new(){20, 45, 54, 67, 100};
 
-    #endregion
+        #endregion
     
     public void GenerateRoomContent(DungeonData dungeonData)
     {
@@ -115,6 +119,21 @@ public class RoomContentGenerator : MonoBehaviour
 
     #endregion
     
+    int GetDistanceWithNearestShop (Vector2Int currentPos)
+    {
+        int distance = 99999;
+            
+        foreach (var shopRoom in shopRoomPos)
+        {
+            if (Vector2Int.Distance(currentPos, shopRoom) < distance)
+            {
+                distance = (int)Vector2Int.Distance(currentPos, shopRoom);
+            }
+        }
+
+        return distance;
+    }
+    
     #region ShopRoom
     
     public Vector2Int firstShopPosition;
@@ -134,6 +153,8 @@ public class RoomContentGenerator : MonoBehaviour
                 spawnedObjects.AddRange(shopRoom.ProcessRoom(firstShopPosition, dungeonData.roomsDictionary[firstShopPosition], dungeonData.GetRoomFloorWithoutCorridors(firstShopPosition)));
                 
                 dungeonData.roomsDictionary.Remove(firstShopPosition); 
+                shopRoomPos.Add(firstShopPosition);
+
                 
                 break;
             }
@@ -151,61 +172,58 @@ public class RoomContentGenerator : MonoBehaviour
 
                 spawnedObjects.AddRange(shopRoom.ProcessRoom(lastShopPosition, dungeonData.roomsDictionary[lastShopPosition], dungeonData.GetRoomFloorWithoutCorridors(lastShopPosition)));
                 dungeonData.roomsDictionary.Remove(lastShopPosition); 
+                shopRoomPos.Add(lastShopPosition);
                 
                 break;
             }
         }
         
-        Vector2Int interShopPosition = firstShopPosition;
-        bool hasShop;
-        int intervalle = 90;
+        var tempDico = new Dictionary<Vector2Int, HashSet<Vector2Int>>(dungeonData.roomsDictionary); //pour faire un dico temporaire pour modif sans tout casser // permet de faire spawn les ennemis 
         
+        bool hasShop = false;
         do
         {
-            foreach (var shop in dungeonData.roomsDictionary.Keys)
+            hasShop = false;
+            
+            foreach (var shop in tempDico.Keys)
             {
-                if (DijkstraAlgorithm.distanceDictionary[shop] == DijkstraAlgorithm.distanceDictionary[interShopPosition] + intervalle)
+                int distance = GetDistanceWithNearestShop(shop);
+
+                if (distance <= 30)
                 {
-                    interShopPosition = shop;
-                    
-                    var interShop = GetMapFromTilePosition(interShopPosition, dungeonData);
-                    
-                    spawnedObjects.AddRange(shopRoom.ProcessRoom(interShop, dungeonData.roomsDictionary[interShop], dungeonData.GetRoomFloorWithoutCorridors(interShop)));
-                    dungeonData.roomsDictionary.Remove(lastShopPosition);
-
+                    var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
+                    tempDico.Remove(shopRoomPositionInter);
                     hasShop = true;
-                    intervalle += 90;
+                    break;
+                }
 
+                int mapDistance = (distance - 30) / 30;
+                
+                float ratio = multiplierPerDistance.Count > mapDistance ? multiplierPerDistance[mapDistance] : multiplierPerDistance[^1];
+
+                if (Random.Range(0, 100) > ratio)
+                {
+                    var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
+                    tempDico.Remove(shopRoomPositionInter);
+                    hasShop = true;
                     break;
                 }
                 
-            }
-            
-        } while (intervalle <= 90);
-        
-
-        /*Vector2Int shopRoomPositionsIntervalles = firstShopPosition;
-        
-        while (DijkstraAlgorithm.distanceDictionary [lastShopPosition] - DijkstraAlgorithm.distanceDictionary [shopRoomPositionsIntervalles] >= 90)
-        {
-            shopRoomPositionsIntervalles = firstShopPosition;
-            
-            foreach (var shop in dungeonData.roomsDictionary.Keys)  
-            {
-                if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[shopRoomPositionsIntervalles] + 90)
+                if (GetDistanceWithNearestShop(shop) > 30)
                 {
-                    shopRoomPositionsIntervalles = shop;
-                    
-                    var shopPosition = GetMapFromTilePosition(shopRoomPositionsIntervalles, dungeonData);
-                    shopIntervallesPositions = shopPosition;
-                    
-                    spawnedObjects.AddRange(shopRoom.ProcessRoom(shopIntervallesPositions, dungeonData.roomsDictionary[shopIntervallesPositions], dungeonData.GetRoomFloorWithoutCorridors(shopIntervallesPositions)));
-                    dungeonData.roomsDictionary.Remove(shopIntervallesPositions);
-                }
-            }
-            break; //pds terrible de break le while de cette maniere
-        }*/
+                    var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
+                    spawnedObjects.AddRange(shopRoom.ProcessRoom(shopRoomPositionInter, dungeonData.roomsDictionary[shopRoomPositionInter], dungeonData.GetRoomFloorWithoutCorridors(shopRoomPositionInter)));
+                            
+                    tempDico.Remove(shopRoomPositionInter); //remove dans le temporaire quand c'est une fake room
+                    dungeonData.roomsDictionary.Remove(shopRoomPositionInter); //remove dans le dico partagé quand c est une true room
+                    shopRoomPos.Add(shopRoomPositionInter);
 
+                    hasShop = true;
+                    break;
+                }
+            
+            }
+        } while (hasShop);
     }
 
     #endregion
