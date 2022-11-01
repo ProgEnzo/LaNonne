@@ -14,10 +14,10 @@ namespace AI.Elite
         [SerializeField] public int bodyDamage;
         [SerializeField] public int bodyKnockback;
         [SerializeField] public int circleDamage;
+        [SerializeField] public bool blinkExecuted;
         
         
-        [SerializeField] public float distanceToPlayer;
-        [SerializeField] public float cooldownTimer;
+        [HideInInspector] public float cooldownTimer;
         [SerializeField] private float timeBetweenCircleSpawn;
 
 
@@ -33,15 +33,21 @@ namespace AI.Elite
         [SerializeField] public GameObject player;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
-        public PlayerController playerController;
+        [HideInInspector] public PlayerController playerController;
         private void Start()
         {
             currentHealth = maxHealth;
+            cooldownTimer = timeBetweenCircleSpawn;
+        }
+
+        private void Update()
+        {
+            CircleTimer();
         }
 
         private void Awake()
         {
-            //Assignation du script au prefab ON SPAWN
+            //Assignation du script playerController au prefab ON SPAWN
             playerController = PlayerController.instance;
         }
 
@@ -125,18 +131,18 @@ namespace AI.Elite
             
         }
         
-        void DistanceBetweenPlayer()
+        void CircleTimer()
         {
-            distanceToPlayer = Vector2.Distance(player.transform.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
             //Timer for spawning circles
-            cooldownTimer -= Time.deltaTime; // cooldowntimer = -1 toutes les secondes
-            if (cooldownTimer > 0)
+            if (!blinkExecuted && cooldownTimer <= 0f)
             {
-                return;
+                blinkExecuted = true;
+                StartCoroutine(BlinkCircle());
             }
-
-            cooldownTimer = timeBetweenCircleSpawn;
-            StartCoroutine(BlinkCircle());
+            else
+            {
+                cooldownTimer -= Time.deltaTime; // cooldowntimer = -1 toutes les secondes
+            }
         }
 
         IEnumerator BlinkCircle()
@@ -144,9 +150,11 @@ namespace AI.Elite
             circle.enabled = true;
             circleSprite.SetActive(true);
             currentHealth += healAmount;
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(timeBetweenCircleSpawn);
             circle.enabled = false;
             circleSprite.SetActive(false);
+            cooldownTimer = timeBetweenCircleSpawn;
+            blinkExecuted = false;
         }
     }
 }

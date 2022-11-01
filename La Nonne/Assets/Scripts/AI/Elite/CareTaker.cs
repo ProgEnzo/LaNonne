@@ -22,9 +22,8 @@ namespace AI.Elite
         [SerializeField] private float bodyKnockback;
         [SerializeField] private float cooldownTimer;
         [SerializeField] private float timeBetweenCircleSpawn;
-        [SerializeField] private bool isInCircle;
         [SerializeField] private float attackRange;
-        private float distanceToPlayer;
+        [SerializeField] public bool blinkExecuted;
 
         [Header("Enemy Components")]
         public PlayerController playerController;
@@ -61,7 +60,7 @@ namespace AI.Elite
 
         private void Update()
         {
-            DistanceBetweenPlayer();
+            CircleTimer();
             HealCeiling();
             
             if (!isStunned)
@@ -117,24 +116,18 @@ namespace AI.Elite
             }
         }
         
-        void DistanceBetweenPlayer()
+        void CircleTimer()
         {
-            distanceToPlayer = Vector2.Distance(player.transform.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
             //Timer for spawning circles
-            cooldownTimer -= Time.deltaTime; // cooldowntimer = -1 toutes les secondes
-            if (cooldownTimer > 0)
+            if (!blinkExecuted && cooldownTimer <= 0f)
             {
-                return;
+                blinkExecuted = true;
+                StartCoroutine(BlinkCircle());
             }
-
-            cooldownTimer = timeBetweenCircleSpawn;
-            StartCoroutine(BlinkCircle());
-        }
-
-        private void OnDrawGizmos()
-        {
-            Vector3 position = transform.position;
-            Gizmos.DrawWireSphere(position, attackRange);
+            else
+            {
+                cooldownTimer -= Time.deltaTime; // cooldowntimer = -1 toutes les secondes
+            }
         }
 
         IEnumerator BlinkCircle()
@@ -142,13 +135,18 @@ namespace AI.Elite
             circle.enabled = true;
             circleSprite.SetActive(true);
             currentHealth += healAmount;
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(timeBetweenCircleSpawn);
             circle.enabled = false;
             circleSprite.SetActive(false);
+            cooldownTimer = timeBetweenCircleSpawn;
+            blinkExecuted = false;
         }
-        
-        
 
+        private void OnDrawGizmos()
+        {
+            Vector3 position = transform.position;
+            Gizmos.DrawWireSphere(position, attackRange);
+        }
         public void GoToTheNearestMob()
         {
             // y = liste de tous les gameobjects mobs/enemy
