@@ -285,7 +285,9 @@ MonoBehaviour:
   throwRadius: 5
   projectileSpeed: 3
   dashSpeed: 500
-  explosionRadius: 0
+  explosionRadius: 1
+  fireTrailTolerance: 0.5
+  fireTrailDisappearanceSpeed: 30
   fireCooldown: 1
   soEnemy: {fileID: 11400000, guid: e10e890db14ac3945b0b1d9d70c2cd51, type: 2}
   isStunned: 0

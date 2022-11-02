@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Controller;
 using Pathfinding;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 // ReSharper disable CommentTypo
@@ -19,6 +20,11 @@ namespace AI.Elite
         [SerializeField] public float projectileSpeed;
         [SerializeField] public float dashSpeed = 10f;
         [SerializeField] public float explosionRadius;
+        private float currentFireTrailMaxLength;
+        [SerializeField] public float fireTrailTolerance;
+        [SerializeField] public float fireTrailDisappearanceSpeed = 1f;
+        private Vector3 boxCastOrigin;
+        private Vector3 boxCastDestination;
         private Vector3 dashInitialPosition;
         private Coroutine currentCoroutine;
         private Coroutine currentHittingCoroutine;
@@ -26,6 +32,7 @@ namespace AI.Elite
         private bool isDashing;
         private bool isProjectileOn;
         private bool isImpactOn;
+        private bool canBoxCast;
         [SerializeField] private float fireCooldown = 1f;
 
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
@@ -39,6 +46,7 @@ namespace AI.Elite
             isDashing = false;
             isProjectileOn = false;
             isImpactOn = false;
+            canBoxCast = false;
             circleGameObject = transform.GetChild(1).gameObject; //Initialisation de l'accès au cercle
             circleGameObject.SetActive(false); //On le désactive pour le moment
         }
@@ -56,52 +64,82 @@ namespace AI.Elite
             var position = transform1.position; //Position du pyromane
             var projectile = transform1.GetChild(0).gameObject;
             var projectileScript = projectile.GetComponent<PyromaniacProjectile>();
+            var projectilePosition = projectile.transform.position; //Position du projectile
             
             //Tant que le projectile n'a pas explosé
             if (!projectileScript.isExploded)
             {
-                //Si le joueur est dans le rayon de détection
-                if (Vector3.Distance(position, playerPosition) <= detectionRadius)
+                if (!isProjectileOn && !isDashing && !isImpactOn)
                 {
-                    if (isProjectileOn) return;
-                    isProjectileOn = true;
-                    scriptAIPath.maxSpeed = 0f;
-                    GetComponent<AIDestinationSetter>().enabled = false;
-                    scriptAIPath.enabled = false;
-                    //Sinon, le pyromane lance sa zone de feu
-                    var distanceToCross = Mathf.Min(Vector3.Distance(position, playerPosition), throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
-                    var newPositionVector = (playerPosition - position).normalized * distanceToCross; //On calcule le vecteur de déplacement du projectile
-                    var newPosition = position + newPositionVector; //On calcule la nouvelle position du projectile
-                    ThrowProjectile(newPosition, newPositionVector.normalized); //On lance le projectile à la nouvelle position, avec la nouvelle direction
-                    Debug.Log(newPosition);
-                }
-                else if (!isProjectileOn && !isDashing && !isImpactOn)
-                {
-                    //Déplacement du pyromane
-                    GetComponent<AIDestinationSetter>().enabled = true;
-                    scriptAIPath.enabled = true;
-                    scriptAIPath.maxSpeed = 3f;
+                    //Si le joueur est dans le rayon de détection
+                    if (Vector3.Distance(position, playerPosition) <= detectionRadius)
+                    {
+                        if (isProjectileOn) return;
+                        isProjectileOn = true;
+                        scriptAIPath.maxSpeed = 0f;
+                        GetComponent<AIDestinationSetter>().enabled = false;
+                        scriptAIPath.enabled = false;
+                        canBoxCast = false;
+                        //Sinon, le pyromane lance sa zone de feu
+                        var distanceToCross =
+                            Mathf.Min(Vector3.Distance(position, playerPosition),
+                                throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
+                        var newPositionVector =
+                            (playerPosition - position).normalized *
+                            distanceToCross; //On calcule le vecteur de déplacement du projectile
+                        var newPosition = position + newPositionVector; //On calcule la nouvelle position du projectile
+                        ThrowProjectile(newPosition,
+                            newPositionVector
+                                .normalized); //On lance le projectile à la nouvelle position, avec la nouvelle direction
+                    }
+                    else
+                    {
+                        //Déplacement du pyromane
+                        GetComponent<AIDestinationSetter>().enabled = true;
+                        scriptAIPath.enabled = true;
+                        scriptAIPath.maxSpeed = 3f;
+                    }
                 }
             }
             //Une fois que le projectile a explosé
             else
             {
+                if (position.x < projectilePosition.x + fireTrailTolerance && position.x > projectilePosition.x - fireTrailTolerance && position.y < projectilePosition.y + fireTrailTolerance && position.y > projectilePosition.y - fireTrailTolerance)
+                {
+                    canBoxCast = true;
+                }
+                
                 if (!isDashing && !isImpactOn)
                 {
                     isProjectileOn = false;
                     //Dash vers la zone de feu
                     currentCoroutine ??= StartCoroutine(DashToFireZone());
                 }
+            }
+            
+            if (canBoxCast)
+            {
+                if (!projectileScript.isExploded && !isProjectileOn && !isDashing && !isImpactOn)
+                {
+                    currentFireTrailMaxLength -= Time.deltaTime * fireTrailDisappearanceSpeed;
+                    if (currentFireTrailMaxLength <= fireTrailTolerance)
+                    {
+                        canBoxCast = false;
+                    }
+                }
                 else
                 {
-                    var objectsInArea = new List<RaycastHit2D>();
-                    Physics2D.BoxCast(dashInitialPosition, new Vector2(3f, 3f), 0f, (position - dashInitialPosition).normalized, new ContactFilter2D(), objectsInArea, Vector2.Distance(dashInitialPosition, position));
-                    foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
-                    {
-                        currentHittingCoroutine ??= StartCoroutine(FireDamage());
-                    }
-                    BoxCastDebug.DrawBoxCast2D(dashInitialPosition, new Vector2(3f, 3f), 0f, (position - dashInitialPosition).normalized, Vector2.Distance(dashInitialPosition, position), Color.magenta);
+                    boxCastOrigin = position;
+                    boxCastDestination = projectilePosition;
+                    currentFireTrailMaxLength = Vector2.Distance(boxCastDestination, boxCastOrigin);
                 }
+                var objectsInArea = new List<RaycastHit2D>();
+                Physics2D.BoxCast(boxCastOrigin, new Vector2(3f, 3f), 0f, (boxCastDestination - boxCastOrigin).normalized, new ContactFilter2D(), objectsInArea, currentFireTrailMaxLength);
+                foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
+                {
+                    currentHittingCoroutine ??= StartCoroutine(FireDamage());
+                }
+                BoxCastDebug.DrawBoxCast2D(boxCastOrigin, new Vector2(3f, 3f), 0f, (boxCastDestination - boxCastOrigin).normalized, currentFireTrailMaxLength, Color.magenta);
             }
         }
 
