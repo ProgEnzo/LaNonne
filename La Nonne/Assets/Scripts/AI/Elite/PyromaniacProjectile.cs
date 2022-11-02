@@ -18,7 +18,7 @@ namespace AI.Elite
         private GameObject circleGameObject;
         public bool isExploded;
         [SerializeField] private float knockBackPower;
-        private Coroutine currentCoroutine;
+        internal Coroutine currentCoroutine;
         [SerializeField] private float fireCooldown = 1f;
         
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;

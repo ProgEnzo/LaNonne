@@ -71,19 +71,21 @@ namespace AI.Elite
                     var newPositionVector = (playerPosition - position).normalized * distanceToCross; //On calcule le vecteur de déplacement du projectile
                     var newPosition = position + newPositionVector; //On calcule la nouvelle position du projectile
                     ThrowProjectile(newPosition, newPositionVector.normalized); //On lance le projectile à la nouvelle position, avec la nouvelle direction
+                    Debug.Log(newPosition);
                 }
-                else
+                else if (!isProjectileOn && !isDashing && !isImpactOn)
                 {
                     //Déplacement du pyromane
+                    GetComponent<AIDestinationSetter>().enabled = true;
+                    scriptAIPath.enabled = true;
                     scriptAIPath.maxSpeed = 3f;
                 }
             }
             //Une fois que le projectile a explosé
             else
             {
-                if (!isDashing)
+                if (!isDashing && !isImpactOn)
                 {
-                    if (isImpactOn) return;
                     isProjectileOn = false;
                     //Dash vers la zone de feu
                     currentCoroutine ??= StartCoroutine(DashToFireZone());
@@ -162,6 +164,7 @@ namespace AI.Elite
             var projectile = transform1.GetChild(0).gameObject;
             projectile.transform.position = transform1.position;
             projectile.GetComponent<PyromaniacProjectile>().isExploded = false;
+            projectile.GetComponent<PyromaniacProjectile>().currentCoroutine = null;
             projectile.SetActive(false);
             
             currentCoroutine = null;
