@@ -34,6 +34,9 @@ namespace AI.Elite
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
         [HideInInspector] public PlayerController playerController;
+        
+        public bool isStunned;
+        
         private void Start()
         {
             currentHealth = maxHealth;
@@ -78,6 +81,20 @@ namespace AI.Elite
             if (col.gameObject.CompareTag("Caretaker"))
             {
                 col.gameObject.GetComponent<CareTaker>().currentHealth += healAmount;
+                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
+            }
+            
+            //Heal le TDI
+            if (col.gameObject.CompareTag("TDI"))
+            {
+                col.gameObject.GetComponent<TDI>().currentHealth += healAmount;
+                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
+            }
+            
+            //Heal le pyromaniac
+            if (col.gameObject.CompareTag("Pyromaniac"))
+            {
+                col.gameObject.GetComponent<Pyromaniac>().currentHealth += healAmount;
                 //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
 

@@ -45,6 +45,8 @@ namespace AI.Elite
 
         private void Update()
         {
+            HealCeiling();
+            
             //Accès à la variable statique du PlayerController
             var playerRef = PlayerController.instance;
             
@@ -177,6 +179,32 @@ namespace AI.Elite
             yield return new WaitForSeconds(0.1f);
             playerRef.GetComponent<SpriteRenderer>().color = Color.yellow;
         }
+        
+        #region HealthEnemyClose
+        public void TakeDamageFromPlayer(int damage)
+        {
+            currentHealth -= damage;
+
+            if (currentHealth <= 0)
+            {
+                TrashMobCloseDie();
+            }
+        }
+    
+        private void TrashMobCloseDie()
+        {
+            Destroy(gameObject);
+        }
+
+        private void HealCeiling()
+        {
+            if (currentHealth > soEnemy.maxHealth)
+            {
+                currentHealth = soEnemy.maxHealth;
+            }
+        }
+    
+        #endregion
 
         private void OnDrawGizmos()
         {

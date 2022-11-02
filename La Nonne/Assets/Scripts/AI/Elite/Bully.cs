@@ -35,7 +35,6 @@ namespace AI.Elite
             //Assignation du script au prefab ON SPAWN
             playerController = PlayerController.instance;
             GetComponent<AIDestinationSetter>().target = playerController.transform;
-
         }
 
         private void Update()

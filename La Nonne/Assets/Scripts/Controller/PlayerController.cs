@@ -250,6 +250,13 @@ namespace Controller
                         //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
                     }
                     
+                    //DMG du player sur le pyromaniac
+                    if (revealingDashAimedEnemy.CompareTag("Pyromaniac"))
+                    {
+                        revealingDashAimedEnemy.GetComponent<Pyromaniac>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
+                        //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
+                    }
+                    
                     
                 
                     isHitting = false;
@@ -299,6 +306,26 @@ namespace Controller
                 if (enemy != null)
                 {
                     enemy.GetComponent<CareTaker>().isStunned = false;
+                }
+            }
+            
+            if (enemy.CompareTag("TDI"))
+            {
+                enemy.GetComponent<TDI>().isStunned = true;
+                yield return new WaitForSeconds(stunDuration);
+                if (enemy != null)
+                {
+                    enemy.GetComponent<TDI>().isStunned = false;
+                }
+            }
+            
+            if (enemy.CompareTag("Pyromaniac"))
+            {
+                enemy.GetComponent<Pyromaniac>().isStunned = true;
+                yield return new WaitForSeconds(stunDuration);
+                if (enemy != null)
+                {
+                    enemy.GetComponent<Pyromaniac>().isStunned = false;
                 }
             }
         }
