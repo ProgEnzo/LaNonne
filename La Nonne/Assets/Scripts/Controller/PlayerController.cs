@@ -183,7 +183,7 @@ namespace Controller
                 });
                 foreach (RaycastHit2D enemy in enemiesInArea)
                 {
-                    if (enemy.collider.CompareTag("TrashMobClose") || enemy.collider.CompareTag("TrashMobRange") || enemy.collider.CompareTag("Bully") || enemy.collider.CompareTag("Caretaker"))
+                    if (enemy.collider.CompareTag("TrashMobClose") || enemy.collider.CompareTag("TrashMobRange") || enemy.collider.CompareTag("Bully") || enemy.collider.CompareTag("Caretaker") || enemy.collider.CompareTag("TDI") || enemy.collider.CompareTag("Pyromaniac"))
                     {
                         soController.epAmount -= revealingDashEpCost;
                         revealingDashAimedEnemy = enemy.collider.gameObject;
