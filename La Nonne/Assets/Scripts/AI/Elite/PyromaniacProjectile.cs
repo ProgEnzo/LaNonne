@@ -25,6 +25,7 @@ namespace AI.Elite
 
         private void OnEnable()
         {
+            GetComponent<SpriteRenderer>().enabled = true; //On réactive le sprite du projectile
             circleGameObject = transform.GetChild(0).gameObject; //Initialisation de l'accès au cercle
             circleGameObject.SetActive(false); //On le désactive pour le moment
             explosionRadius = explosionRadiusIndicator / 2; //On divise par 2 car le cercle est trop grand

@@ -1,5 +1,6 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Controller;
 using Pathfinding;
 using UnityEngine;
@@ -12,15 +13,20 @@ namespace AI.Elite
     {
         [Header("Enemy Health")]
         [SerializeField] public float currentHealth;
-        [SerializeField] public float cooldownTimer;
-        private float timer;
+        private GameObject circleGameObject;
         [SerializeField] public float detectionRadius;
         [SerializeField] public float throwRadius;
         [SerializeField] public float projectileSpeed;
         [SerializeField] public float dashSpeed = 10f;
+        [SerializeField] public float explosionRadius;
+        private Vector3 dashInitialPosition;
         private Coroutine currentCoroutine;
+        private Coroutine currentHittingCoroutine;
         private AIPath scriptAIPath;
         private bool isDashing;
+        private bool isProjectileOn;
+        private bool isImpactOn;
+        [SerializeField] private float fireCooldown = 1f;
 
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
 
@@ -30,8 +36,11 @@ namespace AI.Elite
         {
             scriptAIPath = GetComponent<AIPath>();
             currentHealth = soEnemy.maxHealth;
-            timer = cooldownTimer;
             isDashing = false;
+            isProjectileOn = false;
+            isImpactOn = false;
+            circleGameObject = transform.GetChild(1).gameObject; //Initialisation de l'accès au cercle
+            circleGameObject.SetActive(false); //On le désactive pour le moment
         }
 
         private void Update()
@@ -52,6 +61,8 @@ namespace AI.Elite
                 //Si le joueur est dans le rayon de détection
                 if (Vector3.Distance(position, playerPosition) <= detectionRadius)
                 {
+                    if (isProjectileOn) return;
+                    isProjectileOn = true;
                     scriptAIPath.maxSpeed = 0f;
                     GetComponent<AIDestinationSetter>().enabled = false;
                     scriptAIPath.enabled = false;
@@ -70,8 +81,23 @@ namespace AI.Elite
             //Une fois que le projectile a explosé
             else
             {
-                //Dash vers la zone de feu
-                currentCoroutine ??= StartCoroutine(DashToFireZone());
+                if (!isDashing)
+                {
+                    if (isImpactOn) return;
+                    isProjectileOn = false;
+                    //Dash vers la zone de feu
+                    currentCoroutine ??= StartCoroutine(DashToFireZone());
+                }
+                else
+                {
+                    var objectsInArea = new List<RaycastHit2D>();
+                    Physics2D.BoxCast(dashInitialPosition, new Vector2(3f, 3f), 0f, (position - dashInitialPosition).normalized, new ContactFilter2D(), objectsInArea, Vector2.Distance(dashInitialPosition, position));
+                    foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
+                    {
+                        currentHittingCoroutine ??= StartCoroutine(FireDamage());
+                    }
+                    BoxCastDebug.DrawBoxCast2D(dashInitialPosition, new Vector2(3f, 3f), 0f, (position - dashInitialPosition).normalized, Vector2.Distance(dashInitialPosition, position), Color.magenta);
+                }
             }
         }
 
@@ -89,10 +115,64 @@ namespace AI.Elite
         {
             yield return new WaitForSeconds(0.5f);
             var transform1 = transform;
-            var position = transform1.position; //Position du pyromane
+            dashInitialPosition = transform1.position; //Position du pyromane
             var projectile = transform1.GetChild(0).gameObject;
             isDashing = true;
-            GetComponent<Rigidbody2D>().AddForce((projectile.transform.position - position).normalized * dashSpeed);
+            GetComponent<Rigidbody2D>().AddForce((projectile.transform.position - dashInitialPosition).normalized * dashSpeed);
+        }
+        
+        private IEnumerator FireDamage()
+        {
+            //Accès à la variable statique du PlayerController
+            var playerRef = PlayerController.instance;
+            
+            StartCoroutine(PlayerIsHit());
+            playerRef.TakeDamage(soEnemy.bodyDamage);
+            yield return new WaitForSeconds(1f);
+            currentHittingCoroutine = null;
+        }
+        
+        private IEnumerator BlinkFire()
+        {
+            //Render d'un coup de feu
+            var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
+            var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
+            circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle
+            
+            //Dégâts de feu
+            var playerRef = PlayerController.instance;
+            var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'explosion
+            Physics2D.CircleCast(transform.position, explosionRadius, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
+            if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
+            {
+                foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
+                {
+                    StartCoroutine(PlayerIsHit());
+                    playerRef.TakeDamage(soEnemy.bodyDamage); //Le joueur prend des dégâts
+                }
+            }
+            
+            yield return new WaitForSeconds(0.1f);
+            circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.25f); //Transparence du cercle
+            yield return new WaitForSeconds(fireCooldown);
+            
+            circleGameObject.SetActive(false); //On désactive le cercle
+            isImpactOn = false;
+            var transform1 = transform;
+            var projectile = transform1.GetChild(0).gameObject;
+            projectile.transform.position = transform1.position;
+            projectile.GetComponent<PyromaniacProjectile>().isExploded = false;
+            projectile.SetActive(false);
+            
+            currentCoroutine = null;
+        }
+
+        private static IEnumerator PlayerIsHit()
+        {
+            var playerRef = PlayerController.instance;
+            playerRef.GetComponent<SpriteRenderer>().color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            playerRef.GetComponent<SpriteRenderer>().color = Color.yellow;
         }
 
         private void OnDrawGizmos()
@@ -102,12 +182,28 @@ namespace AI.Elite
             Gizmos.DrawWireSphere(position, throwRadius);
         }
 
-        private void OnCollisionEnter2D(Collision2D col)
+        private void OnCollisionEnter2D(Collision2D other)
         {
             if (isDashing)
             {
                 GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 isDashing = false;
+                isImpactOn = true;
+                
+                //Cercle d'explosion
+                circleGameObject.SetActive(true); //On active le cercle
+                circleGameObject.transform.localScale = Vector3.one * (explosionRadius * 8); //On le met à la bonne taille
+                var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
+                var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
+                circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle
+
+                StartCoroutine(BlinkFire());
+            }
+            
+            if (other.gameObject.CompareTag("Player"))
+            {
+                StartCoroutine(PlayerIsHit());
+                other.gameObject.GetComponent<PlayerController>().TakeDamage(soEnemy.bodyDamage);
             }
         }
     }
