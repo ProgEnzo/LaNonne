@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Controller;
@@ -36,6 +37,14 @@ public class BossStateManager : MonoBehaviour
         currentState.UpdateState(this); //will call any code in Update State from the current state every frame
     }
 
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            player.TakeDamage(20);
+        }
+    }
+
     public void SwitchState(BossBaseState state)
     {
         currentState = state;
@@ -59,9 +68,8 @@ public class BossStateManager : MonoBehaviour
         GetComponent<AIDestinationSetter>().enabled = false;
         GetComponent<AIPath>().enabled = false;
         Vector2 direction = player.transform.position - transform.position;
-        rb.velocity = direction * dashPower;
+        rb.velocity = direction.normalized * dashPower;
         yield return new WaitForSeconds(dashTime);
-        Debug.Log("How many times the Coroutine has been played FIRST PART");
 
         isDashing = false;
         player.GetComponent<Collider2D>().isTrigger = false;
@@ -69,12 +77,14 @@ public class BossStateManager : MonoBehaviour
         GetComponent<AIPath>().enabled = true;
         yield return new WaitForSeconds(dashCooldown);
         
-        Debug.Log("How many times the Coroutine has been played SECOND PART");
         canDash = true;
-
         if (dashAmount > 0)
         {
             StartCoroutine(Dash());
+        }
+        else
+        {
+            SwitchState(AttackCircleState); //SWITCH INTO BossAttackCircleState
         }
 
     }

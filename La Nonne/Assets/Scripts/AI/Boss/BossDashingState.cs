@@ -7,7 +7,6 @@ public class BossDashingState : BossBaseState
     {
         boss.DashManager(); 
         
-        //boss.SwitchState(boss.AttackCircleState);
 
         
         Debug.Log("Hello from the DashingState :))");
