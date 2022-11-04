@@ -18,14 +18,22 @@ public class BossStateManager : MonoBehaviour
 
     public Rigidbody2D rb;
     public PlayerController player;
+
     
+    [Header("Dash")]
     
-    public float dashPower;
+    public int dashDamage;
+    public int bodyDamage;
+    
+    public float dashDistance;
     public float dashTime;
     public float dashCooldown;
-    public bool canDash = true;
-    public bool isDashing;
+    
     public int dashAmount = 3;
+
+    [Header("AttackCircle")] 
+    public GameObject circle;
+    
     
     void Start()
     {
@@ -41,7 +49,15 @@ public class BossStateManager : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            player.TakeDamage(20);
+            player.TakeDamage(dashDamage);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            player.TakeDamage(bodyDamage);
         }
     }
 
@@ -51,33 +67,35 @@ public class BossStateManager : MonoBehaviour
         state.EnterState(this);
     }
 
+    #region DashingState
     public void DashManager()
     {
         StartCoroutine(Dash());
+        Debug.Log($"<color=red>DASHING STATE HAS BEGUN</color>");
+
     }
 
     private IEnumerator Dash()
     {
-        dashAmount--;
-        Debug.Log(dashAmount);
+        dashAmount--; //décrémente de 1 le nombre de dash restant
         yield return new WaitForSeconds(1);
 
+        
+        
         player.GetComponent<Collider2D>().isTrigger = true;
-        canDash = false;
-        isDashing = true;
         GetComponent<AIDestinationSetter>().enabled = false;
         GetComponent<AIPath>().enabled = false;
         Vector2 direction = player.transform.position - transform.position;
-        rb.velocity = direction.normalized * dashPower;
+        rb.velocity = direction.normalized * dashDistance;
         yield return new WaitForSeconds(dashTime);
 
-        isDashing = false;
+        
         player.GetComponent<Collider2D>().isTrigger = false;
         GetComponent<AIDestinationSetter>().enabled = true;
         GetComponent<AIPath>().enabled = true;
         yield return new WaitForSeconds(dashCooldown);
         
-        canDash = true;
+       
         if (dashAmount > 0)
         {
             StartCoroutine(Dash());
@@ -88,4 +106,26 @@ public class BossStateManager : MonoBehaviour
         }
 
     }
+    
+
+    #endregion
+
+    #region AttackCircleState
+
+    public void AttackCircleManager()
+    {
+        StartCoroutine(AttackCircle());
+        Debug.Log($"<color=red>ATTACK CIRCLE STATE HAS BEGUN</color>");
+    }
+    
+    private IEnumerator AttackCircle()
+    {
+        yield return new WaitForSeconds(1);
+
+        Instantiate(circle, player.transform.position, Quaternion.identity);
+
+    }
+
+    #endregion
+    
 }
