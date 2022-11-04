@@ -33,6 +33,9 @@ public class BossStateManager : MonoBehaviour
 
     [Header("AttackCircle")] 
     public GameObject circle;
+    public int circleDamage;
+    public int circleAmount = 3;
+    public float circleSpacingCooldown;
     
     
     void Start()
@@ -50,6 +53,12 @@ public class BossStateManager : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             player.TakeDamage(dashDamage);
+        }
+
+        if (circle.gameObject.CompareTag("Player"))
+        {
+            player.TakeDamage(circleDamage);
+            Debug.Log($"<color=green>DASHING STATE HAS BEGUN</color>");
         }
     }
 
@@ -120,10 +129,24 @@ public class BossStateManager : MonoBehaviour
     
     private IEnumerator AttackCircle()
     {
-        yield return new WaitForSeconds(1);
+        circleAmount--;
+        GameObject circleObject;
+        
+        yield return new WaitForSeconds(circleSpacingCooldown);
 
-        Instantiate(circle, player.transform.position, Quaternion.identity);
+        circleObject = Instantiate(circle, player.transform.position, Quaternion.identity);
+        
+        yield return new WaitForSeconds(circleSpacingCooldown);
+        Destroy(circleObject, 1f);
 
+        if (circleAmount > 0)
+        {
+            StartCoroutine(AttackCircle());
+        }
+        else
+        {
+            SwitchState(GrowingCircleState); //SWITCH INTO GrowingCircleState
+        }
     }
 
     #endregion
