@@ -17,7 +17,15 @@ public class BossStateManager : MonoBehaviour
 
     public Rigidbody2D rb;
     public PlayerController player;
+    
+    
     public float dashPower;
+    public float dashTime;
+    public float dashCooldown;
+    public bool canDash = true;
+    public bool isDashing;
+    public int dashAmount = 3;
+    
     void Start()
     {
         currentState = DashingState; //starting state for the boss state machine
@@ -26,7 +34,6 @@ public class BossStateManager : MonoBehaviour
     void Update()
     {
         currentState.UpdateState(this); //will call any code in Update State from the current state every frame
-        
     }
 
     public void SwitchState(BossBaseState state)
@@ -35,34 +42,40 @@ public class BossStateManager : MonoBehaviour
         state.EnterState(this);
     }
 
-    public IEnumerator Dashing()
+    public void DashManager()
     {
-        yield return new WaitForSeconds(1f);
+        StartCoroutine(Dash());
+    }
 
+    private IEnumerator Dash()
+    {
+        dashAmount--;
+        Debug.Log(dashAmount);
+        yield return new WaitForSeconds(1);
+
+        player.GetComponent<Collider2D>().isTrigger = true;
+        canDash = false;
+        isDashing = true;
         GetComponent<AIDestinationSetter>().enabled = false;
         GetComponent<AIPath>().enabled = false;
         Vector2 direction = player.transform.position - transform.position;
-        rb.AddForce(direction.normalized * dashPower, ForceMode2D.Impulse);
-        Debug.Log(direction);
+        rb.velocity = direction * dashPower;
+        yield return new WaitForSeconds(dashTime);
+        Debug.Log("How many times the Coroutine has been played FIRST PART");
 
-        yield return new WaitForSeconds(1f);
-        
+        isDashing = false;
+        player.GetComponent<Collider2D>().isTrigger = false;
         GetComponent<AIDestinationSetter>().enabled = true;
         GetComponent<AIPath>().enabled = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(dashCooldown);
         
-        GetComponent<AIDestinationSetter>().enabled = false;
-        GetComponent<AIPath>().enabled = false;
-        Vector2 direction2 = player.transform.position - transform.position;
-        rb.AddForce(direction2.normalized * dashPower, ForceMode2D.Impulse);
-        Debug.Log(direction2);
+        Debug.Log("How many times the Coroutine has been played SECOND PART");
+        canDash = true;
 
-        yield return new WaitForSeconds(1f);
-        
-        GetComponent<AIDestinationSetter>().enabled = true;
-        GetComponent<AIPath>().enabled = true;
-        yield return new WaitForSeconds(1f);
-        
-        
+        if (dashAmount > 0)
+        {
+            StartCoroutine(Dash());
+        }
+
     }
 }
