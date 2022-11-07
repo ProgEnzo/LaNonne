@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3199619407987497708}
   - component: {fileID: 6857801488797361742}
-  - component: {fileID: 4161281187752818640}
+  - component: {fileID: 2785767771786919907}
   m_Layer: 10
   m_Name: Item
   m_TagString: Untagged
@@ -131,12 +131,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 3377309282591150777}
-  itemCollider: {fileID: 4161281187752818640}
-  health: 3
-  nonDestructible: 0
-  hitFeedback: {fileID: 0}
-  destoyFeedback: {fileID: 0}
---- !u!61 &4161281187752818640
+  itemCollider: {fileID: 2785767771786919907}
+--- !u!61 &2785767771786919907
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,5 +156,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.5}
   m_EdgeRadius: 0

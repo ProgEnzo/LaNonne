@@ -41,16 +41,10 @@ public class PrefabPlacer : MonoBehaviour
         {
             for (int i = 0; i < placementData.Quantity; i++)
             {
-                Vector2? possiblePlacementSpot = itemPlacementHelper.GetItemPlacementPosition(
-                    placementData.itemData.placementType, 
-                    100, 
-                    placementData.itemData.size, 
-                    placementData.itemData.addOffset);
-
-
+                Vector2? possiblePlacementSpot = itemPlacementHelper.GetItemPlacementPosition(placementData.itemData.placementType, 100, placementData.itemData.size, placementData.itemData.addOffset);
+                
                 if (possiblePlacementSpot.HasValue)
                 {
-
                     placedObjects.Add(PlaceItem(placementData.itemData, possiblePlacementSpot.Value));
                 }
             }
