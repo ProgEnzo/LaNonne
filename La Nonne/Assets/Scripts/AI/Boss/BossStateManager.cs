@@ -6,6 +6,7 @@ using DG.Tweening;
 using Pathfinding;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossStateManager : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class BossStateManager : MonoBehaviour
     public Rigidbody2D rb;
     public PlayerController player;
 
+    
+    [Header("Health")]
+    public int currentHealth;
+    public Slider hpBossSlider;
     
     [Header("Dash")]
     public int dashDamage;
@@ -75,6 +80,22 @@ public class BossStateManager : MonoBehaviour
     {
         currentState = state;
         state.EnterState(this);
+    }
+
+    public void TakeDamageFromPlayer(int damage)
+    {
+        currentHealth -= damage;
+        hpBossSlider.value -= damage;
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 
     #region DashingState
