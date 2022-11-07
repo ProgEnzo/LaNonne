@@ -17,7 +17,7 @@ namespace Controller
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             camera1 = Camera.main;
             transform.GetChild(0).gameObject.SetActive(false);
@@ -26,12 +26,12 @@ namespace Controller
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             InquisitorialChain();
         }
 
-        public void InquisitorialChain()
+        private void InquisitorialChain()
         {
             if (Input.GetMouseButtonDown(1) && !isHitting && soController.epAmount >= epCost)
             {

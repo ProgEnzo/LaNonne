@@ -1,20 +1,14 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using AI.Trash;
 using Controller;
 using Pathfinding;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace AI.Elite
 {
-    public class CareTaker : MonoBehaviour
+    public class CareTaker : EnemyController
     {
-        [Header("Enemy Health")] 
-        [SerializeField] public float currentHealth;
-    
         [Header("Enemy Attack")]
         [SerializeField] private int circleDamage;
         [SerializeField] private int bodyDamage;
@@ -27,22 +21,14 @@ namespace AI.Elite
 
         [Header("Enemy Components")]
         public PlayerController playerController;
-        public SO_Controller soController;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
-        [SerializeField] private GameObject player;
 
-        [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
         public List<GameObject> y;
-    
-        public bool isStunned;
 
-
-    
-
-        private void Start()
+        protected override void Start()
         {
-            currentHealth = soEnemy.maxHealth;
+            base.Start();
             GoToTheNearestMob();
             
             //Zones de heal / dégâts
@@ -54,58 +40,23 @@ namespace AI.Elite
         {
             //Assignation du script au prefab ON SPAWN
             playerController = PlayerController.instance;
-            player = GameObject.FindWithTag("Player");
-
         }
 
-        private void Update()
+        protected override void Update()
         {
-            CircleTimer();
-            HealCeiling();
-            
-            if (!isStunned)
-            {
-                gameObject.GetComponent<AIDestinationSetter>().enabled = true;
-                CheckIfTargetIsDead();
-               
-            }
-            else
-            {
-                gameObject.GetComponent<AIDestinationSetter>().enabled = false;
-            }
+            base.Update();
+            EnemyDeath();
         }
 
         private void OnTriggerEnter2D(Collider2D col)
         {
-            
             if (!isStunned)
             {
                 //Heal le TrashMobCLose
-                if (col.gameObject.CompareTag("TrashMobClose"))
+                if (col.gameObject.CompareTag("Enemy"))
                 {
-                    col.gameObject.GetComponent<TrashMobClose>().currentHealth += healAmount;
+                    col.gameObject.GetComponent<EnemyController>().currentHealth += healAmount;
                     //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobClose>().currentHealth);
-                }
-
-                //Heal le TrashMobRange
-                if (col.gameObject.CompareTag("TrashMobRange"))
-                {
-                    col.gameObject.GetComponent<TrashMobRange>().currentHealth += healAmount;
-                    // Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
-                }
-            
-                //Heal le Bully
-                if (col.gameObject.CompareTag("Bully"))
-                {
-                    col.gameObject.GetComponent<Bully>().currentHealth += healAmount;
-                    //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
-                }
-            
-                //Heal le Caretaker
-                if (col.gameObject.CompareTag("Caretaker"))
-                {
-                    col.gameObject.GetComponent<CareTaker>().currentHealth += healAmount;
-                    //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
                 }
 
                 if (col.gameObject.CompareTag("Player"))
@@ -115,8 +66,8 @@ namespace AI.Elite
                 }
             }
         }
-        
-        void CircleTimer()
+
+        private void CircleTimer()
         {
             //Timer for spawning circles
             if (!blinkExecuted && cooldownTimer <= 0f)
@@ -130,7 +81,7 @@ namespace AI.Elite
             }
         }
 
-        IEnumerator BlinkCircle()
+        private IEnumerator BlinkCircle()
         {
             circle.enabled = true;
             circleSprite.SetActive(true);
@@ -147,7 +98,8 @@ namespace AI.Elite
             Vector3 position = transform.position;
             Gizmos.DrawWireSphere(position, attackRange);
         }
-        public void GoToTheNearestMob()
+
+        private void GoToTheNearestMob()
         {
             // y = liste de tous les gameobjects mobs/enemy
         
@@ -158,7 +110,7 @@ namespace AI.Elite
             foreach (var gObject in y.ToList()) //pour chaque gObject dans y alors exécute le script
             {
                 //exécuter ce script pour tous les game objects sauf ces mobs 
-                if (!gObject.CompareTag("Bully") && !gObject.CompareTag("TrashMobClose") && !gObject.CompareTag("TrashMobRange"))
+                if (!gObject.CompareTag("Enemy"))
                 {
                     y.Remove(gObject);
                 }
@@ -180,36 +132,7 @@ namespace AI.Elite
                 GoToTheNearestMob();
             }
         }
-
-        #region HealthEnemyClose
-        public void TakeDamageFromPlayer(int damage)
-        {
-            currentHealth -= damage;
-
-            if (currentHealth <= 0)
-            {
-                TrashMobCloseDie();
-            }
-        }
-    
-    
-    
-        private void TrashMobCloseDie()
-        {
-            Destroy(gameObject);
-        }
-
-        private void HealCeiling()
-        {
-            if (currentHealth > soEnemy.maxHealth)
-            {
-                currentHealth = soEnemy.maxHealth;
-            }
-        }
-    
-        #endregion
-    
-
+        
         private void OnCollisionEnter2D(Collision2D col) 
         {
             //Si le bully touche le player
@@ -224,13 +147,6 @@ namespace AI.Elite
             
                 playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
-        }
-        
-        IEnumerator PlayerIsHit()
-        {
-            playerController.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerController.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
 }

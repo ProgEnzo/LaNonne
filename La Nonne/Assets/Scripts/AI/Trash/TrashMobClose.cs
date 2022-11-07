@@ -5,61 +5,19 @@ using UnityEngine.Serialization;
 
 namespace AI.Trash
 {
-    public class TrashMobClose : MonoBehaviour
+    public class TrashMobClose : EnemyController
     {
-        [Header("Enemy Health")]
-        public float currentHealth;
-    
         [Header("Enemy Attack")]
         [SerializeField] private float knockbackPower;
 
         [Header("Enemy Components")]
         public PlayerController playerController;
 
-
-        [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
-        
-    
-        public bool isStunned;
-
-
-        private void Start()
+        protected override void Update()
         {
-            currentHealth = soEnemy.maxHealth;
-            isStunned = false;
+            base.Update();
+            EnemyDeath();
         }
-        
-        private void Update()
-        {
-            HealCeiling();
-        }
-
-        #region HealthEnemyClose
-        public void TakeDamageFromPlayer(int damage)
-        {
-            currentHealth -= damage;
-
-            if (currentHealth <= 0)
-            {
-                TrashMobCloseDie();
-            }
-        }
-    
-        private void TrashMobCloseDie()
-        {
-            Destroy(gameObject);
-        }
-
-        private void HealCeiling()
-        {
-            if (currentHealth > soEnemy.maxHealth)
-            {
-                currentHealth = soEnemy.maxHealth;
-            }
-        }
-    
-        #endregion
-    
 
         private void OnCollisionEnter2D(Collision2D col) 
         {
@@ -75,14 +33,6 @@ namespace AI.Trash
             
                 playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
-        }
-
-
-        IEnumerator PlayerIsHit()
-        {
-            playerController.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerController.GetComponent<SpriteRenderer>().color = Color.yellow;
         }
     }
 }

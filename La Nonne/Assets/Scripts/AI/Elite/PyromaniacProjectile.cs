@@ -67,7 +67,7 @@ namespace AI.Elite
                 {
                     foreach (var playerGameObject in objectsInArea.Select(hit => hit.collider.gameObject).Where(playerGameObject => playerGameObject.CompareTag("Player")))
                     {
-                        StartCoroutine(PlayerIsHit());
+                        StartCoroutine(EnemyController.PlayerIsHit());
                         playerRef.TakeDamage(soEnemy.bodyDamage); //Le joueur prend des dégâts
 
                         var direction = (playerGameObject.transform.position - transform.position).normalized;
@@ -85,14 +85,6 @@ namespace AI.Elite
             }
         }
 
-        private static IEnumerator PlayerIsHit()
-        {
-            var playerRef = PlayerController.instance;
-            playerRef.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerRef.GetComponent<SpriteRenderer>().color = Color.yellow;
-        }
-
         private IEnumerator BlinkFire()
         {
             //Render d'un coup de feu
@@ -108,7 +100,7 @@ namespace AI.Elite
             {
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
                 {
-                    StartCoroutine(PlayerIsHit());
+                    StartCoroutine(EnemyController.PlayerIsHit());
                     playerRef.TakeDamage(soEnemy.bodyDamage); //Le joueur prend des dégâts
                 }
             }
