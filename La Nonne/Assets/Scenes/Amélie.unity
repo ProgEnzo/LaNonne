@@ -310,7 +310,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 309c32a6bc2d57d4f9d6f86833e91005, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 309c32a6bc2d57d4f9d6f86833e91005, type: 3}
       propertyPath: m_LocalScale.x
@@ -1170,6 +1170,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Profil
       objectReference: {fileID: 0}
+    - target: {fileID: -7841663023994972267, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheDroite2
+      objectReference: {fileID: 0}
     - target: {fileID: -7789234797519683414, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: Visage
@@ -1234,6 +1238,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7364819517857460601, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneOeil
+      objectReference: {fileID: 0}
+    - target: {fileID: -7196865634554153000, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheDerriereCentre
+      objectReference: {fileID: 0}
     - target: {fileID: -7000953157349300876, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: BonetissusHautDroite
@@ -1241,6 +1253,10 @@ PrefabInstance:
     - target: {fileID: -6951002575288870524, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: BoneMancheDroite
+      objectReference: {fileID: 0}
+    - target: {fileID: -6828311866559059625, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneTissusHautGauche
       objectReference: {fileID: 0}
     - target: {fileID: -5746760408962675281, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
@@ -1250,9 +1266,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoneMancheDroite2
       objectReference: {fileID: 0}
+    - target: {fileID: -5324905754782714925, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneTissusHautDroite
+      objectReference: {fileID: 0}
+    - target: {fileID: -4915055960908796964, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheDroite2
+      objectReference: {fileID: 0}
     - target: {fileID: -4425486953365418137, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: BoneMancheGauche
+      objectReference: {fileID: 0}
+    - target: {fileID: -4312317392391116867, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheCentre2
+      objectReference: {fileID: 0}
+    - target: {fileID: -4098322250686157226, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheGauche2
       objectReference: {fileID: 0}
     - target: {fileID: -3984656711887497604, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
@@ -1270,6 +1302,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoneMancheGauche2
       objectReference: {fileID: 0}
+    - target: {fileID: -2928487601114845716, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneTete
+      objectReference: {fileID: 0}
     - target: {fileID: -2649654592807213740, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: Tronc
@@ -1278,9 +1314,69 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoneMancheDevantCentre
       objectReference: {fileID: 0}
+    - target: {fileID: -1885549927785331794, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.17470424
+      objectReference: {fileID: 0}
+    - target: {fileID: -1885549927785331794, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1885549927785331794, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.984621
+      objectReference: {fileID: 0}
+    - target: {fileID: -1885549927785331794, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -159.877
+      objectReference: {fileID: 0}
+    - target: {fileID: -1708212650566550135, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.19150086
+      objectReference: {fileID: 0}
+    - target: {fileID: -1708212650566550135, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1708212650566550135, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.98149246
+      objectReference: {fileID: 0}
+    - target: {fileID: -1708212650566550135, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 157.919
+      objectReference: {fileID: 0}
+    - target: {fileID: -1485355215479362107, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneCapeBas
+      objectReference: {fileID: 0}
+    - target: {fileID: -1438753760743711329, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.10991919
+      objectReference: {fileID: 0}
+    - target: {fileID: -1438753760743711329, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -1438753760743711329, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.9939406
+      objectReference: {fileID: 0}
+    - target: {fileID: -1438753760743711329, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 192.621
+      objectReference: {fileID: 0}
     - target: {fileID: -1075098041625165290, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: BoneCapeBas
+      objectReference: {fileID: 0}
+    - target: {fileID: -623260105364245435, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheGauche1
+      objectReference: {fileID: 0}
+    - target: {fileID: -588599699919422964, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneCapeHaut
       objectReference: {fileID: 0}
     - target: {fileID: -340667983092289390, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
@@ -1296,7 +1392,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 386791141387813222, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
-      value: BoneTronc
+      value: BonePosition
       objectReference: {fileID: 0}
     - target: {fileID: 613742145289411635, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
@@ -1318,9 +1414,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoneCapeHaut
       objectReference: {fileID: 0}
+    - target: {fileID: 2663622038050080918, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneOreole
+      objectReference: {fileID: 0}
     - target: {fileID: 3004019969263073014, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: BoneTissusRobeGauche
+      objectReference: {fileID: 0}
+    - target: {fileID: 3079497102481529472, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheGauche1
       objectReference: {fileID: 0}
     - target: {fileID: 3297364353584691495, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
@@ -1338,6 +1442,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoneOreole
       objectReference: {fileID: 0}
+    - target: {fileID: 4318038952685130217, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheGauche2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4614390839080453660, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneTronc
+      objectReference: {fileID: 0}
     - target: {fileID: 4811203783196017276, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: BoneMancheCentre2
@@ -1345,6 +1457,10 @@ PrefabInstance:
     - target: {fileID: 5266526917975094821, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: Cou
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050817922310396962, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheDroite1
       objectReference: {fileID: 0}
     - target: {fileID: 6085594173320013114, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
@@ -1358,9 +1474,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: MancheDevant
       objectReference: {fileID: 0}
+    - target: {fileID: 6741840991657475745, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMAncheDevantCentre
+      objectReference: {fileID: 0}
     - target: {fileID: 6931766774190907417, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: BoneTissusRobeCentre
+      objectReference: {fileID: 0}
+    - target: {fileID: 7028022560508714371, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneMancheDroite1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7076306929228770149, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneTissusBasDroite
       objectReference: {fileID: 0}
     - target: {fileID: 7213724133461658795, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
@@ -1378,6 +1506,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoneRobeDroite
       objectReference: {fileID: 0}
+    - target: {fileID: 7787975997425363603, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneTissusBasGauche
+      objectReference: {fileID: 0}
     - target: {fileID: 7972118530880690288, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: BoneTissusRobeBas
@@ -1393,6 +1525,10 @@ PrefabInstance:
     - target: {fileID: 8384570602622157076, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
       propertyPath: m_Name
       value: Robe
+      objectReference: {fileID: 0}
+    - target: {fileID: 8612041174209562945, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
+      propertyPath: m_Name
+      value: BoneCentre2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 94cde278764c4aa4bab58bc5a9052c97, type: 3}
@@ -1470,7 +1606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 14bdc35d302d592488c49b793938420d, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 14bdc35d302d592488c49b793938420d, type: 3}
       propertyPath: m_LocalPosition.x
