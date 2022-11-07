@@ -18,7 +18,7 @@ namespace Controller
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
     
-        [SerializeField] private float m_timerDash;
+        [SerializeField] public float m_timerDash;
 
         public static PlayerController instance;
 

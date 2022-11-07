@@ -670,7 +670,7 @@ Camera:
   m_Depth: 2
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 32959
+    m_Bits: 49343
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -34068,7 +34068,7 @@ MonoBehaviour:
   radius: 2
   height: 1.89
   canMove: 1
-  maxSpeed: 4
+  maxSpeed: 0
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
@@ -34192,7 +34192,7 @@ GameObject:
   - component: {fileID: 6761636065754704816}
   m_Layer: 15
   m_Name: BOSS
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34238,4 +34238,4 @@ MonoBehaviour:
   circleSpacingCooldown: 0.3
   growingCircle: {fileID: 4845308707281541438, guid: b3f8cc22d8f0cce439f2e929b4ceeea8, type: 3}
   growingCircleCooldown: 1
-  growingCircleAmount: 5
+  growingCircleAmount: 10
