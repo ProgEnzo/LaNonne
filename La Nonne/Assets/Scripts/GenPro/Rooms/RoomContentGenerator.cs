@@ -33,7 +33,7 @@ public class RoomContentGenerator : MonoBehaviour
         
     private IEnumerator Scan()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         AstarPath.active.Scan();
     }
     
