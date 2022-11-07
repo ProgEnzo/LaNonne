@@ -5,7 +5,7 @@ public class BossShrinkingCircleState : BossBaseState
     
     public override void EnterState(BossStateManager boss)
     {
-        Debug.Log("Hello from the SHRINKING CIRCLE STATE");
+        boss.ShrinkingCircleManager();
 
     }
 

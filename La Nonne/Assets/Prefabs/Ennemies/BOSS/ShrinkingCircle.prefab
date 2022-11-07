@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4845308707281541439}
   - component: {fileID: 4551907260079855783}
   m_Layer: 14
-  m_Name: GrowingCircle
+  m_Name: ShrinkingCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4845308707281541438}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -42.71, y: 80.54, z: -0.044643402}
-  m_LocalScale: {x: 1, y: 1, z: 0}
+  m_LocalScale: {x: 20, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 8e8486852e14fc840829da6a039efcc7, type: 3}
-  m_Color: {r: 1, g: 0.5766093, b: 0.57254905, a: 1}
+  m_Color: {r: 0.8025008, g: 0.57254905, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

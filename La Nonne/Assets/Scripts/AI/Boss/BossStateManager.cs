@@ -21,13 +21,14 @@ public class BossStateManager : MonoBehaviour
 
     public Rigidbody2D rb;
     public PlayerController player;
+    public AIPath bossAI;
 
     
     [Header("Health")]
     public int currentHealth;
     public Slider hpBossSlider;
     
-    [Header("Dash")]
+    [Header("----Dash----")]
     public int dashDamage;
     public int bodyDamage;
     
@@ -37,22 +38,28 @@ public class BossStateManager : MonoBehaviour
     
     public int dashAmount = 3;
 
-    [Header("AttackCircle")]
-    public GameObject circleWarning;
-    public GameObject circle;
-    public int circleAmount = 3;
-    public float circleSpacingCooldown;
+    [Header("----AttackCircle----")]
+    public GameObject attackCircleWarning;
+    public GameObject attackCircle;
+    public float attackCircleSpacingCooldown;
+    public int attackCircleAmount = 3;
 
-    [Header("AttackCircle")] 
+    [Header("----GrowingCircle----")] 
     public GameObject growingCircle;
     public float growingCircleCooldown;
-    public float growingCircleAmount;
+    public int growingCircleAmount;
 
-    
+    [Header("----ShrinkingCircle----")]
+    public GameObject shrinkingCircle;
+    public float shrinkingCircleCooldown;
+    public int shrinkingCircleAmount;
+
+    public GameObject rotatingBlade;
+    public float rotatingBladeCooldown;
     
     void Start()
     {
-        currentState = GrowingCircleState; //starting state for the boss state machine
+        currentState = ShrinkingCircleState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
     }
     void Update()
@@ -82,6 +89,8 @@ public class BossStateManager : MonoBehaviour
         state.EnterState(this);
     }
 
+    #region Health Boss
+
     public void TakeDamageFromPlayer(int damage)
     {
         currentHealth -= damage;
@@ -98,6 +107,8 @@ public class BossStateManager : MonoBehaviour
         Destroy(gameObject);
     }
 
+    #endregion
+    
     #region DashingState
     public void DashManager()
     {
@@ -151,19 +162,19 @@ public class BossStateManager : MonoBehaviour
     
     private IEnumerator AttackCircle()
     {
-        circleAmount--;
-        yield return new WaitForSeconds(circleSpacingCooldown);
+        attackCircleAmount--;
+        yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
-        var circleObjectWarning = Instantiate(circleWarning, player.transform.position, Quaternion.identity);
-        yield return new WaitForSeconds(circleSpacingCooldown);
+        var circleObjectWarning = Instantiate(attackCircleWarning, player.transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
         Destroy(circleObjectWarning, 1f);
-        var circleObject = Instantiate(circle, circleObjectWarning.transform.position, Quaternion.identity);
-        yield return new WaitForSeconds(circleSpacingCooldown);
+        var circleObject = Instantiate(attackCircle, circleObjectWarning.transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
         Destroy(circleObject, 1f);
 
-        if (circleAmount > 0)
+        if (attackCircleAmount > 0)
         {
             StartCoroutine(AttackCircle());
         }
@@ -176,7 +187,6 @@ public class BossStateManager : MonoBehaviour
     #endregion
 
     #region GrowingCircleState
-
     public void GrowingCircleManager()
     {
         StartCoroutine(GrowingCircle());
@@ -205,6 +215,52 @@ public class BossStateManager : MonoBehaviour
         {
             SwitchState(ShrinkingCircleState);
         }
+    }
+    #endregion
+
+    #region ShrinkingCircleState
+
+    public void ShrinkingCircleManager()
+    {
+        StartCoroutine(ShrinkingCircle());
+        Debug.Log($"<color=red>SHRINKING CIRCLE STATE HAS BEGUN</color>");
+
+    }
+    
+    private IEnumerator ShrinkingCircle()
+    {
+        shrinkingCircleAmount--;
+        yield return new WaitForSeconds(shrinkingCircleCooldown);
+        
+        RotatingBlade();
+        yield return new WaitForSeconds(rotatingBladeCooldown);
+        
+        //METTRE CE BLOC DANS LA COROUTINE
+        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, transform.position, quaternion.identity);
+        shrinkingCircleGameObject.transform.parent = gameObject.transform; //set le prefab en child
+        shrinkingCircleGameObject.transform.DOKill();
+        shrinkingCircleGameObject.transform.DOScale(new Vector3(0, 0, 0), 3f);
+        yield return new WaitForSeconds(shrinkingCircleCooldown);
+
+        Destroy(shrinkingCircleGameObject, 3f);
+        
+        if (shrinkingCircleAmount > 0)
+        {
+            StartCoroutine(ShrinkingCircle());
+        }
+        else
+        {
+            SwitchState(TransitionState);
+        }
+    }
+
+    private void RotatingBlade()
+    {
+        bossAI.maxSpeed = 1;
+        var rotatingBladeGameObject = Instantiate(rotatingBlade, transform.position, Quaternion.identity);
+        rotatingBladeGameObject.transform.parent = gameObject.transform;
+        rotatingBladeGameObject.transform.DORotate(new Vector3(0, 0, 360), rotatingBladeCooldown, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear);
+        
     }
     
 

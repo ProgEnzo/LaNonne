@@ -34432,18 +34432,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6761636065754704817}
   player: {fileID: 1483002657}
+  bossAI: {fileID: 6761636065754704819}
   currentHealth: 100
   hpBossSlider: {fileID: 122512754}
   dashDamage: 50
   bodyDamage: 20
-  dashDistance: 30
+  dashDistance: 10
   dashTime: 0.7
   dashCooldown: 1
   dashAmount: 3
-  circleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
-  circle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
-  circleAmount: 5
-  circleSpacingCooldown: 0.3
+  attackCircleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
+  attackCircle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
+  attackCircleSpacingCooldown: 0.3
+  attackCircleAmount: 3
   growingCircle: {fileID: 4845308707281541438, guid: b3f8cc22d8f0cce439f2e929b4ceeea8, type: 3}
   growingCircleCooldown: 1
-  growingCircleAmount: 10
+  growingCircleAmount: 5
+  shrinkingCircle: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
+  shrinkingCircleCooldown: 1
+  shrinkingCircleAmount: 3
+  rotatingBlade: {fileID: 5203104815070699965, guid: 13ae2e04a8e93da40ada41fff21a7502, type: 3}
+  rotatingBladeCooldown: 5
