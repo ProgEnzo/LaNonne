@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Controller;
 using Pathfinding;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 // ReSharper disable CommentTypo
 
 namespace AI.Elite
 {
-    public class Pyromaniac : MonoBehaviour
+    public class Pyromaniac : EnemyController
     {
         [Header("Enemy Health")]
-        [SerializeField] public float currentHealth;
         private GameObject circleGameObject;
         [SerializeField] public float detectionRadius;
         [SerializeField] public float throwRadius;
@@ -37,12 +35,10 @@ namespace AI.Elite
 
         [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
 
-        public bool isStunned;
-        
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             scriptAIPath = GetComponent<AIPath>();
-            currentHealth = soEnemy.maxHealth;
             isDashing = false;
             isProjectileOn = false;
             isImpactOn = false;
@@ -51,9 +47,10 @@ namespace AI.Elite
             circleGameObject.SetActive(false); //On le désactive pour le moment
         }
 
-        private void Update()
+        protected override void Update()
         {
-            HealCeiling();
+            base.Update();
+            EnemyDeath();
             
             //Accès à la variable statique du PlayerController
             var playerRef = PlayerController.instance;
@@ -217,32 +214,6 @@ namespace AI.Elite
             yield return new WaitForSeconds(0.1f);
             playerRef.GetComponent<SpriteRenderer>().color = Color.yellow;
         }
-        
-        #region HealthEnemyClose
-        public void TakeDamageFromPlayer(int damage)
-        {
-            currentHealth -= damage;
-
-            if (currentHealth <= 0)
-            {
-                TrashMobCloseDie();
-            }
-        }
-    
-        private void TrashMobCloseDie()
-        {
-            Destroy(gameObject);
-        }
-
-        private void HealCeiling()
-        {
-            if (currentHealth > soEnemy.maxHealth)
-            {
-                currentHealth = soEnemy.maxHealth;
-            }
-        }
-    
-        #endregion
 
         private void OnDrawGizmos()
         {

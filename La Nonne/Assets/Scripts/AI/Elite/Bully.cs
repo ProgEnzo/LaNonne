@@ -2,33 +2,20 @@ using System;
 using System.Collections;
 using Controller;
 using Pathfinding;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace AI.Elite
 {
-    public class Bully : MonoBehaviour
+    public class Bully : EnemyController
     {
-        [Header("Enemy Health")] 
-        [SerializeField] public float currentHealth;
-    
         [Header("Enemy Attack")]
         [SerializeField] private int bullyDamage;
         [SerializeField] private float knockbackPower;
 
         [Header("Enemy Components")]
         public PlayerController playerController;
-        
-        [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
-    
-        public bool isStunned;
-
-
-        private void Start()
-        {
-            currentHealth = soEnemy.maxHealth;
-            isStunned = false;
-        }
 
         private void Awake()
         {
@@ -36,38 +23,12 @@ namespace AI.Elite
             playerController = PlayerController.instance;
             GetComponent<AIDestinationSetter>().target = playerController.transform;
         }
-
-        private void Update()
-        {
-            HealCeiling();
-        }
-
-        #region HealthEnemyClose
-        public void TakeDamageFromPlayer(int damage)
-        {
-            currentHealth -= damage;
-
-            if (currentHealth <= 0)
-            {
-                BullyDie();
-            }
-        }
-    
-        private void BullyDie()
-        {
-            Destroy(gameObject);
-        }
-
-        private void HealCeiling()
-        {
-            if (currentHealth > soEnemy.maxHealth)
-            {
-                currentHealth = soEnemy.maxHealth;
-            }
-        }
-    
-        #endregion
         
+        protected override void Update()
+        {
+            base.Update();
+            EnemyDeath();
+        }
 
         private void OnCollisionEnter2D(Collision2D col) 
         {
@@ -83,14 +44,6 @@ namespace AI.Elite
             
                 playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
-        }
-
-
-        IEnumerator PlayerIsHit()
-        {
-            playerController.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerController.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
 }

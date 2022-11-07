@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using AI.Elite;
-using AI.Trash;
+using AI;
 using Core.Scripts.Utils;
-using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -26,6 +25,8 @@ namespace Controller
         public RoomFirstDungeonGenerator rfg;
         
         public DijkstraAlgorithm dijkstraAlgorithm;
+        
+        private List<int> layersToUndoIgnore = new List<int>();
 
         [Header("Revealing Dash")]
         [NonSerialized] public bool isHitting;
@@ -40,12 +41,11 @@ namespace Controller
         [SerializeField] public float damageMultiplier = 1f;
         [SerializeField] public float revealingDashTimer = 5f;
         [NonSerialized] public float revealingDashTimerCount;
-        
+
         [Header("UI elements")]
 
         [SerializeField] public Slider hpSlider;
         [SerializeField] public int currentEp;
-
 
         private void Awake()
         {
@@ -59,8 +59,7 @@ namespace Controller
             }
             m_rigidbody = GetComponent<Rigidbody2D>();
         }
-    
-    
+
         private void Start()
         {
             soController.currentHealth = soController.maxHealth;
@@ -72,9 +71,6 @@ namespace Controller
             //ReInit();
         }
         
-
-        
-
         public void ResetVelocity()
         {
             m_rigidbody.velocity = Vector2.zero;
@@ -94,13 +90,30 @@ namespace Controller
         {
             if (Input.GetKeyDown(KeyCode.Space) && m_timerDash < -0.5f)
             {
+                for (var i = 0; i < SortingLayer.layers.Length; i++)
+                {
+                    if (Physics.GetIgnoreLayerCollision(7, i)) continue;
+                    Physics.IgnoreLayerCollision(7, i);
+                    layersToUndoIgnore.Add(i);
+                }
+                Physics.IgnoreLayerCollision(7, 3, false);
                 m_timerDash = soController.m_durationDash;
             }
-        
-            m_timerDash -= Time.deltaTime;
+            
+            if (m_timerDash < -0.5f)
+            {
+                foreach (var layer in layersToUndoIgnore)
+                {
+                    Physics.IgnoreLayerCollision(7, layer, false);
+                }
+                layersToUndoIgnore.Clear();
+            }
+            else
+            {
+                m_timerDash -= Time.deltaTime;
+            }
         
             RevealingDash();
-
         }
         public void FixedUpdate()
         {
@@ -159,7 +172,7 @@ namespace Controller
             }
         }
 
-        void Die()
+        private static void Die()
         {
             //Destroy(gameObject);
             Debug.Log("<color=green>PLAYER</color> IS NOW DEAD");
@@ -183,7 +196,7 @@ namespace Controller
                 });
                 foreach (RaycastHit2D enemy in enemiesInArea)
                 {
-                    if (enemy.collider.CompareTag("TrashMobClose") || enemy.collider.CompareTag("TrashMobRange") || enemy.collider.CompareTag("Bully") || enemy.collider.CompareTag("Caretaker") || enemy.collider.CompareTag("TDI") || enemy.collider.CompareTag("Pyromaniac"))
+                    if (enemy.collider.CompareTag("Enemy"))
                     {
                         soController.epAmount -= revealingDashEpCost;
                         revealingDashAimedEnemy = enemy.collider.gameObject;
@@ -216,49 +229,12 @@ namespace Controller
                     runningCoroutines.Add(revealingDashAimedEnemy, StartCoroutine(StunEnemy(revealingDashAimedEnemy)));
                 
                     //DMG du player sur le TrashMobClose
-                    if (revealingDashAimedEnemy.CompareTag("TrashMobClose"))
+                    if (revealingDashAimedEnemy.CompareTag("Enemy"))
                     {
-                        revealingDashAimedEnemy.GetComponent<TrashMobClose>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
+                        revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
                         //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobClose>().currentHealth);
                     }
 
-                    //DMG du player sur le TrashMobRange
-                    if (revealingDashAimedEnemy.CompareTag("TrashMobRange"))
-                    {
-                        revealingDashAimedEnemy.GetComponent<TrashMobRange>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
-                        // Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
-                    }
-            
-                    //DMG du player sur le Bully
-                    if (revealingDashAimedEnemy.CompareTag("Bully"))
-                    {
-                        revealingDashAimedEnemy.GetComponent<Bully>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
-                        //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
-                    }
-            
-                    //DMG du player sur le caretaker
-                    if (revealingDashAimedEnemy.CompareTag("Caretaker"))
-                    {
-                        revealingDashAimedEnemy.GetComponent<CareTaker>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
-                        //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
-                    }
-                    
-                    //DMG du player sur le TDI
-                    if (revealingDashAimedEnemy.CompareTag("TDI"))
-                    {
-                        revealingDashAimedEnemy.GetComponent<TDI>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
-                        //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
-                    }
-                    
-                    //DMG du player sur le pyromaniac
-                    if (revealingDashAimedEnemy.CompareTag("Pyromaniac"))
-                    {
-                        revealingDashAimedEnemy.GetComponent<Pyromaniac>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
-                        //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobRange>().currentHealth);
-                    }
-                    
-                    
-                
                     isHitting = false;
                 }
             }
@@ -266,72 +242,11 @@ namespace Controller
 
         public IEnumerator StunEnemy(GameObject enemy)
         {
-            if (enemy.CompareTag("TrashMobClose"))
-            {
-                enemy.GetComponent<TrashMobClose>().isStunned = true;
-                yield return new WaitForSeconds(stunDuration);
-                if (enemy != null)
-                {
-                    enemy.GetComponent<TrashMobClose>().isStunned = false;
-                }
-                yield break;
-            }
-
-            if (enemy.CompareTag("TrashMobRange"))
-            {
-                enemy.GetComponent<TrashMobRange>().isStunned = true;
-                yield return new WaitForSeconds(stunDuration);
-                if (enemy != null)
-                {
-                    enemy.GetComponent<TrashMobRange>().isStunned = false;
-                }
-                yield break;
-            }
-        
-            if (enemy.CompareTag("Bully"))
-            {
-                enemy.GetComponent<Bully>().isStunned = true;
-                yield return new WaitForSeconds(stunDuration);
-                if (enemy != null)
-                {
-                    enemy.GetComponent<Bully>().isStunned = false;
-                }
-                yield break;
-            }
-            
-            if (enemy.CompareTag("Caretaker"))
-            {
-                enemy.GetComponent<CareTaker>().isStunned = true;
-                yield return new WaitForSeconds(stunDuration);
-                if (enemy != null)
-                {
-                    enemy.GetComponent<CareTaker>().isStunned = false;
-                }
-            }
-            
-            if (enemy.CompareTag("TDI"))
-            {
-                enemy.GetComponent<TDI>().isStunned = true;
-                yield return new WaitForSeconds(stunDuration);
-                if (enemy != null)
-                {
-                    enemy.GetComponent<TDI>().isStunned = false;
-                }
-            }
-            
-            if (enemy.CompareTag("Pyromaniac"))
-            {
-                enemy.GetComponent<Pyromaniac>().isStunned = true;
-                yield return new WaitForSeconds(stunDuration);
-                if (enemy != null)
-                {
-                    enemy.GetComponent<Pyromaniac>().isStunned = false;
-                }
-            }
+            enemy.GetComponent<EnemyController>().isStunned = true;
+            yield return new WaitForSeconds(stunDuration);
+            if (enemy) yield break;
+            enemy.GetComponent<EnemyController>().isStunned = false;
         }
-
         #endregion
-    
-  
     }
 }

@@ -1,5 +1,4 @@
-using AI.Elite;
-using AI.Trash;
+using AI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -23,7 +22,7 @@ namespace Controller
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             camera1 = Camera.main;
             lineRenderer = gameObject.GetComponent<LineRenderer>();
@@ -34,12 +33,12 @@ namespace Controller
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             ZealousBlade();
         }
 
-        public void ZealousBlade()
+        private void ZealousBlade()
         {
             if (Input.GetMouseButtonDown(0) && !isHitting)
             {
@@ -86,45 +85,10 @@ namespace Controller
         private void OnTriggerEnter2D(Collider2D other)
         {
             //DMG du player sur le TrashMobClose
-            if (other.gameObject.CompareTag("TrashMobClose"))
+            if (other.gameObject.CompareTag("Enemy"))
             {
-                other.gameObject.GetComponent<TrashMobClose>().TakeDamageFromPlayer(soController.playerAttackDamage);
+                other.gameObject.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.playerAttackDamage);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
-            }
-
-            //DMG du player sur le TrashMobRange
-            if (other.gameObject.CompareTag("TrashMobRange"))
-            {
-                other.gameObject.GetComponent<TrashMobRange>().TakeDamageFromPlayer(soController.playerAttackDamage);
-                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
-            }
-            
-            //DMG du player sur le Bully
-            if (other.gameObject.CompareTag("Bully"))
-            {
-                other.gameObject.GetComponent<Bully>().TakeDamageFromPlayer(soController.playerAttackDamage);
-                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
-            }
-            
-            //DMG du player sur le caretaker
-            if (other.gameObject.CompareTag("Caretaker"))
-            {
-                other.gameObject.GetComponent<CareTaker>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * chainBladeDamage.damageMultiplier));
-                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
-            }
-            
-            //DMG du player sur le TDI
-            if (other.gameObject.CompareTag("TDI"))
-            {
-                other.gameObject.GetComponent<TDI>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * chainBladeDamage.damageMultiplier));
-                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
-            }
-            
-            //DMG du player sur le pyromaniac
-            if (other.gameObject.CompareTag("Pyromaniac"))
-            {
-                other.gameObject.GetComponent<Pyromaniac>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * chainBladeDamage.damageMultiplier));
-                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
         }
     }
