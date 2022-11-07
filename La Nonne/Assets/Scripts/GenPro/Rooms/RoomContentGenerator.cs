@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
@@ -29,6 +30,12 @@ public class RoomContentGenerator : MonoBehaviour
         [SerializeField] private List<float> multiplierPerDistance = new(){20, 45, 54, 67, 100};
 
         #endregion
+        
+    private IEnumerator Scan()
+    {
+        yield return new WaitForSeconds(0.4f);
+        AstarPath.active.Scan();
+    }
     
     public void GenerateRoomContent(DungeonData dungeonData)
     {
@@ -43,6 +50,7 @@ public class RoomContentGenerator : MonoBehaviour
         SelectShopSpawnPoints(dungeonData);
         SelectEnemySpawnPoints(dungeonData);
         
+        StartCoroutine(Scan());
 
         foreach (GameObject item in spawnedObjects)
         {
@@ -238,4 +246,7 @@ public class RoomContentGenerator : MonoBehaviour
         }
         
         #endregion
+        
+        
+        
 }
