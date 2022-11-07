@@ -1,18 +1,32 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using UnityEngine;
 
 public class GrowingCircleManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public BossStateManager bossScript;
+    public PlayerController player;
+
+    public float pushForce;
+
+    private void Awake()
     {
+        //Assignation du script au prefab ON SPAWN
+        player = PlayerController.instance;
         
+        bossScript = GetComponent<BossStateManager>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnCollisionEnter2D(Collision2D col)
     {
+        Vector2 direction = (bossScript.transform.position - player.transform.position).normalized;     
         
+        if (col.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("IAGIHOAEHOAEGOAUEGHOAEUGHPAGHPAGHAEg");
+           player.m_rigidbody.AddForce(direction * pushForce, ForceMode2D.Impulse);
+        }
     }
 }

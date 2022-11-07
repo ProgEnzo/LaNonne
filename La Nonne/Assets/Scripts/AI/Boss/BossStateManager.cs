@@ -23,7 +23,6 @@ public class BossStateManager : MonoBehaviour
 
     
     [Header("Dash")]
-    
     public int dashDamage;
     public int bodyDamage;
     
@@ -48,7 +47,7 @@ public class BossStateManager : MonoBehaviour
     
     void Start()
     {
-        currentState = AttackCircleState; //starting state for the boss state machine
+        currentState = GrowingCircleState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
     }
     void Update()
