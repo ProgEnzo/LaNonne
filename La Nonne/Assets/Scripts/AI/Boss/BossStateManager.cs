@@ -20,7 +20,6 @@ public class BossStateManager : MonoBehaviour
 
     public Rigidbody2D rb;
     public PlayerController player;
-    private Collider2D[] circleCollider;
 
     
     [Header("Dash")]
@@ -36,7 +35,6 @@ public class BossStateManager : MonoBehaviour
 
     [Header("AttackCircle")] 
     public GameObject circle;
-    public int circleDamage;
     public int circleAmount = 3;
     public float circleSpacingCooldown;
 
@@ -62,11 +60,6 @@ public class BossStateManager : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             player.TakeDamage(dashDamage);
-        }
-
-        if (circle.gameObject.CompareTag("Player"))
-        {
-            player.TakeDamage(circleDamage);
         }
     }
 
@@ -142,7 +135,6 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(circleSpacingCooldown);
 
         var circleObject = Instantiate(circle, player.transform.position, Quaternion.identity);
-        
         yield return new WaitForSeconds(circleSpacingCooldown);
         Destroy(circleObject, 1f);
 
