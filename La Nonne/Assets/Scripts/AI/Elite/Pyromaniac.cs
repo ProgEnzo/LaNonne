@@ -33,8 +33,6 @@ namespace AI.Elite
         private bool canBoxCast;
         [SerializeField] private float fireCooldown = 1f;
 
-        [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
-
         protected override void Start()
         {
             base.Start();
