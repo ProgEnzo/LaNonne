@@ -33,7 +33,8 @@ public class BossStateManager : MonoBehaviour
     
     public int dashAmount = 3;
 
-    [Header("AttackCircle")] 
+    [Header("AttackCircle")]
+    public GameObject circleWarning;
     public GameObject circle;
     public int circleAmount = 3;
     public float circleSpacingCooldown;
@@ -131,11 +132,15 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator AttackCircle()
     {
         circleAmount--;
+        yield return new WaitForSeconds(circleSpacingCooldown);
         
+        var circleObjectWarning = Instantiate(circleWarning, player.transform.position, Quaternion.identity);
         yield return new WaitForSeconds(circleSpacingCooldown);
-
-        var circleObject = Instantiate(circle, player.transform.position, Quaternion.identity);
+        
+        Destroy(circleObjectWarning, 1f);
+        var circleObject = Instantiate(circle, circleObjectWarning.transform.position, Quaternion.identity);
         yield return new WaitForSeconds(circleSpacingCooldown);
+        
         Destroy(circleObject, 1f);
 
         if (circleAmount > 0)
@@ -167,7 +172,7 @@ public class BossStateManager : MonoBehaviour
         var growingCircleGameObject = Instantiate(growingCircle, transform.position, quaternion.identity);
         growingCircleGameObject.transform.DOKill();
         growingCircleGameObject.transform.localScale = Vector3.zero;
-        growingCircleGameObject.transform.DOScale(new Vector3(60, 60, 0), 5f);
+        growingCircleGameObject.transform.DOScale(new Vector3(10, 10, 0), 5f);
         yield return new WaitForSeconds(growingCircleCooldown);
         
         Destroy(growingCircleGameObject, 5f);
