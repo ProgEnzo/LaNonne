@@ -171,10 +171,10 @@ public class BossStateManager : MonoBehaviour
         var growingCircleGameObject = Instantiate(growingCircle, transform.position, quaternion.identity);
         growingCircleGameObject.transform.DOKill();
         growingCircleGameObject.transform.localScale = Vector3.zero;
-        growingCircleGameObject.transform.DOScale(new Vector3(10, 10, 0), 5f);
+        growingCircleGameObject.transform.DOScale(new Vector3(10, 10, 0), 3f);
         yield return new WaitForSeconds(growingCircleCooldown);
         
-        Destroy(growingCircleGameObject, 5f);
+        Destroy(growingCircleGameObject, 3f);
 
         if (growingCircleAmount > 0)
         {
