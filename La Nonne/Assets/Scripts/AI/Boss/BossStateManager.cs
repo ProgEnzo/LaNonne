@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Controller;
+using DG.Tweening;
 using Pathfinding;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class BossStateManager : MonoBehaviour
@@ -33,14 +35,19 @@ public class BossStateManager : MonoBehaviour
 
     [Header("AttackCircle")] 
     public GameObject circle;
-    public int circleDamage;
     public int circleAmount = 3;
     public float circleSpacingCooldown;
+
+    [Header("AttackCircle")] 
+    public GameObject growingCircle;
+    public float growingCircleCooldown;
+    public float growingCircleAmount;
+
     
     
     void Start()
     {
-        currentState = DashingState; //starting state for the boss state machine
+        currentState = AttackCircleState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
     }
     void Update()
@@ -53,12 +60,6 @@ public class BossStateManager : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             player.TakeDamage(dashDamage);
-        }
-
-        if (circle.gameObject.CompareTag("Player"))
-        {
-            player.TakeDamage(circleDamage);
-            Debug.Log($"<color=green>DASHING STATE HAS BEGUN</color>");
         }
     }
 
@@ -130,12 +131,10 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator AttackCircle()
     {
         circleAmount--;
-        GameObject circleObject;
         
         yield return new WaitForSeconds(circleSpacingCooldown);
 
-        circleObject = Instantiate(circle, player.transform.position, Quaternion.identity);
-        
+        var circleObject = Instantiate(circle, player.transform.position, Quaternion.identity);
         yield return new WaitForSeconds(circleSpacingCooldown);
         Destroy(circleObject, 1f);
 
@@ -150,5 +149,39 @@ public class BossStateManager : MonoBehaviour
     }
 
     #endregion
+
+    #region GrowingCircleState
+
+    public void GrowingCircleManager()
+    {
+        StartCoroutine(GrowingCircle());
+        Debug.Log($"<color=red>GROWING CIRCLE STATE HAS BEGUN</color>");
+    }
     
+    private IEnumerator GrowingCircle()
+    {
+        growingCircleAmount--;
+        
+        yield return new WaitForSeconds(growingCircleCooldown);
+        
+        var growingCircleGameObject = Instantiate(growingCircle, transform.position, quaternion.identity);
+        growingCircleGameObject.transform.DOKill();
+        growingCircleGameObject.transform.localScale = Vector3.zero;
+        growingCircleGameObject.transform.DOScale(new Vector3(60, 60, 0), 5f);
+        yield return new WaitForSeconds(growingCircleCooldown);
+        
+        Destroy(growingCircleGameObject, 5f);
+
+        if (growingCircleAmount > 0)
+        {
+            StartCoroutine(GrowingCircle());
+        }
+        else
+        {
+            SwitchState(ShrinkingCircleState);
+        }
+    }
+    
+
+    #endregion
 }
