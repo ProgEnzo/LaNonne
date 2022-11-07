@@ -33,9 +33,9 @@ public class BossStateManager : MonoBehaviour
     
     public int dashAmount = 3;
 
-    [Header("AttackCircle")] 
-    public GameObject circle;
+    [Header("AttackCircle")]
     public GameObject circleWarning;
+    public GameObject circle;
     public int circleAmount = 3;
     public float circleSpacingCooldown;
 
@@ -137,10 +137,10 @@ public class BossStateManager : MonoBehaviour
         var circleObjectWarning = Instantiate(circleWarning, player.transform.position, Quaternion.identity);
         yield return new WaitForSeconds(circleSpacingCooldown);
         
-        var circleObject = Instantiate(circle, circleWarning.transform.position, Quaternion.identity);
+        Destroy(circleObjectWarning, 1f);
+        var circleObject = Instantiate(circle, circleObjectWarning.transform.position, Quaternion.identity);
         yield return new WaitForSeconds(circleSpacingCooldown);
         
-        Destroy(circleObjectWarning, 1f);
         Destroy(circleObject, 1f);
 
         if (circleAmount > 0)

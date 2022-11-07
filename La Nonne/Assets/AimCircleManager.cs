@@ -6,9 +6,13 @@ using UnityEngine;
 
 public class AimCircleManager : MonoBehaviour
 {
-    public int circleDamage = 20;
+    public int circleDamage;
     private void OnTriggerEnter2D(Collider2D col)
     {
-        PlayerController.instance.TakeDamage(circleDamage);
+        if (col.gameObject.CompareTag("Player"))
+        {
+            PlayerController.instance.TakeDamage(circleDamage);
+
+        }
     }
 }
