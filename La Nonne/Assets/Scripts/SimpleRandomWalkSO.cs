@@ -6,6 +6,24 @@ using UnityEngine;
 
 public class SimpleRandomWalkSO : ScriptableObject
 {
-   public int iterations = 10, walkLength = 10;
-   public bool startRandomlyEachIteration = true;
+   [SerializeField] private int iterations = 10, walkLength = 10;
+   [SerializeField] private bool startRandomlyEachIteration = true;
+   
+   public SimpleRandomWalk GetSimpleRandomWalk()
+   {
+      return new SimpleRandomWalk(iterations, walkLength, startRandomlyEachIteration);
+   }
+}
+
+public class SimpleRandomWalk
+{
+   public int iterations, walkLength;
+   public bool startRandomlyEachIteration;
+
+   public SimpleRandomWalk(int i, int walkLength1, bool b)
+   {
+      iterations = i;
+      walkLength = walkLength1;
+      startRandomlyEachIteration = b;
+   }
 }
