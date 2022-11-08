@@ -69,18 +69,16 @@ public class RoomContentGenerator : MonoBehaviour
     private Vector2Int playerSpawnRoomPosition;
         private void SelectPlayerSpawnPoint(DungeonData dungeonData)
         {
-            int randomRoomIndex = UnityEngine.Random.Range(0, dungeonData.roomsDictionary.Count);
-            Vector2Int playerSpawnPoint = dungeonData.roomsDictionary.Keys.ElementAt(randomRoomIndex);
+            //int randomRoomIndex = UnityEngine.Random.Range(0, dungeonData.roomsDictionary.Count);
+            //int firstRoom = dungeonData.roomsDictionary.Keys.First(); //je peux pas faire ca c'est sensé etre un vector2Int et pas un int
+            
+            Vector2Int playerSpawnPoint = dungeonData.roomsDictionary.Keys.First(); //fait spawn le hub au premier élément du Dico                          //.ElementAt(randomRoomIndex); 
     
             graphTest.RunDijkstraAlgorithm(playerSpawnPoint, dungeonData.floorPositions);
     
-            playerSpawnRoomPosition = dungeonData.roomsDictionary.Keys.ElementAt(randomRoomIndex);
+            playerSpawnRoomPosition = dungeonData.roomsDictionary.Keys.First();
     
-            List<GameObject> placedPrefabs = playerRoom.ProcessRoom(
-                playerSpawnPoint,
-                dungeonData.roomsDictionary.Values.ElementAt(randomRoomIndex),
-                dungeonData.GetRoomFloorWithoutCorridors(playerSpawnRoomPosition)
-                );
+            List<GameObject> placedPrefabs = playerRoom.ProcessRoom(playerSpawnPoint, dungeonData.roomsDictionary.Values.First(), dungeonData.GetRoomFloorWithoutCorridors(playerSpawnRoomPosition));
     
             FocusCameraOnThePlayer(placedPrefabs[placedPrefabs.Count - 1].transform);
     
@@ -127,7 +125,7 @@ public class RoomContentGenerator : MonoBehaviour
 
     #endregion
     
-    int GetDistanceWithNearestShop (Vector2Int currentPos)
+    int GetDistanceWithNearestShop (Vector2Int currentPos) //Prend la distance entre les shop afin de définir le shop le plus proche 
     {
         int distance = 99999;
             
