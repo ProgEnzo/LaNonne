@@ -59,7 +59,7 @@ public class BossStateManager : MonoBehaviour
     
     void Start()
     {
-        currentState = ShrinkingCircleState; //starting state for the boss state machine
+        currentState = DashingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         currentHealth = maxHealth;
         hpBossSlider.maxValue = maxHealth;
