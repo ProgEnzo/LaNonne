@@ -19,6 +19,12 @@ namespace Controller
                 other.gameObject.GetComponent<EnemyController>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
             }
+            
+            //DMG du player sur le BOSS
+            if (other.gameObject.CompareTag("Boss"))
+            {
+                other.gameObject.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.playerAttackDamage);
+            }
         }
     }
 }

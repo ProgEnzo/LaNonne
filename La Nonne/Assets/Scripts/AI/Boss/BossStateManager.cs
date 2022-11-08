@@ -26,6 +26,7 @@ public class BossStateManager : MonoBehaviour
     
     [Header("Health")]
     public int currentHealth;
+    public int maxHealth;
     public Slider hpBossSlider;
     
     [Header("----Dash----")]
@@ -50,17 +51,19 @@ public class BossStateManager : MonoBehaviour
     public int growingCircleAmount;
 
     [Header("----ShrinkingCircle----")]
+    public GameObject rotatingBlade;
     public GameObject shrinkingCircle;
     public float shrinkingCircleCooldown;
     public int shrinkingCircleAmount;
-
-    public GameObject rotatingBlade;
     public float rotatingBladeCooldown;
     
     void Start()
     {
         currentState = ShrinkingCircleState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
+        currentHealth = maxHealth;
+        hpBossSlider.maxValue = maxHealth;
+        hpBossSlider.value = maxHealth;
     }
     void Update()
     {
@@ -91,7 +94,7 @@ public class BossStateManager : MonoBehaviour
 
     #region Health Boss
 
-    public void TakeDamageFromPlayer(int damage)
+    public void TakeDamageOnBossFromPlayer(int damage)
     {
         currentHealth -= damage;
         hpBossSlider.value -= damage;
@@ -231,18 +234,13 @@ public class BossStateManager : MonoBehaviour
     {
         shrinkingCircleAmount--;
         yield return new WaitForSeconds(shrinkingCircleCooldown);
-        
-        RotatingBlade();
+
+        StartCoroutine(RotatingBlade());
         yield return new WaitForSeconds(rotatingBladeCooldown);
         
-        //METTRE CE BLOC DANS LA COROUTINE
-        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, transform.position, quaternion.identity);
-        shrinkingCircleGameObject.transform.parent = gameObject.transform; //set le prefab en child
-        shrinkingCircleGameObject.transform.DOKill();
-        shrinkingCircleGameObject.transform.DOScale(new Vector3(0, 0, 0), 3f);
-        yield return new WaitForSeconds(shrinkingCircleCooldown);
-
-        Destroy(shrinkingCircleGameObject, 3f);
+        //ÉCHANGER LE CIRCLE COLLIDER AVEC UNE RANGE + ADDFORCE VERS LE BOSS POUR LE "BLACK HOLE"
+        //ENLEVER LES DUPLICATE DE ROTATING BLADE
+        
         
         if (shrinkingCircleAmount > 0)
         {
@@ -254,13 +252,20 @@ public class BossStateManager : MonoBehaviour
         }
     }
 
-    private void RotatingBlade()
+    private IEnumerator RotatingBlade()
     {
         bossAI.maxSpeed = 1;
         var rotatingBladeGameObject = Instantiate(rotatingBlade, transform.position, Quaternion.identity);
         rotatingBladeGameObject.transform.parent = gameObject.transform;
-        rotatingBladeGameObject.transform.DORotate(new Vector3(0, 0, 360), rotatingBladeCooldown, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear);
+        rotatingBladeGameObject.transform.DORotate(new Vector3(0, 0, 360), rotatingBladeCooldown, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear); //5s
         
+        yield return new WaitForSeconds(shrinkingCircleCooldown); //1s
+
+        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, transform.position, quaternion.identity);
+        shrinkingCircleGameObject.transform.parent = gameObject.transform; //set le prefab en child
+        shrinkingCircleGameObject.transform.DOKill();
+        shrinkingCircleGameObject.transform.DOScale(new Vector3(0, 0, 0), 3f);
+        Destroy(shrinkingCircleGameObject, 3f);
     }
     
 

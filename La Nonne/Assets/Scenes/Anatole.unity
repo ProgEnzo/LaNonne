@@ -317,9 +317,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 69.6
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -34433,7 +34433,8 @@ MonoBehaviour:
   rb: {fileID: 6761636065754704817}
   player: {fileID: 1483002657}
   bossAI: {fileID: 6761636065754704819}
-  currentHealth: 100
+  currentHealth: 50
+  maxHealth: 100
   hpBossSlider: {fileID: 122512754}
   dashDamage: 50
   bodyDamage: 20
@@ -34448,8 +34449,8 @@ MonoBehaviour:
   growingCircle: {fileID: 4845308707281541438, guid: b3f8cc22d8f0cce439f2e929b4ceeea8, type: 3}
   growingCircleCooldown: 1
   growingCircleAmount: 5
+  rotatingBlade: {fileID: 5203104815070699965, guid: 13ae2e04a8e93da40ada41fff21a7502, type: 3}
   shrinkingCircle: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
   shrinkingCircleCooldown: 1
   shrinkingCircleAmount: 3
-  rotatingBlade: {fileID: 5203104815070699965, guid: 13ae2e04a8e93da40ada41fff21a7502, type: 3}
   rotatingBladeCooldown: 5

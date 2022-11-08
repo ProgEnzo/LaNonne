@@ -84,11 +84,17 @@ namespace Controller
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            //DMG du player sur le TrashMobClose
+            //DMG du player sur les enemy
             if (other.gameObject.CompareTag("Enemy"))
             {
                 other.gameObject.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.playerAttackDamage);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
+            }
+            
+            //DMG du player sur le BOSS
+            if (other.gameObject.CompareTag("Boss"))
+            {
+                other.gameObject.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.playerAttackDamage);
             }
         }
     }
