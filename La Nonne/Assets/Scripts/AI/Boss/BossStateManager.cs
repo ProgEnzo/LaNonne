@@ -28,8 +28,8 @@ public class BossStateManager : MonoBehaviour
     public int currentHealth;
     public int maxHealth;
     public Slider hpBossSlider;
-    
-    [Header("----Dash----")]
+
+    [Header("----Dash----")] 
     public int dashDamage;
     public int bodyDamage;
     
@@ -68,6 +68,7 @@ public class BossStateManager : MonoBehaviour
     void Update()
     {
         currentState.UpdateState(this); //will call any code in Update State from the current state every frame
+        
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -126,19 +127,20 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         
-        
-        player.GetComponent<Collider2D>().isTrigger = true;
         GetComponent<AIDestinationSetter>().enabled = false;
         GetComponent<AIPath>().enabled = false;
         Vector2 direction = player.transform.position - transform.position;
-        rb.velocity = direction.normalized * dashDistance;
-        yield return new WaitForSeconds(dashTime);
+        rb.velocity = direction.normalized * dashDistance; // DASH
+        Physics2D.IgnoreLayerCollision(15, 7, true);
 
+        yield return new WaitForSeconds(dashTime);
         
-        player.GetComponent<Collider2D>().isTrigger = false;
+        Physics2D.IgnoreLayerCollision(15, 7, false);
+
         GetComponent<AIDestinationSetter>().enabled = true;
         GetComponent<AIPath>().enabled = true;
         yield return new WaitForSeconds(dashCooldown);
+        
         
        
         if (dashAmount > 0)
@@ -255,13 +257,14 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator RotatingBlade()
     {
         bossAI.maxSpeed = 0.5f;
-        var rotatingBladeGameObject = Instantiate(rotatingBlade, transform.position, Quaternion.identity);
+        var bossPosition = transform.position;
+        var rotatingBladeGameObject = Instantiate(rotatingBlade, bossPosition, Quaternion.identity);
         rotatingBladeGameObject.transform.parent = gameObject.transform;
         rotatingBladeGameObject.transform.DORotate(new Vector3(0, 0, 360), rotatingBladeCooldown, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear); //5s
         
         yield return new WaitForSeconds(shrinkingCircleCooldown); //1s
 
-        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, transform.position, quaternion.identity);
+        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, bossPosition, quaternion.identity);
         shrinkingCircleGameObject.transform.parent = gameObject.transform; //set le prefab en child
         shrinkingCircleGameObject.transform.DOKill();
         shrinkingCircleGameObject.transform.DOScale(new Vector3(0, 0, 0), 3f);
