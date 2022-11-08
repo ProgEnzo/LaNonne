@@ -254,7 +254,7 @@ public class BossStateManager : MonoBehaviour
 
     private IEnumerator RotatingBlade()
     {
-        bossAI.maxSpeed = 1;
+        bossAI.maxSpeed = 0.5f;
         var rotatingBladeGameObject = Instantiate(rotatingBlade, transform.position, Quaternion.identity);
         rotatingBladeGameObject.transform.parent = gameObject.transform;
         rotatingBladeGameObject.transform.DORotate(new Vector3(0, 0, 360), rotatingBladeCooldown, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear); //5s

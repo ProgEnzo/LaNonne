@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using UnityEngine;
 
-public class GrowingCircleManager : MonoBehaviour
+public class ShrinkingCircleManager : MonoBehaviour
 {
     public GameObject player;
 
@@ -16,9 +15,9 @@ public class GrowingCircleManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnTriggerStay2D(Collider2D col)
     {
-        Vector2 direction = (player.transform.position - transform.position).normalized;     
+        Vector2 direction = (transform.position - player.transform.position).normalized;     
         
         if (col.gameObject.CompareTag("Player") && PlayerController.instance.m_timerDash < 0)
         {
