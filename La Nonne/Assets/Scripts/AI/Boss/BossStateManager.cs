@@ -30,6 +30,7 @@ public class BossStateManager : MonoBehaviour
     public Slider hpBossSlider;
 
     [Header("----Dash----")] 
+    public GameObject dashMine;
     public int dashDamage;
     public int bodyDamage;
     
@@ -133,6 +134,13 @@ public class BossStateManager : MonoBehaviour
         rb.velocity = direction.normalized * dashDistance; // DASH
         Physics2D.IgnoreLayerCollision(15, 7, true);
 
+        StartCoroutine(DashMine());
+        yield return new WaitForSeconds(0.3f);
+        
+        StartCoroutine(DashMine());
+        yield return new WaitForSeconds(0.3f);
+        
+        StartCoroutine(DashMine());
         yield return new WaitForSeconds(dashTime);
         
         Physics2D.IgnoreLayerCollision(15, 7, false);
@@ -151,7 +159,16 @@ public class BossStateManager : MonoBehaviour
         {
             SwitchState(AttackCircleState); //SWITCH INTO BossAttackCircleState
         }
+    }
 
+    private IEnumerator DashMine()
+    {
+        var dashMineObject = Instantiate(dashMine, transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(0.5f);
+        
+        dashMineObject.transform.DOScale(new Vector3(3, 3, 0), 3f);
+        Destroy(dashMineObject, 3f);
+        yield return new WaitForSeconds(0.3f);
     }
     
 

@@ -12,7 +12,6 @@ public class AimCircleManager : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             PlayerController.instance.TakeDamage(circleDamage);
-
         }
     }
 }
