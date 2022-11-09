@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Controller;
@@ -8,6 +9,8 @@ public class ShrinkingCircleManager : MonoBehaviour
     public GameObject player;
 
     public float pushForce;
+    public float blackHoleRange;
+
 
 
     private void Awake()
@@ -15,13 +18,17 @@ public class ShrinkingCircleManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
     }
 
-    private void OnTriggerStay2D(Collider2D col)
+    private void Update()
     {
-        Vector2 direction = (transform.position - player.transform.position).normalized;     
-        
-        if (col.gameObject.CompareTag("Player") && PlayerController.instance.m_timerDash < 0)
+        Vector2 direction = (transform.position - player.transform.position).normalized;
+        var distanceBossPlayer = Vector2.Distance(transform.position, player.transform.position);
+
+        if (distanceBossPlayer < blackHoleRange && PlayerController.instance.m_timerDash < 0)
         {
             player.GetComponent<Rigidbody2D>().AddForce(direction * pushForce, ForceMode2D.Impulse);
+
         }
     }
+    
+    //DRAW LE BLACK HOLE RANGE ET VOIR COMMENT CA SE FAIT AVEC LE SPRITE RENDERER CIRCLE SHRINKING
 }

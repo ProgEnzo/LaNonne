@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4845308707281541437}
   - component: {fileID: 4845308707281541436}
-  - component: {fileID: 4845308707281541439}
   - component: {fileID: 4031243289595939203}
   m_Layer: 14
   m_Name: ShrinkingCircle
@@ -86,22 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &4845308707281541439
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4845308707281541438}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!114 &4031243289595939203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,4 +98,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  pushForce: 1
+  pushForce: 0.2
+  blackHoleRange: 10

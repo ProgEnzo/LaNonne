@@ -31,7 +31,6 @@ public class BossStateManager : MonoBehaviour
 
     [Header("----Dash----")] 
     public GameObject dashMine;
-    public int dashDamage;
     public int bodyDamage;
     
     public float dashDistance;
@@ -60,7 +59,7 @@ public class BossStateManager : MonoBehaviour
     
     void Start()
     {
-        currentState = DashingState; //starting state for the boss state machine
+        currentState = ShrinkingCircleState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         currentHealth = maxHealth;
         hpBossSlider.maxValue = maxHealth;
@@ -69,6 +68,7 @@ public class BossStateManager : MonoBehaviour
     void Update()
     {
         currentState.UpdateState(this); //will call any code in Update State from the current state every frame
+
         
     }
 
@@ -76,7 +76,7 @@ public class BossStateManager : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            player.TakeDamage(dashDamage);
+            player.TakeDamage(20);
         }
     }
 
