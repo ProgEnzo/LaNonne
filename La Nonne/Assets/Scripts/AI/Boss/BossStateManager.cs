@@ -24,10 +24,11 @@ public class BossStateManager : MonoBehaviour
     public AIPath bossAI;
 
     
-    [Header("Health")]
+    [Header("Overall Stats")]
+    public Slider hpBossSlider;
     public int currentHealth;
     public int maxHealth;
-    public Slider hpBossSlider;
+    public float movementSpeed;
 
     [Header("----Dash----")] 
     public GameObject dashMine;
@@ -36,6 +37,7 @@ public class BossStateManager : MonoBehaviour
     public float dashDistance;
     public float dashTime;
     public float dashCooldown;
+    public float timeBeforeDashing;
     
     public int dashAmount = 3;
 
@@ -61,15 +63,16 @@ public class BossStateManager : MonoBehaviour
     {
         currentState = ShrinkingCircleState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
+        
         currentHealth = maxHealth;
         hpBossSlider.maxValue = maxHealth;
         hpBossSlider.value = maxHealth;
+
+        bossAI.maxSpeed = movementSpeed;
     }
     void Update()
     {
         currentState.UpdateState(this); //will call any code in Update State from the current state every frame
-
-        
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -127,7 +130,9 @@ public class BossStateManager : MonoBehaviour
         dashAmount--; //décrémente de 1 le nombre de dash restant
         yield return new WaitForSeconds(1);
 
-        
+        bossAI.maxSpeed = 0;
+        yield return new WaitForSeconds(timeBeforeDashing);
+
         GetComponent<AIDestinationSetter>().enabled = false;
         GetComponent<AIPath>().enabled = false;
         Vector2 direction = player.transform.position - transform.position;
@@ -143,12 +148,12 @@ public class BossStateManager : MonoBehaviour
         StartCoroutine(DashMine());
         yield return new WaitForSeconds(dashTime);
         
+        bossAI.maxSpeed = movementSpeed;
         Physics2D.IgnoreLayerCollision(15, 7, false);
 
         GetComponent<AIDestinationSetter>().enabled = true;
         GetComponent<AIPath>().enabled = true;
         yield return new WaitForSeconds(dashCooldown);
-        
         
        
         if (dashAmount > 0)
@@ -184,6 +189,7 @@ public class BossStateManager : MonoBehaviour
     
     private IEnumerator AttackCircle()
     {
+        bossAI.maxSpeed = 0;
         attackCircleAmount--;
         yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
@@ -202,6 +208,7 @@ public class BossStateManager : MonoBehaviour
         }
         else
         {
+            bossAI.maxSpeed = movementSpeed;
             SwitchState(GrowingCircleState); //SWITCH INTO GrowingCircleState
         }
     }
@@ -267,27 +274,31 @@ public class BossStateManager : MonoBehaviour
         }
         else
         {
+            bossAI.maxSpeed = movementSpeed;
             SwitchState(TransitionState);
         }
     }
 
     private IEnumerator RotatingBlade()
     {
-        bossAI.maxSpeed = 0.5f;
-        var bossPosition = transform.position;
+        bossAI.maxSpeed = 1f;
+        var bossPosition = transform.localPosition;
         var rotatingBladeGameObject = Instantiate(rotatingBlade, bossPosition, Quaternion.identity);
         rotatingBladeGameObject.transform.parent = gameObject.transform;
         rotatingBladeGameObject.transform.DORotate(new Vector3(0, 0, 360), rotatingBladeCooldown, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear); //5s
         
         yield return new WaitForSeconds(shrinkingCircleCooldown); //1s
 
-        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, bossPosition, quaternion.identity);
+        bossAI.maxSpeed = 0f;
+        yield return new WaitForSeconds(2);
+
+        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, bossPosition, Quaternion.identity);
         shrinkingCircleGameObject.transform.parent = gameObject.transform; //set le prefab en child
-        shrinkingCircleGameObject.transform.DOKill();
-        shrinkingCircleGameObject.transform.DOScale(new Vector3(0, 0, 0), 3f);
+        //shrinkingCircleGameObject.transform.DOKill();
+        //shrinkingCircleGameObject.transform.DOScale(new Vector3(0, 0, 0), 3f);
         Destroy(shrinkingCircleGameObject, 3f);
     }
     
-
+    
     #endregion
 }
