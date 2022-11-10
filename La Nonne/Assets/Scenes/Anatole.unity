@@ -770,7 +770,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456407908}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5599997, y: 0.4800001, z: -10}
+  m_LocalPosition: {x: -1.5599996, y: 0.4800001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -31719,7 +31719,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656192447}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5599997, y: 0.4800001, z: -10}
+  m_LocalPosition: {x: -1.5599996, y: 0.4800001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34274,7 +34274,7 @@ MonoBehaviour:
   radius: 2
   height: 1.89
   canMove: 1
-  maxSpeed: 4
+  maxSpeed: 2
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
@@ -34370,7 +34370,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: -7606234629451901924, guid: a0d3fbbc155eb404a87f827b40a48dfe, type: 3}
-  m_Color: {r: 1, g: 0.7319846, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.9547765, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -34433,24 +34433,26 @@ MonoBehaviour:
   rb: {fileID: 6761636065754704817}
   player: {fileID: 1483002657}
   bossAI: {fileID: 6761636065754704819}
-  currentHealth: 100
-  maxHealth: 100
   hpBossSlider: {fileID: 122512754}
+  currentHealth: 100
+  maxHealth: 500
+  movementSpeed: 3
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   bodyDamage: 20
   dashDistance: 10
   dashTime: 0.7
   dashCooldown: 1
+  timeBeforeDashing: 0.5
   dashAmount: 3
   attackCircleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
   attackCircle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
-  attackCircleSpacingCooldown: 0.3
+  attackCircleSpacingCooldown: 0.5
   attackCircleAmount: 3
   growingCircle: {fileID: 4845308707281541438, guid: b3f8cc22d8f0cce439f2e929b4ceeea8, type: 3}
   growingCircleCooldown: 1
-  growingCircleAmount: 5
+  growingCircleAmount: 3
   rotatingBlade: {fileID: 5203104815070699965, guid: 13ae2e04a8e93da40ada41fff21a7502, type: 3}
   shrinkingCircle: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
   shrinkingCircleCooldown: 1
-  shrinkingCircleAmount: 3
+  shrinkingCircleAmount: 10
   rotatingBladeCooldown: 5
