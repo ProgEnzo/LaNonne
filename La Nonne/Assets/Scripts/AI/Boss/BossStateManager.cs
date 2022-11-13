@@ -61,7 +61,7 @@ public class BossStateManager : MonoBehaviour
     
     void Start()
     {
-        currentState = ShrinkingCircleState; //starting state for the boss state machine
+        currentState = DashingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         currentHealth = maxHealth;
@@ -79,7 +79,7 @@ public class BossStateManager : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            player.TakeDamage(20);
+            
         }
     }
 
@@ -282,17 +282,16 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator RotatingBlade()
     {
         bossAI.maxSpeed = 1f;
-        var bossPosition = transform.localPosition;
-        var rotatingBladeGameObject = Instantiate(rotatingBlade, bossPosition, Quaternion.identity);
+        var rotatingBladeGameObject = Instantiate(rotatingBlade, transform.position, Quaternion.identity);
         rotatingBladeGameObject.transform.parent = gameObject.transform;
         rotatingBladeGameObject.transform.DORotate(new Vector3(0, 0, 360), rotatingBladeCooldown, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear); //5s
         
         yield return new WaitForSeconds(shrinkingCircleCooldown); //1s
 
         bossAI.maxSpeed = 0f;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(2f);
 
-        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, bossPosition, Quaternion.identity);
+        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, transform.position, Quaternion.identity);
         shrinkingCircleGameObject.transform.parent = gameObject.transform; //set le prefab en child
         //shrinkingCircleGameObject.transform.DOKill();
         //shrinkingCircleGameObject.transform.DOScale(new Vector3(0, 0, 0), 3f);
