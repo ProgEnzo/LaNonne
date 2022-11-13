@@ -285,7 +285,7 @@ public class BossStateManager : MonoBehaviour
         var rotatingBladeGameObject = Instantiate(rotatingBlade, transform.position, Quaternion.identity);
         rotatingBladeGameObject.transform.parent = gameObject.transform;
         rotatingBladeGameObject.transform.DORotate(new Vector3(0, 0, 360), rotatingBladeCooldown, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear); //5s
-        
+        Destroy(rotatingBladeGameObject, rotatingBladeCooldown);
         yield return new WaitForSeconds(shrinkingCircleCooldown); //1s
 
         bossAI.maxSpeed = 0f;
@@ -297,7 +297,20 @@ public class BossStateManager : MonoBehaviour
         //shrinkingCircleGameObject.transform.DOScale(new Vector3(0, 0, 0), 3f);
         Destroy(shrinkingCircleGameObject, 3f);
     }
-    
-    
+    #endregion
+
+    #region TransitionState
+
+    public void TransitionManager()
+    {
+        StartCoroutine(Transition());
+        Debug.Log($"<color=red>TRANSITION STATE HAS BEGUN</color>");
+    }
+
+    private IEnumerator Transition()
+    {
+        yield return new WaitForSeconds(1f);
+    }
+
     #endregion
 }
