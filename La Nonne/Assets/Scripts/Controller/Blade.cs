@@ -8,6 +8,7 @@ namespace Controller
     {
         public bool isHitting;
         public bool hitStep;
+        public float hitLength;
         public float hitAngle = 45f;
         public float hitSpeed = 1f;
         public float toleranceAngle = 1f;
@@ -25,8 +26,8 @@ namespace Controller
         private void Start()
         {
             camera1 = Camera.main;
-            lineRenderer = gameObject.GetComponent<LineRenderer>();
-            boxCollider = gameObject.GetComponent<BoxCollider2D>();
+            lineRenderer = GetComponent<LineRenderer>();
+            boxCollider = GetComponent<BoxCollider2D>();
             lineRenderer.enabled = false;
             boxCollider.enabled = false;
             isHitting = false;
@@ -36,6 +37,7 @@ namespace Controller
         private void Update()
         {
             ZealousBlade();
+            lineRenderer.SetPosition(1, new Vector3(0, hitLength/transform.parent.parent.localScale.x, 0));
         }
 
         private void ZealousBlade()
