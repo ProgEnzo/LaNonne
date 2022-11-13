@@ -64,6 +64,7 @@ namespace Controller
         {
             soController.currentHealth = soController.maxHealth;
             isHitting = false;
+            hpSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
             hpSlider.maxValue = soController.maxHealth;
             hpSlider.value = soController.maxHealth;
             currentEp = 0;

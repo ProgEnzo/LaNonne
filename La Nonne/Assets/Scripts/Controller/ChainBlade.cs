@@ -13,6 +13,8 @@ namespace Controller
         public float toleranceAngle = 1f;
         public LineRenderer chainLineRenderer;
         public LineRenderer bladeLineRenderer;
+        public BoxCollider2D chainBoxCollider;
+        public BoxCollider2D bladeBoxCollider;
         public Quaternion initialRotation;
         public Quaternion finalRotation;
         private Camera camera1;
@@ -26,6 +28,8 @@ namespace Controller
             camera1 = Camera.main;
             chainLineRenderer = transform.GetChild(0).GetComponent<LineRenderer>();
             bladeLineRenderer = transform.GetChild(1).GetComponent<LineRenderer>();
+            chainBoxCollider = transform.GetChild(0).GetComponent<BoxCollider2D>();
+            bladeBoxCollider = transform.GetChild(1).GetComponent<BoxCollider2D>();
             transform.GetChild(0).gameObject.SetActive(false);
             transform.GetChild(1).gameObject.SetActive(false);
             isHitting = false;
@@ -39,6 +43,10 @@ namespace Controller
             chainLineRenderer.SetPosition(1, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
             bladeLineRenderer.SetPosition(0, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
             bladeLineRenderer.SetPosition(1, new Vector3(0, (chainHitLength+bladeHitLength)/parentLocalScaleX, 0));
+            chainBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, chainHitLength/parentLocalScaleX);
+            chainBoxCollider.offset = new Vector2(0, chainHitLength/parentLocalScaleX/2);
+            bladeBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, bladeHitLength/parentLocalScaleX);
+            bladeBoxCollider.offset = new Vector2(0, (chainHitLength+bladeHitLength/2)/parentLocalScaleX);
         }
 
         private void InquisitorialChain()
