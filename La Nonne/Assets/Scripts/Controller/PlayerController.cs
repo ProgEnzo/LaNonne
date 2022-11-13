@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using AI;
 using Core.Scripts.Utils;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -26,7 +25,8 @@ namespace Controller
         
         public DijkstraAlgorithm dijkstraAlgorithm;
         
-        private List<int> layersToUndoIgnore = new List<int>();
+        [SerializeField] private List<int> layersToConsiderAnyway = new();
+        private List<int> layersToUndoIgnore = new();
 
         [Header("Revealing Dash")]
         [NonSerialized] public bool isHitting;
@@ -90,13 +90,16 @@ namespace Controller
         {
             if (Input.GetKeyDown(KeyCode.Space) && m_timerDash < -0.5f)
             {
-                for (var i = 0; i < SortingLayer.layers.Length; i++)
+                for (var i = 0; i < 32; i++)
                 {
-                    if (Physics.GetIgnoreLayerCollision(7, i)) continue;
-                    Physics.IgnoreLayerCollision(7, i);
+                    if (Physics2D.GetIgnoreLayerCollision(7, i)) continue;
+                    Physics2D.IgnoreLayerCollision(7, i);
                     layersToUndoIgnore.Add(i);
                 }
-                Physics.IgnoreLayerCollision(7, 3, false);
+                foreach (var layer in layersToConsiderAnyway)
+                {
+                    Physics2D.IgnoreLayerCollision(7, layer, false);
+                }
                 m_timerDash = soController.m_durationDash;
             }
             
@@ -104,7 +107,7 @@ namespace Controller
             {
                 foreach (var layer in layersToUndoIgnore)
                 {
-                    Physics.IgnoreLayerCollision(7, layer, false);
+                    Physics2D.IgnoreLayerCollision(7, layer, false);
                 }
                 layersToUndoIgnore.Clear();
             }
