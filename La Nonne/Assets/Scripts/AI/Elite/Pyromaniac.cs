@@ -27,6 +27,7 @@ namespace AI.Elite
         private Coroutine currentCoroutine;
         private Coroutine currentHittingCoroutine;
         private AIPath scriptAIPath;
+        private bool scriptAIPathState;
         private bool isDashing;
         private bool isProjectileOn;
         private bool isImpactOn;
@@ -37,6 +38,7 @@ namespace AI.Elite
         {
             base.Start();
             scriptAIPath = GetComponent<AIPath>();
+            scriptAIPathState = true;
             isDashing = false;
             isProjectileOn = false;
             isImpactOn = false;
@@ -60,6 +62,14 @@ namespace AI.Elite
             var projectile = transform1.GetChild(0).gameObject;
             var projectileScript = projectile.GetComponent<PyromaniacProjectile>();
             var projectilePosition = projectile.transform.position; //Position du projectile
+
+            if (isStunned)
+            {
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                isDashing = false;
+                isImpactOn = false;
+                canBoxCast = false;
+            }
             
             //Tant que le projectile n'a pas explosé
             if (!projectileScript.isExploded)
@@ -73,7 +83,7 @@ namespace AI.Elite
                         isProjectileOn = true;
                         scriptAIPath.maxSpeed = 0f;
                         GetComponent<AIDestinationSetter>().enabled = false;
-                        scriptAIPath.enabled = false;
+                        scriptAIPathState = false;
                         canBoxCast = false;
                         //Sinon, le pyromane lance sa zone de feu
                         var distanceToCross =
@@ -91,7 +101,7 @@ namespace AI.Elite
                     {
                         //Déplacement du pyromane
                         GetComponent<AIDestinationSetter>().enabled = true;
-                        scriptAIPath.enabled = true;
+                        scriptAIPathState = true;
                         scriptAIPath.maxSpeed = 3f;
                     }
                 }
@@ -129,12 +139,12 @@ namespace AI.Elite
                     currentFireTrailMaxLength = Vector2.Distance(boxCastDestination, boxCastOrigin);
                 }
                 var objectsInArea = new List<RaycastHit2D>();
-                Physics2D.BoxCast(boxCastOrigin, new Vector2(3f, 3f), 0f, (boxCastDestination - boxCastOrigin).normalized, new ContactFilter2D(), objectsInArea, currentFireTrailMaxLength);
+                Physics2D.BoxCast(boxCastOrigin, Vector2.one * transform1.localScale * 2, 0f, (boxCastDestination - boxCastOrigin).normalized, new ContactFilter2D(), objectsInArea, currentFireTrailMaxLength);
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
                 {
                     currentHittingCoroutine ??= StartCoroutine(FireDamage());
                 }
-                BoxCastDebug.DrawBoxCast2D(boxCastOrigin, new Vector2(3f, 3f), 0f, (boxCastDestination - boxCastOrigin).normalized, currentFireTrailMaxLength, Color.magenta);
+                BoxCastDebug.DrawBoxCast2D(boxCastOrigin, Vector2.one * transform1.localScale * 2, 0f, (boxCastDestination - boxCastOrigin).normalized, currentFireTrailMaxLength, Color.magenta);
             }
         }
 
@@ -205,12 +215,16 @@ namespace AI.Elite
             currentCoroutine = null;
         }
 
-        private static IEnumerator PlayerIsHit()
+        protected override void StunCheck()
         {
-            var playerRef = PlayerController.instance;
-            playerRef.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerRef.GetComponent<SpriteRenderer>().color = Color.yellow;
+            if (scriptAIPathState)
+            {
+                base.StunCheck();
+            }
+            else
+            {
+                scriptAIPath.enabled = false;
+            }
         }
 
         private void OnDrawGizmos()

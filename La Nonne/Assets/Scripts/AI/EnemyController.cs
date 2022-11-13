@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Controller;
 using Pathfinding;
 using UnityEngine;
@@ -13,14 +14,12 @@ namespace AI
 
         [NonSerialized] public bool isStunned;
         private AIPath aiPathComponent;
-        private static SpriteRenderer _playerSpriteRenderer;
+        private static readonly List<SpriteRenderer> PlayerSpriteRenderers = new();
 
         protected virtual void Start()
         {
             aiPathComponent = GetComponent<AIPath>();
             var playerRef = PlayerController.instance;
-            _playerSpriteRenderer = playerRef.GetComponent<SpriteRenderer>();
-            
             currentHealth = soEnemy.maxHealth;
             GetComponent<AIDestinationSetter>().target = playerRef.transform;
             isStunned = false;
@@ -28,6 +27,16 @@ namespace AI
         
         protected virtual void Update()
         {
+            var playerRef = PlayerController.instance;
+            PlayerSpriteRenderers.Clear();
+            for (var i = 0; i < playerRef.transform.childCount; i++)
+            {
+                if (playerRef.transform.GetChild(i).TryGetComponent(out SpriteRenderer spriteRenderer))
+                {
+                    PlayerSpriteRenderers.Add(spriteRenderer);
+                }
+            }
+            
             HealCeiling();
             StunCheck();
         }
@@ -55,16 +64,22 @@ namespace AI
         }
         #endregion
 
-        private void StunCheck()
+        protected virtual void StunCheck()
         {
             aiPathComponent.enabled = !isStunned;
         }
 
         protected internal static IEnumerator PlayerIsHit()
         {
-            _playerSpriteRenderer.color = Color.red;
+            foreach (var spriteRenderer in PlayerSpriteRenderers)
+            {
+                spriteRenderer.color = Color.red;
+            }
             yield return new WaitForSeconds(0.1f);
-            _playerSpriteRenderer.color = Color.yellow;
+            foreach (var spriteRenderer in PlayerSpriteRenderers)
+            {
+                spriteRenderer.color = Color.yellow;
+            }
         }
     }
 }
