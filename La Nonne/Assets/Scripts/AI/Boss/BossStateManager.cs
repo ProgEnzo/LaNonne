@@ -7,6 +7,7 @@ using Pathfinding;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class BossStateManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class BossStateManager : MonoBehaviour
     public PlayerController player;
     public AIPath bossAI;
     
+    public List<BossBaseState> stateList = new List<BossBaseState>();
     
     [Header("Overall Stats")]
     public Slider hpBossSlider;
@@ -39,29 +41,33 @@ public class BossStateManager : MonoBehaviour
     public float dashCooldown;
     public float timeBeforeDashing;
     
-    public int dashAmount = 3;
+    public int dashAmount;
+    public int currentDashAmount;
 
     [Header("----AttackCircle----")]
     public GameObject attackCircleWarning;
     public GameObject attackCircle;
     public float attackCircleSpacingCooldown;
-    public int attackCircleAmount = 3;
+    public int attackCircleAmount;
+    public int currentAttackCircleAmount;
 
     [Header("----GrowingCircle----")] 
     public GameObject growingCircle;
     public float growingCircleCooldown;
     public int growingCircleAmount;
+    public int currentGrowingCircleAmount;
 
     [Header("----ShrinkingCircle----")]
     public GameObject rotatingBlade;
     public GameObject shrinkingCircle;
     public float shrinkingCircleCooldown;
-    public int shrinkingCircleAmount;
     public float rotatingBladeCooldown;
+    public int shrinkingCircleAmount;
+    public int currentShrinkingCircleAmount;
     
     void Start()
     {
-        currentState = GrowingCircleState; //starting state for the boss state machine
+        currentState = DashingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         currentHealth = maxHealth;
@@ -69,6 +75,11 @@ public class BossStateManager : MonoBehaviour
         hpBossSlider.value = maxHealth;
 
         bossAI.maxSpeed = movementSpeed;
+        
+        stateList.Add(DashingState);
+        stateList.Add(AttackCircleState);
+        stateList.Add(GrowingCircleState);
+        stateList.Add(ShrinkingCircleState);
     }
     void Update()
     {
@@ -93,10 +104,20 @@ public class BossStateManager : MonoBehaviour
 
     public void SwitchState(BossBaseState state)
     {
+        Reinit();
         currentState = state;
         state.EnterState(this);
+        
     }
 
+    void Reinit()
+    {
+        currentDashAmount = dashAmount;
+        currentAttackCircleAmount = attackCircleAmount;
+        currentGrowingCircleAmount = growingCircleAmount;
+        currentShrinkingCircleAmount = shrinkingCircleAmount;
+    }
+    
     #region Health Boss
 
     public void TakeDamageOnBossFromPlayer(int damage)
@@ -125,9 +146,12 @@ public class BossStateManager : MonoBehaviour
 
     }
 
+    
+
     private IEnumerator Dash()
     {
-        dashAmount--; //décrémente de 1 le nombre de dash restant
+        
+        currentDashAmount--; //décrémente de 1 le nombre de dash restant
         yield return new WaitForSeconds(1);
 
         bossAI.maxSpeed = 0;
@@ -156,13 +180,18 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         
        
-        if (dashAmount > 0 && currentHealth >= maxHealth / 2)
+        if (currentDashAmount > 0 && currentHealth >= maxHealth / 2)
         {
             StartCoroutine(Dash());
         }
-        else if (dashAmount == 0)
+        else if (currentDashAmount == 0)
         {
-            SwitchState(AttackCircleState); //SWITCH INTO BossAttackCircleState
+            
+            var nextState = stateList[Random.Range(0, stateList.Count)];
+            
+            SwitchState(nextState);
+            
+
 
         }
         else if (currentHealth <= maxHealth / 2)
@@ -197,7 +226,7 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator AttackCircle()
     {
         bossAI.maxSpeed = 0;
-        attackCircleAmount--;
+        currentAttackCircleAmount--;
         yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
         var circleObjectWarning = Instantiate(attackCircleWarning, player.transform.position, Quaternion.identity);
@@ -209,11 +238,11 @@ public class BossStateManager : MonoBehaviour
         
         Destroy(circleObject, 1f);
 
-        if (attackCircleAmount > 0 && currentHealth >= maxHealth / 2)
+        if (currentAttackCircleAmount > 0 && currentHealth >= maxHealth / 2)
         {
             StartCoroutine(AttackCircle());
         }
-        else if (attackCircleAmount == 0)
+        else if (currentAttackCircleAmount == 0)
         {
             bossAI.maxSpeed = movementSpeed;
             SwitchState(GrowingCircleState); //SWITCH INTO GrowingCircleState
@@ -236,7 +265,7 @@ public class BossStateManager : MonoBehaviour
     
     private IEnumerator GrowingCircle()
     {
-        growingCircleAmount--;
+        currentGrowingCircleAmount--;
         
         yield return new WaitForSeconds(growingCircleCooldown);
         
@@ -248,18 +277,21 @@ public class BossStateManager : MonoBehaviour
         
         Destroy(growingCircleGameObject, 3f);
 
-        if (growingCircleAmount > 0 && currentHealth >= maxHealth / 2)
+        if (currentGrowingCircleAmount > 0 && currentHealth >= maxHealth / 2)
         {
             StartCoroutine(GrowingCircle());
+        }
+        else if(currentGrowingCircleAmount == 0)
+        {
+            var nextState = stateList[Random.Range(0, stateList.Count)];
+            
+            SwitchState(nextState);
         }
         else if (currentHealth <= maxHealth / 2)
         {
             SwitchState(TransitionState);
         }
-        else
-        {
-            SwitchState(ShrinkingCircleState);
-        }
+        
     }
     #endregion
 
@@ -274,7 +306,7 @@ public class BossStateManager : MonoBehaviour
     
     private IEnumerator ShrinkingCircle()
     {
-        shrinkingCircleAmount--;
+        currentShrinkingCircleAmount--;
         yield return new WaitForSeconds(shrinkingCircleCooldown);
 
         StartCoroutine(RotatingBlade());
@@ -284,14 +316,15 @@ public class BossStateManager : MonoBehaviour
         //ENLEVER LES DUPLICATE DE ROTATING BLADE
         
         
-        if (shrinkingCircleAmount > 0 && currentHealth >= maxHealth / 2)
+        if (currentShrinkingCircleAmount > 0 && currentHealth >= maxHealth / 2)
         {
             StartCoroutine(ShrinkingCircle());
         }
-        else if(attackCircleAmount == 0)
+        else if(currentShrinkingCircleAmount == 0)
         {
-            bossAI.maxSpeed = movementSpeed;
-            SwitchState(TransitionState);
+            var nextState = stateList[Random.Range(0, stateList.Count)];
+            
+            SwitchState(nextState);
         }
         else if (currentHealth <= maxHealth / 2)
         {
