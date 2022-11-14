@@ -57,6 +57,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: canChange
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: directionState
     m_EventTreshold: 0
@@ -317,6 +320,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: canChange
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: directionState
     m_EventTreshold: 1
@@ -446,6 +452,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: canChange
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: directionState
     m_EventTreshold: 2
@@ -477,6 +486,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: canChange
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: directionState
     m_EventTreshold: 2
@@ -508,6 +520,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: canChange
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: directionState
     m_EventTreshold: 2
@@ -615,6 +630,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: canChange
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: directionState
     m_EventTreshold: 1
@@ -673,6 +691,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: canChange
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: directionState
     m_EventTreshold: 0
@@ -701,6 +722,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: canChange
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: directionState
     m_EventTreshold: 1
@@ -754,7 +778,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: New State
-  m_Speed: 1000
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2213676732944345783}
@@ -836,6 +860,9 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: canChange
+    m_EventTreshold: 0
   - m_ConditionMode: 6
     m_ConditionEvent: directionState
     m_EventTreshold: 0

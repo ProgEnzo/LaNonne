@@ -83,7 +83,6 @@ namespace Controller
                     isHitting = false;
                     transform.GetChild(0).gameObject.SetActive(false);
                     transform.GetChild(1).gameObject.SetActive(false);
-                    playerAnimator.SetBool(IsAttacking, false);
                 }
             }
         }
@@ -94,6 +93,8 @@ namespace Controller
             yield return new WaitForNextFrameUnit();
             playerAnimator.SetBool(CanChange, false);
             playerAnimator.SetBool(parameterToChange, true);
+            yield return new WaitForNextFrameUnit();
+            playerAnimator.SetBool(parameterToChange, false);
         }
     }
 }
