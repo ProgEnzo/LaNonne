@@ -22,7 +22,7 @@ public class BossStateManager : MonoBehaviour
     public Rigidbody2D rb;
     public PlayerController player;
     public AIPath bossAI;
-
+    
     
     [Header("Overall Stats")]
     public Slider hpBossSlider;
@@ -61,7 +61,7 @@ public class BossStateManager : MonoBehaviour
     
     void Start()
     {
-        currentState = DashingState; //starting state for the boss state machine
+        currentState = GrowingCircleState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         currentHealth = maxHealth;
