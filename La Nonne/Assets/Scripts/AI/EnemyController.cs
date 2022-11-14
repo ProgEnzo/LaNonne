@@ -78,7 +78,7 @@ namespace AI
             yield return new WaitForSeconds(0.1f);
             foreach (var spriteRenderer in PlayerSpriteRenderers)
             {
-                spriteRenderer.color = Color.yellow;
+                spriteRenderer.color = Color.white;
             }
         }
     }
