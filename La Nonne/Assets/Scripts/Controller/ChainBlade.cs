@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -19,12 +21,16 @@ namespace Controller
         public Quaternion finalRotation;
         private Camera camera1;
         public int epCost;
+        private Animator playerAnimator;
+        private static readonly int CanChange = Animator.StringToHash("canChange");
+        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
         // Start is called before the first frame update
         private void Start()
         {
+            playerAnimator = PlayerController.instance.GetComponent<Animator>();
             camera1 = Camera.main;
             chainLineRenderer = transform.GetChild(0).GetComponent<LineRenderer>();
             bladeLineRenderer = transform.GetChild(1).GetComponent<LineRenderer>();
@@ -53,6 +59,7 @@ namespace Controller
         {
             if (Input.GetMouseButtonDown(1) && !isHitting && soController.epAmount >= epCost)
             {
+                StartCoroutine(AnimationControllerBool(IsAttacking));
                 soController.epAmount -= epCost;
                 Vector3 newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
@@ -78,6 +85,16 @@ namespace Controller
                     transform.GetChild(1).gameObject.SetActive(false);
                 }
             }
+        }
+        
+        private IEnumerator AnimationControllerBool(int parameterToChange)
+        {
+            playerAnimator.SetBool(CanChange, true);
+            yield return new WaitForNextFrameUnit();
+            playerAnimator.SetBool(CanChange, false);
+            playerAnimator.SetBool(parameterToChange, true);
+            yield return new WaitForNextFrameUnit();
+            playerAnimator.SetBool(parameterToChange, false);
         }
     }
 }
