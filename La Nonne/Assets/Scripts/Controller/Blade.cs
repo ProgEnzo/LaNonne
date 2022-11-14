@@ -89,6 +89,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
+                        playerAnimator.SetBool(IsAttacking, false);
                     }
                 }
             }
@@ -116,8 +117,6 @@ namespace Controller
             yield return new WaitForNextFrameUnit();
             playerAnimator.SetBool(CanChange, false);
             playerAnimator.SetBool(parameterToChange, true);
-            yield return new WaitForNextFrameUnit();
-            playerAnimator.SetBool(parameterToChange, false);
         }
     }
 }
