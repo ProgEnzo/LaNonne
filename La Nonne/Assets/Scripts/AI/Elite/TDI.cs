@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using AI.Trash;
 using Controller;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 namespace AI.Elite
 {
-    public class TDI : MonoBehaviour
+    public class TDI : EnemyController
     {
         [Header("Enemy Attack")] 
         [SerializeField] public int bodyDamage;
@@ -19,12 +18,7 @@ namespace AI.Elite
         
         [HideInInspector] public float cooldownTimer;
         [SerializeField] private float timeBetweenCircleSpawn;
-
-
         
-        [Header("Enemy Health")] 
-        [SerializeField] public float currentHealth;
-        [SerializeField] public float maxHealth;
         [SerializeField] public float healAmount;
         
         [Header("Components")] 
@@ -35,16 +29,17 @@ namespace AI.Elite
         [SerializeField] private GameObject circleSprite;
         [HideInInspector] public PlayerController playerController;
         
-        public bool isStunned;
-        
-        private void Start()
+        protected override void Start()
         {
-            currentHealth = maxHealth;
+            base.Start();
             cooldownTimer = timeBetweenCircleSpawn;
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+            StartCoroutine(EnemyDeath());
+
             CircleTimer();
         }
 
@@ -57,45 +52,10 @@ namespace AI.Elite
         private void OnTriggerEnter2D(Collider2D col)
         {
             //Heal le TrashMobCLose
-            if (col.gameObject.CompareTag("TrashMobClose"))
+            if (col.gameObject.CompareTag("Enemy"))
             {
-                col.gameObject.GetComponent<TrashMobClose>().currentHealth += healAmount;
+                col.gameObject.GetComponent<EnemyController>().currentHealth += healAmount;
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobClose>().currentHealth);
-            }
-
-            //Heal le TrashMobRange
-            if (col.gameObject.CompareTag("TrashMobRange"))
-            {
-                col.gameObject.GetComponent<TrashMobRange>().currentHealth += healAmount;
-                // Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
-            }
-            
-            //Heal le Bully
-            if (col.gameObject.CompareTag("Bully"))
-            {
-                col.gameObject.GetComponent<Bully>().currentHealth += healAmount;
-                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
-            }
-            
-            //Heal le Caretaker
-            if (col.gameObject.CompareTag("Caretaker"))
-            {
-                col.gameObject.GetComponent<CareTaker>().currentHealth += healAmount;
-                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
-            }
-            
-            //Heal le TDI
-            if (col.gameObject.CompareTag("TDI"))
-            {
-                col.gameObject.GetComponent<TDI>().currentHealth += healAmount;
-                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
-            }
-            
-            //Heal le pyromaniac
-            if (col.gameObject.CompareTag("Pyromaniac"))
-            {
-                col.gameObject.GetComponent<Pyromaniac>().currentHealth += healAmount;
-                //Debug.Log("<color=red>TRASH MOB RANGE</color>TRASH MOB HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobRange>().currentHealth);
             }
 
             if (col.gameObject.CompareTag("Player"))
@@ -120,35 +80,21 @@ namespace AI.Elite
                 playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
         }
-        
-        IEnumerator PlayerIsHit()
-        {
-            playerController.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerController.GetComponent<SpriteRenderer>().color = Color.white;
-        }
 
-        public void TakeDamageFromPlayer(int damage)
+        #region HealthEnemy
+        private new IEnumerator EnemyDeath()
         {
-            currentHealth -= damage;
-
-            if (currentHealth <= 50)
-            {
-                StartCoroutine(DieAndSpawn());
-            }
-        }
-        
-        IEnumerator DieAndSpawn()
-        {
+            if (!(currentHealth <= 50)) yield break;
             transform.DOScale(new Vector3(3, 0, 3), 0.1f);
             yield return new WaitForSeconds(0.1f);
             Destroy(gameObject);
-            Instantiate(bully, transform.position, quaternion.identity);
-            Instantiate(caretaker, transform.position, quaternion.identity);
-            
+            var position = transform.position;
+            Instantiate(bully, position, quaternion.identity);
+            Instantiate(caretaker, position, quaternion.identity);
         }
-        
-        void CircleTimer()
+        #endregion
+
+        private void CircleTimer()
         {
             //Timer for spawning circles
             if (!blinkExecuted && cooldownTimer <= 0f)
@@ -162,7 +108,7 @@ namespace AI.Elite
             }
         }
 
-        IEnumerator BlinkCircle()
+        private IEnumerator BlinkCircle()
         {
             circle.enabled = true;
             circleSprite.SetActive(true);

@@ -32,9 +32,9 @@ public class ItemPlacementHelper
         }
     }
 
-    public Vector2? GetItemPlacementPosition(PlacementType placementType, int iterationsMax, Vector2Int size, bool addOffset)
+    public Vector2? GetItemPlacementPosition(PlacementType placementType, int iterationsMax, Vector2 size, bool addOffset)
     {
-        int itemArea = size.x * size.y;
+        float itemArea = size.x * size.y;
         if (tileByType[placementType].Count < itemArea)
             return null;
 
@@ -68,12 +68,12 @@ public class ItemPlacementHelper
 
     private (bool, List<Vector2Int>) PlaceBigItem(
         Vector2Int originPosition, 
-        Vector2Int size ,
+        Vector2 size ,
         bool addOffset)
     {
         List<Vector2Int> positions = new List<Vector2Int>() { originPosition };
-        int maxX = addOffset ? size.x + 1 : size.x;
-        int maxY = addOffset ? size.y + 1 : size.y;
+        float maxX = addOffset ? size.x + 1 : size.x;
+        float maxY = addOffset ? size.y + 1 : size.y;
         int minX = addOffset ? -1 : 0;
         int minY = addOffset ? -1 : 0;
 

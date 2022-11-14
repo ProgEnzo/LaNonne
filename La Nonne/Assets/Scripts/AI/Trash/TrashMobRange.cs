@@ -4,7 +4,9 @@ using Pathfinding;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class TrashMobRange : MonoBehaviour
+namespace AI.Trash
+{
+    public class TrashMobRange : EnemyController
     {
         [Header("Enemy Detection")]
         [SerializeField] float distanceToPlayer;
@@ -16,33 +18,28 @@ public class TrashMobRange : MonoBehaviour
         [SerializeField] float cooldownBetweenShots;
         [SerializeField] float bulletSpeed;
         [SerializeField] float knockbackBody;
-
-        [Header("Enemy Health")]
-        [SerializeField] public float currentHealth;
         
         [Header("Enemy Components")]
         [SerializeField] GameObject player;
         private AIPath scriptAIPath;
         [SerializeField] GameObject bulletPrefab;
-        [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
         public PlayerController playerController;
-        
-        public bool isStunned;
-    
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             scriptAIPath = GetComponent<AIPath>();
-            currentHealth = soEnemy.maxHealth;
-            isStunned = false;
         }
-        private void Update()
+        
+        protected override void Update()
         {
+            base.Update();
+            EnemyDeath();
+
             if (!isStunned)
             {
                 StopAndShoot();
             }
-            HealCeiling();
         }
 
         #region EnemyRangeBehavior
@@ -103,48 +100,13 @@ public class TrashMobRange : MonoBehaviour
             }
         }
 
-        IEnumerator PlayerIsHit()
-        {
-            playerController.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerController.GetComponent<SpriteRenderer>().color = Color.white;
-        }
-    
         private void OnDrawGizmos()
         {
             Vector3 position = transform.position;
             Gizmos.DrawWireSphere(position, shootingRange);
             Gizmos.DrawWireSphere(position, aggroRange);
         }
-        
-        
-
-        #endregion
-    
-        #region HealthEnemyRange
-        public void TakeDamageFromPlayer(int damage)
-        {
-            currentHealth -= damage;
-
-            if (currentHealth <= 0)
-            {
-                TrashMobRangeDie();
-            }
-        }
-
-        private void TrashMobRangeDie()
-        {
-            Destroy(gameObject);
-        }
-
-        private void HealCeiling()
-        {
-            if (currentHealth > soEnemy.maxHealth)
-            {
-                currentHealth = soEnemy.maxHealth;
-            }
-        }
-
         #endregion
     }
+}
 

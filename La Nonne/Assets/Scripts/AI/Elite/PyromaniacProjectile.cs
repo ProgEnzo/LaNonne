@@ -55,19 +55,19 @@ namespace AI.Elite
                 
                 //Cercle d'explosion
                 circleGameObject.SetActive(true); //On active le cercle
-                circleGameObject.transform.localScale = Vector3.one * (explosionRadius * 8); //On le met à la bonne taille
+                circleGameObject.transform.localScale = Vector3.one * (explosionRadius * 4); //On le met à la bonne taille
                 var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
                 var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
                 circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle
                 
                 //Explosion
                 var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'explosion
-                Physics2D.CircleCast(transform.position, explosionRadius, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
+                Physics2D.CircleCast(transform.position, explosionRadius*transform.parent.localScale.x*transform.localScale.x, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
                 if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
                 {
                     foreach (var playerGameObject in objectsInArea.Select(hit => hit.collider.gameObject).Where(playerGameObject => playerGameObject.CompareTag("Player")))
                     {
-                        StartCoroutine(PlayerIsHit());
+                        StartCoroutine(EnemyController.PlayerIsHit());
                         playerRef.TakeDamage(soEnemy.bodyDamage); //Le joueur prend des dégâts
 
                         var direction = (playerGameObject.transform.position - transform.position).normalized;
@@ -85,14 +85,6 @@ namespace AI.Elite
             }
         }
 
-        private static IEnumerator PlayerIsHit()
-        {
-            var playerRef = PlayerController.instance;
-            playerRef.GetComponent<SpriteRenderer>().color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            playerRef.GetComponent<SpriteRenderer>().color = Color.yellow;
-        }
-
         private IEnumerator BlinkFire()
         {
             //Render d'un coup de feu
@@ -103,12 +95,12 @@ namespace AI.Elite
             //Dégâts de feu
             var playerRef = PlayerController.instance;
             var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'explosion
-            Physics2D.CircleCast(transform.position, explosionRadius, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
+            Physics2D.CircleCast(transform.position, explosionRadius*transform.parent.localScale.x*transform.localScale.x, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
             if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
             {
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
                 {
-                    StartCoroutine(PlayerIsHit());
+                    StartCoroutine(EnemyController.PlayerIsHit());
                     playerRef.TakeDamage(soEnemy.bodyDamage); //Le joueur prend des dégâts
                 }
             }

@@ -6,9 +6,15 @@ namespace Controller
     public class ChainBlade : MonoBehaviour
     {
         public bool isHitting;
+        public float chainHitLength;
+        public float bladeHitLength;
         public float hitAngle = 100f;
         public float hitSpeed = 1f;
         public float toleranceAngle = 1f;
+        public LineRenderer chainLineRenderer;
+        public LineRenderer bladeLineRenderer;
+        public BoxCollider2D chainBoxCollider;
+        public BoxCollider2D bladeBoxCollider;
         public Quaternion initialRotation;
         public Quaternion finalRotation;
         private Camera camera1;
@@ -17,21 +23,33 @@ namespace Controller
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             camera1 = Camera.main;
+            chainLineRenderer = transform.GetChild(0).GetComponent<LineRenderer>();
+            bladeLineRenderer = transform.GetChild(1).GetComponent<LineRenderer>();
+            chainBoxCollider = transform.GetChild(0).GetComponent<BoxCollider2D>();
+            bladeBoxCollider = transform.GetChild(1).GetComponent<BoxCollider2D>();
             transform.GetChild(0).gameObject.SetActive(false);
             transform.GetChild(1).gameObject.SetActive(false);
             isHitting = false;
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             InquisitorialChain();
+            var parentLocalScaleX = transform.parent.parent.localScale.x;
+            chainLineRenderer.SetPosition(1, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
+            bladeLineRenderer.SetPosition(0, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
+            bladeLineRenderer.SetPosition(1, new Vector3(0, (chainHitLength+bladeHitLength)/parentLocalScaleX, 0));
+            chainBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, chainHitLength/parentLocalScaleX);
+            chainBoxCollider.offset = new Vector2(0, chainHitLength/parentLocalScaleX/2);
+            bladeBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, bladeHitLength/parentLocalScaleX);
+            bladeBoxCollider.offset = new Vector2(0, (chainHitLength+bladeHitLength/2)/parentLocalScaleX);
         }
 
-        public void InquisitorialChain()
+        private void InquisitorialChain()
         {
             if (Input.GetMouseButtonDown(1) && !isHitting && soController.epAmount >= epCost)
             {

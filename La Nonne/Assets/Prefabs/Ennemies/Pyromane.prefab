@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 5813854497670849606}
   m_Layer: 0
   m_Name: Pyromane
-  m_TagString: Pyromaniac
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,8 +260,8 @@ Transform:
   m_GameObject: {fileID: 5813854497670849624}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -44.166, y: 46.214005, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 2.2599502}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2111184171189557223}
   - {fileID: 7998991036773127295}
@@ -280,6 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 711db929fb021b645a67d9fd23391a0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soEnemy: {fileID: 11400000, guid: e10e890db14ac3945b0b1d9d70c2cd51, type: 2}
   currentHealth: 0
   detectionRadius: 10
   throwRadius: 5
@@ -289,8 +290,6 @@ MonoBehaviour:
   fireTrailTolerance: 0.5
   fireTrailDisappearanceSpeed: 30
   fireCooldown: 1
-  soEnemy: {fileID: 11400000, guid: e10e890db14ac3945b0b1d9d70c2cd51, type: 2}
-  isStunned: 0
 --- !u!212 &5813854497670849601
 SpriteRenderer:
   m_ObjectHideFlags: 0

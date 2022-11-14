@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 6272501254927288816}
   m_Layer: 0
   m_Name: Caretaker
-  m_TagString: Caretaker
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,8 +60,8 @@ MonoBehaviour:
   bodyKnockback: 50
   cooldownTimer: 2
   timeBetweenCircleSpawn: 1
-  isInCircle: 0
   attackRange: 5
+  blinkExecuted: 0
   playerController: {fileID: 0}
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
   circle: {fileID: 6272501254927288816}

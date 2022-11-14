@@ -80,7 +80,7 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkMapGenerator
       {
          var roomBounds = roomsList[i];
          var roomCenter = new Vector2Int(Mathf.RoundToInt(roomBounds.center.x), Mathf.RoundToInt(roomBounds.center.y));
-         var roomFloor = RunRandomWalk(randomWalkParameters, roomCenter);
+         var roomFloor = RunRandomWalk(randomWalkParameters.GetSimpleRandomWalk(), roomCenter);
          foreach (var position in roomFloor)
          {
             if (position.x >= (roomBounds.xMin + offSet) && position.x <= (roomBounds.xMax - offSet) &&
