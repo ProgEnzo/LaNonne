@@ -156,14 +156,21 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         
        
-        if (dashAmount > 0)
+        if (dashAmount > 0 && currentHealth >= maxHealth / 2)
         {
             StartCoroutine(Dash());
         }
-        else
+        else if (dashAmount == 0)
         {
             SwitchState(AttackCircleState); //SWITCH INTO BossAttackCircleState
+
         }
+        else if (currentHealth <= maxHealth / 2)
+        {
+            SwitchState(TransitionState);
+        }
+
+        
     }
 
     private IEnumerator DashMine()
@@ -202,14 +209,19 @@ public class BossStateManager : MonoBehaviour
         
         Destroy(circleObject, 1f);
 
-        if (attackCircleAmount > 0)
+        if (attackCircleAmount > 0 && currentHealth >= maxHealth / 2)
         {
             StartCoroutine(AttackCircle());
         }
-        else
+        else if (attackCircleAmount == 0)
         {
             bossAI.maxSpeed = movementSpeed;
             SwitchState(GrowingCircleState); //SWITCH INTO GrowingCircleState
+        }
+        else if (currentHealth <= maxHealth / 2)
+        {
+            bossAI.maxSpeed = movementSpeed;
+            SwitchState(TransitionState);
         }
     }
 
@@ -236,9 +248,13 @@ public class BossStateManager : MonoBehaviour
         
         Destroy(growingCircleGameObject, 3f);
 
-        if (growingCircleAmount > 0)
+        if (growingCircleAmount > 0 && currentHealth >= maxHealth / 2)
         {
             StartCoroutine(GrowingCircle());
+        }
+        else if (currentHealth <= maxHealth / 2)
+        {
+            SwitchState(TransitionState);
         }
         else
         {
@@ -268,15 +284,21 @@ public class BossStateManager : MonoBehaviour
         //ENLEVER LES DUPLICATE DE ROTATING BLADE
         
         
-        if (shrinkingCircleAmount > 0)
+        if (shrinkingCircleAmount > 0 && currentHealth >= maxHealth / 2)
         {
             StartCoroutine(ShrinkingCircle());
         }
-        else
+        else if(attackCircleAmount == 0)
         {
             bossAI.maxSpeed = movementSpeed;
             SwitchState(TransitionState);
         }
+        else if (currentHealth <= maxHealth / 2)
+        {
+            bossAI.maxSpeed = movementSpeed;
+            SwitchState(TransitionState);
+        }
+        
     }
 
     private IEnumerator RotatingBlade()
@@ -304,7 +326,7 @@ public class BossStateManager : MonoBehaviour
     public void TransitionManager()
     {
         StartCoroutine(Transition());
-        Debug.Log($"<color=red>TRANSITION STATE HAS BEGUN</color>");
+        Debug.Log($"<color=orange>TRANSITION STATE HAS BEGUN</color>");
     }
 
     private IEnumerator Transition()
