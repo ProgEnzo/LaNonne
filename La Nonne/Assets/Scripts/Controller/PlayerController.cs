@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AI;
 using Core.Scripts.Utils;
 using Unity.VisualScripting;
@@ -28,9 +29,6 @@ namespace Controller
         
         [SerializeField] private List<int> layersToConsiderAnyway = new();
         private List<int> layersToUndoIgnore = new();
-        
-        private Animator playerAnimator;
-        private SpriteRenderer playerSpriteRenderer;
 
         [Header("Revealing Dash")]
         [NonSerialized] public bool isHitting;
@@ -56,6 +54,9 @@ namespace Controller
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
         private bool isMoving;
         private float playerScale;
+        private List<GameObject> animPrefabs = new();
+        private GameObject currentAnimPrefab;
+        private Animator currentAnimPrefabAnimator;
 
         private void Awake()
         {
@@ -68,8 +69,18 @@ namespace Controller
                 instance = this;
             }
             m_rigidbody = GetComponent<Rigidbody2D>();
-            playerAnimator = GetComponent<Animator>();
-            playerSpriteRenderer = GetComponent<SpriteRenderer>();
+            
+            for (int i = 1; i < transform.childCount; i++)
+            {
+                animPrefabs.Add(transform.GetChild(i).gameObject);
+            }
+            currentAnimPrefab = animPrefabs[0];
+            currentAnimPrefab.SetActive(true);
+            currentAnimPrefabAnimator = currentAnimPrefab.GetComponent<Animator>();
+            foreach (var prefab in animPrefabs.Where(prefab => prefab != currentAnimPrefab))
+            {
+                prefab.SetActive(false);
+            }
         }
 
         private void Start()
@@ -134,6 +145,7 @@ namespace Controller
         }
         public void FixedUpdate()
         {
+            AnimationManager();
             m_rigidbody.drag = soController.dragDeceleration * soController.dragMultiplier;
             ManageMove();
         }
@@ -157,7 +169,10 @@ namespace Controller
                 isMoving = true;
                 transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
                 transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-                StartCoroutine(AnimationControllerInt(DirectionState, 1));
+                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 1)
+                {
+                    StartCoroutine(AnimationControllerInt(DirectionState, 1));
+                }
                 m_rigidbody.AddForce(Vector2.up*speed);
             }
 
@@ -166,7 +181,10 @@ namespace Controller
                 isMoving = true;
                 transform.localScale = new Vector3(-playerScale, transform.localScale.y, transform.localScale.z);
                 transform.GetChild(0).localScale = new Vector3(1, -1, 1);
-                StartCoroutine(AnimationControllerInt(DirectionState, 2));
+                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
+                {
+                    StartCoroutine(AnimationControllerInt(DirectionState, 2));
+                }
                 m_rigidbody.AddForce(Vector2.left*speed);
             }
 
@@ -175,7 +193,10 @@ namespace Controller
                 isMoving = true;
                 transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
                 transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-                StartCoroutine(AnimationControllerInt(DirectionState, 0));
+                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 0)
+                {
+                    StartCoroutine(AnimationControllerInt(DirectionState, 0));
+                }
                 m_rigidbody.AddForce(Vector2.down*speed);
             }
 
@@ -184,19 +205,28 @@ namespace Controller
                 isMoving = true;
                 transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
                 transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-                StartCoroutine(AnimationControllerInt(DirectionState, 2));
+                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
+                {
+                    StartCoroutine(AnimationControllerInt(DirectionState, 2));
+                }
                 m_rigidbody.AddForce(Vector2.right*speed);
             }
 
-            if (!playerAnimator.GetBool(IsAttacking))
+            if (!currentAnimPrefabAnimator.GetBool(IsAttacking))
             {
                 if (isMoving)
                 {
-                    StartCoroutine(AnimationControllerInt(MovingState, 1));
+                    if (currentAnimPrefabAnimator.GetInteger(MovingState) != 1)
+                    {
+                        StartCoroutine(AnimationControllerInt(MovingState, 1));
+                    }
                 }
                 else
                 {
-                    StartCoroutine(AnimationControllerInt(MovingState, 0));
+                    if (currentAnimPrefabAnimator.GetInteger(MovingState) != 0)
+                    {
+                        StartCoroutine(AnimationControllerInt(MovingState, 0));
+                    }
                 }
             }
             isMoving = false;
@@ -293,23 +323,62 @@ namespace Controller
         
         private IEnumerator AnimationControllerInt(int parameterToChange, int value)
         {
-            if (playerAnimator.GetInteger(parameterToChange) != value)
+            if (currentAnimPrefabAnimator.GetInteger(parameterToChange) != value)
             {
-                playerAnimator.SetBool(CanChange, true);
+                currentAnimPrefabAnimator.SetBool(CanChange, true);
                 yield return new WaitForNextFrameUnit();
-                playerAnimator.SetBool(CanChange, false);
-                playerAnimator.SetInteger(parameterToChange, value);
+                currentAnimPrefabAnimator.SetBool(CanChange, false);
+                currentAnimPrefabAnimator.SetInteger(parameterToChange, value);
             }
         }
 
         private IEnumerator AnimationControllerBool(int parameterToChange)
         {
-            playerAnimator.SetBool(CanChange, true);
+            currentAnimPrefabAnimator.SetBool(CanChange, true);
             yield return new WaitForNextFrameUnit();
-            playerAnimator.SetBool(CanChange, false);
-            playerAnimator.SetBool(parameterToChange, true);
+            currentAnimPrefabAnimator.SetBool(CanChange, false);
+            currentAnimPrefabAnimator.SetBool(parameterToChange, true);
             yield return new WaitForNextFrameUnit();
-            playerAnimator.SetBool(parameterToChange, false);
+            currentAnimPrefabAnimator.SetBool(parameterToChange, false);
+        }
+
+        private void AnimationManager()
+        {
+            switch (currentAnimPrefabAnimator.GetInteger(DirectionState), currentAnimPrefabAnimator.GetInteger(MovingState), currentAnimPrefabAnimator.GetBool(IsAttacking))
+            {
+                case (0, 0, false):
+                    currentAnimPrefab = animPrefabs[0];
+                    break;
+                case (0, 1, false):
+                    currentAnimPrefab = animPrefabs[1];
+                    break;
+                case (0, >=0, true):
+                    currentAnimPrefab = animPrefabs[2];
+                    break;
+                case (1, 0, false):
+                case (1, 1, false):
+                    currentAnimPrefab = animPrefabs[3];
+                    break;
+                case (1, >=0, true):
+                    currentAnimPrefab = animPrefabs[4];
+                    break;
+                case (2, 0, false):
+                case (2, 1, false):
+                case (2, >=0, true):
+                    currentAnimPrefab = animPrefabs[5];
+                    break;
+                default:
+                    currentAnimPrefab = animPrefabs[0];
+                    break;
+            }
+            
+            currentAnimPrefab.SetActive(true);
+            currentAnimPrefabAnimator = currentAnimPrefab.GetComponent<Animator>();
+
+            foreach (var prefab in animPrefabs.Where(prefab => prefab != currentAnimPrefab))
+            {
+                prefab.SetActive(false);
+            }
         }
     }
 }
