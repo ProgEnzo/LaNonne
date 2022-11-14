@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using AI;
 using Core.Scripts.Utils;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -27,6 +28,9 @@ namespace Controller
         
         [SerializeField] private List<int> layersToConsiderAnyway = new();
         private List<int> layersToUndoIgnore = new();
+        
+        private Animator playerAnimator;
+        private SpriteRenderer playerSpriteRenderer;
 
         [Header("Revealing Dash")]
         [NonSerialized] public bool isHitting;
@@ -46,6 +50,12 @@ namespace Controller
 
         [SerializeField] public Slider hpSlider;
         [SerializeField] public int currentEp;
+        private static readonly int CanChange = Animator.StringToHash("canChange");
+        private static readonly int DirectionState = Animator.StringToHash("directionState");
+        private static readonly int MovingState = Animator.StringToHash("movingState");
+        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+        private bool isMoving;
+        private float playerScale;
 
         private void Awake()
         {
@@ -58,10 +68,13 @@ namespace Controller
                 instance = this;
             }
             m_rigidbody = GetComponent<Rigidbody2D>();
+            playerAnimator = GetComponent<Animator>();
+            playerSpriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         private void Start()
         {
+            playerScale = transform.localScale.x;
             soController.currentHealth = soController.maxHealth;
             isHitting = false;
             hpSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
@@ -141,26 +154,53 @@ namespace Controller
 
             if (Input.GetKey(KeyCode.Z))
             {
+                isMoving = true;
+                transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+                StartCoroutine(AnimationControllerInt(DirectionState, 1));
                 m_rigidbody.AddForce(Vector2.up*speed);
             }
 
             if (Input.GetKey(KeyCode.Q))
             {
+                isMoving = true;
+                transform.localScale = new Vector3(-playerScale, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).localScale = new Vector3(1, -1, 1);
+                StartCoroutine(AnimationControllerInt(DirectionState, 2));
                 m_rigidbody.AddForce(Vector2.left*speed);
             }
 
             if (Input.GetKey(KeyCode.S))
             {
+                isMoving = true;
+                transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+                StartCoroutine(AnimationControllerInt(DirectionState, 0));
                 m_rigidbody.AddForce(Vector2.down*speed);
             }
 
             if (Input.GetKey(KeyCode.D))
             {
+                isMoving = true;
+                transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+                StartCoroutine(AnimationControllerInt(DirectionState, 2));
                 m_rigidbody.AddForce(Vector2.right*speed);
             }
-        }
-    
 
+            if (!playerAnimator.GetBool(IsAttacking))
+            {
+                if (isMoving)
+                {
+                    StartCoroutine(AnimationControllerInt(MovingState, 1));
+                }
+                else
+                {
+                    StartCoroutine(AnimationControllerInt(MovingState, 0));
+                }
+            }
+            isMoving = false;
+        }
         #endregion
 
         #region HealthPlayer
@@ -182,8 +222,6 @@ namespace Controller
             Debug.Log("<color=green>PLAYER</color> IS NOW DEAD");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-    
-
         #endregion
 
         #region AttackPlayer
@@ -252,5 +290,26 @@ namespace Controller
             enemy.GetComponent<EnemyController>().isStunned = false;
         }
         #endregion
+        
+        private IEnumerator AnimationControllerInt(int parameterToChange, int value)
+        {
+            if (playerAnimator.GetInteger(parameterToChange) != value)
+            {
+                playerAnimator.SetBool(CanChange, true);
+                yield return new WaitForNextFrameUnit();
+                playerAnimator.SetBool(CanChange, false);
+                playerAnimator.SetInteger(parameterToChange, value);
+            }
+        }
+
+        private IEnumerator AnimationControllerBool(int parameterToChange)
+        {
+            playerAnimator.SetBool(CanChange, true);
+            yield return new WaitForNextFrameUnit();
+            playerAnimator.SetBool(CanChange, false);
+            playerAnimator.SetBool(parameterToChange, true);
+            yield return new WaitForNextFrameUnit();
+            playerAnimator.SetBool(parameterToChange, false);
+        }
     }
 }

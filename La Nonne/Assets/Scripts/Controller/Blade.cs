@@ -1,4 +1,6 @@
+using System.Collections;
 using AI;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,6 +19,9 @@ namespace Controller
         public Quaternion finalRotation1;
         public Quaternion finalRotation2;
         private Camera camera1;
+        private Animator playerAnimator;
+        private static readonly int CanChange = Animator.StringToHash("canChange");
+        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
 
         public ChainBladeDamage chainBladeDamage;
     
@@ -25,6 +30,7 @@ namespace Controller
         // Start is called before the first frame update
         private void Start()
         {
+            playerAnimator = PlayerController.instance.GetComponent<Animator>();
             camera1 = Camera.main;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
@@ -47,6 +53,7 @@ namespace Controller
         {
             if (Input.GetMouseButtonDown(0) && !isHitting)
             {
+                StartCoroutine(AnimationControllerBool(IsAttacking));
                 Vector3 newDirection = camera1.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
@@ -82,6 +89,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
+                        playerAnimator.SetBool(IsAttacking, false);
                     }
                 }
             }
@@ -101,6 +109,14 @@ namespace Controller
             {
                 other.gameObject.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.playerAttackDamage);
             }
+        }
+        
+        private IEnumerator AnimationControllerBool(int parameterToChange)
+        {
+            playerAnimator.SetBool(CanChange, true);
+            yield return new WaitForNextFrameUnit();
+            playerAnimator.SetBool(CanChange, false);
+            playerAnimator.SetBool(parameterToChange, true);
         }
     }
 }
