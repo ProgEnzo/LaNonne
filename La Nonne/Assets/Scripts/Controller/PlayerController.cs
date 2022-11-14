@@ -156,6 +156,7 @@ namespace Controller
             {
                 isMoving = true;
                 transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                 StartCoroutine(AnimationControllerInt(DirectionState, 1));
                 m_rigidbody.AddForce(Vector2.up*speed);
             }
@@ -164,6 +165,7 @@ namespace Controller
             {
                 isMoving = true;
                 transform.localScale = new Vector3(-playerScale, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).localScale = new Vector3(1, -1, 1);
                 StartCoroutine(AnimationControllerInt(DirectionState, 2));
                 m_rigidbody.AddForce(Vector2.left*speed);
             }
@@ -172,6 +174,7 @@ namespace Controller
             {
                 isMoving = true;
                 transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                 StartCoroutine(AnimationControllerInt(DirectionState, 0));
                 m_rigidbody.AddForce(Vector2.down*speed);
             }
@@ -180,17 +183,21 @@ namespace Controller
             {
                 isMoving = true;
                 transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                 StartCoroutine(AnimationControllerInt(DirectionState, 2));
                 m_rigidbody.AddForce(Vector2.right*speed);
             }
-            
-            if (isMoving)
+
+            if (!playerAnimator.GetBool(IsAttacking))
             {
-                StartCoroutine(AnimationControllerInt(MovingState, 1));
-            }
-            else
-            {
-                StartCoroutine(AnimationControllerInt(MovingState, 0));
+                if (isMoving)
+                {
+                    StartCoroutine(AnimationControllerInt(MovingState, 1));
+                }
+                else
+                {
+                    StartCoroutine(AnimationControllerInt(MovingState, 0));
+                }
             }
             isMoving = false;
         }
@@ -222,7 +229,6 @@ namespace Controller
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && !isHitting && soController.epAmount >= revealingDashEpCost && revealingDashTimerCount <= 0)
             {
-                StartCoroutine(AnimationControllerBool(IsAttacking));
                 List<RaycastHit2D> enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, revealingDashDetectionRadius, Vector2.zero, new ContactFilter2D(), enemiesInArea);
                 enemiesInArea.Sort((x, y) =>
