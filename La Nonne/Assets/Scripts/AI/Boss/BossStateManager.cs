@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Controller;
 using DG.Tweening;
 using Pathfinding;
@@ -24,7 +25,9 @@ public class BossStateManager : MonoBehaviour
     public PlayerController player;
     public AIPath bossAI;
     
+    //LIST
     public List<BossBaseState> stateList = new List<BossBaseState>();
+    public List<GameObject> spawnerList = new List<GameObject>();
     
     [Header("Overall Stats")]
     public Slider hpBossSlider;
@@ -64,22 +67,31 @@ public class BossStateManager : MonoBehaviour
     public float rotatingBladeCooldown;
     public int shrinkingCircleAmount;
     public int currentShrinkingCircleAmount;
-    
+
+    [Header("----TransitionState----")] 
+    public CinemachineVirtualCamera vCamPlayer;
+    public bool takingDamage = true;
+
     void Start()
     {
         currentState = DashingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
+        //HEALTH
         currentHealth = maxHealth;
         hpBossSlider.maxValue = maxHealth;
         hpBossSlider.value = maxHealth;
 
         bossAI.maxSpeed = movementSpeed;
         
+        //STATES
         stateList.Add(DashingState);
         stateList.Add(AttackCircleState);
         stateList.Add(GrowingCircleState);
         stateList.Add(ShrinkingCircleState);
+
+        //VIRTUAL CAMERA
+        vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
     }
     void Update()
     {
@@ -122,8 +134,12 @@ public class BossStateManager : MonoBehaviour
 
     public void TakeDamageOnBossFromPlayer(int damage)
     {
-        currentHealth -= damage;
-        hpBossSlider.value -= damage;
+        if (takingDamage)
+        {
+            currentHealth -= damage;
+            hpBossSlider.value -= damage;
+        }
+        
 
         if (currentHealth <= 0)
         {
@@ -142,7 +158,7 @@ public class BossStateManager : MonoBehaviour
     public void DashManager()
     {
         StartCoroutine(Dash());
-        Debug.Log($"<color=red>DASHING STATE HAS BEGUN</color>");
+        Debug.Log($"<color=green>DASHING STATE HAS BEGUN</color>");
 
     }
 
@@ -220,7 +236,7 @@ public class BossStateManager : MonoBehaviour
     public void AttackCircleManager()
     {
         StartCoroutine(AttackCircle());
-        Debug.Log($"<color=red>ATTACK CIRCLE STATE HAS BEGUN</color>");
+        Debug.Log($"<color=green>ATTACK CIRCLE STATE HAS BEGUN</color>");
     }
     
     private IEnumerator AttackCircle()
@@ -260,7 +276,7 @@ public class BossStateManager : MonoBehaviour
     public void GrowingCircleManager()
     {
         StartCoroutine(GrowingCircle());
-        Debug.Log($"<color=red>GROWING CIRCLE STATE HAS BEGUN</color>");
+        Debug.Log($"<color=green>GROWING CIRCLE STATE HAS BEGUN</color>");
     }
     
     private IEnumerator GrowingCircle()
@@ -300,7 +316,7 @@ public class BossStateManager : MonoBehaviour
     public void ShrinkingCircleManager()
     {
         StartCoroutine(ShrinkingCircle());
-        Debug.Log($"<color=red>SHRINKING CIRCLE STATE HAS BEGUN</color>");
+        Debug.Log($"<color=green>SHRINKING CIRCLE STATE HAS BEGUN</color>");
 
     }
     
@@ -362,9 +378,34 @@ public class BossStateManager : MonoBehaviour
         Debug.Log($"<color=orange>TRANSITION STATE HAS BEGUN</color>");
     }
 
+    private Queue<GameObject> poolSpawner = new(); //Initialisation de la queue "poolSpawner"
     private IEnumerator Transition()
     {
+        bossAI.maxSpeed = 0;
+        vCamPlayer.enabled = false;
+        takingDamage = false;
+        transform.DOScale(new Vector2(1.2f, 1.2f), 0.2f);
         yield return new WaitForSeconds(1f);
+
+
+        if (poolSpawner.Count > 0) //si des objets sont dans la liste
+        {
+            var enemySpawned = poolSpawner.Dequeue();
+            enemySpawned.SetActive(true); //le passe de false en true
+            enemySpawned.transform.DOKill(); 
+        }
+        else
+        {
+            Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], Vector3.up, Quaternion.identity); //si il n'y a rien dans la liste, cette ligne de code en crée
+        }
+        
+
+        yield return new WaitForSeconds(100f);
+        
+        vCamPlayer.enabled = true;
+        takingDamage = true;
+
+
     }
 
     #endregion
