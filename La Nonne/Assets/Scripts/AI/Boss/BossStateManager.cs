@@ -378,31 +378,22 @@ public class BossStateManager : MonoBehaviour
         Debug.Log($"<color=orange>TRANSITION STATE HAS BEGUN</color>");
     }
 
-    private Queue<GameObject> poolSpawner = new(); //Initialisation de la queue "poolSpawner"
     private IEnumerator Transition()
     {
         bossAI.maxSpeed = 0;
         vCamPlayer.enabled = false;
         takingDamage = false;
         transform.DOScale(new Vector2(1.2f, 1.2f), 0.2f);
+        yield return new WaitForSeconds(3f);
+        
+        vCamPlayer.enabled = true;
         yield return new WaitForSeconds(1f);
 
-
-        if (poolSpawner.Count > 0) //si des objets sont dans la liste
-        {
-            var enemySpawned = poolSpawner.Dequeue();
-            enemySpawned.SetActive(true); //le passe de false en true
-            enemySpawned.transform.DOKill(); 
-        }
-        else
-        {
-            Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], Vector3.up, Quaternion.identity); //si il n'y a rien dans la liste, cette ligne de code en crée
-        }
+        var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], Vector3.up, Quaternion.identity);
         
 
         yield return new WaitForSeconds(100f);
         
-        vCamPlayer.enabled = true;
         takingDamage = true;
 
 
