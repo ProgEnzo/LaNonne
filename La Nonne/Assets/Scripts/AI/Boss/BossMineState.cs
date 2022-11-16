@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class BossRotateAroundState : BossBaseState
+public class BossMineState : BossBaseState
 {
     
     public override void EnterState(BossStateManager boss)
     {
-        
+        boss.MineManager();
     }
 
     public override void UpdateState(BossStateManager boss)

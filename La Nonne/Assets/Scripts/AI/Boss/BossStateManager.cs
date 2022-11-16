@@ -18,7 +18,7 @@ public class BossStateManager : MonoBehaviour
     public BossAttackCircleState AttackCircleState = new BossAttackCircleState();
     public BossGrowingCircleState GrowingCircleState = new BossGrowingCircleState();
     public BossShrinkingCircleState ShrinkingCircleState = new BossShrinkingCircleState();
-    public BossRotateAroundState RotateAroundState = new BossRotateAroundState();
+    public BossMineState MineState = new BossMineState();
     public BossTransitionState TransitionState = new BossTransitionState();
 
     public Rigidbody2D rb;
@@ -389,11 +389,28 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], Vector3.up, Quaternion.identity);
+        
+        yield return new WaitForSeconds(10f);
         bossAI.maxSpeed = 3;
         takingDamage = true;
-        yield return new WaitForSeconds(1f);
-        
+        SwitchState(MineState);
 
+    }
+
+    #endregion
+
+    #region MineState
+
+    public void MineManager()
+    {
+        StartCoroutine(Mine());
+        Debug.Log($"<color=red>MINE STATE HAS BEGUN</color>");
+
+    }
+
+    private IEnumerator Mine()
+    {
+        yield return new WaitForSeconds(1f);
     }
 
     #endregion
