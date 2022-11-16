@@ -71,6 +71,7 @@ public class BossStateManager : MonoBehaviour
     [Header("----TransitionState----")] 
     public CinemachineVirtualCamera vCamPlayer;
     public bool takingDamage = true;
+    public int numberOfSpawn;
 
     void Start()
     {
@@ -202,20 +203,14 @@ public class BossStateManager : MonoBehaviour
         }
         else if (currentDashAmount == 0)
         {
-            
             var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
             SwitchState(nextState);
-            
-
-
         }
         else if (currentHealth <= maxHealth / 2)
         {
             SwitchState(TransitionState);
         }
-
-        
     }
 
     private IEnumerator DashMine()
@@ -388,7 +383,11 @@ public class BossStateManager : MonoBehaviour
         vCamPlayer.Priority = 10;
         yield return new WaitForSeconds(1f);
 
-        var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], Vector3.up, Quaternion.identity);
+        for (int i = 0; i < numberOfSpawn; i++)
+        {
+            var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(Random.Range(0, 5), Random.Range(0, 5)), Quaternion.identity);
+        }
+
         
         yield return new WaitForSeconds(10f);
         bossAI.maxSpeed = 3;
