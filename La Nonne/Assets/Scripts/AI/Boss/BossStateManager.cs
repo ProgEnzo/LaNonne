@@ -26,7 +26,7 @@ public class BossStateManager : MonoBehaviour
     public AIPath bossAI;
     
     //LIST
-    public List<BossBaseState> stateList = new List<BossBaseState>();
+    public List<BossBaseState> firstStatesList = new List<BossBaseState>();
     public List<GameObject> spawnerList = new List<GameObject>();
     
     [Header("Overall Stats")]
@@ -85,10 +85,10 @@ public class BossStateManager : MonoBehaviour
         bossAI.maxSpeed = movementSpeed;
         
         //STATES
-        stateList.Add(DashingState);
-        stateList.Add(AttackCircleState);
-        stateList.Add(GrowingCircleState);
-        stateList.Add(ShrinkingCircleState);
+        firstStatesList.Add(DashingState);
+        firstStatesList.Add(AttackCircleState);
+        firstStatesList.Add(GrowingCircleState);
+        firstStatesList.Add(ShrinkingCircleState);
 
         //VIRTUAL CAMERA
         vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
@@ -203,7 +203,7 @@ public class BossStateManager : MonoBehaviour
         else if (currentDashAmount == 0)
         {
             
-            var nextState = stateList[Random.Range(0, stateList.Count)];
+            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
             SwitchState(nextState);
             
@@ -299,7 +299,7 @@ public class BossStateManager : MonoBehaviour
         }
         else if(currentGrowingCircleAmount == 0)
         {
-            var nextState = stateList[Random.Range(0, stateList.Count)];
+            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
             SwitchState(nextState);
         }
@@ -338,7 +338,7 @@ public class BossStateManager : MonoBehaviour
         }
         else if(currentShrinkingCircleAmount == 0)
         {
-            var nextState = stateList[Random.Range(0, stateList.Count)];
+            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
             SwitchState(nextState);
         }
@@ -381,21 +381,18 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator Transition()
     {
         bossAI.maxSpeed = 0;
-        vCamPlayer.enabled = false;
+        vCamPlayer.Priority = 1; //on laisse la priorité à la vCam du boss
         takingDamage = false;
-        transform.DOScale(new Vector2(1.2f, 1.2f), 0.2f);
         yield return new WaitForSeconds(3f);
         
-        vCamPlayer.enabled = true;
+        vCamPlayer.Priority = 10;
         yield return new WaitForSeconds(1f);
 
         var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], Vector3.up, Quaternion.identity);
-        
-
-        yield return new WaitForSeconds(100f);
-        
+        bossAI.maxSpeed = 3;
         takingDamage = true;
-
+        yield return new WaitForSeconds(1f);
+        
 
     }
 
