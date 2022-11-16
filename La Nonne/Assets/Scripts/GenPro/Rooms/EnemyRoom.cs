@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyRoomLvL3 : RoomGenerator
+public class EnemyRoom : RoomGenerator
 {
     [SerializeField]
     private PrefabPlacer prefabPlacer;

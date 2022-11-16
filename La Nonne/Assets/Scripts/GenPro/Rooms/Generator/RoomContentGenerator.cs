@@ -12,7 +12,7 @@ public class RoomContentGenerator : MonoBehaviour
     #region Variables
 
         [SerializeField]
-        private RoomGenerator playerRoom, defaultRoom, bossRoom, shopRoom;
+        private RoomGenerator playerRoom, bossRoom, shopRoom, EnemyRoom; //généraliser lvl0
     
         List<GameObject> spawnedObjects = new List<GameObject>();
     
@@ -48,7 +48,13 @@ public class RoomContentGenerator : MonoBehaviour
         SelectPlayerSpawnPoint(dungeonData);
         SelectBossSpawnPoints(dungeonData);
         SelectShopSpawnPoints(dungeonData);
+        
         SelectEnemySpawnPoints(dungeonData);
+        
+        /*EnemiesRoomLevelOne(dungeonData);
+        EnemiesRoomLevelTwo(dungeonData);
+        EnemiesRoomLevelThree(dungeonData);
+        EnemiesRoomLevelFour(dungeonData);*/
         
         StartCoroutine(Scan());
 
@@ -234,17 +240,158 @@ public class RoomContentGenerator : MonoBehaviour
 
     #endregion
     
-     #region DefaultRoom
-        private void SelectEnemySpawnPoints(DungeonData dungeonData)
+     #region DefaultRoom 
+     
+     [SerializeField] private List<EnemyRoom> enemyRoom;
+         private void SelectEnemySpawnPoints(DungeonData dungeonData)
         {
             foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary)
-            { 
-                spawnedObjects.AddRange(defaultRoom.ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+            {
+                var distance = Vector2Int.Distance(playerSpawnRoomPosition, roomData.Key) / 30; // room data bonne clés de distance ?
+
+                if (distance <= 5)
+                {
+                    
+                    spawnedObjects.AddRange(enemyRoom[0].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+                }
+                else if (distance > 5)
+                {
+                    spawnedObjects.AddRange(enemyRoom[1].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+                }
+                else if (distance > 10)
+                {
+                    spawnedObjects.AddRange(enemyRoom[2].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+                }
             }
         }
         
         #endregion
-        
-        
-        
+     
+     /*#region EnemiesRooms
+
+     public Vector2Int firstEnemiesRoomsPosition;
+     public Vector2Int secondEnemiesRoomsPosition;
+     public Vector2Int thirdEnemiesRoomsPosition;
+     public Vector2Int lastEnemiesRoomsPosition;
+     
+     bool hasEnemiesLvl0Rooms = false;
+     bool hasEnemiesLvl1Rooms = false;
+     bool hasEnemiesLvl2Rooms = false;
+     bool hasEnemiesLvl3Rooms = false;
+     
+     private void EnemiesRoomLevelOne(DungeonData dungeonData)
+     {
+         Vector2Int enemiesLvl0RoomPosition = playerSpawnRoomPosition;
+         
+         do
+         {
+             hasEnemiesLvl0Rooms = false;
+             
+             foreach (var ennemiesRoomPosition in dungeonData.roomsDictionary.Keys)
+             {
+                 if (DijkstraAlgorithm.distanceDictionary[enemiesLvl0RoomPosition] > DijkstraAlgorithm.distanceDictionary[mapBoss] / 4)
+                 {
+                     enemiesLvl0RoomPosition = ennemiesRoomPosition;
+                                               
+                     var ennemiesLvl0 = GetMapFromTilePosition(enemiesLvl0RoomPosition, dungeonData);
+                     firstEnemiesRoomsPosition = ennemiesLvl0;
+                                               
+                     spawnedObjects.AddRange(enemiesLvl0Room.ProcessRoom(firstEnemiesRoomsPosition, dungeonData.roomsDictionary[firstEnemiesRoomsPosition], dungeonData.GetRoomFloorWithoutCorridors(firstEnemiesRoomsPosition)));
+                                               
+                     dungeonData.roomsDictionary.Remove(firstEnemiesRoomsPosition);
+                     hasEnemiesLvl0Rooms = true;
+                     break;
+                 }
+             }
+                 
+         } while (hasEnemiesLvl0Rooms);
+     }
+
+     private void EnemiesRoomLevelTwo(DungeonData dungeonData)
+     {
+         Vector2Int enemiesLvl1RoomPosition = firstEnemiesRoomsPosition;
+         
+         do
+         {
+             hasEnemiesLvl1Rooms = false;
+             
+             foreach (var ennemiesRoom2Position in dungeonData.roomsDictionary.Keys)
+             {
+                 if (DijkstraAlgorithm.distanceDictionary[enemiesLvl1RoomPosition] > DijkstraAlgorithm.distanceDictionary[mapBoss] / 3)
+                 {
+                     enemiesLvl1RoomPosition = ennemiesRoom2Position;
+                                               
+                     var enemiesLvl1 = GetMapFromTilePosition(enemiesLvl1RoomPosition, dungeonData);
+                     secondEnemiesRoomsPosition = enemiesLvl1;
+                                               
+                     spawnedObjects.AddRange(enemiesLvl1Room.ProcessRoom(secondEnemiesRoomsPosition, dungeonData.roomsDictionary[secondEnemiesRoomsPosition], dungeonData.GetRoomFloorWithoutCorridors(secondEnemiesRoomsPosition)));
+                                               
+                     dungeonData.roomsDictionary.Remove(secondEnemiesRoomsPosition);
+                     hasEnemiesLvl1Rooms = true;
+                     break;
+                 }
+             }
+             
+         } while (hasEnemiesLvl1Rooms);
+     }
+     
+     private void EnemiesRoomLevelThree(DungeonData dungeonData)
+     {
+         Vector2Int enemiesLvl2RoomPosition = secondEnemiesRoomsPosition;
+         
+         do
+         {
+             hasEnemiesLvl2Rooms = false;
+             
+             foreach (var ennemiesRoom3Position in dungeonData.roomsDictionary.Keys)
+             {
+                 if (DijkstraAlgorithm.distanceDictionary[enemiesLvl2RoomPosition] > DijkstraAlgorithm.distanceDictionary[mapBoss] / 2)
+                 {
+                     enemiesLvl2RoomPosition = ennemiesRoom3Position;
+                                               
+                     var enemiesLvl2 = GetMapFromTilePosition(enemiesLvl2RoomPosition, dungeonData);
+                     thirdEnemiesRoomsPosition = enemiesLvl2;
+                                               
+                     spawnedObjects.AddRange(enemiesLvl2Room.ProcessRoom(thirdEnemiesRoomsPosition, dungeonData.roomsDictionary[thirdEnemiesRoomsPosition], dungeonData.GetRoomFloorWithoutCorridors(thirdEnemiesRoomsPosition)));
+                                               
+                                               
+                     dungeonData.roomsDictionary.Remove(thirdEnemiesRoomsPosition);
+                     hasEnemiesLvl2Rooms = true;
+                     break;
+                 }
+             }
+            
+         } while (hasEnemiesLvl2Rooms);
+     }
+     
+     private void EnemiesRoomLevelFour(DungeonData dungeonData)
+     {
+         Vector2Int enemiesLvl3RoomPosition = thirdEnemiesRoomsPosition;
+         
+         do
+         {
+             hasEnemiesLvl3Rooms = false;
+
+             foreach (var ennemiesRoom4Position in dungeonData.roomsDictionary.Keys)
+             {
+                 if (DijkstraAlgorithm.distanceDictionary[enemiesLvl3RoomPosition] > DijkstraAlgorithm.distanceDictionary[mapBoss])
+                 {
+                     enemiesLvl3RoomPosition = ennemiesRoom4Position;
+
+                     var enemiesLvl3 = GetMapFromTilePosition(thirdEnemiesRoomsPosition, dungeonData);
+                     lastEnemiesRoomsPosition = enemiesLvl3;
+
+                     spawnedObjects.AddRange(enemiesLvl3Room.ProcessRoom(lastEnemiesRoomsPosition, dungeonData.roomsDictionary[lastEnemiesRoomsPosition], dungeonData.GetRoomFloorWithoutCorridors(lastEnemiesRoomsPosition)));
+                     
+                     dungeonData.roomsDictionary.Remove(lastEnemiesRoomsPosition);
+                     hasEnemiesLvl3Rooms = true;
+                     break;
+                 }
+             }
+
+         } while (hasEnemiesLvl3Rooms);
+     }
+    
+     #endregion*/
+
 }
