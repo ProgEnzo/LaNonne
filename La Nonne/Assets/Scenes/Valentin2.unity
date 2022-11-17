@@ -35116,9 +35116,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerRoom: {fileID: 1671693011229352959, guid: bc1fe4c4e41e6dc48902bea9a8c193d9, type: 3}
-  defaultRoom: {fileID: 876618566080520563, guid: 5a8158f6b57cd88499e7ce821b361b8e, type: 3}
   bossRoom: {fileID: 3553662050975420391, guid: 6c9745ac671e30143b5ab289e6e16301, type: 3}
   shopRoom: {fileID: 8254994962805580812, guid: fef2c70e5eb18de4d885fc16593d53c9, type: 3}
+  EnemyRoom: {fileID: 0}
   graphTest: {fileID: 1427748917}
   itemParent: {fileID: 130347694}
   cinemachineCamera: {fileID: 0}
@@ -35131,6 +35131,7 @@ MonoBehaviour:
   mapBoss: {x: 60, y: -180}
   firstShopPosition: {x: -90, y: -60}
   lastShopPosition: {x: 60, y: -210}
+  enemyRoom: []
 --- !u!1 &1917881044
 GameObject:
   m_ObjectHideFlags: 0
@@ -37090,6 +37091,10 @@ PrefabInstance:
     - target: {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
       propertyPath: m_Name
       value: Pyromane
+      objectReference: {fileID: 0}
+    - target: {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}

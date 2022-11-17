@@ -96,7 +96,7 @@ namespace AI.Trash
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
                 Vector2 knockback = direction * knockbackBody;
             
-                playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
         }
 

@@ -73,7 +73,7 @@ namespace AI.Elite
                         var direction = (playerGameObject.transform.position - transform.position).normalized;
                         var knockBack = direction * knockBackPower;
 
-                        playerRef.m_rigidbody.AddForce(knockBack, ForceMode2D.Impulse);
+                        playerRef.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
                     }
                 }
 

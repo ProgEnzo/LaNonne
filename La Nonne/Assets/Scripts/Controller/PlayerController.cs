@@ -14,18 +14,13 @@ namespace Controller
 {
     public class PlayerController : MonoSingleton<PlayerController>
     {
-        [SerializeField] public Rigidbody2D m_rigidbody;
+        [SerializeField] public Rigidbody2D mRigidbody;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
-        [FormerlySerializedAs("SO_Enemy")] public SO_Enemy soEnemy;
     
-        [SerializeField] public float m_timerDash;
+        [SerializeField] public float mTimerDash;
 
-        public static PlayerController instance;
-
-        public RoomFirstDungeonGenerator rfg;
-        
-        public DijkstraAlgorithm dijkstraAlgorithm;
+        public new static PlayerController instance;
         
         [SerializeField] private List<int> layersToConsiderAnyway = new();
         private List<int> layersToUndoIgnore = new();
@@ -54,9 +49,10 @@ namespace Controller
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
         private bool isMoving;
         private float playerScale;
-        private List<GameObject> animPrefabs = new();
-        private GameObject currentAnimPrefab;
-        private Animator currentAnimPrefabAnimator;
+        internal List<GameObject> animPrefabs = new();
+        internal GameObject currentAnimPrefab;
+        internal Animator currentAnimPrefabAnimator;
+        private (int parameterToChange, int value) animParametersToChange;
 
         private void Awake()
         {
@@ -68,9 +64,9 @@ namespace Controller
             {
                 instance = this;
             }
-            m_rigidbody = GetComponent<Rigidbody2D>();
+            mRigidbody = GetComponent<Rigidbody2D>();
             
-            for (int i = 1; i < transform.childCount; i++)
+            for (var i = 1; i < transform.childCount; i++)
             {
                 animPrefabs.Add(transform.GetChild(i).gameObject);
             }
@@ -96,24 +92,24 @@ namespace Controller
             //ReInit();
         }
         
-        public void ResetVelocity()
+        /*public void ResetVelocity()
         {
-            m_rigidbody.velocity = Vector2.zero;
-        }
+            mRigidbody.velocity = Vector2.zero;
+        }*/
 
         /*public void ReInit()
         {
             transform.position = dijkstraAlgorithm.startingPoint.transform.position;
         }*/
-    
-        void OnDestroy()
+
+        private void OnDestroy()
         {
             instance = null;
         }
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && m_timerDash < -0.5f)
+            if (Input.GetKeyDown(KeyCode.Space) && mTimerDash < -0.5f)
             {
                 for (var i = 0; i < 32; i++)
                 {
@@ -125,10 +121,10 @@ namespace Controller
                 {
                     Physics2D.IgnoreLayerCollision(7, layer, false);
                 }
-                m_timerDash = soController.m_durationDash;
+                mTimerDash = soController.m_durationDash;
             }
             
-            if (m_timerDash < -0.5f)
+            if (mTimerDash < -0.5f)
             {
                 foreach (var layer in layersToUndoIgnore)
                 {
@@ -138,15 +134,14 @@ namespace Controller
             }
             else
             {
-                m_timerDash -= Time.deltaTime;
+                mTimerDash -= Time.deltaTime;
             }
         
             RevealingDash();
         }
         public void FixedUpdate()
         {
-            AnimationManager();
-            m_rigidbody.drag = soController.dragDeceleration * soController.dragMultiplier;
+            mRigidbody.drag = soController.dragDeceleration * soController.dragMultiplier;
             ManageMove();
         }
         
@@ -158,7 +153,7 @@ namespace Controller
         #region MovementPlayer
         private void ManageMove()
         {
-            var speed = m_timerDash <= 0 ? soController.m_speed : soController.m_dashSpeed;
+            var speed = mTimerDash <= 0 ? soController.m_speed : soController.m_dashSpeed;
 
             int nbInputs = (Input.GetKey(KeyCode.Z) ? 1 : 0) + (Input.GetKey(KeyCode.Q) ? 1 : 0) +
                            (Input.GetKey(KeyCode.S) ? 1 : 0) + (Input.GetKey(KeyCode.D) ? 1 : 0);
@@ -171,9 +166,9 @@ namespace Controller
                 transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                 if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 1)
                 {
-                    StartCoroutine(AnimationControllerInt(DirectionState, 1));
+                    animParametersToChange = (DirectionState, 1);
                 }
-                m_rigidbody.AddForce(Vector2.up*speed);
+                mRigidbody.AddForce(Vector2.up*speed);
             }
 
             if (Input.GetKey(KeyCode.Q))
@@ -183,9 +178,9 @@ namespace Controller
                 transform.GetChild(0).localScale = new Vector3(1, -1, 1);
                 if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
                 {
-                    StartCoroutine(AnimationControllerInt(DirectionState, 2));
+                    animParametersToChange = (DirectionState, 2);
                 }
-                m_rigidbody.AddForce(Vector2.left*speed);
+                mRigidbody.AddForce(Vector2.left*speed);
             }
 
             if (Input.GetKey(KeyCode.S))
@@ -195,9 +190,9 @@ namespace Controller
                 transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                 if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 0)
                 {
-                    StartCoroutine(AnimationControllerInt(DirectionState, 0));
+                    animParametersToChange = (DirectionState, 0);
                 }
-                m_rigidbody.AddForce(Vector2.down*speed);
+                mRigidbody.AddForce(Vector2.down*speed);
             }
 
             if (Input.GetKey(KeyCode.D))
@@ -207,9 +202,9 @@ namespace Controller
                 transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                 if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
                 {
-                    StartCoroutine(AnimationControllerInt(DirectionState, 2));
+                    animParametersToChange = (DirectionState, 2);
                 }
-                m_rigidbody.AddForce(Vector2.right*speed);
+                mRigidbody.AddForce(Vector2.right*speed);
             }
 
             if (!currentAnimPrefabAnimator.GetBool(IsAttacking))
@@ -218,18 +213,35 @@ namespace Controller
                 {
                     if (currentAnimPrefabAnimator.GetInteger(MovingState) != 1)
                     {
-                        StartCoroutine(AnimationControllerInt(MovingState, 1));
+                        AnimationControllerInt(
+                            animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 1);
+                    }
+                    else
+                    {
+                        if (animParametersToChange != (0, 0))
+                        {
+                            AnimationControllerInt(animParametersToChange.parameterToChange, animParametersToChange.value);
+                        }
                     }
                 }
                 else
                 {
                     if (currentAnimPrefabAnimator.GetInteger(MovingState) != 0)
                     {
-                        StartCoroutine(AnimationControllerInt(MovingState, 0));
+                        AnimationControllerInt(
+                            animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 0);
+                    }
+                    else
+                    {
+                        if (animParametersToChange != (0, 0))
+                        {
+                            AnimationControllerInt(animParametersToChange.parameterToChange, animParametersToChange.value);
+                        }
                     }
                 }
             }
             isMoving = false;
+            animParametersToChange = (0, 0);
         }
         #endregion
 
@@ -259,24 +271,21 @@ namespace Controller
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && !isHitting && soController.epAmount >= revealingDashEpCost && revealingDashTimerCount <= 0)
             {
-                List<RaycastHit2D> enemiesInArea = new List<RaycastHit2D>();
+                var enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, revealingDashDetectionRadius, Vector2.zero, new ContactFilter2D(), enemiesInArea);
                 enemiesInArea.Sort((x, y) =>
                 {
-                    Vector3 position = transform.position;
+                    var position = transform.position;
                     return (Vector3.Distance(position, x.transform.position).CompareTo(Vector3.Distance(position, y.transform.position)));
                 });
-                foreach (RaycastHit2D enemy in enemiesInArea)
+                foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
                 {
-                    if (enemy.collider.CompareTag("Enemy"))
-                    {
-                        soController.epAmount -= revealingDashEpCost;
-                        revealingDashAimedEnemy = enemy.collider.gameObject;
-                        newPosition = revealingDashAimedEnemy.transform.position;
-                        isHitting = true;
-                        revealingDashTimerCount = revealingDashTimer;
-                        break;
-                    }
+                    soController.epAmount -= revealingDashEpCost;
+                    revealingDashAimedEnemy = enemy.collider.gameObject;
+                    newPosition = revealingDashAimedEnemy.transform.position;
+                    isHitting = true;
+                    revealingDashTimerCount = revealingDashTimer;
+                    break;
                 }
             }
             else if (revealingDashTimerCount > 0)
@@ -287,32 +296,27 @@ namespace Controller
             if (isHitting)
             {
                 transform.position = Vector2.MoveTowards(transform.position, newPosition, hitSpeed * Time.deltaTime);
-                if (Vector3.Distance(transform.position, newPosition) < toleranceDistance)
+                if (!(Vector3.Distance(transform.position, newPosition) < toleranceDistance)) return;
+                foreach (var enemy in runningCoroutines.Keys.Where(enemy => enemy == revealingDashAimedEnemy))
                 {
-                    foreach (GameObject enemy in runningCoroutines.Keys)
-                    {
-                        if (enemy == revealingDashAimedEnemy)
-                        {
-                            StopCoroutine(runningCoroutines[enemy]);
-                            runningCoroutines.Remove(enemy);
-                            break;
-                        }
-                    }
-                    runningCoroutines.Add(revealingDashAimedEnemy, StartCoroutine(StunEnemy(revealingDashAimedEnemy)));
-                
-                    //DMG du player sur le TrashMobClose
-                    if (revealingDashAimedEnemy.CompareTag("Enemy"))
-                    {
-                        revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
-                        //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobClose>().currentHealth);
-                    }
-
-                    isHitting = false;
+                    StopCoroutine(runningCoroutines[enemy]);
+                    runningCoroutines.Remove(enemy);
+                    break;
                 }
+                runningCoroutines.Add(revealingDashAimedEnemy, StartCoroutine(StunEnemy(revealingDashAimedEnemy)));
+                
+                //DMG du player sur le TrashMobClose
+                if (revealingDashAimedEnemy.CompareTag("Enemy"))
+                {
+                    revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer((int)(soController.playerAttackDamage * damageMultiplier));
+                    //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobClose>().currentHealth);
+                }
+
+                isHitting = false;
             }
         }
 
-        public IEnumerator StunEnemy(GameObject enemy)
+        private IEnumerator StunEnemy(GameObject enemy)
         {
             enemy.GetComponent<EnemyController>().isStunned = true;
             yield return new WaitForSeconds(stunDuration);
@@ -321,18 +325,35 @@ namespace Controller
         }
         #endregion
         
-        private IEnumerator AnimationControllerInt(int parameterToChange, int value)
+        private void AnimationControllerInt(int parameterToChange, int value)
         {
-            if (currentAnimPrefabAnimator.GetInteger(parameterToChange) != value)
+            if (parameterToChange  == DirectionState || parameterToChange == MovingState)
             {
-                currentAnimPrefabAnimator.SetBool(CanChange, true);
-                yield return new WaitForNextFrameUnit();
-                currentAnimPrefabAnimator.SetBool(CanChange, false);
-                currentAnimPrefabAnimator.SetInteger(parameterToChange, value);
+                if (currentAnimPrefabAnimator.GetInteger(parameterToChange) != value)
+                {
+                    AnimationManagerInt(parameterToChange, value);
+                    StartCoroutine(CanChangeCoroutine());
+                }
+            }
+            else
+            {
+                if (!(currentAnimPrefabAnimator.GetInteger(DirectionState) == parameterToChange &&
+                     currentAnimPrefabAnimator.GetInteger(MovingState) == value))
+                {
+                    AnimationManagerInt(parameterToChange, value);
+                    StartCoroutine(CanChangeCoroutine());
+                }
             }
         }
 
-        private IEnumerator AnimationControllerBool(int parameterToChange)
+        internal IEnumerator CanChangeCoroutine()
+        {
+            currentAnimPrefabAnimator.SetBool(CanChange, true);
+            yield return new WaitForNextFrameUnit();
+            currentAnimPrefabAnimator.SetBool(CanChange, false);
+        }
+
+        /*private IEnumerator AnimationControllerBool(int parameterToChange)
         {
             currentAnimPrefabAnimator.SetBool(CanChange, true);
             yield return new WaitForNextFrameUnit();
@@ -340,11 +361,35 @@ namespace Controller
             currentAnimPrefabAnimator.SetBool(parameterToChange, true);
             yield return new WaitForNextFrameUnit();
             currentAnimPrefabAnimator.SetBool(parameterToChange, false);
+        }*/
+
+        private void AnimationManagerInt(int parameterToChange, int value)
+        {
+            if (parameterToChange  == DirectionState)
+            {
+                AnimationManagerSwitch(value, currentAnimPrefabAnimator.GetInteger(MovingState),
+                    currentAnimPrefabAnimator.GetBool(IsAttacking));
+            }
+            else if (parameterToChange == MovingState)
+            {
+                AnimationManagerSwitch(currentAnimPrefabAnimator.GetInteger(DirectionState), value,
+                    currentAnimPrefabAnimator.GetBool(IsAttacking));
+            }
+            else
+            {
+                AnimationManagerSwitch(parameterToChange, value, 
+                    currentAnimPrefabAnimator.GetBool(IsAttacking));
+            }
+
+            foreach (var prefab in animPrefabs.Where(prefab => prefab != currentAnimPrefab))
+            {
+                prefab.SetActive(false);
+            }
         }
 
-        private void AnimationManager()
+        internal void AnimationManagerSwitch(int directionState, int movingState, bool isAttacking)
         {
-            switch (currentAnimPrefabAnimator.GetInteger(DirectionState), currentAnimPrefabAnimator.GetInteger(MovingState), currentAnimPrefabAnimator.GetBool(IsAttacking))
+            switch (directionState, movingState, isAttacking)
             {
                 case (0, 0, false):
                     currentAnimPrefab = animPrefabs[0];
@@ -352,19 +397,19 @@ namespace Controller
                 case (0, 1, false):
                     currentAnimPrefab = animPrefabs[1];
                     break;
-                case (0, >=0, true):
+                case (0, >= 0, true):
                     currentAnimPrefab = animPrefabs[2];
                     break;
                 case (1, 0, false):
                 case (1, 1, false):
                     currentAnimPrefab = animPrefabs[3];
                     break;
-                case (1, >=0, true):
+                case (1, >= 0, true):
                     currentAnimPrefab = animPrefabs[4];
                     break;
                 case (2, 0, false):
                 case (2, 1, false):
-                case (2, >=0, true):
+                case (2, >= 0, true):
                     currentAnimPrefab = animPrefabs[5];
                     break;
                 default:
@@ -374,11 +419,10 @@ namespace Controller
             
             currentAnimPrefab.SetActive(true);
             currentAnimPrefabAnimator = currentAnimPrefab.GetComponent<Animator>();
-
-            foreach (var prefab in animPrefabs.Where(prefab => prefab != currentAnimPrefab))
-            {
-                prefab.SetActive(false);
-            }
+            
+            currentAnimPrefabAnimator.SetInteger(DirectionState, directionState);
+            currentAnimPrefabAnimator.SetInteger(MovingState, movingState);
+            currentAnimPrefabAnimator.SetBool(IsAttacking, isAttacking);
         }
     }
 }
