@@ -245,23 +245,18 @@ public class RoomContentGenerator : MonoBehaviour
      [SerializeField] private List<EnemyRoom> enemyRoom;
          private void SelectEnemySpawnPoints(DungeonData dungeonData)
         {
-            foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary)
+            foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary) //roomData n'est pas bon
             {
-                var distance = Vector2Int.Distance(playerSpawnRoomPosition, roomData.Key) / 25; // room data bonne clés de distance ?
+                var distance = Vector2Int.Distance(playerSpawnRoomPosition, roomData.Key) / 25; // room data bonne clés de distance ? Actuellement me donne la distance en ne passant pas par les couloirs
 
-                if (distance <= 5)
-                {
-                    
+                if (distance <= 2) 
                     spawnedObjects.AddRange(enemyRoom[0].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                }
-                else if (distance > 5)
-                {
+                else if (distance < 4) 
                     spawnedObjects.AddRange(enemyRoom[1].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                }
-                else if (distance > 10)
-                {
+                else if (distance < 6) 
                     spawnedObjects.AddRange(enemyRoom[2].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                }
+                else if (distance > 6) 
+                    spawnedObjects.AddRange(enemyRoom[3].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
             }
         }
         

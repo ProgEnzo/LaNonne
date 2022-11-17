@@ -25,17 +25,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Discover.Launch.Via.Unity": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "XThreadsFramesViewSplitterKey": "0.09411765",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="$PROJECT_DIR$/../../../Builds/Build 1\La Nonne.exe" />
@@ -121,7 +122,7 @@
       <workItem from="1667927873054" duration="5114000" />
       <workItem from="1668423187055" duration="3921000" />
       <workItem from="1668597158458" duration="11794000" />
-      <workItem from="1668675684318" duration="847000" />
+      <workItem from="1668675684318" duration="2267000" />
     </task>
     <servers />
   </component>
@@ -146,75 +147,6 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
-          <line>80</line>
-          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="80" containingFunctionPresentation="method 'SelectPlayerSpawnPoint'">
-            <startOffsets>
-              <option value="2376" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2551" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
-          <line>86</line>
-          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="86" containingFunctionPresentation="method 'SelectPlayerSpawnPoint'">
-            <startOffsets>
-              <option value="2749" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2934" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
-          <line>157</line>
-          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="157" containingFunctionPresentation="method 'SelectShopSpawnPoints'">
-            <startOffsets>
-              <option value="5688" />
-            </startOffsets>
-            <endOffsets>
-              <option value="5742" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
-          <line>103</line>
-          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="103" containingFunctionPresentation="method 'GetMapFromTilePosition'">
-            <startOffsets>
-              <option value="3560" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3656" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
-          <line>105</line>
-          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="105" containingFunctionPresentation="method 'GetMapFromTilePosition'">
-            <startOffsets>
-              <option value="3695" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3717" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="Frame#RoomFirstDungeonGenerator.CreateRooms" memberName="roomsList" />
