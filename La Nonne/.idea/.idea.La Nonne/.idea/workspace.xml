@@ -63,10 +63,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="20140">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="20140" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -121,6 +121,7 @@
       <workItem from="1667927873054" duration="5114000" />
       <workItem from="1668423187055" duration="3921000" />
       <workItem from="1668597158458" duration="11794000" />
+      <workItem from="1668675684318" duration="847000" />
     </task>
     <servers />
   </component>
@@ -145,6 +146,75 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
+          <line>80</line>
+          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="80" containingFunctionPresentation="method 'SelectPlayerSpawnPoint'">
+            <startOffsets>
+              <option value="2376" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2551" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
+          <line>86</line>
+          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="86" containingFunctionPresentation="method 'SelectPlayerSpawnPoint'">
+            <startOffsets>
+              <option value="2749" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2934" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
+          <line>157</line>
+          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="157" containingFunctionPresentation="method 'SelectShopSpawnPoints'">
+            <startOffsets>
+              <option value="5688" />
+            </startOffsets>
+            <endOffsets>
+              <option value="5742" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
+          <line>103</line>
+          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="103" containingFunctionPresentation="method 'GetMapFromTilePosition'">
+            <startOffsets>
+              <option value="3560" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3656" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GenPro/Rooms/Generator/RoomContentGenerator.cs</url>
+          <line>105</line>
+          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\GenPro\Rooms\Generator\RoomContentGenerator.cs" initialLine="105" containingFunctionPresentation="method 'GetMapFromTilePosition'">
+            <startOffsets>
+              <option value="3695" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3717" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="Frame#RoomFirstDungeonGenerator.CreateRooms" memberName="roomsList" />
