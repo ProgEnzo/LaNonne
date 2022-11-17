@@ -175,7 +175,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 25) //30 étant la longueur des couloirs ou "corridors Length" dans l'IDE
+            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 25) //25 étant la longueur des couloirs ou "corridors Length" dans l'IDE
             {
                 shopRoomPosition2 = shop;
                 
