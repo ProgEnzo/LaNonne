@@ -9,15 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64b238cc4a3ea964faba7793b2d325e0, type: 3}
-  m_Name: playerMovement
+  m_Script: {fileID: 11500000, guid: ceab9461821508f498cfda454331f443, type: 3}
+  m_Name: TDI
   m_EditorClassIdentifier: 
-  m_speed: 85
-  m_dashSpeed: 155
-  m_durationDash: 0.35
-  dragDeceleration: 7
-  dragMultiplier: 2
-  maxHealth: 200
-  currentHealth: 143
-  playerAttackDamage: 20
-  epAmount: 0
+  maxHealth: 100
+  currentHealth: 250
+  bodyDamage: 20

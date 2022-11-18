@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BossShootingState : BossBaseState
+public class BossThrowingState : BossBaseState
 {
     
     public override void EnterState(BossStateManager boss)

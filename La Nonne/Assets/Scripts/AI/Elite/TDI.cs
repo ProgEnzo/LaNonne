@@ -24,7 +24,6 @@ namespace AI.Elite
         [Header("Components")] 
         [SerializeField] public GameObject bully;
         [SerializeField] public GameObject caretaker;
-        [SerializeField] public GameObject player;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
         [HideInInspector] public PlayerController playerController;

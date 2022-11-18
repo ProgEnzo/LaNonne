@@ -392,6 +392,85 @@ Transform:
   m_Father: {fileID: 1026837434}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &279181326 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6378819069783649303, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+  m_PrefabInstance: {fileID: 282907141}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &282907141
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6761636065754704831}
+    m_Modifications:
+    - target: {fileID: 6378819069783649296, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649297, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649303, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_Name
+      value: VacuumEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 6378819069783649303, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+--- !u!4 &282907142 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6378819069783649298, guid: 6e34b6fb4b160674a9da26d3210ff888, type: 3}
+  m_PrefabInstance: {fileID: 282907141}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &319088002
 GameObject:
   m_ObjectHideFlags: 0
@@ -34857,7 +34936,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1697932136}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.1499996, y: 3.88, z: -10}
+  m_LocalPosition: {x: 0.99000025, y: 1.8800001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -37377,7 +37456,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -37553,10 +37632,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6761636065754704830}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.15, y: 3.88, z: 0}
+  m_LocalPosition: {x: 0.99, y: 1.88, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 282907142}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -37583,7 +37663,7 @@ MonoBehaviour:
   hpBossSlider: {fileID: 122512754}
   currentHealth: 100
   maxHealth: 500
-  movementSpeed: 3
+  normalSpeed: 2
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   bodyDamage: 20
   dashDistance: 10
@@ -37594,19 +37674,16 @@ MonoBehaviour:
   currentDashAmount: 2
   attackCircleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
   attackCircle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
-  attackCircleSpacingCooldown: 0.5
-  attackCircleAmount: 2
-  currentAttackCircleAmount: 2
-  growingCircle: {fileID: 4845308707281541438, guid: b3f8cc22d8f0cce439f2e929b4ceeea8, type: 3}
-  growingCircleCooldown: 1
-  growingCircleAmount: 2
-  currentGrowingCircleAmount: 2
-  rotatingBlade: {fileID: 5203104815070699965, guid: 13ae2e04a8e93da40ada41fff21a7502, type: 3}
-  shrinkingCircle: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
-  shrinkingCircleCooldown: 1
-  rotatingBladeCooldown: 5
-  shrinkingCircleAmount: 2
-  currentShrinkingCircleAmount: 2
+  attackCircleSpacingCooldown: 0.3
+  attackCircleAmount: 5
+  currentAttackCircleAmount: 5
+  vacuumArea: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
+  toxicArea: {fileID: 2696438898175031748, guid: 9a087c729841efe48808cf2c26a9b491, type: 3}
+  vacuumParticle: {fileID: 279181326}
+  vacuumCooldown: 3
+  toxicAreaCooldown: 3
+  vacuumAmount: 3
+  currentVacuumAmount: 3
   vCamPlayer: {fileID: 1656192450}
   takingDamage: 1
   numberOfSpawn: 5
