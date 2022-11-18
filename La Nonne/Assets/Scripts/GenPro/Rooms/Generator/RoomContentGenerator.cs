@@ -243,7 +243,7 @@ public class RoomContentGenerator : MonoBehaviour
      #region DefaultRoom 
      
      [SerializeField] private List<EnemyRoom> enemyRoom;
-         private void SelectEnemySpawnPoints(DungeonData dungeonData)
+         private void SelectEnemySpawnPoints(DungeonData dungeonData) //Ca fonctionne mais le fait que ce soit la distance à vol d'oiseau du hub est domageable ! Faire un A* serait trop compliqué et pas worth en fonction de la charge de taff demandée.
         {
             foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary) //roomData n'est pas bon
             {
