@@ -1,11 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class BossShrinkingCircleState : BossBaseState
+public class BossBoxingState : BossBaseState
 {
-    
     public override void EnterState(BossStateManager boss)
     {
-        boss.ShrinkingCircleManager();
 
     }
 

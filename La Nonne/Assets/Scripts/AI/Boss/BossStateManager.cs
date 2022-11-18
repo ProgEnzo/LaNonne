@@ -14,10 +14,9 @@ public class BossStateManager : MonoBehaviour
 {
     private BossBaseState currentState;
     public BossDashingState DashingState = new BossDashingState();
-    public BossShootingState ShootingState = new BossShootingState();
+    public BossThrowingState ThrowingState = new BossThrowingState();
     public BossAttackCircleState AttackCircleState = new BossAttackCircleState();
-    public BossGrowingCircleState GrowingCircleState = new BossGrowingCircleState();
-    public BossShrinkingCircleState ShrinkingCircleState = new BossShrinkingCircleState();
+    public BossVacuumState VacuumState = new BossVacuumState();
     public BossMineState MineState = new BossMineState();
     public BossTransitionState TransitionState = new BossTransitionState();
 
@@ -33,7 +32,7 @@ public class BossStateManager : MonoBehaviour
     public Slider hpBossSlider;
     public int currentHealth;
     public int maxHealth;
-    public float movementSpeed;
+    public float normalSpeed;
 
     [Header("----Dash----")] 
     public GameObject dashMine;
@@ -54,19 +53,12 @@ public class BossStateManager : MonoBehaviour
     public int attackCircleAmount;
     public int currentAttackCircleAmount;
 
-    [Header("----GrowingCircle----")] 
-    public GameObject growingCircle;
-    public float growingCircleCooldown;
-    public int growingCircleAmount;
-    public int currentGrowingCircleAmount;
-
-    [Header("----ShrinkingCircle----")]
-    public GameObject rotatingBlade;
-    public GameObject shrinkingCircle;
-    public float shrinkingCircleCooldown;
-    public float rotatingBladeCooldown;
-    public int shrinkingCircleAmount;
-    public int currentShrinkingCircleAmount;
+    [Header("----Vacuum----")]
+    public GameObject vacuumArea;
+    public float vacuumCooldown;
+    public float toxicAreaCooldown;
+    public int vacuumAmount;
+    public int currentVacuumAmount;
 
     [Header("----TransitionState----")] 
     public CinemachineVirtualCamera vCamPlayer;
@@ -83,13 +75,12 @@ public class BossStateManager : MonoBehaviour
         hpBossSlider.maxValue = maxHealth;
         hpBossSlider.value = maxHealth;
 
-        bossAI.maxSpeed = movementSpeed;
+        bossAI.maxSpeed = normalSpeed;
         
         //STATES
         firstStatesList.Add(DashingState);
         firstStatesList.Add(AttackCircleState);
-        firstStatesList.Add(GrowingCircleState);
-        firstStatesList.Add(ShrinkingCircleState);
+        firstStatesList.Add(VacuumState);
 
         //VIRTUAL CAMERA
         vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
@@ -127,8 +118,7 @@ public class BossStateManager : MonoBehaviour
     {
         currentDashAmount = dashAmount;
         currentAttackCircleAmount = attackCircleAmount;
-        currentGrowingCircleAmount = growingCircleAmount;
-        currentShrinkingCircleAmount = shrinkingCircleAmount;
+        currentVacuumAmount = vacuumAmount;
     }
     
     #region Health Boss
@@ -189,7 +179,7 @@ public class BossStateManager : MonoBehaviour
         StartCoroutine(DashMine());
         yield return new WaitForSeconds(dashTime);
         
-        bossAI.maxSpeed = movementSpeed;
+        bossAI.maxSpeed = normalSpeed;
         Physics2D.IgnoreLayerCollision(15, 7, false);
 
         GetComponent<AIDestinationSetter>().enabled = true;
@@ -255,83 +245,50 @@ public class BossStateManager : MonoBehaviour
         }
         else if (currentAttackCircleAmount == 0)
         {
-            bossAI.maxSpeed = movementSpeed;
-            SwitchState(GrowingCircleState); //SWITCH INTO GrowingCircleState
-        }
-        else if (currentHealth <= maxHealth / 2)
-        {
-            bossAI.maxSpeed = movementSpeed;
-            SwitchState(TransitionState);
-        }
-    }
-
-    #endregion
-
-    #region GrowingCircleState
-    public void GrowingCircleManager()
-    {
-        StartCoroutine(GrowingCircle());
-        Debug.Log($"<color=green>GROWING CIRCLE STATE HAS BEGUN</color>");
-    }
-    
-    private IEnumerator GrowingCircle()
-    {
-        currentGrowingCircleAmount--;
-        
-        yield return new WaitForSeconds(growingCircleCooldown);
-        
-        var growingCircleGameObject = Instantiate(growingCircle, transform.position, quaternion.identity);
-        growingCircleGameObject.transform.DOKill();
-        growingCircleGameObject.transform.localScale = Vector3.zero;
-        growingCircleGameObject.transform.DOScale(new Vector3(10, 10, 0), 3f);
-        yield return new WaitForSeconds(growingCircleCooldown);
-        
-        Destroy(growingCircleGameObject, 3f);
-
-        if (currentGrowingCircleAmount > 0 && currentHealth >= maxHealth / 2)
-        {
-            StartCoroutine(GrowingCircle());
-        }
-        else if(currentGrowingCircleAmount == 0)
-        {
             var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
             SwitchState(nextState);
         }
         else if (currentHealth <= maxHealth / 2)
         {
+            bossAI.maxSpeed = normalSpeed;
             SwitchState(TransitionState);
         }
-        
     }
+
     #endregion
+    
+    #region VacuumState
 
-    #region ShrinkingCircleState
-
-    public void ShrinkingCircleManager()
+    public void VacuumManager()
     {
-        StartCoroutine(ShrinkingCircle());
+        StartCoroutine(Vacuum());
         Debug.Log($"<color=green>SHRINKING CIRCLE STATE HAS BEGUN</color>");
 
     }
     
-    private IEnumerator ShrinkingCircle()
+    private IEnumerator Vacuum()
     {
-        currentShrinkingCircleAmount--;
-        yield return new WaitForSeconds(shrinkingCircleCooldown);
+        currentVacuumAmount--;
+        bossAI.maxSpeed = 1f; // decrease speed
+        yield return new WaitForSeconds(2f);
 
-        StartCoroutine(RotatingBlade());
-        yield return new WaitForSeconds(rotatingBladeCooldown);
+        bossAI.maxSpeed = 0f; // STOP THE BOSS
         
-        //ÉCHANGER LE CIRCLE COLLIDER AVEC UNE RANGE + ADDFORCE VERS LE BOSS POUR LE "BLACK HOLE"
-        //ENLEVER LES DUPLICATE DE ROTATING BLADE
+        var shrinkingCircleGameObject = Instantiate(vacuumArea, transform.position, Quaternion.identity);
+        shrinkingCircleGameObject.transform.parent = gameObject.transform; //set le prefab en child
+        StartCoroutine(ToxicArea());
+        yield return new WaitForSeconds(vacuumCooldown);
+
+        Destroy(shrinkingCircleGameObject);
+        bossAI.maxSpeed = normalSpeed; //Change the speed back to normal
         
-        
-        if (currentShrinkingCircleAmount > 0 && currentHealth >= maxHealth / 2)
+
+        if (currentVacuumAmount > 0 && currentHealth >= maxHealth / 2)
         {
-            StartCoroutine(ShrinkingCircle());
+            StartCoroutine(Vacuum());
         }
-        else if(currentShrinkingCircleAmount == 0)
+        else if(currentVacuumAmount == 0)
         {
             var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
@@ -339,29 +296,16 @@ public class BossStateManager : MonoBehaviour
         }
         else if (currentHealth <= maxHealth / 2)
         {
-            bossAI.maxSpeed = movementSpeed;
+            bossAI.maxSpeed = normalSpeed;
             SwitchState(TransitionState);
         }
         
     }
 
-    private IEnumerator RotatingBlade()
+    private IEnumerator ToxicArea()
     {
-        bossAI.maxSpeed = 1f;
-        var rotatingBladeGameObject = Instantiate(rotatingBlade, transform.position, Quaternion.identity);
-        rotatingBladeGameObject.transform.parent = gameObject.transform;
-        rotatingBladeGameObject.transform.DORotate(new Vector3(0, 0, 360), rotatingBladeCooldown, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear); //5s
-        Destroy(rotatingBladeGameObject, rotatingBladeCooldown);
-        yield return new WaitForSeconds(shrinkingCircleCooldown); //1s
-
-        bossAI.maxSpeed = 0f;
-        yield return new WaitForSeconds(2f);
-
-        var shrinkingCircleGameObject = Instantiate(shrinkingCircle, transform.position, Quaternion.identity);
-        shrinkingCircleGameObject.transform.parent = gameObject.transform; //set le prefab en child
-        //shrinkingCircleGameObject.transform.DOKill();
-        //shrinkingCircleGameObject.transform.DOScale(new Vector3(0, 0, 0), 3f);
-        Destroy(shrinkingCircleGameObject, 3f);
+        
+        yield return new WaitForSeconds(1f);
     }
     #endregion
 
@@ -390,7 +334,7 @@ public class BossStateManager : MonoBehaviour
 
         
         yield return new WaitForSeconds(10f);
-        bossAI.maxSpeed = 3;
+        bossAI.maxSpeed = normalSpeed;
         takingDamage = true;
         SwitchState(MineState);
 

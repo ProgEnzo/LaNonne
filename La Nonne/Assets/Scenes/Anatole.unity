@@ -37583,7 +37583,7 @@ MonoBehaviour:
   hpBossSlider: {fileID: 122512754}
   currentHealth: 100
   maxHealth: 500
-  movementSpeed: 3
+  normalSpeed: 2
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   bodyDamage: 20
   dashDistance: 10
@@ -37597,16 +37597,11 @@ MonoBehaviour:
   attackCircleSpacingCooldown: 0.5
   attackCircleAmount: 2
   currentAttackCircleAmount: 2
-  growingCircle: {fileID: 4845308707281541438, guid: b3f8cc22d8f0cce439f2e929b4ceeea8, type: 3}
-  growingCircleCooldown: 1
-  growingCircleAmount: 2
-  currentGrowingCircleAmount: 2
-  rotatingBlade: {fileID: 5203104815070699965, guid: 13ae2e04a8e93da40ada41fff21a7502, type: 3}
-  shrinkingCircle: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
-  shrinkingCircleCooldown: 1
-  rotatingBladeCooldown: 5
-  shrinkingCircleAmount: 2
-  currentShrinkingCircleAmount: 2
+  vacuumArea: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
+  vacuumCooldown: 3
+  toxicAreaCooldown: 3
+  vacuumAmount: 2
+  currentVacuumAmount: 2
   vCamPlayer: {fileID: 1656192450}
   takingDamage: 1
   numberOfSpawn: 5
