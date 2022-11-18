@@ -55,6 +55,7 @@ public class BossStateManager : MonoBehaviour
 
     [Header("----Vacuum----")]
     public GameObject vacuumArea;
+    public GameObject toxicArea;
     public float vacuumCooldown;
     public float toxicAreaCooldown;
     public int vacuumAmount;
@@ -67,7 +68,7 @@ public class BossStateManager : MonoBehaviour
 
     void Start()
     {
-        currentState = DashingState; //starting state for the boss state machine
+        currentState = VacuumState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
@@ -208,7 +209,7 @@ public class BossStateManager : MonoBehaviour
         var dashMineObject = Instantiate(dashMine, transform.position, Quaternion.identity);
         yield return new WaitForSeconds(0.5f);
         
-        dashMineObject.transform.DOScale(new Vector3(3, 3, 0), 3f);
+        dashMineObject.transform.DOScale(new Vector2(3, 3), 3f);
         Destroy(dashMineObject, 3f);
         yield return new WaitForSeconds(0.3f);
     }
@@ -275,12 +276,19 @@ public class BossStateManager : MonoBehaviour
 
         bossAI.maxSpeed = 0f; // STOP THE BOSS
         
-        var shrinkingCircleGameObject = Instantiate(vacuumArea, transform.position, Quaternion.identity);
-        shrinkingCircleGameObject.transform.parent = gameObject.transform; //set le prefab en child
-        StartCoroutine(ToxicArea());
-        yield return new WaitForSeconds(vacuumCooldown);
+        var bossPos = transform.position;
 
-        Destroy(shrinkingCircleGameObject);
+        //VACUUM AREA
+        var vacuumGameObject = Instantiate(vacuumArea, bossPos, Quaternion.identity);
+        vacuumGameObject.transform.parent = gameObject.transform; //set le prefab en child
+        
+        //TOXIC AREA
+        var toxicAreaObject = Instantiate(toxicArea, bossPos, Quaternion.identity);
+        toxicAreaObject.transform.DOScale(new Vector2(3f, 3f), 2f);
+        yield return new WaitForSeconds(3f);
+
+        Destroy(vacuumGameObject);
+        Destroy(toxicAreaObject);
         bossAI.maxSpeed = normalSpeed; //Change the speed back to normal
         
 
@@ -300,12 +308,6 @@ public class BossStateManager : MonoBehaviour
             SwitchState(TransitionState);
         }
         
-    }
-
-    private IEnumerator ToxicArea()
-    {
-        
-        yield return new WaitForSeconds(1f);
     }
     #endregion
 

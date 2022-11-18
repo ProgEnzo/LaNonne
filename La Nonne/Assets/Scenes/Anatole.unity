@@ -37594,14 +37594,15 @@ MonoBehaviour:
   currentDashAmount: 2
   attackCircleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
   attackCircle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
-  attackCircleSpacingCooldown: 0.5
-  attackCircleAmount: 2
-  currentAttackCircleAmount: 2
+  attackCircleSpacingCooldown: 0.3
+  attackCircleAmount: 5
+  currentAttackCircleAmount: 5
   vacuumArea: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
+  toxicArea: {fileID: 2696438898175031748, guid: 9a087c729841efe48808cf2c26a9b491, type: 3}
   vacuumCooldown: 3
   toxicAreaCooldown: 3
-  vacuumAmount: 2
-  currentVacuumAmount: 2
+  vacuumAmount: 3
+  currentVacuumAmount: 3
   vCamPlayer: {fileID: 1656192450}
   takingDamage: 1
   numberOfSpawn: 5
