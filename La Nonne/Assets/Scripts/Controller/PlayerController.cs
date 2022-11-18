@@ -53,6 +53,7 @@ namespace Controller
         internal GameObject currentAnimPrefab;
         internal Animator currentAnimPrefabAnimator;
         private (int parameterToChange, int value) animParametersToChange;
+        private bool isMovingProfile;
 
         private void Awake()
         {
@@ -159,21 +160,10 @@ namespace Controller
                            (Input.GetKey(KeyCode.S) ? 1 : 0) + (Input.GetKey(KeyCode.D) ? 1 : 0);
             if (nbInputs > 1) speed *= 0.75f;
 
-            if (Input.GetKey(KeyCode.Z))
-            {
-                isMoving = true;
-                transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
-                transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 1)
-                {
-                    animParametersToChange = (DirectionState, 1);
-                }
-                mRigidbody.AddForce(Vector2.up*speed);
-            }
-
             if (Input.GetKey(KeyCode.Q))
             {
                 isMoving = true;
+                isMovingProfile = true;
                 transform.localScale = new Vector3(-playerScale, transform.localScale.y, transform.localScale.z);
                 transform.GetChild(0).localScale = new Vector3(1, -1, 1);
                 if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
@@ -183,21 +173,10 @@ namespace Controller
                 mRigidbody.AddForce(Vector2.left*speed);
             }
 
-            if (Input.GetKey(KeyCode.S))
-            {
-                isMoving = true;
-                transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
-                transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 0)
-                {
-                    animParametersToChange = (DirectionState, 0);
-                }
-                mRigidbody.AddForce(Vector2.down*speed);
-            }
-
             if (Input.GetKey(KeyCode.D))
             {
                 isMoving = true;
+                isMovingProfile = true;
                 transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
                 transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                 if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
@@ -205,6 +184,36 @@ namespace Controller
                     animParametersToChange = (DirectionState, 2);
                 }
                 mRigidbody.AddForce(Vector2.right*speed);
+            }
+
+            if (Input.GetKey(KeyCode.Z))
+            {
+                isMoving = true;
+                if (!isMovingProfile)
+                {
+                    transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                    transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+                    if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 1)
+                    {
+                        animParametersToChange = (DirectionState, 1);
+                    }
+                }
+                mRigidbody.AddForce(Vector2.up*speed);
+            }
+
+            if (Input.GetKey(KeyCode.S))
+            {
+                isMoving = true;
+                if (!isMovingProfile)
+                {
+                    transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                    transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+                    if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 0)
+                    {
+                        animParametersToChange = (DirectionState, 0);
+                    }
+                }
+                mRigidbody.AddForce(Vector2.down*speed);
             }
 
             if (!currentAnimPrefabAnimator.GetBool(IsAttacking))
@@ -241,6 +250,7 @@ namespace Controller
                 }
             }
             isMoving = false;
+            isMovingProfile = false;
             animParametersToChange = (0, 0);
         }
         #endregion
