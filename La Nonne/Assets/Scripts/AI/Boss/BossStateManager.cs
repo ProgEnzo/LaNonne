@@ -26,6 +26,7 @@ public class BossStateManager : MonoBehaviour
     
     //LIST
     public List<BossBaseState> firstStatesList = new List<BossBaseState>();
+    public List<BossBaseState> lastStatesList = new List<BossBaseState>();
     public List<GameObject> spawnerList = new List<GameObject>();
     
     [Header("Overall Stats")]
@@ -66,10 +67,16 @@ public class BossStateManager : MonoBehaviour
     public CinemachineVirtualCamera vCamPlayer;
     public bool takingDamage = true;
     public int numberOfSpawn;
+    public float transitionCooldown;
+
+    [Header("----ThrowingState----")] 
+    public GameObject slug;
+    public int throwAmount;
+    public int currentThrowAmount;
 
     void Start()
     {
-        currentState = VacuumState; //starting state for the boss state machine
+        currentState = ThrowingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
@@ -83,6 +90,8 @@ public class BossStateManager : MonoBehaviour
         firstStatesList.Add(DashingState);
         firstStatesList.Add(AttackCircleState);
         firstStatesList.Add(VacuumState);
+        
+        lastStatesList.Add(ThrowingState);
 
         //VIRTUAL CAMERA
         vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
@@ -121,6 +130,8 @@ public class BossStateManager : MonoBehaviour
         currentDashAmount = dashAmount;
         currentAttackCircleAmount = attackCircleAmount;
         currentVacuumAmount = vacuumAmount;
+
+        currentThrowAmount = throwAmount;
     }
     
     #region Health Boss
@@ -329,19 +340,21 @@ public class BossStateManager : MonoBehaviour
         takingDamage = false;
         yield return new WaitForSeconds(3f);
         
-        vCamPlayer.Priority = 10;
-        yield return new WaitForSeconds(1f);
-
         for (int i = 0; i < numberOfSpawn; i++)
         {
+            yield return new WaitForSeconds(0.3f);
             var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(Random.Range(0, 5), Random.Range(0, 5)), Quaternion.identity);
         }
+        yield return new WaitForSeconds(1f);
 
+        vCamPlayer.Priority = 10;
+        yield return new WaitForSeconds(transitionCooldown);
         
-        yield return new WaitForSeconds(10f);
+        //CODE FOR THE EXPLOSION AFTER THE TRANSITION HERE
+        
         bossAI.maxSpeed = normalSpeed;
         takingDamage = true;
-        SwitchState(MineState);
+        SwitchState(ThrowingState);
 
     }
 
@@ -359,6 +372,36 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator Mine()
     {
         yield return new WaitForSeconds(1f);
+    }
+
+    #endregion
+
+    #region ThrowingState
+
+    public void ThrowingManager()
+    {
+        StartCoroutine(Throwing());
+        Debug.Log($"<color=red>TRANSITION STATE HAS BEGUN</color>");
+
+    }
+
+    private IEnumerator Throwing()
+    {
+        currentThrowAmount--;
+        yield return new WaitForSeconds(1f);
+
+        var slugObject = Instantiate(slug, Vector3.one, Quaternion.identity);
+        
+        if (currentVacuumAmount > 0)
+        {
+            StartCoroutine(Throwing());
+        }
+        else if(currentVacuumAmount == 0)
+        {
+            var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+            
+            SwitchState(nextState);
+        }
     }
 
     #endregion
