@@ -389,34 +389,20 @@ namespace Controller
 
         internal void AnimationManagerSwitch(int directionState, int movingState, bool isAttacking)
         {
-            switch (directionState, movingState, isAttacking)
+            currentAnimPrefab = (directionState, movingState, isAttacking) switch
             {
-                case (0, 0, false):
-                    currentAnimPrefab = animPrefabs[0];
-                    break;
-                case (0, 1, false):
-                    currentAnimPrefab = animPrefabs[1];
-                    break;
-                case (0, >= 0, true):
-                    currentAnimPrefab = animPrefabs[2];
-                    break;
-                case (1, 0, false):
-                case (1, 1, false):
-                    currentAnimPrefab = animPrefabs[3];
-                    break;
-                case (1, >= 0, true):
-                    currentAnimPrefab = animPrefabs[4];
-                    break;
-                case (2, 0, false):
-                case (2, 1, false):
-                case (2, >= 0, true):
-                    currentAnimPrefab = animPrefabs[5];
-                    break;
-                default:
-                    currentAnimPrefab = animPrefabs[0];
-                    break;
-            }
-            
+                (0, 0, false) => animPrefabs[0],
+                (0, 1, false) => animPrefabs[1],
+                (0, >= 0, true) => animPrefabs[2],
+                (1, 0, false) => animPrefabs[3],
+                (1, 1, false) => animPrefabs[4],
+                (1, >= 0, true) => animPrefabs[5],
+                (2, 0, false) => animPrefabs[6],
+                (2, 1, false) => animPrefabs[7],
+                (2, >= 0, true) => animPrefabs[8],
+                _ => animPrefabs[0]
+            };
+
             currentAnimPrefab.SetActive(true);
             currentAnimPrefabAnimator = currentAnimPrefab.GetComponent<Animator>();
             
