@@ -18,7 +18,7 @@ public class BossStateManager : MonoBehaviour
     public BossAttackCircleState AttackCircleState = new BossAttackCircleState();
     public BossGrowingCircleState GrowingCircleState = new BossGrowingCircleState();
     public BossShrinkingCircleState ShrinkingCircleState = new BossShrinkingCircleState();
-    public BossRotateAroundState RotateAroundState = new BossRotateAroundState();
+    public BossMineState MineState = new BossMineState();
     public BossTransitionState TransitionState = new BossTransitionState();
 
     public Rigidbody2D rb;
@@ -26,7 +26,7 @@ public class BossStateManager : MonoBehaviour
     public AIPath bossAI;
     
     //LIST
-    public List<BossBaseState> stateList = new List<BossBaseState>();
+    public List<BossBaseState> firstStatesList = new List<BossBaseState>();
     public List<GameObject> spawnerList = new List<GameObject>();
     
     [Header("Overall Stats")]
@@ -71,6 +71,7 @@ public class BossStateManager : MonoBehaviour
     [Header("----TransitionState----")] 
     public CinemachineVirtualCamera vCamPlayer;
     public bool takingDamage = true;
+    public int numberOfSpawn;
 
     void Start()
     {
@@ -85,10 +86,10 @@ public class BossStateManager : MonoBehaviour
         bossAI.maxSpeed = movementSpeed;
         
         //STATES
-        stateList.Add(DashingState);
-        stateList.Add(AttackCircleState);
-        stateList.Add(GrowingCircleState);
-        stateList.Add(ShrinkingCircleState);
+        firstStatesList.Add(DashingState);
+        firstStatesList.Add(AttackCircleState);
+        firstStatesList.Add(GrowingCircleState);
+        firstStatesList.Add(ShrinkingCircleState);
 
         //VIRTUAL CAMERA
         vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
@@ -202,20 +203,14 @@ public class BossStateManager : MonoBehaviour
         }
         else if (currentDashAmount == 0)
         {
-            
-            var nextState = stateList[Random.Range(0, stateList.Count)];
+            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
             SwitchState(nextState);
-            
-
-
         }
         else if (currentHealth <= maxHealth / 2)
         {
             SwitchState(TransitionState);
         }
-
-        
     }
 
     private IEnumerator DashMine()
@@ -299,7 +294,7 @@ public class BossStateManager : MonoBehaviour
         }
         else if(currentGrowingCircleAmount == 0)
         {
-            var nextState = stateList[Random.Range(0, stateList.Count)];
+            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
             SwitchState(nextState);
         }
@@ -338,7 +333,7 @@ public class BossStateManager : MonoBehaviour
         }
         else if(currentShrinkingCircleAmount == 0)
         {
-            var nextState = stateList[Random.Range(0, stateList.Count)];
+            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
             SwitchState(nextState);
         }
@@ -381,22 +376,40 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator Transition()
     {
         bossAI.maxSpeed = 0;
-        vCamPlayer.enabled = false;
+        vCamPlayer.Priority = 1; //on laisse la priorité à la vCam du boss
         takingDamage = false;
-        transform.DOScale(new Vector2(1.2f, 1.2f), 0.2f);
         yield return new WaitForSeconds(3f);
         
-        vCamPlayer.enabled = true;
+        vCamPlayer.Priority = 10;
         yield return new WaitForSeconds(1f);
 
-        var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], Vector3.up, Quaternion.identity);
-        
+        for (int i = 0; i < numberOfSpawn; i++)
+        {
+            var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(Random.Range(0, 5), Random.Range(0, 5)), Quaternion.identity);
+        }
 
-        yield return new WaitForSeconds(100f);
         
+        yield return new WaitForSeconds(10f);
+        bossAI.maxSpeed = 3;
         takingDamage = true;
+        SwitchState(MineState);
 
+    }
 
+    #endregion
+
+    #region MineState
+
+    public void MineManager()
+    {
+        StartCoroutine(Mine());
+        Debug.Log($"<color=red>MINE STATE HAS BEGUN</color>");
+
+    }
+
+    private IEnumerator Mine()
+    {
+        yield return new WaitForSeconds(1f);
     }
 
     #endregion
