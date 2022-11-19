@@ -25,7 +25,7 @@ public class ShrinkingCircleManager : MonoBehaviour
         Vector2 direction = (transform.position - player.transform.position).normalized;
         var distanceBossPlayer = Vector2.Distance(boss.transform.position, player.transform.position);
 
-        if (distanceBossPlayer < blackHoleRange && PlayerController.instance.m_timerDash < 0)
+        if (distanceBossPlayer < blackHoleRange && PlayerController.instance.mTimerDash < 0)
         {
             player.GetComponent<Rigidbody2D>().AddForce(direction * pullForce, ForceMode2D.Impulse);
 

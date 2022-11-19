@@ -24,7 +24,6 @@ namespace AI.Elite
         [Header("Components")] 
         [SerializeField] public GameObject bully;
         [SerializeField] public GameObject caretaker;
-        [SerializeField] public GameObject player;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
         [HideInInspector] public PlayerController playerController;
@@ -77,7 +76,7 @@ namespace AI.Elite
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
                 Vector2 knockback = direction * bodyKnockback;
             
-                playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
         }
 

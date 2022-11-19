@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using AI;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,8 +20,10 @@ namespace Controller
         public Quaternion finalRotation1;
         public Quaternion finalRotation2;
         private Camera camera1;
-        private Animator playerAnimator;
+        private PlayerController playerController;
         private static readonly int CanChange = Animator.StringToHash("canChange");
+        private static readonly int DirectionState = Animator.StringToHash("directionState");
+        private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
 
         public ChainBladeDamage chainBladeDamage;
@@ -30,7 +33,7 @@ namespace Controller
         // Start is called before the first frame update
         private void Start()
         {
-            playerAnimator = PlayerController.instance.GetComponent<Animator>();
+            playerController = PlayerController.instance;
             camera1 = Camera.main;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
@@ -53,7 +56,7 @@ namespace Controller
         {
             if (Input.GetMouseButtonDown(0) && !isHitting)
             {
-                StartCoroutine(AnimationControllerBool(IsAttacking));
+                AnimationControllerBool(IsAttacking);
                 Vector3 newDirection = camera1.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
@@ -89,7 +92,8 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        playerAnimator.SetBool(IsAttacking, false);
+                        AnimationManagerBool(IsAttacking, false);
+                        playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                     }
                 }
             }
@@ -111,12 +115,24 @@ namespace Controller
             }
         }
         
-        private IEnumerator AnimationControllerBool(int parameterToChange)
+        private void AnimationControllerBool(int parameterToChange)
         {
-            playerAnimator.SetBool(CanChange, true);
-            yield return new WaitForNextFrameUnit();
-            playerAnimator.SetBool(CanChange, false);
-            playerAnimator.SetBool(parameterToChange, true);
+            AnimationManagerBool(parameterToChange, true);
+            StartCoroutine(playerController.CanChangeCoroutine());
+        }
+        
+        private void AnimationManagerBool(int parameterToChange, bool value)
+        {
+            if (parameterToChange  == IsAttacking)
+            {
+                playerController.AnimationManagerSwitch(playerController.currentAnimPrefabAnimator.GetInteger(DirectionState),
+                    playerController.currentAnimPrefabAnimator.GetInteger(MovingState), value);
+            }
+
+            foreach (var prefab in playerController.animPrefabs.Where(prefab => prefab != playerController.currentAnimPrefab))
+            {
+                prefab.SetActive(false);
+            }
         }
     }
 }

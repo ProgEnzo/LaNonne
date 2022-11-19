@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Controller;
 using Pathfinding;
@@ -20,10 +21,14 @@ namespace AI.Trash
         [SerializeField] float knockbackBody;
         
         [Header("Enemy Components")]
-        [SerializeField] GameObject player;
         private AIPath scriptAIPath;
-        [SerializeField] GameObject bulletPrefab;
+        [SerializeField] private GameObject bulletPrefab;
         public PlayerController playerController;
+
+        private void Awake()
+        {
+            playerController = PlayerController.instance;
+        }
 
         protected override void Start()
         {
@@ -43,9 +48,10 @@ namespace AI.Trash
         }
 
         #region EnemyRangeBehavior
-        void StopAndShoot()
+
+        private void StopAndShoot()
         {
-            distanceToPlayer = Vector2.Distance(player.transform.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
+            distanceToPlayer = Vector2.Distance(playerController.transform.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
         
             if (distanceToPlayer <= shootingRange) //si le joueur est dans la SHOOTING RANGE du trashMob
             {
@@ -66,7 +72,6 @@ namespace AI.Trash
     
         private void Shoot()
         {
-        
             //Timer for firing bullets
             cooldownTimer -= Time.deltaTime;
             if (cooldownTimer > 0)
@@ -75,10 +80,10 @@ namespace AI.Trash
             }
             cooldownTimer = cooldownBetweenShots;
 
-            Vector3 position = transform.position;
-            Vector3 direction = player.transform.position - position; // direction entre player et enemy
-            GameObject bullet = Instantiate(bulletPrefab, position, Quaternion.identity); // spawn bullet
-            Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>(); // chope le rb de la bullet 
+            var position = transform.position;
+            var direction = playerController.transform.position - position; // direction entre player et enemy
+            var bullet = Instantiate(bulletPrefab, position, Quaternion.identity); // spawn bullet
+            var rbBullet = bullet.GetComponent<Rigidbody2D>(); // chope le rb de la bullet 
             rbBullet.AddForce(direction * bulletSpeed, ForceMode2D.Impulse); // Addforce avec la direction + le rb
         
             Destroy(bullet, 3f);
@@ -92,17 +97,17 @@ namespace AI.Trash
                 StartCoroutine(PlayerIsHit());
                 playerController.TakeDamage(soEnemy.bodyDamage); //Player takes damage
 
-                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockback = direction * knockbackBody;
+                var knockback = direction * knockbackBody;
             
-                playerController.m_rigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
             }
         }
 
         private void OnDrawGizmos()
         {
-            Vector3 position = transform.position;
+            var position = transform.position;
             Gizmos.DrawWireSphere(position, shootingRange);
             Gizmos.DrawWireSphere(position, aggroRange);
         }

@@ -12,8 +12,7 @@ public class ItemPlacementHelper
     HashSet<Vector2Int> roomFloorNoCorridor;
 
 
-    public ItemPlacementHelper(HashSet<Vector2Int> roomFloor, 
-        HashSet<Vector2Int> roomFloorNoCorridor)
+    public ItemPlacementHelper(HashSet<Vector2Int> roomFloor, HashSet<Vector2Int> roomFloorNoCorridor)
     {
         Graph graph = new Graph(roomFloor);
         this.roomFloorNoCorridor = roomFloorNoCorridor;
@@ -39,6 +38,7 @@ public class ItemPlacementHelper
             return null;
 
         int iteration = 0;
+        
         while (iteration < iterationsMax)
         {
             iteration++;
@@ -98,4 +98,5 @@ public enum PlacementType
 {
     OpenSpace,
     NearWall,
+    Tas,
 }

@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 320513e8b866ab841b09819266605095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soEnemy: {fileID: 0}
+  soEnemy: {fileID: 11400000, guid: bd11d4348b38d80479def3fd9e4a72b8, type: 2}
   currentHealth: 200
   bodyDamage: 20
   bodyKnockback: 50
@@ -64,7 +64,6 @@ MonoBehaviour:
   healAmount: 20
   bully: {fileID: 5813854497670849624, guid: a0948d9d068470444ae080e8385eee73, type: 3}
   caretaker: {fileID: 6272501254927288805, guid: 095c4a11c967334409514fd419e7921e, type: 3}
-  player: {fileID: 0}
   circle: {fileID: 1280591066966374491}
   circleSprite: {fileID: 2031974246127490173}
   playerController: {fileID: 0}
