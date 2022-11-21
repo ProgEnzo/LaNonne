@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class BossMineState : BossBaseState
+public class BossToxicMineState : BossBaseState
 {
     
     public override void EnterState(BossStateManager boss)
     {
-        boss.MineManager();
+        boss.ToxicMineManager();
     }
 
     public override void UpdateState(BossStateManager boss)

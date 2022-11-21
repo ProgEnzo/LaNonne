@@ -849,7 +849,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456407908}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5599998, y: 0.4800001, z: -10}
+  m_LocalPosition: {x: -1.5599997, y: 0.4800001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34852,7 +34852,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656192447}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5599998, y: 0.4800001, z: -10}
+  m_LocalPosition: {x: -1.5599997, y: 0.4800001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -37688,6 +37688,12 @@ MonoBehaviour:
   takingDamage: 1
   numberOfSpawn: 5
   transitionCooldown: 15
+  toxicMinePosList: []
+  toxicMine: {fileID: 4656905889621561962, guid: cb6ee878049cac944a1bf2471efb45d5, type: 3}
+  toxicMineWarning: {fileID: 7668595343999760947, guid: 6570a0989bc5f4f4ea9bcaf9d07b3c37, type: 3}
+  numberOfToxicMines: 15
+  toxicMineAmount: 2
+  currentToxicMineAmount: 2
   slug: {fileID: 5399778970430523503, guid: d78ff8a45bd3fe14786cf5fdeb4b43e8, type: 3}
-  throwAmount: 2
-  currentThrowAmount: 2
+  throwAmount: 1
+  currentThrowAmount: 1

@@ -17,7 +17,7 @@ public class BossStateManager : MonoBehaviour
     public BossThrowingState ThrowingState = new BossThrowingState();
     public BossAttackCircleState AttackCircleState = new BossAttackCircleState();
     public BossVacuumState VacuumState = new BossVacuumState();
-    public BossMineState MineState = new BossMineState();
+    public BossToxicMineState ToxicMineState = new BossToxicMineState();
     public BossTransitionState TransitionState = new BossTransitionState();
 
     public Rigidbody2D rb;
@@ -27,8 +27,9 @@ public class BossStateManager : MonoBehaviour
     //LIST
     public List<BossBaseState> firstStatesList = new List<BossBaseState>();
     public List<BossBaseState> lastStatesList = new List<BossBaseState>();
-    public List<GameObject> spawnerList = new List<GameObject>();
     
+    public List<GameObject> spawnerList = new List<GameObject>();
+
     [Header("Overall Stats")]
     public Slider hpBossSlider;
     public int currentHealth;
@@ -69,6 +70,16 @@ public class BossStateManager : MonoBehaviour
     public int numberOfSpawn;
     public float transitionCooldown;
 
+    [Header("----ToxicMineState----")]
+    public List<GameObject> toxicMinePosList = new List<GameObject>();
+
+    public GameObject toxicMine;
+    public GameObject toxicMineWarning;
+    private GameObject toxicMinePos;
+    public int numberOfToxicMines;
+    public int toxicMineAmount;
+    public int currentToxicMineAmount;
+    
     [Header("----ThrowingState----")] 
     public GameObject slug;
     public int throwAmount;
@@ -100,15 +111,6 @@ public class BossStateManager : MonoBehaviour
     {
         currentState.UpdateState(this); //will call any code in Update State from the current state every frame
     }
-
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Player"))
-        {
-            
-        }
-    }
-
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player"))
@@ -131,6 +133,7 @@ public class BossStateManager : MonoBehaviour
         currentAttackCircleAmount = attackCircleAmount;
         currentVacuumAmount = vacuumAmount;
 
+        currentToxicMineAmount = toxicMineAmount;
         currentThrowAmount = throwAmount;
     }
     
@@ -360,18 +363,50 @@ public class BossStateManager : MonoBehaviour
 
     #endregion
 
-    #region MineState
+    #region ToxicMineState
 
-    public void MineManager()
+    public void ToxicMineManager()
     {
-        StartCoroutine(Mine());
-        Debug.Log($"<color=red>MINE STATE HAS BEGUN</color>");
+        StartCoroutine(ToxicMine());
+        Debug.Log($"<color=red>TOXIC MINE STATE HAS BEGUN</color>");
 
     }
 
-    private IEnumerator Mine()
+    private IEnumerator ToxicMine()
     {
+        currentToxicMineAmount--;
         yield return new WaitForSeconds(1f);
+
+        for (int i = 0; i < numberOfToxicMines; i++)
+        {
+            toxicMinePos = Instantiate(toxicMine, transform.position, Quaternion.identity); //spawn les mines 
+            toxicMinePos.transform.DOMove(new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f)), 3f); //envoie les mines dans tous les sens
+            toxicMinePosList.Add(toxicMinePos); //ajout de toutes les mines dans une liste
+
+            Destroy(toxicMinePos, 5f);
+        }
+        Invoke(nameof(WarningToxicMine), 4.9f); //spawn les warning sur TOUS les transform de TOUTES les mines présentes dans la liste
+        yield return new WaitForSeconds(4f);
+
+        if (currentToxicMineAmount > 0)
+        {
+            StartCoroutine(ToxicMine());
+        }
+        else if(currentToxicMineAmount == 0)
+        { 
+            //var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+            SwitchState(ThrowingState);
+        }
+    }
+
+    void WarningToxicMine()
+    {
+        foreach (var VARIABLE in toxicMinePosList)
+        {
+            Instantiate(toxicMineWarning, VARIABLE.transform.position, Quaternion.identity);
+        }
+
+        toxicMinePosList.Clear();
     }
 
     #endregion
@@ -381,7 +416,7 @@ public class BossStateManager : MonoBehaviour
     public void ThrowingManager()
     {
         StartCoroutine(Throwing());
-        Debug.Log($"<color=red>TRANSITION STATE HAS BEGUN</color>");
+        Debug.Log($"<color=red>THROWING STATE HAS BEGUN</color>");
 
     }
 
@@ -391,16 +426,17 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         var slugObject = Instantiate(slug, transform.position, Quaternion.identity);
+
+        yield return new WaitForSeconds(8f);
         
         if (currentThrowAmount > 0)
         {
             StartCoroutine(Throwing());
         }
         else if(currentThrowAmount == 0)
-        {
-            // var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
-            //
-            // SwitchState(nextState);
+        { 
+            //var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+            SwitchState(ToxicMineState);
         }
     }
 
