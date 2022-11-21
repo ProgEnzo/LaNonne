@@ -30,6 +30,7 @@ public class SlugManager : MonoBehaviour
 
     private IEnumerator Go()
     {
+        
         dashAmount--;
         bulletMassReduction += 0.2f;
         var directionDash = player.transform.position - transform.position;

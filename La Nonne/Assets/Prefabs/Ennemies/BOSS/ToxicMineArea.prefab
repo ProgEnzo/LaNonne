@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 7668595343999760950}
   - component: {fileID: 7668595343999760945}
   - component: {fileID: 7668595343999760944}
+  - component: {fileID: 2225287644695220903}
   m_Layer: 0
-  m_Name: ToxicMineWarning
+  m_Name: ToxicMineArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0.19482294, b: 0, a: 0.12941177}
+  m_Color: {r: 1, g: 0.19482294, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -101,3 +102,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &2225287644695220903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7668595343999760947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dcb78cd41b492f4f84873b34e4598d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toxicMineDamage: 40

@@ -71,12 +71,18 @@ public class BossStateManager : MonoBehaviour
     public float transitionCooldown;
 
     [Header("----ToxicMineState----")]
-    public List<GameObject> toxicMinePosList = new List<GameObject>();
+    public List<GameObject> toxicMineList = new List<GameObject>();
+    public List<GameObject> toxicMineAreaWarningList = new List<GameObject>();
+    public List<GameObject> toxicMineAreaList = new List<GameObject>();
 
+    private GameObject toxicMineObject;
     public GameObject toxicMine;
     public GameObject toxicMineWarning;
-    private GameObject toxicMinePos;
+    public GameObject toxicMineArea;
+    
+    
     public int numberOfToxicMines;
+    
     public int toxicMineAmount;
     public int currentToxicMineAmount;
     
@@ -87,7 +93,7 @@ public class BossStateManager : MonoBehaviour
 
     void Start()
     {
-        currentState = ThrowingState; //starting state for the boss state machine
+        currentState = ToxicMineState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
@@ -377,16 +383,58 @@ public class BossStateManager : MonoBehaviour
         currentToxicMineAmount--;
         yield return new WaitForSeconds(1f);
 
+        //SPAWN TOXIC MINE 
         for (int i = 0; i < numberOfToxicMines; i++)
         {
-            toxicMinePos = Instantiate(toxicMine, transform.position, Quaternion.identity); //spawn les mines 
-            toxicMinePos.transform.DOMove(new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f)), 3f); //envoie les mines dans tous les sens
-            toxicMinePosList.Add(toxicMinePos); //ajout de toutes les mines dans une liste
-
-            Destroy(toxicMinePos, 5f);
+            toxicMineObject = Instantiate(toxicMine, transform.position, Quaternion.identity); //spawn toxic mines
+            toxicMineObject.transform.DOMove(new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f)), 3f).SetEase(Ease.OutQuint); //send toxic mines everywhere
+            
+            toxicMineList.Add(toxicMineObject); //add toxic mines into the list
         }
-        Invoke(nameof(WarningToxicMine), 4.9f); //spawn les warning sur TOUS les transform de TOUTES les mines présentes dans la liste
+        
         yield return new WaitForSeconds(4f);
+
+        //SPAWN TOXIC MINE AREA WARNING
+        for (int i = 0; i < numberOfToxicMines; i++)
+        {
+            var toxicMineAreaWarningObject = Instantiate(toxicMineWarning, toxicMineList[i].transform.position, Quaternion.identity);
+            
+            //ADD LIST Mine Area Warning
+            toxicMineAreaWarningList.Add(toxicMineAreaWarningObject);
+        }
+        
+        foreach (var VARIABLE in toxicMineAreaWarningList)
+        {
+            Destroy(VARIABLE, 1f); //destroy toxic mine
+        }
+        
+        yield return new WaitForSeconds(1f);
+
+        //SPAWN TOXIC MINE AREA
+        for (int i = 0; i < numberOfToxicMines; i++)
+        {
+            var toxicMineAreaObject = Instantiate(toxicMineArea, toxicMineList[i].transform.position, Quaternion.identity);
+            
+            //ADD LIST Mine Area
+            toxicMineAreaList.Add(toxicMineAreaObject);
+        }
+        
+        foreach (var VARIABLE in toxicMineAreaList)
+        {
+            Destroy(VARIABLE, 1f); //destroy toxic mine area
+        }
+        
+        for (int i = 0; i < numberOfToxicMines; i++)
+        {
+            Destroy(toxicMineList[i].gameObject, 1f);
+        }
+        
+        //Clear toutes les list 
+        toxicMineAreaWarningList.Clear();
+        toxicMineAreaList.Clear();
+        toxicMineList.Clear();
+
+        yield return new WaitForSeconds(1f);
 
         if (currentToxicMineAmount > 0)
         {
@@ -399,15 +447,7 @@ public class BossStateManager : MonoBehaviour
         }
     }
 
-    void WarningToxicMine()
-    {
-        foreach (var VARIABLE in toxicMinePosList)
-        {
-            Instantiate(toxicMineWarning, VARIABLE.transform.position, Quaternion.identity);
-        }
-
-        toxicMinePosList.Clear();
-    }
+    
 
     #endregion
 

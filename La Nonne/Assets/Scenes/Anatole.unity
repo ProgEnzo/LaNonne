@@ -37688,9 +37688,12 @@ MonoBehaviour:
   takingDamage: 1
   numberOfSpawn: 5
   transitionCooldown: 15
-  toxicMinePosList: []
+  toxicMineList: []
+  toxicMineAreaWarningList: []
+  toxicMineAreaList: []
   toxicMine: {fileID: 4656905889621561962, guid: cb6ee878049cac944a1bf2471efb45d5, type: 3}
   toxicMineWarning: {fileID: 7668595343999760947, guid: 6570a0989bc5f4f4ea9bcaf9d07b3c37, type: 3}
+  toxicMineArea: {fileID: 7668595343999760947, guid: 1de9f9cb31000914583da39d2d0b5270, type: 3}
   numberOfToxicMines: 15
   toxicMineAmount: 2
   currentToxicMineAmount: 2
