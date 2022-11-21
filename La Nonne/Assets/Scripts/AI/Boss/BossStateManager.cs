@@ -390,17 +390,17 @@ public class BossStateManager : MonoBehaviour
         currentThrowAmount--;
         yield return new WaitForSeconds(1f);
 
-        var slugObject = Instantiate(slug, Vector3.one, Quaternion.identity);
+        var slugObject = Instantiate(slug, new Vector2(Random.Range(0, 5), Random.Range(0, 5)), Quaternion.identity);
         
-        if (currentVacuumAmount > 0)
+        if (currentThrowAmount > 0)
         {
             StartCoroutine(Throwing());
         }
-        else if(currentVacuumAmount == 0)
+        else if(currentThrowAmount == 0)
         {
-            var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
-            
-            SwitchState(nextState);
+            // var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+            //
+            // SwitchState(nextState);
         }
     }
 
