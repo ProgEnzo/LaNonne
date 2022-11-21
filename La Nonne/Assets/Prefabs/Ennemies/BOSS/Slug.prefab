@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5399778970430523503}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.3, y: 1.32, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -51,7 +51,7 @@ MonoBehaviour:
   numberOfBullets: 5
   bulletSpeed: 5
   dashAmount: 4
-  massReduction: 0.2
+  massReduction: 0.4
   bulletMassReduction: 0.1
 --- !u!212 &5399778970430524304
 SpriteRenderer:
