@@ -20,7 +20,6 @@ namespace AI.Elite
         [SerializeField] public bool blinkExecuted;
 
         [Header("Enemy Components")]
-        public PlayerController playerController;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
 
@@ -34,12 +33,6 @@ namespace AI.Elite
             //Zones de heal / dégâts
             circle.enabled = false;
             circleSprite.SetActive(false);
-        }
-
-        private void Awake()
-        {
-            //Assignation du script au prefab ON SPAWN
-            playerController = PlayerController.instance;
         }
 
         protected override void Update()

@@ -52,11 +52,8 @@ namespace AI.Elite
             base.Update();
             EnemyDeath();
             
-            //Accès à la variable statique du PlayerController
-            var playerRef = PlayerController.instance;
-            
             //Initialisation de variables locales pour l'optimisation
-            var playerPosition = playerRef.transform.position; //Position du joueur
+            var playerPosition = playerController.transform.position; //Position du joueur
             var transform1 = transform;
             var position = transform1.position; //Position du pyromane
             var projectile = transform1.GetChild(0).gameObject;
@@ -170,11 +167,8 @@ namespace AI.Elite
         
         private IEnumerator FireDamage()
         {
-            //Accès à la variable statique du PlayerController
-            var playerRef = PlayerController.instance;
-            
             StartCoroutine(PlayerIsHit());
-            playerRef.TakeDamage(soEnemy.bodyDamage);
+            playerController.TakeDamage(soEnemy.bodyDamage);
             yield return new WaitForSeconds(1f);
             currentHittingCoroutine = null;
         }
@@ -187,7 +181,6 @@ namespace AI.Elite
             circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle
             
             //Dégâts de feu
-            var playerRef = PlayerController.instance;
             var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'explosion
             Physics2D.CircleCast(transform.position, explosionRadius, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
             if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
@@ -195,7 +188,7 @@ namespace AI.Elite
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
                 {
                     StartCoroutine(PlayerIsHit());
-                    playerRef.TakeDamage(soEnemy.bodyDamage); //Le joueur prend des dégâts
+                    playerController.TakeDamage(soEnemy.bodyDamage); //Le joueur prend des dégâts
                 }
             }
             

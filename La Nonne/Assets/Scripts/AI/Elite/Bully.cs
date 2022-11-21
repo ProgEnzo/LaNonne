@@ -14,13 +14,9 @@ namespace AI.Elite
         [SerializeField] private int bullyDamage;
         [SerializeField] private float knockbackPower;
 
-        [Header("Enemy Components")]
-        public PlayerController playerController;
-
         private void Awake()
         {
             //Assignation du script au prefab ON SPAWN
-            playerController = PlayerController.instance;
             GetComponent<AIDestinationSetter>().target = playerController.transform;
         }
         

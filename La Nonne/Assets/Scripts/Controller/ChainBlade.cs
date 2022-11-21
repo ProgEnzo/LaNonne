@@ -27,6 +27,9 @@ namespace Controller
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+        private int attackDirectionState;
+        private float playerScale;
+        private float localStateMult;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
@@ -42,6 +45,7 @@ namespace Controller
             transform.GetChild(0).gameObject.SetActive(false);
             transform.GetChild(1).gameObject.SetActive(false);
             isHitting = false;
+            playerScale = playerController.transform.localScale.x;
         }
 
         // Update is called once per frame
@@ -62,12 +66,30 @@ namespace Controller
         {
             if (Input.GetMouseButtonDown(1) && !isHitting && soController.epAmount >= epCost)
             {
-                AnimationControllerBool(IsAttacking);
                 soController.epAmount -= epCost;
                 Vector3 newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
                 Quaternion newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
+                attackDirectionState = newRotation.eulerAngles.z switch
+                {
+                    >= 45 and <= 135 => 2,
+                    >= 225 and <= 315 => 2,
+                    >= 0 and < 45 or > 315 and < 360 => 1,
+                    > 135 and < 225 => 0,
+                    _ => 0
+                };
+                localStateMult = newRotation.eulerAngles.z switch
+                {
+                    >= 45 and <= 135 => -1,
+                    >= 225 and <= 315 => 1,
+                    >= 0 and < 45 or > 315 and < 360 => 1,
+                    > 135 and < 225 => 1,
+                    _ => 1
+                };
+                playerController.transform.localScale = new Vector3(playerScale * localStateMult, playerController.transform.localScale.y, playerController.transform.localScale.z);
+                playerController.transform.GetChild(0).localScale = new Vector3(1,  1 * localStateMult, 1);
+                AnimationControllerBool(attackDirectionState, IsAttacking);
                 initialRotation = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
                 finalRotation = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
                 transform.rotation = initialRotation;
@@ -85,24 +107,24 @@ namespace Controller
                 {
                     isHitting = false;
                     transform.GetChild(0).gameObject.SetActive(false);
-                    transform.GetChild(1).gameObject.SetActive(false);
-                    AnimationManagerBool(IsAttacking, false);
+                    transform.GetChild(1).gameObject.SetActive(false);;
+                    AnimationManagerBool(attackDirectionState, IsAttacking, false);
+                    playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                 }
             }
         }
         
-        private void AnimationControllerBool(int parameterToChange)
+        private void AnimationControllerBool(int directionState, int parameterToChange)
         {
-            AnimationManagerBool(parameterToChange, true);
+            AnimationManagerBool(directionState, parameterToChange, true);
             StartCoroutine(playerController.CanChangeCoroutine());
         }
         
-        private void AnimationManagerBool(int parameterToChange, bool value)
+        private void AnimationManagerBool(int directionState, int parameterToChange, bool value)
         {
             if (parameterToChange  == IsAttacking)
             {
-                playerController.AnimationManagerSwitch(playerController.currentAnimPrefabAnimator.GetInteger(DirectionState),
-                    playerController.currentAnimPrefabAnimator.GetInteger(MovingState), value);
+                playerController.AnimationManagerSwitch(directionState, playerController.currentAnimPrefabAnimator.GetInteger(MovingState), value);
             }
 
             foreach (var prefab in playerController.animPrefabs.Where(prefab => prefab != playerController.currentAnimPrefab))

@@ -1,3 +1,4 @@
+using System;
 using Controller;
 using UnityEngine;
 
@@ -5,7 +6,6 @@ namespace AI.Elite
 {
     public class Autophagic : EnemyController
     {
-        private PlayerController playerController;
         [SerializeField] private float detectionRadius;
         [SerializeField] private float autoDamagePart;
         [SerializeField] private float maxTimer;
@@ -15,6 +15,8 @@ namespace AI.Elite
         protected override void Update()
         {
             base.Update();
+            EnemyDeath();
+            
             if (!isActivated)
             {
                 var distanceToPlayer = Vector2.Distance(playerController.transform.position, transform.position);
