@@ -26,7 +26,6 @@ namespace AI.Elite
         [SerializeField] public GameObject caretaker;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
-        [HideInInspector] public PlayerController playerController;
         
         protected override void Start()
         {
@@ -40,12 +39,6 @@ namespace AI.Elite
             StartCoroutine(EnemyDeath());
 
             CircleTimer();
-        }
-
-        private void Awake()
-        {
-            //Assignation du script playerController au prefab ON SPAWN
-            playerController = PlayerController.instance;
         }
 
         private void OnTriggerEnter2D(Collider2D col)

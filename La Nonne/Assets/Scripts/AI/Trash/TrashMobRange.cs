@@ -23,12 +23,6 @@ namespace AI.Trash
         [Header("Enemy Components")]
         private AIPath scriptAIPath;
         [SerializeField] private GameObject bulletPrefab;
-        public PlayerController playerController;
-
-        private void Awake()
-        {
-            playerController = PlayerController.instance;
-        }
 
         protected override void Start()
         {

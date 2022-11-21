@@ -9,6 +9,7 @@ namespace AI
 {
     public class EnemyController : MonoBehaviour
     {
+        protected PlayerController playerController;
         [SerializeField] protected SO_Enemy soEnemy;
         [SerializeField] public float currentHealth;
 
@@ -19,19 +20,19 @@ namespace AI
         protected virtual void Start()
         {
             aiPathComponent = GetComponent<AIPath>();
-            var playerRef = PlayerController.instance;
+            playerController = PlayerController.instance;
             currentHealth = soEnemy.maxHealth;
-            GetComponent<AIDestinationSetter>().target = playerRef.transform;
+            GetComponent<AIDestinationSetter>().target = playerController.transform;
             isStunned = false;
         }
         
         protected virtual void Update()
         {
-            var playerRef = PlayerController.instance;
+            playerController = PlayerController.instance;
             PlayerSpriteRenderers.Clear();
-            for (var i = 0; i < playerRef.transform.childCount; i++)
+            for (var i = 0; i < playerController.transform.childCount; i++)
             {
-                if (playerRef.transform.GetChild(i).TryGetComponent(out SpriteRenderer spriteRenderer))
+                if (playerController.transform.GetChild(i).TryGetComponent(out SpriteRenderer spriteRenderer))
                 {
                     PlayerSpriteRenderers.Add(spriteRenderer);
                 }

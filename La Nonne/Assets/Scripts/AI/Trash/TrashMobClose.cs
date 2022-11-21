@@ -10,9 +10,6 @@ namespace AI.Trash
         [Header("Enemy Attack")]
         [SerializeField] private float knockbackPower;
 
-        [Header("Enemy Components")]
-        public PlayerController playerController;
-
         protected override void Update()
         {
             base.Update();
