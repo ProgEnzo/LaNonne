@@ -47,9 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727663e94a146d8489bbca1e0400b707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfBullets: 5
-  bulletSpeed: 50
   slugBullet: {fileID: 6827132699127361376, guid: c74315c65598c374cb005c710a176d75, type: 3}
+  numberOfBullets: 5
+  bulletSpeed: 5
+  dashAmount: 4
+  massReduction: 0.2
+  bulletMassReduction: 0.1
 --- !u!212 &5399778970430524304
 SpriteRenderer:
   m_ObjectHideFlags: 0

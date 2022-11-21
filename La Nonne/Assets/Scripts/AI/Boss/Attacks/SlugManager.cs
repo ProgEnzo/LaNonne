@@ -1,21 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class SlugManager : MonoBehaviour
 {
+    private PlayerController player;
+    public GameObject slugBullet;
+
     public int numberOfBullets;
     public float bulletSpeed;
+    public int dashAmount;
+    public float massReduction;
+    public float bulletMassReduction;
 
-    public GameObject slugBullet;
     private void Start()
     {
+        player = PlayerController.instance;
+
         GoToNextPoint();
     }
-
     void GoToNextPoint()
     {
         StartCoroutine(Go());
@@ -23,17 +30,36 @@ public class SlugManager : MonoBehaviour
 
     private IEnumerator Go()
     {
-        transform.DOMove(new Vector2(Random.Range(3f, 6f), Random.Range(3f, 6f)), 3f).OnComplete(GoToNextPoint);
+        dashAmount--;
+        bulletMassReduction += 0.2f;
+        
+        //NE FONCTIONNE PAS WITH OTHER COLLIDERS
+        transform.DOMove(new Vector2(Random.Range(3f, 6f), Random.Range(3f, 6f)), 3f);
         yield return new WaitForSeconds(3f);
+
+        var localScaleProj = slugBullet.transform.localScale;
 
         for (int i = 0; i < numberOfBullets; i++)
         {
-            var slugBulletObject = Instantiate(slugBullet, transform.position, Quaternion.identity);
-            slugBulletObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(0f, 360f), Random.Range(3f, 6f)) * bulletSpeed);
-
+            var slugBulletObject = Instantiate(slugBullet, transform.position, Quaternion.identity); //spawn slug
+            slugBulletObject.transform.localScale += localScaleProj - new Vector3(bulletMassReduction, bulletMassReduction, 0); //reduction masse bullet
+            
+            var direction = player.transform.position - transform.position;
+            slugBulletObject.GetComponent<Rigidbody2D>().AddForce(direction * new Vector2(Random.Range(5f, 10f), Random.Range(5f, 10f)) * bulletSpeed); //bullet goes to player
+            Destroy(slugBulletObject, 3f);
         }
 
+        transform.DOScale(new Vector2(transform.localScale.x - massReduction, transform.localScale.y - massReduction), 0.5f).SetEase(Ease.OutBounce);
+        yield return new WaitForSeconds(1f);
 
+        if (dashAmount > 0)
+        {
+            StartCoroutine(Go());
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
     }
 }
