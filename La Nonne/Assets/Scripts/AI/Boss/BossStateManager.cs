@@ -91,6 +91,11 @@ public class BossStateManager : MonoBehaviour
     public int throwAmount;
     public int currentThrowAmount;
 
+    private void Awake()
+    {
+        GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
+    }
+
     void Start()
     {
         currentState = ToxicMineState; //starting state for the boss state machine
@@ -392,7 +397,7 @@ public class BossStateManager : MonoBehaviour
             toxicMineList.Add(toxicMineObject); //add toxic mines into the list
         }
         
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
 
         //SPAWN TOXIC MINE AREA WARNING
         for (int i = 0; i < numberOfToxicMines; i++)
