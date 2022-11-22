@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2389888792811269880}
   - component: {fileID: 2389888792811269883}
   - component: {fileID: 378485306}
+  - component: {fileID: 5533253443611567255}
   m_Layer: 15
   m_Name: ActivateBOSS
   m_TagString: Untagged
@@ -50,6 +51,20 @@ CircleCollider2D:
   serializedVersion: 2
   m_Radius: 8
 --- !u!114 &378485306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389888792811269881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8398feaeaed10a641be9faffffbdf8da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boss: {fileID: 0}
+  bossAIDestinationSetter: {fileID: 0}
+--- !u!114 &5533253443611567255
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,7 +138,7 @@ MonoBehaviour:
   - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
   hpBossSlider: {fileID: 0}
   currentHealth: 100
-  maxHealth: 1000
+  maxHealth: 2000
   normalSpeed: 2
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   bodyDamage: 20

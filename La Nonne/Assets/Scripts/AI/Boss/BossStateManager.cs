@@ -93,7 +93,7 @@ public class BossStateManager : MonoBehaviour
 
     private void Awake()
     {
-        
+      
     }
 
     void Start()

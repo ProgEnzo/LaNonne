@@ -589,25 +589,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319088002}
   m_CullTransparentMesh: 1
---- !u!1 &378485303 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2389888792811269881, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
-  m_PrefabInstance: {fileID: 1951201965}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &378485306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 378485303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8398feaeaed10a641be9faffffbdf8da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boss: {fileID: 0}
-  bossAIDestinationSetter: {fileID: 0}
 --- !u!1 &431778753
 GameObject:
   m_ObjectHideFlags: 0
@@ -110467,10 +110448,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2389888792811269881, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 9006283483999273122, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -110519,22 +110496,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BOSS
       objectReference: {fileID: 0}
-    - target: {fileID: 9006283483999273135, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
       propertyPath: vCamPlayer
       value: 
       objectReference: {fileID: 1656192450}
-    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
-      propertyPath: hpBossSlider
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
 --- !u!1 &1973999741
