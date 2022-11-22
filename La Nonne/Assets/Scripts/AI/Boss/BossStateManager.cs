@@ -21,7 +21,7 @@ public class BossStateManager : MonoBehaviour
     public BossTransitionState TransitionState = new BossTransitionState();
 
     public Rigidbody2D rb;
-    public PlayerController player;
+    private PlayerController player;
     public AIPath bossAI;
     
     //LIST
@@ -93,12 +93,15 @@ public class BossStateManager : MonoBehaviour
 
     private void Awake()
     {
-        GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
+        
     }
 
     void Start()
     {
-        currentState = ToxicMineState; //starting state for the boss state machine
+        player = PlayerController.instance;
+        gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
+
+        currentState = DashingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
@@ -357,7 +360,9 @@ public class BossStateManager : MonoBehaviour
         for (int i = 0; i < numberOfSpawn; i++)
         {
             yield return new WaitForSeconds(0.3f);
-            var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(Random.Range(0, 5), Random.Range(0, 5)), Quaternion.identity);
+            
+            var posBossBeforeSpawn = transform.position; //get la pos du boss
+            var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
         }
         yield return new WaitForSeconds(1f);
 
@@ -391,13 +396,15 @@ public class BossStateManager : MonoBehaviour
         //SPAWN TOXIC MINE 
         for (int i = 0; i < numberOfToxicMines; i++)
         {
-            toxicMineObject = Instantiate(toxicMine, transform.position, Quaternion.identity); //spawn toxic mines
-            toxicMineObject.transform.DOMove(new Vector2(Random.Range(-5f, 5f), Random.Range(-5f, 5f)), 3f).SetEase(Ease.OutQuint); //send toxic mines everywhere
+            var posBossBeforeSpawn = transform.position; //get la pos du boss 
+            
+            toxicMineObject = Instantiate(toxicMine, posBossBeforeSpawn, Quaternion.identity); //spawn toxic mines
+            toxicMineObject.transform.DOMove(new Vector2(posBossBeforeSpawn.x + Random.Range(-5f, 5f),posBossBeforeSpawn.y +  Random.Range(-5f, 5f)), 1.5f).SetEase(Ease.OutQuint); //send toxic mines everywhere
             
             toxicMineList.Add(toxicMineObject); //add toxic mines into the list
         }
         
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1.5f);
 
         //SPAWN TOXIC MINE AREA WARNING
         for (int i = 0; i < numberOfToxicMines; i++)
@@ -470,7 +477,8 @@ public class BossStateManager : MonoBehaviour
         currentThrowAmount--;
         yield return new WaitForSeconds(1f);
 
-        var slugObject = Instantiate(slug, transform.position, Quaternion.identity);
+        var posBossBeforeSpawn = transform.position; //get la pos du boss 
+        var slugObject = Instantiate(slug, new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
 
         yield return new WaitForSeconds(8f);
         
