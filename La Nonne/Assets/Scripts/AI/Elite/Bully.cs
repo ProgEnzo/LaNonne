@@ -13,6 +13,12 @@ namespace AI.Elite
         [Header("Enemy Attack")]
         [SerializeField] private int bullyDamage;
         [SerializeField] private float knockbackPower;
+
+        private void Awake()
+        {
+            //Assignation du script au prefab ON SPAWN
+            GetComponent<AIDestinationSetter>().target = playerController.transform;
+        }
         
         protected override void Update()
         {

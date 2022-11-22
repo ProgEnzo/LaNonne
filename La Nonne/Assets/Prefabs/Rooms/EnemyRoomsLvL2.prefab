@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5068190748374987145}
+  - component: {fileID: 49358237}
   m_Layer: 0
   m_Name: EnemyRoomsLvL2
   m_TagString: Untagged
@@ -31,3 +32,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &49358237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7022380931974592965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6266878fcaa21743b4ec1504ed17f20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
+  enemyPlacementData:
+  - minQuantity: 1
+    maxQuantity: 1
+    enemyPrefab: {fileID: 9071314407910337641, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}
+    enemySize: {x: 1, y: 1}
+    bossSize: {x: 1, y: 1}
+  itemData: []
