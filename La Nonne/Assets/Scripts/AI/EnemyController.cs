@@ -22,7 +22,10 @@ namespace AI
             aiPathComponent = GetComponent<AIPath>();
             playerController = PlayerController.instance;
             currentHealth = soEnemy.maxHealth;
-            GetComponent<AIDestinationSetter>().target = playerController.transform;
+            if (GetComponent<AIDestinationSetter>() != null)
+            {
+                GetComponent<AIDestinationSetter>().target = playerController.transform;
+            }
             isStunned = false;
         }
         
