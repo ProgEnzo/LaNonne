@@ -486,4 +486,21 @@ public class BossStateManager : MonoBehaviour
     }
 
     #endregion
+
+    #region BoxingState
+
+    public void BoxingManager()
+    {
+        StartCoroutine(Boxing());
+        Debug.Log($"<color=red>BOXING STATE HAS BEGUN</color>");
+
+    }
+
+    private IEnumerator Boxing()
+    {
+        
+        yield return new WaitForSeconds(1f);
+    }
+
+    #endregion
 }
