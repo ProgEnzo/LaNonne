@@ -33,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 5813854497670849624}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -44.166, y: 46.214005, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2.2599502}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -51,12 +51,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea927aaacea1f06468d6ce92b9cd5729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soEnemy: {fileID: 11400000, guid: 64aed33986fc5ff4ba0fe14bfa4249f3, type: 2}
   currentHealth: 100
+  isStunned: 0
   bullyDamage: 20
   knockbackPower: 50
-  playerController: {fileID: 0}
-  soEnemy: {fileID: 11400000, guid: 64aed33986fc5ff4ba0fe14bfa4249f3, type: 2}
-  isStunned: 0
 --- !u!212 &5813854497670849601
 SpriteRenderer:
   m_ObjectHideFlags: 0

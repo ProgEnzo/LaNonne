@@ -34,7 +34,7 @@ Transform:
   m_GameObject: {fileID: 6272501254927288805}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -56.28, y: 50.350002, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 5}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6272501255602388927}
@@ -53,7 +53,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2dd2e38e18d7a43a2f6a5903a0c9fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soEnemy: {fileID: 11400000, guid: df8a88526cafc9f4f8cb5e0ac56aae0a, type: 2}
   currentHealth: 100
+  isStunned: 0
   circleDamage: 20
   bodyDamage: 20
   healAmount: 50
@@ -62,14 +64,9 @@ MonoBehaviour:
   timeBetweenCircleSpawn: 1
   attackRange: 5
   blinkExecuted: 0
-  playerController: {fileID: 0}
-  soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
   circle: {fileID: 6272501254927288816}
   circleSprite: {fileID: 6272501255602388926}
-  player: {fileID: 0}
-  soEnemy: {fileID: 11400000, guid: df8a88526cafc9f4f8cb5e0ac56aae0a, type: 2}
   y: []
-  isStunned: 0
 --- !u!212 &6272501254927288828
 SpriteRenderer:
   m_ObjectHideFlags: 0

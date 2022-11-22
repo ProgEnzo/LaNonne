@@ -33,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 9071314407910337641}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 31.1, y: -8.05, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 5}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -53,15 +53,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soEnemy: {fileID: 11400000, guid: 3d266add0c81b1e4b96d5eb236504880, type: 2}
   currentHealth: 100
+  isStunned: 0
   distanceToPlayer: 0
   shootingRange: 4.5
   aggroRange: 10
   cooldownBetweenShots: 1
   bulletSpeed: 2
   knockbackBody: 50
-  player: {fileID: 0}
   bulletPrefab: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
-  playerController: {fileID: 0}
 --- !u!114 &9071314407910337632
 MonoBehaviour:
   m_ObjectHideFlags: 0

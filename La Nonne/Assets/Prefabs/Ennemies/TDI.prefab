@@ -34,7 +34,7 @@ Transform:
   m_GameObject: {fileID: 1280591066966374502}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -41.28, y: 51.47, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 5}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2031974246127490172}
@@ -55,6 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soEnemy: {fileID: 11400000, guid: bd11d4348b38d80479def3fd9e4a72b8, type: 2}
   currentHealth: 200
+  isStunned: 0
   bodyDamage: 20
   bodyKnockback: 50
   circleDamage: 20
@@ -66,7 +67,6 @@ MonoBehaviour:
   caretaker: {fileID: 6272501254927288805, guid: 095c4a11c967334409514fd419e7921e, type: 3}
   circle: {fileID: 1280591066966374491}
   circleSprite: {fileID: 2031974246127490173}
-  playerController: {fileID: 0}
 --- !u!212 &1280591066966374509
 SpriteRenderer:
   m_ObjectHideFlags: 0
