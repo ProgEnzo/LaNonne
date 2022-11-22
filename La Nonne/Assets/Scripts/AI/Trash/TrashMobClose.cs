@@ -10,12 +10,6 @@ namespace AI.Trash
         [Header("Enemy Attack")]
         [SerializeField] private float knockbackPower;
 
-        protected override void Update()
-        {
-            base.Update();
-            EnemyDeath();
-        }
-
         private void OnCollisionEnter2D(Collision2D col) 
         {
             //Si le TrashMobClose touche le player

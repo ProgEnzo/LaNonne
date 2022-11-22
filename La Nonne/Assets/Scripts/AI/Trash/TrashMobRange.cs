@@ -33,7 +33,6 @@ namespace AI.Trash
         protected override void Update()
         {
             base.Update();
-            EnemyDeath();
 
             if (!isStunned)
             {

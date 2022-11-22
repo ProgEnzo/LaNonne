@@ -35,12 +35,6 @@ namespace AI.Elite
             circleSprite.SetActive(false);
         }
 
-        protected override void Update()
-        {
-            base.Update();
-            EnemyDeath();
-        }
-
         private void OnTriggerEnter2D(Collider2D col)
         {
             if (!isStunned)

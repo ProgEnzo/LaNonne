@@ -277,7 +277,8 @@ namespace Controller
         #endregion
 
         #region AttackPlayer
-        void RevealingDash()
+
+        private void RevealingDash()
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) && !isHitting && soController.epAmount >= revealingDashEpCost && revealingDashTimerCount <= 0)
             {
@@ -330,7 +331,8 @@ namespace Controller
         {
             enemy.GetComponent<EnemyController>().isStunned = true;
             yield return new WaitForSeconds(stunDuration);
-            if (enemy) yield break;
+            Debug.Log(enemy);
+            if (!enemy) yield break;
             enemy.GetComponent<EnemyController>().isStunned = false;
         }
         #endregion

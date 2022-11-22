@@ -14,18 +14,6 @@ namespace AI.Elite
         [SerializeField] private int bullyDamage;
         [SerializeField] private float knockbackPower;
 
-        private void Awake()
-        {
-            //Assignation du script au prefab ON SPAWN
-            GetComponent<AIDestinationSetter>().target = playerController.transform;
-        }
-        
-        protected override void Update()
-        {
-            base.Update();
-            EnemyDeath();
-        }
-
         private void OnCollisionEnter2D(Collision2D col) 
         {
             //Si le bully touche le player

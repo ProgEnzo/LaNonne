@@ -50,7 +50,6 @@ namespace AI.Elite
         protected override void Update()
         {
             base.Update();
-            EnemyDeath();
             
             //Initialisation de variables locales pour l'optimisation
             var playerPosition = playerController.transform.position; //Position du joueur
@@ -59,14 +58,6 @@ namespace AI.Elite
             var projectile = transform1.GetChild(0).gameObject;
             var projectileScript = projectile.GetComponent<PyromaniacProjectile>();
             var projectilePosition = projectile.transform.position; //Position du projectile
-
-            if (isStunned)
-            {
-                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                isDashing = false;
-                isImpactOn = false;
-                canBoxCast = false;
-            }
             
             //Tant que le projectile n'a pas explosé
             if (!projectileScript.isExploded)
@@ -217,6 +208,14 @@ namespace AI.Elite
             else
             {
                 scriptAIPath.enabled = false;
+            }
+
+            if (isStunned)
+            {
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                isDashing = false;
+                isImpactOn = false;
+                canBoxCast = false;
             }
         }
 

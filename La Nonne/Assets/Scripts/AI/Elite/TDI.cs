@@ -1,5 +1,4 @@
 using System.Collections;
-using AI.Trash;
 using Controller;
 using DG.Tweening;
 using Unity.Mathematics;
@@ -36,7 +35,6 @@ namespace AI.Elite
         protected override void Update()
         {
             base.Update();
-            StartCoroutine(EnemyDeath());
 
             CircleTimer();
         }
@@ -74,7 +72,13 @@ namespace AI.Elite
         }
 
         #region HealthEnemy
-        private new IEnumerator EnemyDeath()
+        public override void TakeDamageFromPlayer(int damage)
+        {
+            currentHealth -= damage;
+            StartCoroutine(Split());
+        }
+        
+        private IEnumerator Split()
         {
             if (!(currentHealth <= 50)) yield break;
             transform.DOScale(new Vector3(3, 0, 3), 0.1f);

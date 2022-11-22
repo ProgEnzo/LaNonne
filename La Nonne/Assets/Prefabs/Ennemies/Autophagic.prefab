@@ -51,12 +51,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soEnemy: {fileID: 11400000, guid: b20d13ab50ca57540af421c040fca443, type: 2}
   currentHealth: 0
+  isStunned: 0
   detectionRadius: 10
   autoDamagePart: 0.05
-  maxTimer: 0.5
-  avoidedAngle: 90
+  maxTimer: 1
+  avoidedAngle: 180
   destinationMinRangeValue: 5
   destinationMaxRangeValue: 10
+  stunBarMaxDamages: 20
+  stunBarDuration: 3
 --- !u!212 &5813854497670849601
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -153,7 +156,7 @@ MonoBehaviour:
   radius: 2
   height: 1.89
   canMove: 1
-  maxSpeed: 4
+  maxSpeed: 7
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2

@@ -13,7 +13,7 @@ namespace AI
         [SerializeField] protected SO_Enemy soEnemy;
         [SerializeField] public float currentHealth;
 
-        [NonSerialized] public bool isStunned;
+        /*[NonSerialized]*/ public bool isStunned;
         private AIPath aiPathComponent;
         private static readonly List<SpriteRenderer> PlayerSpriteRenderers = new();
 
@@ -46,9 +46,10 @@ namespace AI
         }
         
         #region HealthEnemy
-        public void TakeDamageFromPlayer(int damage)
+        public virtual void TakeDamageFromPlayer(int damage)
         {
             currentHealth -= damage;
+            EnemyDeath();
         }
 
         protected void EnemyDeath()
@@ -71,6 +72,7 @@ namespace AI
         protected virtual void StunCheck()
         {
             aiPathComponent.enabled = !isStunned;
+            
         }
 
         protected internal static IEnumerator PlayerIsHit()
