@@ -31,7 +31,7 @@ public class BossStateManager : MonoBehaviour
     public List<GameObject> spawnerList = new List<GameObject>();
 
     [Header("Overall Stats")]
-    public Slider hpBossSlider;
+    [SerializeField] private Slider hpBossSlider;
     public int currentHealth;
     public int maxHealth;
     public float normalSpeed;
@@ -98,6 +98,7 @@ public class BossStateManager : MonoBehaviour
 
     void Start()
     {
+        hpBossSlider = GameObject.FindGameObjectWithTag("Boss HealthBar").GetComponent<Slider>();
         player = PlayerController.instance;
         gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
 
