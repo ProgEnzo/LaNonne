@@ -10,13 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 2389888792811269880}
   - component: {fileID: 2389888792811269883}
+  - component: {fileID: 378485306}
   m_Layer: 15
   m_Name: ActivateBOSS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2389888792811269880
 Transform:
   m_ObjectHideFlags: 0
@@ -48,6 +49,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 8
+--- !u!114 &378485306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389888792811269881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8398feaeaed10a641be9faffffbdf8da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boss: {fileID: 0}
+  bossAIDestinationSetter: {fileID: 0}
 --- !u!1 &9006283483999273123
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +110,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9006283483999273123}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aaa4db4eb1a1ea74eb89d5b19ec4f81a, type: 3}
   m_Name: 
@@ -108,7 +123,7 @@ MonoBehaviour:
   - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
   hpBossSlider: {fileID: 0}
   currentHealth: 100
-  maxHealth: 500
+  maxHealth: 1000
   normalSpeed: 2
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   bodyDamage: 20
@@ -144,8 +159,8 @@ MonoBehaviour:
   toxicMineAmount: 2
   currentToxicMineAmount: 2
   slug: {fileID: 5399778970430523503, guid: d78ff8a45bd3fe14786cf5fdeb4b43e8, type: 3}
-  throwAmount: 1
-  currentThrowAmount: 1
+  throwAmount: 2
+  currentThrowAmount: 2
 --- !u!212 &9006283483999273128
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -275,7 +290,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9006283483999273123}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9679e68a0f1144e79c664d9a11ca121, type: 3}
   m_Name: 
