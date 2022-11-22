@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f789f89a3b2438e91c0c2698866c22f, type: 3}
+  m_Name: Explosif
+  m_EditorClassIdentifier: 
+  WeaponName: Whip Chain - Explosif
+  cost: 50
+  description: "L'attaque provoque une explosion \xE0 l'impact qui touche les ennemis
+    autour de la cible."
+  rateOfDamage: 0.5
+  damage: 10
+  radius: 25
+  coolDown: 2
+  epDropRate: 5
+  movementSpeed: 10
