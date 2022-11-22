@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2389888792811269880
 Transform:
   m_ObjectHideFlags: 0
@@ -101,13 +101,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 9006283483999273132}
-  player: {fileID: 0}
   bossAI: {fileID: 9006283483999273134}
   spawnerList:
   - {fileID: 9071314407910337641, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}
   - {fileID: 1593806974005075729, guid: 358aa556e8a060a4a9b452adb90fb974, type: 3}
   - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
-  - {fileID: 1280591066966374502, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
   hpBossSlider: {fileID: 0}
   currentHealth: 100
   maxHealth: 500
@@ -134,7 +132,7 @@ MonoBehaviour:
   currentVacuumAmount: 3
   vCamPlayer: {fileID: 0}
   takingDamage: 1
-  numberOfSpawn: 5
+  numberOfSpawn: 3
   transitionCooldown: 15
   toxicMineList: []
   toxicMineAreaWarningList: []

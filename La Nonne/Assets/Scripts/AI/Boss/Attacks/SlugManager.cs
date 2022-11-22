@@ -33,10 +33,9 @@ public class SlugManager : MonoBehaviour
         
         dashAmount--;
         bulletMassReduction += 0.2f;
-        var directionDash = player.transform.position - transform.position;
+        var directionDash = transform.position;
         
-        //NE FONCTIONNE PAS WITH OTHER COLLIDERS
-        transform.DOMove(directionDash, 3f);
+        transform.DOMove(new Vector2(directionDash.x + Random.Range(-5f, 5f),directionDash.y +  Random.Range(-5f, 5f)), 3f);
         yield return new WaitForSeconds(3f);
 
         var localScaleProj = slugBullet.transform.localScale;
@@ -47,6 +46,7 @@ public class SlugManager : MonoBehaviour
             slugBulletObject.transform.localScale += localScaleProj - new Vector3(bulletMassReduction, bulletMassReduction, 0); //reduction masse bullet
             
             var direction = player.transform.position - transform.position;
+            
             slugBulletObject.GetComponent<Rigidbody2D>().AddForce(direction * new Vector2(Random.Range(-5f, 10f), Random.Range(-5f, 10f)) * bulletSpeed); //bullet goes to player
             Destroy(slugBulletObject, 5f);
         }
