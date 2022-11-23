@@ -6,11 +6,18 @@ using UnityEngine.Rendering;
 
 public class ShopController : MonoBehaviour
 {
-   public GameObject shopPanel;
+   private GameObject shopPanel;
 
    private void Start()
    {
+      StartCoroutine(JeTeBaise());
+   }
+
+   private IEnumerator JeTeBaise()
+   {
       shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
+      yield return new WaitForSeconds(0.5f);
+      shopPanel.SetActive(false);
    }
 
    private void OnTriggerEnter2D(Collider2D col)
@@ -25,8 +32,9 @@ public class ShopController : MonoBehaviour
       Time.timeScale = 0;
    }
 
-   void CloseShop()
+   public void CloseShop()
    {
+      shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
       shopPanel.SetActive(false);
       Time.timeScale = 1;  
    }
