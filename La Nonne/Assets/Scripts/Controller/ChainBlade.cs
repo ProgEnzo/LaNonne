@@ -21,7 +21,6 @@ namespace Controller
         public Quaternion initialRotation;
         public Quaternion finalRotation;
         private Camera camera1;
-        public int epCost;
         private PlayerController playerController;
         private static readonly int CanChange = Animator.StringToHash("canChange");
         private static readonly int DirectionState = Animator.StringToHash("directionState");
@@ -30,6 +29,8 @@ namespace Controller
         private int attackDirectionState;
         private float playerScale;
         private float localStateMult;
+        [SerializeField] private float cooldownTime;
+        private float currentTime;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
@@ -46,6 +47,7 @@ namespace Controller
             transform.GetChild(1).gameObject.SetActive(false);
             isHitting = false;
             playerScale = playerController.transform.localScale.x;
+            currentTime = cooldownTime;
         }
 
         // Update is called once per frame
@@ -60,17 +62,18 @@ namespace Controller
             chainBoxCollider.offset = new Vector2(0, chainHitLength/parentLocalScaleX/2);
             bladeBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, bladeHitLength/parentLocalScaleX);
             bladeBoxCollider.offset = new Vector2(0, (chainHitLength+bladeHitLength/2)/parentLocalScaleX);
+            currentTime -= Time.deltaTime;
         }
 
         private void InquisitorialChain()
         {
-            if (Input.GetMouseButtonDown(1) && !isHitting && soController.epAmount >= epCost)
+            if (Input.GetMouseButtonDown(1) && !isHitting && currentTime <= 0)
             {
-                soController.epAmount -= epCost;
-                Vector3 newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+                currentTime = cooldownTime;
+                var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
-                Quaternion newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
+                var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
                 attackDirectionState = newRotation.eulerAngles.z switch
                 {
                     >= 45 and <= 135 => 2,

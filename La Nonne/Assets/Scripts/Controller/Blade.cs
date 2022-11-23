@@ -19,14 +19,12 @@ namespace Controller
         public BoxCollider2D boxCollider;
         public Quaternion finalRotation1;
         public Quaternion finalRotation2;
-        private Camera camera1;
         private PlayerController playerController;
         private static readonly int CanChange = Animator.StringToHash("canChange");
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
         private int attackDirectionState;
-        private float playerScale;
         private float localStateMult;
 
         public ChainBladeDamage chainBladeDamage;
@@ -37,13 +35,11 @@ namespace Controller
         private void Start()
         {
             playerController = PlayerController.instance;
-            camera1 = Camera.main;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
             lineRenderer.enabled = false;
             boxCollider.enabled = false;
             isHitting = false;
-            playerScale = playerController.transform.localScale.x;
         }
 
         // Update is called once per frame
@@ -60,29 +56,16 @@ namespace Controller
         {
             if (Input.GetMouseButtonDown(0) && !isHitting)
             {
-                var newDirection = camera1.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-                newDirection.z = 0;
-                newDirection.Normalize();
+                var newDirection = (playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.transform.localScale.x) switch
+                {
+                    (0, > 0 or < 0) => Vector2.down,
+                    (1, > 0 or < 0) => Vector2.up,
+                    (2, > 0) => Vector2.right,
+                    (2, < 0) => Vector2.left,
+                    _ => Vector2.right
+                };
                 var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
-                attackDirectionState = newRotation.eulerAngles.z switch
-                {
-                    >= 45 and <= 135 => 2,
-                    >= 225 and <= 315 => 2,
-                    >= 0 and < 45 or > 315 and < 360 => 1,
-                    > 135 and < 225 => 0,
-                    _ => 0
-                };
-                localStateMult = newRotation.eulerAngles.z switch
-                {
-                    >= 45 and <= 135 => -1,
-                    >= 225 and <= 315 => 1,
-                    >= 0 and < 45 or > 315 and < 360 => 1,
-                    > 135 and < 225 => 1,
-                    _ => 1
-                };
-                playerController.transform.localScale = new Vector3(playerScale * localStateMult, playerController.transform.localScale.y, playerController.transform.localScale.z);
-                playerController.transform.GetChild(0).localScale = new Vector3(1,  1 * localStateMult, 1);
-                AnimationControllerBool(attackDirectionState, IsAttacking);
+                AnimationControllerBool(IsAttacking);
                 finalRotation1 = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
                 finalRotation2 = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
                 transform.rotation = finalRotation2;
@@ -114,7 +97,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        AnimationManagerBool(attackDirectionState, IsAttacking, false);
+                        AnimationManagerBool(IsAttacking, false);
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                     }
                 }
@@ -137,17 +120,17 @@ namespace Controller
             }
         }
         
-        private void AnimationControllerBool(int directionState, int parameterToChange)
+        private void AnimationControllerBool(int parameterToChange)
         {
-            AnimationManagerBool(directionState, parameterToChange, true);
+            AnimationManagerBool(parameterToChange, true);
             StartCoroutine(playerController.CanChangeCoroutine());
         }
         
-        private void AnimationManagerBool(int directionState, int parameterToChange, bool value)
+        private void AnimationManagerBool(int parameterToChange, bool value)
         {
             if (parameterToChange  == IsAttacking)
             {
-                playerController.AnimationManagerSwitch(directionState, playerController.currentAnimPrefabAnimator.GetInteger(MovingState), value);
+                playerController.AnimationManagerSwitch(playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.currentAnimPrefabAnimator.GetInteger(MovingState), value);
             }
 
             foreach (var prefab in playerController.animPrefabs.Where(prefab => prefab != playerController.currentAnimPrefab))
