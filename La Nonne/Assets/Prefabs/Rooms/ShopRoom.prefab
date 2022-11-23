@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4209061577741649223}
   - component: {fileID: 8254994962805580812}
+  - component: {fileID: 4669910471305661622}
   m_Layer: 0
   m_Name: ShopRoom
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44,9 +45,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b3ababfb6fac947887781573349996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shopKeeper: {fileID: 6272501254927288805, guid: 095c4a11c967334409514fd419e7921e, type: 3}
+  shopKeeper: {fileID: 4378271069584297667, guid: 228a5840c7aba484580377d593d0ad83, type: 3}
   itemData:
   - minQuantity: 1
     maxQuantity: 5
     itemData: {fileID: 11400000, guid: 3793436cc813cda429901ebd28a09097, type: 2}
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
+--- !u!114 &4669910471305661622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4209061577741649222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8c70cbdbce7609449cd752fd2e40727, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopPanel: {fileID: 0}
