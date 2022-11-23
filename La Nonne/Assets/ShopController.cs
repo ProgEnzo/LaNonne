@@ -1,16 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class ShopController : MonoBehaviour
 {
    private GameObject shopPanel;
 
+   public RectTransform image;
+
    private void Start()
    {
       StartCoroutine(JeTeBaise());
+
+      //image.DORectTransformMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutFlash); Merci Mathieu je vais voir ca ce soir !!
    }
 
    private IEnumerator JeTeBaise()
