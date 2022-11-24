@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class ShopController : MonoBehaviour
 {
+   [Header("References")] 
    private GameObject shopPanel;
+   public Image image;
+   
+   private float timeToAccess = 0f;
 
-   public RectTransform image;
+   
 
    private void Start()
    {
@@ -26,16 +30,36 @@ public class ShopController : MonoBehaviour
       shopPanel.SetActive(false);
    }
 
-   private void OnTriggerEnter2D(Collider2D col)
+   /*private void OnTriggerEnter2D(Collider2D col)
    {
       if (col.gameObject.CompareTag("Player"))
          OpenShop();
+   }*/
+
+   private void Update()
+   {
+      OpenShop();
    }
 
-   void OpenShop()
+   public void OpenShop()
    {
-      shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
-      Time.timeScale = 0;
+      if (Input.GetKey(KeyCode.E))
+      {
+         timeToAccess += 0.1f;
+         image.DOFillAmount(timeToAccess, 1f);
+
+         if (timeToAccess == 0.5f)
+         {
+            shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
+            Time.timeScale = 0;
+         }
+      }
+
+      if (Input.GetKeyUp(KeyCode.E))
+      {
+         timeToAccess = 0f;
+      }
+      
    }
 
    public void CloseShop()
