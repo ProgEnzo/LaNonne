@@ -49,6 +49,7 @@ public class ShopController : MonoBehaviour
    {
       if (other.gameObject.CompareTag("Player"))
       {
+         image.DOFillAmount(0, 0f);
          shopCanvas.SetActive(false);
       }
    }
