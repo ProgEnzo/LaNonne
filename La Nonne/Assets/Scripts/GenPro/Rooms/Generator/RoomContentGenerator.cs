@@ -155,7 +155,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == 25)
+            if (DijkstraAlgorithm.distanceDictionary [shop] == 22)
             {
                 shopRoomPosition = shop;
                 
@@ -175,7 +175,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 25) //25 étant la longueur des couloirs ou "corridors Length" dans l'IDE
+            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 22) //25 étant la longueur des couloirs ou "corridors Length" dans l'IDE
             {
                 shopRoomPosition2 = shop;
                 
@@ -201,7 +201,7 @@ public class RoomContentGenerator : MonoBehaviour
             {
                 int distance = GetDistanceWithNearestShop(shop);
 
-                if (distance <= 25)
+                if (distance <= 22)
                 {
                     var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
                     tempDico.Remove(shopRoomPositionInter);
@@ -209,7 +209,7 @@ public class RoomContentGenerator : MonoBehaviour
                     break;
                 }
 
-                int mapDistance = (distance - 25) / 25;
+                int mapDistance = (distance - 22) / 22;
                 
                 float ratio = multiplierPerDistance.Count > mapDistance ? multiplierPerDistance[mapDistance] : multiplierPerDistance[^1];
 
@@ -221,7 +221,7 @@ public class RoomContentGenerator : MonoBehaviour
                     break;
                 }
                 
-                if (GetDistanceWithNearestShop(shop) > 25)
+                if (GetDistanceWithNearestShop(shop) > 22)
                 {
                     var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
                     spawnedObjects.AddRange(shopRoom.ProcessRoom(shopRoomPositionInter, dungeonData.roomsDictionary[shopRoomPositionInter], dungeonData.GetRoomFloorWithoutCorridors(shopRoomPositionInter)));
@@ -247,7 +247,7 @@ public class RoomContentGenerator : MonoBehaviour
         {
             foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary) //roomData n'est pas bon
             {
-                var distance = Vector2Int.Distance(playerSpawnRoomPosition, roomData.Key) / 25; // room data bonne clés de distance ? Actuellement me donne la distance en ne passant pas par les couloirs
+                var distance = Vector2Int.Distance(playerSpawnRoomPosition, roomData.Key) / 22; // room data bonne clés de distance ? Actuellement me donne la distance en ne passant pas par les couloirs
 
                 if (distance <= 2) 
                     spawnedObjects.AddRange(enemyRoom[0].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));

@@ -10,9 +10,10 @@ public class ShopController : MonoBehaviour
 {
    [Header("References")] 
    private GameObject shopPanel;
+   //public Canvas shopCanvas;
    public Image image;
    
-   private float timeToAccess = 0f;
+   private float timeToAccess;
 
    
 
@@ -26,14 +27,18 @@ public class ShopController : MonoBehaviour
    private IEnumerator JeTeBaise()
    {
       shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
-      yield return new WaitForSeconds(0.5f);
+      //shopCanvas = Canvas.FindObjectOfType<Canvas>(false);
+      yield return new WaitForSeconds(0.3f);
       shopPanel.SetActive(false);
    }
 
    /*private void OnTriggerEnter2D(Collider2D col)
    {
       if (col.gameObject.CompareTag("Player"))
+      {
+         shopCanvas.enabled = true;
          OpenShop();
+      }
    }*/
 
    private void Update()
