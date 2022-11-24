@@ -10,16 +10,17 @@ public class ShopController : MonoBehaviour
 {
    [Header("References")] 
    private GameObject shopPanel;
-   //public Canvas shopCanvas;
+   public GameObject shopCanvas;
    public Image image;
    
-   private float timeToAccess;
+   private float timeToAccess = 0f;
 
    
 
    private void Start()
    {
       StartCoroutine(JeTeBaise());
+      shopCanvas.SetActive(false);
 
       //image.DORectTransformMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutFlash); Merci Mathieu je vais voir ca ce soir !!
    }
@@ -27,31 +28,42 @@ public class ShopController : MonoBehaviour
    private IEnumerator JeTeBaise()
    {
       shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
-      //shopCanvas = Canvas.FindObjectOfType<Canvas>(false);
       yield return new WaitForSeconds(0.3f);
       shopPanel.SetActive(false);
    }
 
-   /*private void OnTriggerEnter2D(Collider2D col)
+   private void OnTriggerStay2D(Collider2D col)
    {
       if (col.gameObject.CompareTag("Player"))
       {
-         shopCanvas.enabled = true;
+         shopCanvas.SetActive(true);
+      }
+
+      if (shopCanvas == true)
+      {
          OpenShop();
       }
-   }*/
+   }
 
-   private void Update()
+   private void OnTriggerExit2D(Collider2D other)
+   {
+      if (other.gameObject.CompareTag("Player"))
+      {
+         shopCanvas.SetActive(false);
+      }
+   }
+
+   /*private void Update()
    {
       OpenShop();
-   }
+   }*/
 
    public void OpenShop()
    {
       if (Input.GetKey(KeyCode.E))
       {
          timeToAccess += 0.1f;
-         image.DOFillAmount(timeToAccess, 1f);
+         image.DOFillAmount(timeToAccess, 0f);
 
          if (timeToAccess == 0.5f)
          {
@@ -63,6 +75,7 @@ public class ShopController : MonoBehaviour
       if (Input.GetKeyUp(KeyCode.E))
       {
          timeToAccess = 0f;
+         image.DOFillAmount(0, 0f);
       }
       
    }
@@ -71,6 +84,8 @@ public class ShopController : MonoBehaviour
    {
       shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
       shopPanel.SetActive(false);
+      image.DOFillAmount(0, 0f);
+
       Time.timeScale = 1;  
    }
    
