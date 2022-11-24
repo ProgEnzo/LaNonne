@@ -64,9 +64,9 @@ public class ShopController : MonoBehaviour
       if (Input.GetKey(KeyCode.E))
       {
          timeToAccess += 0.1f;
-         image.DOFillAmount(timeToAccess, 0f);
+         image.DOFillAmount(timeToAccess, 0.1f);
 
-         if (timeToAccess == 0.5f)
+         if (timeToAccess == 0.4f)
          {
             shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
             Time.timeScale = 0;
