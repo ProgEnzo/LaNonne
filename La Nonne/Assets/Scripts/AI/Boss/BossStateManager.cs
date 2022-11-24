@@ -19,6 +19,7 @@ public class BossStateManager : MonoBehaviour
     public BossVacuumState VacuumState = new BossVacuumState();
     public BossToxicMineState ToxicMineState = new BossToxicMineState();
     public BossTransitionState TransitionState = new BossTransitionState();
+    public BossBoxingState BoxingState = new BossBoxingState();
 
     public Rigidbody2D rb;
     private PlayerController player;
@@ -31,10 +32,11 @@ public class BossStateManager : MonoBehaviour
     public List<GameObject> spawnerList = new List<GameObject>();
 
     [Header("Overall Stats")]
-    [SerializeField] private Slider hpBossSlider;
+    private Slider hpBossSlider;
     public int currentHealth;
     public int maxHealth;
     public float normalSpeed;
+    public float knockbackForce;
 
     [Header("----Dash----")] 
     public GameObject dashMine;
@@ -91,6 +93,10 @@ public class BossStateManager : MonoBehaviour
     public int throwAmount;
     public int currentThrowAmount;
 
+    [Header("----ThrowingState----")] 
+    public float distanceBetweenPlayer;
+    public float aggroBoxingRange;
+    
     private void Awake()
     {
       
@@ -102,7 +108,7 @@ public class BossStateManager : MonoBehaviour
         player = PlayerController.instance;
         gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
 
-        currentState = DashingState; //starting state for the boss state machine
+        currentState = ToxicMineState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
@@ -125,6 +131,8 @@ public class BossStateManager : MonoBehaviour
     void Update()
     {
         currentState.UpdateState(this); //will call any code in Update State from the current state every frame
+
+        distanceBetweenPlayer = Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(player.transform.position.x, player.transform.position.y));
     }
     private void OnCollisionEnter2D(Collision2D col)
     {
@@ -151,7 +159,13 @@ public class BossStateManager : MonoBehaviour
         currentToxicMineAmount = toxicMineAmount;
         currentThrowAmount = throwAmount;
     }
-    
+
+    private void OnDrawGizmos()
+    {
+        var position = transform.position;
+        Gizmos.DrawWireSphere(position, aggroBoxingRange);
+    }
+
     #region Health Boss
 
     public void TakeDamageOnBossFromPlayer(int damage)
@@ -162,7 +176,6 @@ public class BossStateManager : MonoBehaviour
             hpBossSlider.value -= damage;
         }
         
-
         if (currentHealth <= 0)
         {
             Die();
@@ -208,11 +221,12 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         
         StartCoroutine(DashMine());
+        yield return new WaitForSeconds(0.3f);
+        
+        Physics2D.IgnoreLayerCollision(15, 7, false); //Active la collision avec le joueur
         yield return new WaitForSeconds(dashTime);
         
         bossAI.maxSpeed = normalSpeed;
-        Physics2D.IgnoreLayerCollision(15, 7, false);
-
         GetComponent<AIDestinationSetter>().enabled = true;
         GetComponent<AIPath>().enabled = true;
         yield return new WaitForSeconds(dashCooldown);
@@ -384,6 +398,18 @@ public class BossStateManager : MonoBehaviour
 
     public void ToxicMineManager()
     {
+        // if (distanceBetweenPlayer < aggroBoxingRange)
+        // {
+        //     Debug.Log("JE TE BOXE");
+        //     SwitchState(BoxingState);
+        // }
+        // else
+        // {
+        //     //var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+        //     SwitchState(ThrowingState);
+        // }
+        
+        
         StartCoroutine(ToxicMine());
         Debug.Log($"<color=red>TOXIC MINE STATE HAS BEGUN</color>");
 
@@ -448,7 +474,8 @@ public class BossStateManager : MonoBehaviour
         toxicMineList.Clear();
 
         yield return new WaitForSeconds(1f);
-
+        
+        
         if (currentToxicMineAmount > 0)
         {
             StartCoroutine(ToxicMine());
@@ -507,7 +534,7 @@ public class BossStateManager : MonoBehaviour
 
     private IEnumerator Boxing()
     {
-        
+
         yield return new WaitForSeconds(1f);
     }
 
