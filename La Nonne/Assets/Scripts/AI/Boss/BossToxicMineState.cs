@@ -10,6 +10,6 @@ public class BossToxicMineState : BossBaseState
 
     public override void UpdateState(BossStateManager boss)
     {
-        
+        boss.SwitchFromToxicMineToBoxing();
     }
 }

@@ -10,6 +10,6 @@ public class BossThrowingState : BossBaseState
 
     public override void UpdateState(BossStateManager boss)
     {
-        
+        boss.SwitchFromThrowingToBoxing();
     }
 }
