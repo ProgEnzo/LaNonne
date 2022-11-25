@@ -230,7 +230,8 @@ MonoBehaviour:
   finalRotation1: {x: 0, y: 0, z: 0, w: 0}
   finalRotation2: {x: 0, y: 0, z: 0, w: 0}
   maxHitState: 3
-  maxComboCooldown: 5
+  maxDuringComboCooldown: 2
+  maxNextComboCooldown: 0.5
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
 --- !u!61 &4579524371399318225
 BoxCollider2D:
