@@ -93,9 +93,12 @@ public class BossStateManager : MonoBehaviour
     public int throwAmount;
     public int currentThrowAmount;
 
-    [Header("----ThrowingState----")] 
+    [Header("----BoxingState----")] 
     public float distanceBetweenPlayer;
     public float aggroBoxingRange;
+    public float timerBeforeBoxing;
+    
+    public bool timerIsRunning;
     
     private void Awake()
     {
@@ -128,6 +131,8 @@ public class BossStateManager : MonoBehaviour
 
         //VIRTUAL CAMERA
         vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
+
+        timerIsRunning = true;
     }
     void Update()
     {
@@ -401,12 +406,6 @@ public class BossStateManager : MonoBehaviour
     {
         StartCoroutine(ToxicMine());
         Debug.Log($"<color=red>TOXIC MINE STATE HAS BEGUN</color>");
-        
-        if (distanceBetweenPlayer < aggroBoxingRange)
-        {
-            Debug.Log("JE TE BOXE");
-            SwitchState(BoxingState);
-        }
 
     }
     
@@ -414,8 +413,21 @@ public class BossStateManager : MonoBehaviour
     {
         if (distanceBetweenPlayer < aggroBoxingRange)
         {
-            Debug.Log("JE TE BOXE");
-            SwitchState(BoxingState);
+            if (timerIsRunning)
+            {
+                if (timerBeforeBoxing > 0)
+                {
+                    timerBeforeBoxing -= Time.deltaTime;
+                }
+                else
+                {
+                    StartCoroutine(Boxing());
+                    Debug.Log($"<color=red>BOXING STATE HAS BEGUN</color>");
+                    
+                    timerBeforeBoxing = 3; //reset le timer
+                    timerIsRunning = false; //pour que le script au dessus ne s'exécute qu'une seule fois
+                }
+            }
         }
     }
 
@@ -509,8 +521,21 @@ public class BossStateManager : MonoBehaviour
     {
         if (distanceBetweenPlayer < aggroBoxingRange)
         {
-            Debug.Log("JE TE BOXE");
-            SwitchState(BoxingState);
+            if (timerIsRunning)
+            {
+                if (timerBeforeBoxing > 0)
+                {
+                    timerBeforeBoxing -= Time.deltaTime;
+                }
+                else
+                {
+                    StartCoroutine(Boxing());
+                    Debug.Log($"<color=red>BOXING STATE HAS BEGUN</color>");
+                    
+                    timerBeforeBoxing = 3; //reset le timer
+                    timerIsRunning = false; //pour que le script au dessus ne s'exécute qu'une seule fois
+                }
+            }
         }
     }
 
@@ -555,8 +580,21 @@ public class BossStateManager : MonoBehaviour
     {
         if (distanceBetweenPlayer < aggroBoxingRange)
         {
-            StartCoroutine(Boxing());
-            Debug.Log($"<color=red>BOXING STATE HAS BEGUN</color>");
+            if (timerIsRunning)
+            {
+                if (timerBeforeBoxing > 0)
+                {
+                    timerBeforeBoxing -= Time.deltaTime;
+                }
+                else
+                {
+                    StartCoroutine(Boxing());
+                    Debug.Log($"<color=red>BOXING STATE HAS BEGUN</color>");
+                    
+                    timerBeforeBoxing = 3; //reset le timer
+                    timerIsRunning = false;
+                }
+            }
         }
     }
 
