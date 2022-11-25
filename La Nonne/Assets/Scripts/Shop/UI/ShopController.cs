@@ -13,9 +13,10 @@ public class ShopController : MonoBehaviour
    public GameObject shopCanvas;
    public Image image;
    
-   private float timeToAccess = 0f;
+   private float timeToAccess = 4f;
 
-   
+   private float timerInputPressed;
+   private bool isInTrigger;
 
    private void Start()
    {
@@ -23,6 +24,8 @@ public class ShopController : MonoBehaviour
       shopCanvas.SetActive(false);
 
       //image.DORectTransformMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutFlash); Merci Mathieu je vais voir ca ce soir !!
+
+      timerInputPressed = 0f;
    }
 
    private IEnumerator JeTeBaise()
@@ -39,34 +42,38 @@ public class ShopController : MonoBehaviour
          shopCanvas.SetActive(true);
       }
 
-      if (shopCanvas == true)
-      {
-         OpenShop();
-      }
+      isInTrigger = true;
    }
 
    private void OnTriggerExit2D(Collider2D other)
    {
       if (other.gameObject.CompareTag("Player"))
       {
-         image.DOFillAmount(0, 0f);
+         timerInputPressed = 0f;
          shopCanvas.SetActive(false);
+
+         image.fillAmount = 0f;
+
+         isInTrigger = false;
       }
    }
 
-   /*private void Update()
+   private void Update()
    {
-      OpenShop();
-   }*/
+      if (shopCanvas == true && isInTrigger)
+      {
+         OpenShop();
+      }
+   }
 
    public void OpenShop()
    {
       if (Input.GetKey(KeyCode.E))
       {
-         timeToAccess += 0.1f;
-         image.DOFillAmount(timeToAccess, 0.1f);
+         timerInputPressed += Time.deltaTime;
+         image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
 
-         if (timeToAccess == 0.4f)
+         if (timerInputPressed > timeToAccess - 0.05f)
          {
             shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
             Time.timeScale = 0;
@@ -75,8 +82,8 @@ public class ShopController : MonoBehaviour
 
       if (Input.GetKeyUp(KeyCode.E))
       {
-         timeToAccess = 0f;
-         image.DOFillAmount(0, 0f);
+         timerInputPressed = 0f;
+         image.DOFillAmount(0,0.5f);
       }
       
    }
@@ -85,7 +92,8 @@ public class ShopController : MonoBehaviour
    {
       shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
       shopPanel.SetActive(false);
-      image.DOFillAmount(0, 0f);
+
+      image.fillAmount = 0f;
 
       Time.timeScale = 1;  
    }
