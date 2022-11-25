@@ -282,8 +282,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soEnemy: {fileID: 11400000, guid: e10e890db14ac3945b0b1d9d70c2cd51, type: 2}
   currentHealth: 0
-  detectionRadius: 10
-  throwRadius: 5
+  isStunned: 0
+  detectionRadius: 4.5
+  throwRadius: 2.5
   projectileSpeed: 3
   dashSpeed: 500
   explosionRadius: 1

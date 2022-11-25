@@ -33,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 9071314407910337641}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 31.1, y: -8.05, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -55,8 +55,8 @@ MonoBehaviour:
   currentHealth: 100
   isStunned: 0
   distanceToPlayer: 0
-  shootingRange: 4.5
-  aggroRange: 10
+  shootingRange: 2
+  aggroRange: 3.5
   cooldownBetweenShots: 1
   bulletSpeed: 2
   knockbackBody: 10
