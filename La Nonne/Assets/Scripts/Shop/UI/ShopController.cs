@@ -1,5 +1,7 @@
 using System.Collections;
+using Controller;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,8 +20,12 @@ namespace Shop.UI
       private float timerInputPressed;
       private bool isInTrigger;
 
+      public PlayerController playerController;
+
       private void Start()
       {
+         playerController = PlayerController.instance;
+         
          StartCoroutine(BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp());
          shopCanvas.SetActive(false);
 
@@ -108,10 +114,13 @@ namespace Shop.UI
          //shopPanel.SetActive(true);
       }
 
-      public void OpenWhipModificationMenu(GameObject x)
+      public void OpenWhipModificationMenu(GameObject menu)
       {
-         x.SetActive(true);
+         menu.SetActive(true);
+         for (var i = 0; i < PlayerController.instance.effectInventory.Count; i++)
+         {
+            menu.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ((EffectManager.Effect)i).ToString();
+         }
       }
-   
    }
 }

@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Shop;
 using UnityEngine;
 
 namespace Shop
@@ -11,7 +15,9 @@ namespace Shop
             Target = 2,
             Wealth = 3
         }
-        
+
+        private Dictionary<Effect, List<ShopObjectSO>> effectDictionary = new();
+
         void Start()
         {
         
