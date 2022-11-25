@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
+using Cinemachine;
 using Core.Scripts.Utils;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -139,6 +140,7 @@ namespace Controller
             }
         
             RevealingDash();
+            LoadMenu();
         }
         public void FixedUpdate()
         {
@@ -265,6 +267,14 @@ namespace Controller
             if (soController.currentHealth <= 0)
             {
                 Die();
+            }
+        }
+        
+        public void LoadMenu()
+        {
+            if (soController.currentHealth <= 0)
+            {
+                SceneManager.LoadScene("MainMenu");
             }
         }
 
