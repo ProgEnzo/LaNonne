@@ -249,14 +249,19 @@ public class RoomContentGenerator : MonoBehaviour
             {
                 var distance = Vector2Int.Distance(playerSpawnRoomPosition, roomData.Key) / 22; // room data bonne clés de distance ? Actuellement me donne la distance en ne passant pas par les couloirs
 
-                if (distance <= 2) 
+                if (distance <= 4) 
                     spawnedObjects.AddRange(enemyRoom[0].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 4) 
+                else if (distance < 7) 
                     spawnedObjects.AddRange(enemyRoom[1].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 6) 
+                else if (distance < 9) 
                     spawnedObjects.AddRange(enemyRoom[2].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance > 6) 
+                else if (distance < 10) 
                     spawnedObjects.AddRange(enemyRoom[3].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+                else if (distance < 11) 
+                    spawnedObjects.AddRange(enemyRoom[4].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+                else if (distance > 11) 
+                    spawnedObjects.AddRange(enemyRoom[5].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+
             }
         }
         
