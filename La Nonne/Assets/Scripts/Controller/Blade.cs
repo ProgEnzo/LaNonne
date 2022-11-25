@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using AI;
 using UnityEngine;
@@ -23,8 +24,10 @@ namespace Controller
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
         private int hitState;
         [SerializeField] private int maxHitState;
-        [SerializeField] private float maxComboCooldown;
-        private float currentComboCooldown;
+        [SerializeField] private float maxDuringComboCooldown;
+        private float currentDuringComboCooldown;
+        [SerializeField] private float maxNextComboCooldown;
+        private float currentNextComboCooldown;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
@@ -37,7 +40,8 @@ namespace Controller
             lineRenderer.enabled = false;
             boxCollider.enabled = false;
             isHitting = false;
-            currentComboCooldown = maxComboCooldown;
+            currentDuringComboCooldown = maxDuringComboCooldown;
+            currentNextComboCooldown = maxNextComboCooldown;
             hitState = 0;
         }
 
@@ -53,18 +57,19 @@ namespace Controller
 
         private void ZealousBlade()
         {
-            currentComboCooldown -= Time.deltaTime;
-            if (currentComboCooldown <= 0)
+            currentDuringComboCooldown -= Time.deltaTime;
+            currentNextComboCooldown -= Time.deltaTime;
+            if (currentDuringComboCooldown <= 0)
             {
                 hitState = 0;
             }
 
-            if (Input.GetMouseButtonDown(0) && !isHitting)
+            if (Input.GetMouseButtonDown(0) && !isHitting && currentNextComboCooldown <= 0)
             {
                 hitState += 1;
-                currentComboCooldown = maxComboCooldown;
+                currentDuringComboCooldown = maxDuringComboCooldown;
                 
-                var newDirection = (playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.transform.localScale.x) switch
+                var facingDirection = (playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.transform.localScale.x) switch
                 {
                     (0, > 0 or < 0) => Vector2.down,
                     (1, > 0 or < 0) => Vector2.up,
@@ -72,6 +77,35 @@ namespace Controller
                     (2, < 0) => Vector2.left,
                     _ => Vector2.right
                 };
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, facingDirection);
+                GameObject enemyToAim;
+                var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'attaque
+                var contactFilter = new ContactFilter2D(); //Déclaration du filtre de contact
+                contactFilter.SetNormalAngle(0, 270);
+                Physics2D.CircleCast(transform.position, hitLength, Vector2.zero, contactFilter, objectsInArea); //On récupère les objets dans la zone d'attaque
+                if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
+                {
+                    var enemiesToAim = objectsInArea.Select(hit => hit.collider.gameObject).Where(enemyGameObject =>
+                        enemyGameObject.CompareTag("Enemy") || enemyGameObject.CompareTag("Boss")).ToList();
+                    enemyToAim = enemiesToAim.Count > 0 ? enemiesToAim[0] : null;
+                }
+                else
+                {
+                    enemyToAim = null;
+                }
+
+                Vector3 newDirection;
+                if (enemyToAim)
+                {
+                    newDirection = enemyToAim.transform.position - transform.position;
+                    newDirection.z = 0;
+                    newDirection.Normalize();
+                }
+                else
+                {
+                    newDirection = facingDirection;
+                }
+                
                 var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
                 AnimationControllerBool(IsAttacking);
                 finalRotation1 = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
@@ -106,6 +140,7 @@ namespace Controller
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                         if (hitState == maxHitState)
                         {
+                            currentNextComboCooldown = maxNextComboCooldown;
                             hitState = 0;
                         }
                     }
@@ -124,6 +159,7 @@ namespace Controller
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                         if (hitState == maxHitState)
                         {
+                            currentNextComboCooldown = maxNextComboCooldown;
                             hitState = 0;
                         }
                     }
