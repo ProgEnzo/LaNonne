@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Linq;
 using AI;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,7 +8,6 @@ namespace Controller
     public class Blade : MonoBehaviour
     {
         public bool isHitting;
-        public bool hitStep;
         public float hitLength;
         public float hitAngle = 45f;
         public float hitSpeed = 1f;
@@ -24,10 +21,10 @@ namespace Controller
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
-        private int attackDirectionState;
-        private float localStateMult;
-
-        public ChainBladeDamage chainBladeDamage;
+        private int hitState;
+        [SerializeField] private int maxHitState;
+        [SerializeField] private float maxComboCooldown;
+        private float currentComboCooldown;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
@@ -40,6 +37,8 @@ namespace Controller
             lineRenderer.enabled = false;
             boxCollider.enabled = false;
             isHitting = false;
+            currentComboCooldown = maxComboCooldown;
+            hitState = 0;
         }
 
         // Update is called once per frame
@@ -54,8 +53,17 @@ namespace Controller
 
         private void ZealousBlade()
         {
+            currentComboCooldown -= Time.deltaTime;
+            if (currentComboCooldown <= 0)
+            {
+                hitState = 0;
+            }
+
             if (Input.GetMouseButtonDown(0) && !isHitting)
             {
+                hitState += 1;
+                currentComboCooldown = maxComboCooldown;
+                
                 var newDirection = (playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.transform.localScale.x) switch
                 {
                     (0, > 0 or < 0) => Vector2.down,
@@ -68,23 +76,38 @@ namespace Controller
                 AnimationControllerBool(IsAttacking);
                 finalRotation1 = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
                 finalRotation2 = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
-                transform.rotation = finalRotation2;
                 lineRenderer.enabled = true;
                 boxCollider.enabled = true;
                 isHitting = true;
-                hitStep = true;
+
+                if (hitState % 2 == 1)
+                {
+                    transform.rotation = finalRotation2;
+                }
+                else
+                {
+                    transform.rotation = finalRotation1;
+                }
             }
 
             if (isHitting)
             {
-                if (hitStep)
+                if (hitState % 2 == 1)
                 {
                     transform.rotation =
                         Quaternion.RotateTowards(transform.rotation, finalRotation1, hitSpeed * Time.deltaTime);
                     if (transform.rotation.eulerAngles.z < finalRotation1.eulerAngles.z + toleranceAngle &&
                         transform.rotation.eulerAngles.z > finalRotation1.eulerAngles.z - toleranceAngle)
                     {
-                        hitStep = false;
+                        isHitting = false;
+                        lineRenderer.enabled = false;
+                        boxCollider.enabled = false;
+                        AnimationManagerBool(IsAttacking, false);
+                        playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
+                        if (hitState == maxHitState)
+                        {
+                            hitState = 0;
+                        }
                     }
                 }
                 else
@@ -99,6 +122,10 @@ namespace Controller
                         boxCollider.enabled = false;
                         AnimationManagerBool(IsAttacking, false);
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
+                        if (hitState == maxHitState)
+                        {
+                            hitState = 0;
+                        }
                     }
                 }
             }
