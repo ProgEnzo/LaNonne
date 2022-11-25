@@ -10,6 +10,7 @@ public class ShopController : MonoBehaviour
 {
    [Header("References")] 
    private GameObject shopPanel;
+   private GameObject whipModifMenu;
    public GameObject shopCanvas;
    public Image image;
    
@@ -31,8 +32,10 @@ public class ShopController : MonoBehaviour
    private IEnumerator JeTeBaise()
    {
       shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
+      whipModifMenu = GameObject.FindGameObjectWithTag("WhipModifMenu");
       yield return new WaitForSeconds(0.3f);
       shopPanel.SetActive(false);
+      whipModifMenu.SetActive(false);
    }
 
    private void OnTriggerStay2D(Collider2D col)
@@ -96,6 +99,19 @@ public class ShopController : MonoBehaviour
       image.fillAmount = 0f;
 
       Time.timeScale = 1;  
+   }
+   
+   public void CloseWhipModifMenu()
+   {
+      whipModifMenu = GameObject.FindGameObjectWithTag("WhipModifMenu");
+      whipModifMenu.SetActive(false);
+      
+      //shopPanel.SetActive(true);
+   }
+
+   public void OpenWhipModifMenu(GameObject x)
+   {
+      x.SetActive(true);
    }
    
 }
