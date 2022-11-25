@@ -108,7 +108,7 @@ public class BossStateManager : MonoBehaviour
         player = PlayerController.instance;
         gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
 
-        currentState = ToxicMineState; //starting state for the boss state machine
+        currentState = BoxingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
@@ -124,6 +124,7 @@ public class BossStateManager : MonoBehaviour
         firstStatesList.Add(VacuumState);
         
         lastStatesList.Add(ThrowingState);
+        lastStatesList.Add(ToxicMineState);
 
         //VIRTUAL CAMERA
         vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
@@ -398,21 +399,24 @@ public class BossStateManager : MonoBehaviour
 
     public void ToxicMineManager()
     {
-        // if (distanceBetweenPlayer < aggroBoxingRange)
-        // {
-        //     Debug.Log("JE TE BOXE");
-        //     SwitchState(BoxingState);
-        // }
-        // else
-        // {
-        //     //var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
-        //     SwitchState(ThrowingState);
-        // }
-        
-        
         StartCoroutine(ToxicMine());
         Debug.Log($"<color=red>TOXIC MINE STATE HAS BEGUN</color>");
+        
+        if (distanceBetweenPlayer < aggroBoxingRange)
+        {
+            Debug.Log("JE TE BOXE");
+            SwitchState(BoxingState);
+        }
 
+    }
+    
+    public void SwitchFromToxicMineToBoxing()
+    {
+        if (distanceBetweenPlayer < aggroBoxingRange)
+        {
+            Debug.Log("JE TE BOXE");
+            SwitchState(BoxingState);
+        }
     }
 
     private IEnumerator ToxicMine()
@@ -476,14 +480,15 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         
         
+        
         if (currentToxicMineAmount > 0)
         {
             StartCoroutine(ToxicMine());
         }
         else if(currentToxicMineAmount == 0)
         { 
-            //var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
-            SwitchState(ThrowingState);
+            var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+            SwitchState(nextState);
         }
     }
 
@@ -500,6 +505,15 @@ public class BossStateManager : MonoBehaviour
 
     }
 
+    public void SwitchFromThrowingToBoxing()
+    {
+        if (distanceBetweenPlayer < aggroBoxingRange)
+        {
+            Debug.Log("JE TE BOXE");
+            SwitchState(BoxingState);
+        }
+    }
+
     private IEnumerator Throwing()
     {
         currentThrowAmount--;
@@ -510,14 +524,16 @@ public class BossStateManager : MonoBehaviour
 
         yield return new WaitForSeconds(8f);
         
+        
+        
         if (currentThrowAmount > 0)
         {
             StartCoroutine(Throwing());
         }
         else if(currentThrowAmount == 0)
         { 
-            //var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
-            SwitchState(ToxicMineState);
+            var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+            SwitchState(nextState);
         }
     }
 
@@ -525,17 +541,32 @@ public class BossStateManager : MonoBehaviour
 
     #region BoxingState
 
+    public void SwitchWhenFarAway() //Is in Update
+    {
+        if (distanceBetweenPlayer > aggroBoxingRange)
+        {
+            Debug.Log($"<color=green>SWITCHING OUT TO ANOTHER STATE</color>");
+            var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+            SwitchState(nextState);
+        }
+    }
+
     public void BoxingManager()
     {
-        StartCoroutine(Boxing());
-        Debug.Log($"<color=red>BOXING STATE HAS BEGUN</color>");
-
+        if (distanceBetweenPlayer < aggroBoxingRange)
+        {
+            StartCoroutine(Boxing());
+            Debug.Log($"<color=red>BOXING STATE HAS BEGUN</color>");
+        }
     }
 
     private IEnumerator Boxing()
     {
 
         yield return new WaitForSeconds(1f);
+        
+        
+        
     }
 
     #endregion
