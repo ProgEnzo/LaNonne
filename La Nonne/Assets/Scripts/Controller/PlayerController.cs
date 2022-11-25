@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
-using Cinemachine;
 using Core.Scripts.Utils;
+using Shop;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -55,6 +55,8 @@ namespace Controller
         internal Animator currentAnimPrefabAnimator;
         private (int parameterToChange, int value) animParametersToChange;
         private bool isMovingProfile;
+        
+        internal Dictionary<EffectManager.Effect, int> effectInventory = new();
 
         private void Awake()
         {
@@ -79,6 +81,11 @@ namespace Controller
             {
                 prefab.SetActive(false);
             }
+            
+            effectInventory.Add(EffectManager.Effect.Bleed, 0);
+            effectInventory.Add(EffectManager.Effect.Chill, 0);
+            effectInventory.Add(EffectManager.Effect.Target, 0);
+            effectInventory.Add(EffectManager.Effect.Wealth, 0);
         }
 
         private void Start()
@@ -262,7 +269,7 @@ namespace Controller
         {
             soController.currentHealth -= damage;
             hpSlider.value -= damage;
-            Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
+            //Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
 
             if (soController.currentHealth <= 0)
             {

@@ -1,117 +1,117 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class ShopController : MonoBehaviour
+namespace Shop.UI
 {
-   [Header("References")] 
-   private GameObject shopPanel;
-   private GameObject whipModifMenu;
-   public GameObject shopCanvas;
-   public Image image;
+   public class ShopController : MonoBehaviour
+   {
+      [Header("References")] 
+      private GameObject shopPanel;
+      private GameObject whipModificationMenu;
+      public GameObject shopCanvas;
+      public Image image;
    
-   private float timeToAccess = 4f;
+      [SerializeField] private float timeToAccess;
 
-   private float timerInputPressed;
-   private bool isInTrigger;
+      private float timerInputPressed;
+      private bool isInTrigger;
 
-   private void Start()
-   {
-      StartCoroutine(JeTeBaise());
-      shopCanvas.SetActive(false);
-
-      //image.DORectTransformMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutFlash); Merci Mathieu je vais voir ca ce soir !!
-
-      timerInputPressed = 0f;
-   }
-
-   private IEnumerator JeTeBaise()
-   {
-      shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
-      whipModifMenu = GameObject.FindGameObjectWithTag("WhipModifMenu");
-      yield return new WaitForSeconds(0.3f);
-      shopPanel.SetActive(false);
-      whipModifMenu.SetActive(false);
-   }
-
-   private void OnTriggerStay2D(Collider2D col)
-   {
-      if (col.gameObject.CompareTag("Player"))
+      private void Start()
       {
-         shopCanvas.SetActive(true);
-      }
-
-      isInTrigger = true;
-   }
-
-   private void OnTriggerExit2D(Collider2D other)
-   {
-      if (other.gameObject.CompareTag("Player"))
-      {
-         timerInputPressed = 0f;
+         StartCoroutine(BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp());
          shopCanvas.SetActive(false);
 
-         image.fillAmount = 0f;
+         //image.DORectTransformMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutFlash); Merci Mathieu je vais voir ca ce soir !!
 
-         isInTrigger = false;
+         timerInputPressed = 0f;
       }
-   }
 
-   private void Update()
-   {
-      if (shopCanvas == true && isInTrigger)
+      private IEnumerator BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp()
       {
-         OpenShop();
+         shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
+         whipModificationMenu = GameObject.FindGameObjectWithTag("WhipModifMenu");
+         yield return new WaitForSeconds(0.3f);
+         shopPanel.SetActive(false);
+         whipModificationMenu.SetActive(false);
       }
-   }
 
-   public void OpenShop()
-   {
-      if (Input.GetKey(KeyCode.E))
+      private void OnTriggerStay2D(Collider2D col)
       {
-         timerInputPressed += Time.deltaTime;
-         image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
-
-         if (timerInputPressed > timeToAccess - 0.05f)
+         if (col.gameObject.CompareTag("Player"))
          {
-            shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
-            Time.timeScale = 0;
+            shopCanvas.SetActive(true);
+         }
+
+         isInTrigger = true;
+      }
+
+      private void OnTriggerExit2D(Collider2D other)
+      {
+         if (other.gameObject.CompareTag("Player"))
+         {
+            timerInputPressed = 0f;
+            shopCanvas.SetActive(false);
+
+            image.fillAmount = 0f;
+
+            isInTrigger = false;
          }
       }
 
-      if (Input.GetKeyUp(KeyCode.E))
+      private void Update()
       {
-         timerInputPressed = 0f;
-         image.DOFillAmount(0,0.5f);
+         if (shopCanvas == true && isInTrigger)
+         {
+            OpenShop();
+         }
       }
+
+      public void OpenShop()
+      {
+         if (Input.GetKey(KeyCode.E))
+         {
+            timerInputPressed += Time.deltaTime;
+            image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
+
+            if (timerInputPressed > timeToAccess - 0.05f)
+            {
+               shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
+               Time.timeScale = 0;
+            }
+         }
+
+         if (Input.GetKeyUp(KeyCode.E))
+         {
+            timerInputPressed = 0f;
+            image.DOFillAmount(0,0.5f);
+         }
       
-   }
+      }
 
-   public void CloseShop()
-   {
-      shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
-      shopPanel.SetActive(false);
+      public void CloseShop()
+      {
+         shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
+         shopPanel.SetActive(false);
 
-      image.fillAmount = 0f;
+         image.fillAmount = 0f;
 
-      Time.timeScale = 1;  
-   }
+         Time.timeScale = 1;  
+      }
    
-   public void CloseWhipModifMenu()
-   {
-      whipModifMenu = GameObject.FindGameObjectWithTag("WhipModifMenu");
-      whipModifMenu.SetActive(false);
+      public void CloseWhipModificationMenu()
+      {
+         whipModificationMenu = GameObject.FindGameObjectWithTag("WhipModifMenu");
+         whipModificationMenu.SetActive(false);
       
-      //shopPanel.SetActive(true);
-   }
+         //shopPanel.SetActive(true);
+      }
 
-   public void OpenWhipModifMenu(GameObject x)
-   {
-      x.SetActive(true);
-   }
+      public void OpenWhipModificationMenu(GameObject x)
+      {
+         x.SetActive(true);
+      }
    
+   }
 }
