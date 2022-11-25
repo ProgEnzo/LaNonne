@@ -28,6 +28,7 @@ namespace Controller
         private float currentDuringComboCooldown;
         [SerializeField] private float maxNextComboCooldown;
         private float currentNextComboCooldown;
+        [SerializeField] private float maxDetectionAngle;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
 
@@ -78,20 +79,16 @@ namespace Controller
                     _ => Vector2.right
                 };
                 transform.rotation = Quaternion.LookRotation(Vector3.forward, facingDirection);
-                GameObject enemyToAim;
+                GameObject enemyToAim = null;
                 var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'attaque
-                var contactFilter = new ContactFilter2D(); //Déclaration du filtre de contact
-                contactFilter.SetNormalAngle(0, 270);
-                Physics2D.CircleCast(transform.position, hitLength, Vector2.zero, contactFilter, objectsInArea); //On récupère les objets dans la zone d'attaque
+                Physics2D.CircleCast(transform.position, hitLength, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'attaque
                 if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
                 {
-                    var enemiesToAim = objectsInArea.Select(hit => hit.collider.gameObject).Where(enemyGameObject =>
-                        enemyGameObject.CompareTag("Enemy") || enemyGameObject.CompareTag("Boss")).ToList();
-                    enemyToAim = enemiesToAim.Count > 0 ? enemiesToAim[0] : null;
-                }
-                else
-                {
-                    enemyToAim = null;
+                    foreach (var hit in from hit in objectsInArea where hit.collider.CompareTag("Enemy") let enemyToAimPosition = hit.collider.transform.position let playerPosition = playerController.transform.position let directionToAim = enemyToAimPosition - playerPosition let angleToAim = Vector2.Angle(facingDirection, directionToAim) where angleToAim <= maxDetectionAngle/2 select hit)
+                    {
+                        enemyToAim = hit.collider.gameObject;
+                        break; //On sort de la boucle
+                    }
                 }
 
                 Vector3 newDirection;
