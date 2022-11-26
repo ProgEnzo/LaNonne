@@ -37,12 +37,9 @@ public class BossStateManager : MonoBehaviour
     public int currentHealth;
     public int maxHealth;
     public float normalSpeed;
-    public float knockbackForce;
 
     [Header("Virtual Camera")] 
     public CinemachineVirtualCamera vCamPlayer;
-    public float amplitudeGain;
-    public float frequencyGain;
     
     [Header("----Dash----")] 
     public GameObject dashMine;
@@ -589,7 +586,6 @@ public class BossStateManager : MonoBehaviour
                 var circleBoxingObject = Instantiate(circleBoxing, circleWarningObject.transform.position, Quaternion.identity);
                 
                 //DO SHAKE CAMERA
-                
                 yield return new WaitForSeconds(0.3f);
 
                 Destroy(circleBoxingObject, 1f);
