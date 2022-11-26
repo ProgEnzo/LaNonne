@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 9006283483999273133}
   m_Layer: 15
   m_Name: BOSS
-  m_TagString: Boss
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,14 +136,17 @@ MonoBehaviour:
   - {fileID: 9071314407910337641, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}
   - {fileID: 1593806974005075729, guid: 358aa556e8a060a4a9b452adb90fb974, type: 3}
   - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
-  hpBossSlider: {fileID: 0}
   currentHealth: 100
-  maxHealth: 2000
-  normalSpeed: 2
+  maxHealth: 500
+  normalSpeed: 0
+  knockbackForce: 2
+  vCamPlayer: {fileID: 0}
+  amplitudeGain: 0
+  frequencyGain: 0
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   bodyDamage: 20
   dashDistance: 10
-  dashTime: 0.7
+  dashTime: 3
   dashCooldown: 1
   timeBeforeDashing: 0.5
   dashAmount: 2
@@ -157,10 +160,8 @@ MonoBehaviour:
   toxicArea: {fileID: 2696438898175031748, guid: 9a087c729841efe48808cf2c26a9b491, type: 3}
   vacuumParticle: {fileID: 8767533293606540559}
   vacuumCooldown: 3
-  toxicAreaCooldown: 3
   vacuumAmount: 3
   currentVacuumAmount: 3
-  vCamPlayer: {fileID: 0}
   takingDamage: 1
   numberOfSpawn: 3
   transitionCooldown: 15
@@ -176,6 +177,13 @@ MonoBehaviour:
   slug: {fileID: 5399778970430523503, guid: d78ff8a45bd3fe14786cf5fdeb4b43e8, type: 3}
   throwAmount: 2
   currentThrowAmount: 2
+  circleBoxing: {fileID: 7688052807178463068, guid: 129cb48c03dda974cb5778945467a8c3, type: 3}
+  circleBoxingWarning: {fileID: 7688052807178463068, guid: 56ae3f4c1b1c1884f80bda630e3c1f24, type: 3}
+  distanceBetweenPlayer: 3
+  aggroBoxingRange: 3
+  timerBeforeBoxing: 3
+  numberOfSurroundingCircle: 5
+  timerIsRunning: 0
 --- !u!212 &9006283483999273128
 SpriteRenderer:
   m_ObjectHideFlags: 0
