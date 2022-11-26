@@ -20,13 +20,15 @@ public class ItemPlacementHelper
         foreach (var position in roomFloorNoCorridor)
         {
             int neighboursCount8Dir = graph.GetNeighbours8Directions(position).Count;
-            PlacementType type = neighboursCount8Dir < 8 ? PlacementType.NearWall : PlacementType.OpenSpace;
+            
+            PlacementType type = neighboursCount8Dir < 8 ? PlacementType.NearWall : PlacementType.OpenSpace; //ne pas faire un ternary si plus de 2 conditions
 
             if (tileByType.ContainsKey(type) == false)
                 tileByType[type] = new HashSet<Vector2Int>();
 
             if (type == PlacementType.NearWall && graph.GetNeighbours4Directions(position).Count == 4)
                 continue;
+            
             tileByType[type].Add(position);
         }
     }
@@ -66,10 +68,7 @@ public class ItemPlacementHelper
         return null;
     }
 
-    private (bool, List<Vector2Int>) PlaceBigItem(
-        Vector2Int originPosition, 
-        Vector2 size ,
-        bool addOffset)
+    private (bool, List<Vector2Int>) PlaceBigItem(Vector2Int originPosition, Vector2 size , bool addOffset)
     {
         List<Vector2Int> positions = new List<Vector2Int>() { originPosition };
         float maxX = addOffset ? size.x + 1 : size.x;
@@ -83,10 +82,11 @@ public class ItemPlacementHelper
             {
                 if (col == 0 && row == 0)
                     continue;
-                Vector2Int newPosToCheck = 
-                    new Vector2Int(originPosition.x + row, originPosition.y + col);
+                Vector2Int newPosToCheck = new Vector2Int(originPosition.x + row, originPosition.y + col);
+                
                 if (roomFloorNoCorridor.Contains(newPosToCheck) == false)
-                    return (false, positions);
+                    return (false, positions); 
+                
                 positions.Add(newPosToCheck);
             }
         }
@@ -98,5 +98,9 @@ public enum PlacementType
 {
     OpenSpace,
     NearWall,
-    Tas,
+    Corner,
+    NearWallUp,
+    NearWallDown,
+    NearWallLeft,
+    NearWallRight
 }
