@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f789f89a3b2438e91c0c2698866c22f, type: 3}
-  m_Name: Wealth
+  m_Name: Target - T1
   m_EditorClassIdentifier: 
-  WeaponName: Dague - Wealth
+  effectName: Target
+  level: 1
   cost: 50
-  description: "Les ennemis qui meurent de cette attaque l\xE2chent des EP additionnels."
+  description: "L'attaque pose une marque sur les ennemis, ceux qui se font marquer
+    prennent plus de d\xE9g\xE2ts."
   rateOfDamage: 0.5
   damage: 10
   radius: 25

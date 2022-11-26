@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3786407124578739001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3786407124578739007}
+  - component: {fileID: 3786407124578739006}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: GameManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3786407124578739007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786407124578739001}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3786407124578739006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786407124578739001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1998cc00992028540b7fa8a3168de8b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectMaxLevel: 3
+  numberOfEffects: 4
+  effectDictionary:
+  - shopObjects:
+    - {fileID: 11400000, guid: 1c53014be8d7457f8380159759850351, type: 2}
+    - {fileID: 11400000, guid: 2a8f7fda24a649b4fb51d2a3db818bbf, type: 2}
+    - {fileID: 11400000, guid: 4575c72c919e74b4fb6ffb876a144906, type: 2}
+  - shopObjects:
+    - {fileID: 11400000, guid: 9ffa2baa9011f124da910390b0bc1381, type: 2}
+    - {fileID: 11400000, guid: 56977f9de6541f84cb937c57eba7ccf0, type: 2}
+    - {fileID: 11400000, guid: b1708a7e4535fda448e6024d0d9af41a, type: 2}
+  - shopObjects:
+    - {fileID: 11400000, guid: 9510313bf0334204eb6b43a73fce159b, type: 2}
+    - {fileID: 11400000, guid: 10e2c74dff91bbf4285cd9cd61d094ff, type: 2}
+    - {fileID: 11400000, guid: 885ce8b5c9356d747b9347450e30c9e6, type: 2}
+  - shopObjects:
+    - {fileID: 11400000, guid: 2a34203dbc9f62a499256557c3859d3d, type: 2}
+    - {fileID: 11400000, guid: 121ba08a42bd8994ba2071dd05134183, type: 2}
+    - {fileID: 11400000, guid: f305cf92e3aa353438f72faa7d6ab4de, type: 2}

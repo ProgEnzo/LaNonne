@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f789f89a3b2438e91c0c2698866c22f, type: 3}
+  m_Name: Bleed - T1
+  m_EditorClassIdentifier: 
+  effectName: Bleed
+  level: 1
+  cost: 50
+  description: "L'attaque fait saigner les ennemis qui prennent des d\xE9g\xE2ts
+    sur la dur\xE9e."
+  rateOfDamage: 0.5
+  damage: 10
+  radius: 25
+  coolDown: 2
+  epDropRate: 5
+  movementSpeed: 10

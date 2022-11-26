@@ -24,21 +24,21 @@ namespace Controller
         public new static PlayerController instance;
         
         [SerializeField] private List<int> layersToConsiderAnyway = new();
-        private List<int> layersToUndoIgnore = new();
+        private readonly List<int> layersToUndoIgnore = new();
 
         [Header("Revealing Dash")]
-        [NonSerialized] public bool isHitting;
+        private bool isHitting;
         [SerializeField] public float hitSpeed = 1f;
         [SerializeField] public float revealingDashDetectionRadius = 1f;
         [SerializeField] public int revealingDashEpCost;
-        [NonSerialized] public GameObject revealingDashAimedEnemy;
+        private GameObject revealingDashAimedEnemy;
         [SerializeField] public float toleranceDistance = 0.1f;
-        [NonSerialized] public Vector3 newPosition;
+        private Vector3 newPosition;
         [SerializeField] public float stunDuration = 1f;
-        [NonSerialized] Dictionary<GameObject, Coroutine> runningCoroutines = new();
+        private readonly Dictionary<GameObject, Coroutine> runningCoroutines = new();
         [SerializeField] public float damageMultiplier = 1f;
         [SerializeField] public float revealingDashTimer = 5f;
-        [NonSerialized] public float revealingDashTimerCount;
+        private float revealingDashTimerCount;
 
         [Header("UI elements")]
 
@@ -50,13 +50,14 @@ namespace Controller
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
         private bool isMoving;
         private float playerScale;
-        internal List<GameObject> animPrefabs = new();
+        internal readonly List<GameObject> animPrefabs = new();
         internal GameObject currentAnimPrefab;
         internal Animator currentAnimPrefabAnimator;
         private (int parameterToChange, int value) animParametersToChange;
         private bool isMovingProfile;
         
         internal Dictionary<EffectManager.Effect, int> effectInventory = new();
+        private EffectManager effectManager;
 
         private void Awake()
         {
@@ -81,11 +82,6 @@ namespace Controller
             {
                 prefab.SetActive(false);
             }
-            
-            effectInventory.Add(EffectManager.Effect.Bleed, 0);
-            effectInventory.Add(EffectManager.Effect.Chill, 0);
-            effectInventory.Add(EffectManager.Effect.Target, 0);
-            effectInventory.Add(EffectManager.Effect.Wealth, 0);
         }
 
         private void Start()
@@ -97,6 +93,12 @@ namespace Controller
             hpSlider.maxValue = soController.maxHealth;
             hpSlider.value = soController.maxHealth;
             currentEp = 0;
+            
+            effectManager = EffectManager.instance;
+            for (var i = 0; i < effectManager.numberOfEffects; i++)
+            {
+                effectInventory.Add((EffectManager.Effect)i, 0);
+            }
 
             //ReInit();
         }

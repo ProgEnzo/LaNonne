@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Controller;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Shop.UI
 {
@@ -20,18 +23,21 @@ namespace Shop.UI
       private float timerInputPressed;
       private bool isInTrigger;
 
-      public PlayerController playerController;
+      [SerializeField] private int numberOfOfferedObjects;
+      private EffectManager.Effect[] effectsInTheShop;
+      private EffectManager effectManager;
+      private bool isShopOpened;
 
       private void Start()
       {
-         playerController = PlayerController.instance;
-         
          StartCoroutine(BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp());
          shopCanvas.SetActive(false);
 
          //image.DORectTransformMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutFlash); Merci Mathieu je vais voir ca ce soir !!
 
          timerInputPressed = 0f;
+         effectManager = EffectManager.instance;
+         isShopOpened = false;
       }
 
       private IEnumerator BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp()
@@ -74,17 +80,41 @@ namespace Shop.UI
          }
       }
 
-      public void OpenShop()
+      private void OpenShop()
       {
          if (Input.GetKey(KeyCode.E))
          {
             timerInputPressed += Time.deltaTime;
             image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
 
-            if (timerInputPressed > timeToAccess - 0.05f)
+            if (timerInputPressed > timeToAccess - 0.05f && isShopOpened == false)
             {
+               isShopOpened = true;
                shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
                Time.timeScale = 0;
+               ShopObjectsSelector();
+               for (var i = 0; i < effectsInTheShop.Length; i++)
+               {
+                  if (effectsInTheShop[i] != EffectManager.Effect.None)
+                  {
+                     shopPanel.transform.GetChild(i + 1).GetChild(0).GetComponent<TextMeshProUGUI>().text =
+                        effectsInTheShop[i] + " - T" +
+                        (PlayerController.instance.effectInventory[effectsInTheShop[i]] + 1);
+                     shopPanel.transform.GetChild(i + 1).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+                        "Cost : " + effectManager.effectDictionary[(int)effectsInTheShop[i]][
+                           PlayerController.instance.effectInventory[effectsInTheShop[i]]].cost;
+                     shopPanel.transform.GetChild(i + 1).GetChild(2).GetComponent<TextMeshProUGUI>().text =
+                        effectManager.effectDictionary[(int)effectsInTheShop[i]][
+                           PlayerController.instance.effectInventory[effectsInTheShop[i]]].description;
+                  }
+                  else
+                  {
+                     for (var j = 0; j < 3; j++)
+                     {
+                        shopPanel.transform.GetChild(i + 1).GetChild(j).GetComponent<TextMeshProUGUI>().text = "Closed.";
+                     }
+                  }
+               }
             }
          }
 
@@ -96,8 +126,37 @@ namespace Shop.UI
       
       }
 
+      private void ShopObjectsSelector()
+      {
+         effectsInTheShop = new EffectManager.Effect[numberOfOfferedObjects];
+         for (var i = 0; i < effectsInTheShop.Length; i++)
+         {
+            effectsInTheShop[i] = EffectManager.Effect.None;
+         }
+
+         var possibleEffects = new List<EffectManager.Effect>();
+         
+         for (var i = 0; i < effectManager.numberOfEffects; i++)
+         {
+            if (PlayerController.instance.effectInventory[(EffectManager.Effect)i] < effectManager.effectMaxLevel)
+            {
+               Debug.Log("Effect " + (EffectManager.Effect)i + " is available.");
+               possibleEffects.Add((EffectManager.Effect)i);
+            }
+         }
+         
+         var maxPossibleEffects = possibleEffects.Count;
+
+         for (var i = 0; i < Math.Min(effectsInTheShop.Length, maxPossibleEffects); i++)
+         {
+            effectsInTheShop[i] = possibleEffects[Random.Range(0, possibleEffects.Count)];
+            possibleEffects.Remove(effectsInTheShop[i]);
+         }
+      }
+
       public void CloseShop()
       {
+         isShopOpened = false;
          shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
          shopPanel.SetActive(false);
 
@@ -119,7 +178,19 @@ namespace Shop.UI
          menu.SetActive(true);
          for (var i = 0; i < PlayerController.instance.effectInventory.Count; i++)
          {
-            menu.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ((EffectManager.Effect)i).ToString();
+            menu.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (EffectManager.Effect)i + "\n\n" + PlayerController.instance.effectInventory[(EffectManager.Effect)i];
+         }
+      }
+      
+      public void BuyEffect(int buttonNumber)
+      {
+         if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None)
+         {
+            PlayerController.instance.effectInventory[effectsInTheShop[buttonNumber]]++;
+            PlayerController.instance.soController.epAmount -=
+               effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
+                  PlayerController.instance.effectInventory[effectsInTheShop[buttonNumber]] - 1].cost;
+            CloseShop();
          }
       }
    }

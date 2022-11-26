@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f789f89a3b2438e91c0c2698866c22f, type: 3}
-  m_Name: Bleed
+  m_Name: Chill - T1
   m_EditorClassIdentifier: 
-  WeaponName: Dague - Bleed
+  effectName: Chill
+  level: 1
   cost: 50
-  description: "L'attaque fait saigner les ennemis qui prennent des d\xE9g\xE2ts
-    sur la dur\xE9e."
+  description: "Ralentit l'ennemi touch\xE9 sur une dur\xE9e."
   rateOfDamage: 0.5
   damage: 10
   radius: 25

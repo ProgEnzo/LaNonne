@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f789f89a3b2438e91c0c2698866c22f, type: 3}
-  m_Name: Explosif
+  m_Name: Wealth - T1
   m_EditorClassIdentifier: 
-  WeaponName: Whip Chain - Explosif
+  effectName: Wealth
+  level: 1
   cost: 50
-  description: "L'attaque provoque une explosion \xE0 l'impact qui touche les ennemis
-    autour de la cible."
+  description: "Les ennemis qui meurent de cette attaque l\xE2chent des EP additionnels."
   rateOfDamage: 0.5
   damage: 10
   radius: 25

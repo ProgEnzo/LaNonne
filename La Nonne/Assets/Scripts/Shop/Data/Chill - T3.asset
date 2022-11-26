@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f789f89a3b2438e91c0c2698866c22f, type: 3}
-  m_Name: Toxic
+  m_Name: Chill - T3
   m_EditorClassIdentifier: 
-  WeaponName: Dash - Toxic
+  effectName: Chill
+  level: 3
   cost: 50
-  description: "Les ennemis touch\xE9s par cette attaque r\xE9pandent une tra\xEEn\xE9e
-    toxique qui font des d\xE9g\xE2ts aux ennemis qui passent dessus."
+  description: "Ralentit l'ennemi touch\xE9 sur une dur\xE9e."
   rateOfDamage: 0.5
   damage: 10
   radius: 25
