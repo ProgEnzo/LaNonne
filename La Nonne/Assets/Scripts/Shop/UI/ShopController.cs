@@ -31,6 +31,8 @@ namespace Shop.UI
       private bool canChooseEffect;
       private int selectedEffectEmplacement;
       private bool isEffectEmplacementSelected;
+      [SerializeField] private int maxNumberOfTakenObjects;
+      private int currentNumberOfTakenObjects;
 
       private void Start()
       {
@@ -98,6 +100,7 @@ namespace Shop.UI
                isShopOpened = true;
                shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
                Time.timeScale = 0;
+               currentNumberOfTakenObjects = 0;
                ShopObjectsSelector();
                for (var i = 0; i < effectsInTheShop.Length; i++)
                {
@@ -190,13 +193,25 @@ namespace Shop.UI
       
       public void BuyEffect(int buttonNumber)
       {
-         if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None)
+         if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None/* && PlayerController.instance.soController.epAmount >=
+             effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
+                EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]]].cost*/)
          {
+            currentNumberOfTakenObjects++;
             EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]]++;
             PlayerController.instance.soController.epAmount -=
                effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
                   EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]] - 1].cost;
-            CloseShop();
+            effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
+            for (var j = 0; j < 3; j++)
+            {
+               shopPanel.transform.GetChild(buttonNumber+1).GetChild(j).GetComponent<TextMeshProUGUI>().text = "Closed.";
+            }
+
+            if (currentNumberOfTakenObjects == maxNumberOfTakenObjects || effectsInTheShop.All(effect => effect == EffectManager.Effect.None))
+            {
+               CloseShop();
+            }
          }
       }
       
