@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AI;
 using Core.Scripts.Utils;
-using Shop;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -55,9 +54,6 @@ namespace Controller
         internal Animator currentAnimPrefabAnimator;
         private (int parameterToChange, int value) animParametersToChange;
         private bool isMovingProfile;
-        
-        internal Dictionary<EffectManager.Effect, int> effectInventory = new();
-        private EffectManager effectManager;
 
         private void Awake()
         {
@@ -93,12 +89,6 @@ namespace Controller
             hpSlider.maxValue = soController.maxHealth;
             hpSlider.value = soController.maxHealth;
             currentEp = 0;
-            
-            effectManager = EffectManager.instance;
-            for (var i = 0; i < effectManager.numberOfEffects; i++)
-            {
-                effectInventory.Add((EffectManager.Effect)i, 0);
-            }
 
             //ReInit();
         }
