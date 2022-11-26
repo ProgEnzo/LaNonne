@@ -110510,6 +110510,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: distance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
       propertyPath: maxHealth
       value: 500
       objectReference: {fileID: 0}
@@ -110554,12 +110558,20 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: circleBoxingWarning
+      value: 
+      objectReference: {fileID: 7688052807178463068, guid: 56ae3f4c1b1c1884f80bda630e3c1f24, type: 3}
+    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
       propertyPath: distanceBetweenPlayer
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
       propertyPath: currentToxicMineAmount
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: numberOfSurroundingCircle
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
