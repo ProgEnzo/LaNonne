@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class ItemPlacementHelper 
 {
-    Dictionary<PlacementType, HashSet<Vector2Int>> 
-        tileByType = new Dictionary<PlacementType, HashSet<Vector2Int>>();
+    Dictionary<PlacementType, HashSet<Vector2Int>> tileByType = new Dictionary<PlacementType, HashSet<Vector2Int>>();
 
 
     HashSet<Vector2Int> roomFloorNoCorridor;
@@ -71,8 +70,10 @@ public class ItemPlacementHelper
     private (bool, List<Vector2Int>) PlaceBigItem(Vector2Int originPosition, Vector2 size , bool addOffset)
     {
         List<Vector2Int> positions = new List<Vector2Int>() { originPosition };
+        
         float maxX = addOffset ? size.x + 1 : size.x;
         float maxY = addOffset ? size.y + 1 : size.y;
+        
         int minX = addOffset ? -1 : 0;
         int minY = addOffset ? -1 : 0;
 
@@ -100,7 +101,5 @@ public enum PlacementType
     NearWall,
     Corner,
     NearWallUp,
-    NearWallDown,
-    NearWallLeft,
-    NearWallRight
+    NearWallDown
 }
