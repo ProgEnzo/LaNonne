@@ -39,6 +39,11 @@ public class BossStateManager : MonoBehaviour
     public float normalSpeed;
     public float knockbackForce;
 
+    [Header("Virtual Camera")] 
+    public CinemachineVirtualCamera vCamPlayer;
+    public float amplitudeGain;
+    public float frequencyGain;
+    
     [Header("----Dash----")] 
     public GameObject dashMine;
     public int bodyDamage;
@@ -63,12 +68,10 @@ public class BossStateManager : MonoBehaviour
     public GameObject toxicArea;
     public GameObject vacuumParticle;
     public float vacuumCooldown;
-    public float toxicAreaCooldown;
     public int vacuumAmount;
     public int currentVacuumAmount;
 
     [Header("----TransitionState----")] 
-    public CinemachineVirtualCamera vCamPlayer;
     public bool takingDamage = true;
     public int numberOfSpawn;
     public float transitionCooldown;
@@ -96,11 +99,17 @@ public class BossStateManager : MonoBehaviour
 
     [Header("----BoxingState----")] 
     public GameObject circleBoxing;
+    public GameObject circleBoxingWarning;
     public float distanceBetweenPlayer;
     public float aggroBoxingRange;
     public float timerBeforeBoxing;
     
+    
+    public float numberOfSurroundingCircle;
+    
+    
     public bool timerIsRunning;
+    
     
     private void Awake()
     {
@@ -528,7 +537,7 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         var posBossBeforeSpawn = transform.position; //get la pos du boss 
-        var slugObject = Instantiate(slug, new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+        var slugObject = Instantiate(slug, new Vector2(posBossBeforeSpawn.x + Random.Range(2f, 3f),posBossBeforeSpawn.y +  Random.Range(2f, 3f)), Quaternion.identity);
 
         yield return new WaitForSeconds(3f);
         
@@ -555,19 +564,39 @@ public class BossStateManager : MonoBehaviour
     #endregion
 
     #region BoxingState
+    
     public void BoxingManager()
     {
         StartCoroutine(Boxing());
+        Debug.Log($"<color=red>COROUTINE Boxing HAS begun</color>");
     }
 
     private IEnumerator Boxing()
     {
-        Debug.Log($"<color=green>COROUTINE Boxing HAS begun</color>");
 
         yield return new WaitForSeconds(1f);
+
         
-        var posBossBeforeSpawn = transform.position; //get la pos du boss 
-        Instantiate(circleBoxing,new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+        for (int i = 0; i < numberOfSurroundingCircle; i++)
+        {
+            if (distanceBetweenPlayer < aggroBoxingRange)
+            {
+                var posPlayerBeforeSpawn = player.transform.position; //get la pos du boss
+                var circleWarningObject = Instantiate(circleBoxingWarning, new Vector2(posPlayerBeforeSpawn.x + Random.Range(-1f, 1f),posPlayerBeforeSpawn.y +  Random.Range(-1, 1f)), Quaternion.identity);
+                yield return new WaitForSeconds(0.3f);
+
+                Destroy(circleWarningObject, 1f);
+                var circleBoxingObject = Instantiate(circleBoxing, circleWarningObject.transform.position, Quaternion.identity);
+                
+                //DO SHAKE CAMERA
+                
+                yield return new WaitForSeconds(0.3f);
+
+                Destroy(circleBoxingObject, 1f);
+            }
+        }
+        yield return new WaitForSeconds(0.5f);
+
         
         if (distanceBetweenPlayer < aggroBoxingRange)
         {
