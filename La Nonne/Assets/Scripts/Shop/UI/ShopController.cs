@@ -14,8 +14,8 @@ namespace Shop.UI
    public class ShopController : MonoBehaviour
    {
       [Header("References")] 
-      private GameObject shopPanel;
-      private GameObject whipModificationMenu;
+      [SerializeField] private GameObject shopPanel;
+      [SerializeField] private GameObject whipModificationMenu;
       public GameObject shopCanvas;
       public Image image;
    
@@ -50,8 +50,6 @@ namespace Shop.UI
 
       private IEnumerator BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp()
       {
-         shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
-         whipModificationMenu = GameObject.FindGameObjectWithTag("WhipModifMenu");
          yield return new WaitForSeconds(0.3f);
          shopPanel.SetActive(false);
          whipModificationMenu.SetActive(false);
@@ -165,7 +163,6 @@ namespace Shop.UI
       public void CloseShop()
       {
          isShopOpened = false;
-         shopPanel = GameObject.FindGameObjectWithTag("ShopPanel");
          shopPanel.SetActive(false);
 
          image.fillAmount = 0f;
@@ -176,7 +173,6 @@ namespace Shop.UI
       public void CloseWhipModificationMenu()
       {
          isEffectEmplacementSelected = false;
-         whipModificationMenu = GameObject.FindGameObjectWithTag("WhipModifMenu");
          whipModificationMenu.SetActive(false);
       
          //shopPanel.SetActive(true);
