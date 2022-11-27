@@ -17,6 +17,7 @@ namespace AI
         [SerializeField, ShowOnly] internal float currentVelocitySpeed;
         [SerializeField, ShowOnly] internal float currentDamageMultiplier;
         [SerializeField, ShowOnly] internal float currentEpDropMultiplier;
+        //eds
 
         /*[NonSerialized]*/ public bool isStunned;
         private AIPath aiPathComponent;
