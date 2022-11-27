@@ -51,10 +51,53 @@ public class TilemapVisualizer : MonoBehaviour
         wallTilemap.ClearAllTiles();
     }
 
-    public void Update()
+    /*public void Update()
     {
         var a = wallTilemap.GetTile(new Vector3Int(-8, 1, 0));
         Debug.Log(a);
+    }*/
+
+    //Appler cette fonction pour toute mes salles 
+    private List<Tile> GetWalls(int middleX, int middleY, PlacementType TypeWanted) //surement remplacer le placement Type (actuellement mon script) 
+    {
+        int count = 14;
+        
+        List<Tile> tileReturn = new List<Tile>();
+
+        for (int i = 0; i < count; i++)
+        {
+            for (int j = 0; j < count; j++)
+            {
+                var cellX = middleX - count / 2 + i;
+                var cellY = middleY - count / 2 + j;
+                
+                var tile = wallTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
+
+                switch (TypeWanted)
+                {
+                    case PlacementType.WallUp:
+                        if (tile == wallTop)
+                        {
+                            
+                        }
+                        break;
+                    case PlacementType.WallSide:
+                        if (tile == wallSideRight || tile == wallSideLeft)
+                        {
+                            
+                        }
+                        break;
+                    case PlacementType.WallDown:
+                        if (tile == wallBottom)
+                        {
+                            
+                        }
+                        break;
+                }
+            }
+        }
+
+        return tileReturn;
     }
 
     public void PaintSingleBasicWall(Vector2Int positions, string binaryType)
