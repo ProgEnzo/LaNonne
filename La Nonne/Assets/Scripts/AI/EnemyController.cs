@@ -1,9 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using Pathfinding;
 using Shop;
+using Tools;
 using UnityEngine;
 
 namespace AI
@@ -12,19 +12,32 @@ namespace AI
     {
         protected PlayerController playerController;
         [SerializeField] protected SO_Enemy soEnemy;
-        [SerializeField] public float currentHealth;
+        [SerializeField, ShowOnly] internal float currentHealth;
+        [SerializeField, ShowOnly] internal float currentAiPathSpeed;
+        [SerializeField, ShowOnly] internal float currentVelocitySpeed;
+        [SerializeField, ShowOnly] internal float currentDamageMultiplier;
+        [SerializeField, ShowOnly] internal float currentEpDropMultiplier;
 
         /*[NonSerialized]*/ public bool isStunned;
         private AIPath aiPathComponent;
+        protected Rigidbody2D rb;
         private static readonly List<SpriteRenderer> PlayerSpriteRenderers = new();
-        internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
-        internal readonly float[] stackTimers = new float[3];
+        [SerializeField, ShowOnly] internal (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
+        [SerializeField, ShowOnly] internal float[] stackTimers = new float[3];
+        [SerializeField, ShowOnly] internal bool[] areStacksOn = new bool[3];
+        private EffectManager effectManager;
 
         protected virtual void Start()
         {
             aiPathComponent = GetComponent<AIPath>();
+            rb = GetComponent<Rigidbody2D>();
             playerController = PlayerController.instance;
+            effectManager = EffectManager.instance;
             currentHealth = soEnemy.maxHealth;
+            currentAiPathSpeed = soEnemy.aiPathBasicSpeed;
+            currentVelocitySpeed = soEnemy.velocityBasicSpeed;
+            currentDamageMultiplier = 1f;
+            currentEpDropMultiplier = 1f;
             if (GetComponent<AIDestinationSetter>() != null)
             {
                 GetComponent<AIDestinationSetter>().target = playerController.transform;
@@ -36,12 +49,14 @@ namespace AI
                 stacks[i].effect = EffectManager.Effect.None; 
                 stacks[i].level = 0;
                 stackTimers[i] = 0;
+                areStacksOn[i] = false;
             }
         }
         
         protected virtual void Update()
         {
-            playerController = PlayerController.instance;
+            aiPathComponent.maxSpeed = currentAiPathSpeed;
+            
             PlayerSpriteRenderers.Clear();
             for (var i = 0; i < playerController.transform.childCount; i++)
             {
@@ -59,7 +74,7 @@ namespace AI
         #region HealthEnemy
         public virtual void TakeDamageFromPlayer(int damage)
         {
-            currentHealth -= damage;
+            currentHealth -= damage * currentDamageMultiplier;
             EnemyDeath();
         }
 
@@ -83,7 +98,6 @@ namespace AI
         protected virtual void StunCheck()
         {
             aiPathComponent.enabled = !isStunned;
-            
         }
         
         private void EffectCheck()
@@ -97,9 +111,15 @@ namespace AI
                 stackTimers[i] -= Time.deltaTime;
                 if (stackTimers[i] <= 0)
                 {
+                    stackTimers[i] = 0;
                     stacks[i].effect = EffectManager.Effect.None;
                     stacks[i].level = 0;
+                    continue;
                 }
+
+                if (areStacksOn[i]) continue;
+                areStacksOn[i] = true;
+                effectManager.EffectSwitch(stacks[i].effect, stacks[i].level, gameObject, i);
             }
         }
 
