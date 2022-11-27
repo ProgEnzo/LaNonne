@@ -58,7 +58,7 @@ public class TilemapVisualizer : MonoBehaviour
     }*/
 
     //Appler cette fonction pour toute mes salles 
-    private List<Tile> GetWalls(int middleX, int middleY, PlacementType TypeWanted) //surement remplacer le placement Type (actuellement mon script) 
+    private List<Tile> GetWalls(int middleX, int middleY, PlacementType typeWanted) //surement remplacer le placement Type (actuellement mon script) 
     {
         int count = 14;
         
@@ -73,7 +73,7 @@ public class TilemapVisualizer : MonoBehaviour
                 
                 var tile = wallTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
 
-                switch (TypeWanted)
+                switch (typeWanted)
                 {
                     case PlacementType.WallUp:
                         if (tile == wallTop)
