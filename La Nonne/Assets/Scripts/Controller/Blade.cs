@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AI;
+using Shop;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -31,11 +32,13 @@ namespace Controller
         [SerializeField] private float maxDetectionAngle;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
+        private EffectManager effectManager;
 
         // Start is called before the first frame update
         private void Start()
         {
             playerController = PlayerController.instance;
+            effectManager = EffectManager.instance;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
             lineRenderer.enabled = false;
@@ -170,6 +173,7 @@ namespace Controller
             if (other.gameObject.CompareTag("Enemy"))
             {
                 other.gameObject.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.playerAttackDamage);
+                PutStack(other.gameObject);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
             }
             
@@ -177,6 +181,25 @@ namespace Controller
             if (other.gameObject.CompareTag("Boss"))
             {
                 other.gameObject.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.playerAttackDamage);
+            }
+        }
+
+        private void PutStack(GameObject enemy)
+        {
+            var applicableEffects = (from effect in effectManager.appliedEffects let randomPercent = Random.Range(0, 100) where randomPercent < effectManager.effectDictionary[(int)effect][effectManager.effectInventory[effect] - 1].chanceToBeApplied select (effect, effectManager.effectInventory[effect])).ToList();
+            var randomNumber = Random.Range(0, applicableEffects.Count);
+            ApplyStack(enemy, applicableEffects[randomNumber]);
+        }
+        
+        private static void ApplyStack(GameObject enemy, (EffectManager.Effect effect, int level) effectToApply)
+        {
+            var enemyController = enemy.GetComponent<EnemyController>();
+            if (!enemyController.stacks.Contains<>(EffectManager.Effect.None)) return;
+            for (var i = 0; i < enemyController.stacks.Length; i++)
+            {
+                if (enemyController.stacks[i].effect != EffectManager.Effect.None) continue;
+                enemyController.stacks[i] = effectToApply;
+                break;
             }
         }
         

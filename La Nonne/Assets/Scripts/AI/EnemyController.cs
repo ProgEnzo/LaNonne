@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using Pathfinding;
+using Shop;
 using UnityEngine;
 
 namespace AI
@@ -16,6 +17,7 @@ namespace AI
         /*[NonSerialized]*/ public bool isStunned;
         private AIPath aiPathComponent;
         private static readonly List<SpriteRenderer> PlayerSpriteRenderers = new();
+        internal (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
 
         protected virtual void Start()
         {
@@ -27,6 +29,12 @@ namespace AI
                 GetComponent<AIDestinationSetter>().target = playerController.transform;
             }
             isStunned = false;
+            
+            for (var i = 0; i < stacks.Length; i++)
+            {
+                stacks[i].effect = EffectManager.Effect.None; 
+                stacks[i].level = 0;
+            }
         }
         
         protected virtual void Update()

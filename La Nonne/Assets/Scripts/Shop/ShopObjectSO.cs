@@ -10,6 +10,7 @@ public class ShopObjectSO : ScriptableObject
    public int cost = 50;
    public string description;
 
+   public float chanceToBeApplied = 10;
    public float rateOfDamage = 0.5f;
    public int damage = 10;
    public int radius = 25;
