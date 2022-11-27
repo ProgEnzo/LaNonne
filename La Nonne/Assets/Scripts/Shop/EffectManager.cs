@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using AI;
 using Core.Scripts.Utils;
+using Shop;
 using UnityEngine;
 
 [Serializable]
@@ -52,6 +55,76 @@ namespace Shop
             {
                 appliedEffects[i] = Effect.None;
             }
+        }
+        
+        internal void EffectSwitch(Effect effect, int level, GameObject enemy, int stackIndex)
+        {
+            switch (effect)
+            {
+                case Effect.Bleed:
+                    StartCoroutine(Bleed(level, enemy, stackIndex));
+                    break;
+                case Effect.Chill:
+                    StartCoroutine(Chill(level, enemy, stackIndex));
+                    break;
+                case Effect.Target:
+                    StartCoroutine(Target(level, enemy, stackIndex));
+                    break;
+                case Effect.Wealth:
+                    StartCoroutine(Wealth(level, enemy, stackIndex));
+                    break;
+                default:
+                    Debug.Log("None");
+                    break;
+            }
+        }
+        
+        private static IEnumerator Bleed(int level, GameObject enemy, int stackIndex)
+        {
+            var bleedSo = (BleedSO) instance.effectDictionary[(int)Effect.Bleed][level-1];
+            var enemyController = enemy.GetComponent<EnemyController>();
+            yield return new WaitForSeconds(bleedSo.cooldown);
+            while (enemyController.stacks[stackIndex].effect == Effect.Bleed)
+            {
+                enemyController.TakeDamageFromPlayer(bleedSo.damage);
+                yield return new WaitForSeconds(bleedSo.cooldown);
+            }
+            enemyController.areStacksOn[stackIndex] = false;
+        }
+        
+        private static IEnumerator Chill(int level, GameObject enemy, int stackIndex)
+        {
+            var chillSo = (ChillSO) instance.effectDictionary[(int)Effect.Chill][level-1];
+            var enemyController = enemy.GetComponent<EnemyController>();
+            enemyController.currentAiPathSpeed *= chillSo.rateOfBasicSpeed;
+            enemyController.currentVelocitySpeed *= chillSo.rateOfBasicSpeed;
+            bool Condition() => enemyController.stacks[stackIndex].effect != Effect.Chill;
+            yield return new WaitUntil(Condition);
+            enemyController.currentAiPathSpeed /= chillSo.rateOfBasicSpeed;
+            enemyController.currentVelocitySpeed /= chillSo.rateOfBasicSpeed;
+            enemyController.areStacksOn[stackIndex] = false;
+        }
+        
+        private static IEnumerator Target(int level, GameObject enemy, int stackIndex)
+        {
+            var targetSo = (TargetSO) instance.effectDictionary[(int)Effect.Target][level-1];
+            var enemyController = enemy.GetComponent<EnemyController>();
+            enemyController.currentDamageMultiplier *= targetSo.rateOfDamage;
+            bool Condition() => enemyController.stacks[stackIndex].effect != Effect.Target;
+            yield return new WaitUntil(Condition);
+            enemyController.currentDamageMultiplier /= targetSo.rateOfDamage;
+            enemyController.areStacksOn[stackIndex] = false;
+        }
+        
+        private static IEnumerator Wealth(int level, GameObject enemy, int stackIndex)
+        {
+            var wealthSo = (WealthSO) instance.effectDictionary[(int)Effect.Wealth][level-1];
+            var enemyController = enemy.GetComponent<EnemyController>();
+            enemyController.currentEpDropMultiplier *= wealthSo.epDropRate;
+            bool Condition() => enemyController.stacks[stackIndex].effect != Effect.Wealth;
+            yield return new WaitUntil(Condition);
+            enemyController.currentEpDropMultiplier /= wealthSo.epDropRate;
+            enemyController.areStacksOn[stackIndex] = false;
         }
     }
 }

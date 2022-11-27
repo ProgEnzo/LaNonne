@@ -99,7 +99,7 @@ public enum PlacementType
 {
     OpenSpace,
     NearWall,
-    Corner,
-    NearWallUp,
-    NearWallDown
+    WallUp,
+    WallDown,
+    WallSide
 }
