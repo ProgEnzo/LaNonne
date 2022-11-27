@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Controller;
 using DG.Tweening;
 using TMPro;
@@ -27,6 +28,11 @@ namespace Shop.UI
       private EffectManager.Effect[] effectsInTheShop;
       private EffectManager effectManager;
       private bool isShopOpened;
+      private bool canChooseEffect;
+      private int selectedEffectEmplacement;
+      private bool isEffectEmplacementSelected;
+      [SerializeField] private int maxNumberOfTakenObjects;
+      private int currentNumberOfTakenObjects;
 
       private void Start()
       {
@@ -38,6 +44,8 @@ namespace Shop.UI
          timerInputPressed = 0f;
          effectManager = EffectManager.instance;
          isShopOpened = false;
+         canChooseEffect = false;
+         isEffectEmplacementSelected = false;
       }
 
       private IEnumerator BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp()
@@ -87,11 +95,12 @@ namespace Shop.UI
             timerInputPressed += Time.deltaTime;
             image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
 
-            if (timerInputPressed > timeToAccess - 0.05f && isShopOpened == false)
+            if (timerInputPressed > timeToAccess - 0.05f && !isShopOpened)
             {
                isShopOpened = true;
                shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
                Time.timeScale = 0;
+               currentNumberOfTakenObjects = 0;
                ShopObjectsSelector();
                for (var i = 0; i < effectsInTheShop.Length; i++)
                {
@@ -99,13 +108,13 @@ namespace Shop.UI
                   {
                      shopPanel.transform.GetChild(i + 1).GetChild(0).GetComponent<TextMeshProUGUI>().text =
                         effectsInTheShop[i] + " - T" +
-                        (PlayerController.instance.effectInventory[effectsInTheShop[i]] + 1);
+                        (EffectManager.instance.effectInventory[effectsInTheShop[i]] + 1);
                      shopPanel.transform.GetChild(i + 1).GetChild(1).GetComponent<TextMeshProUGUI>().text =
                         "Cost : " + effectManager.effectDictionary[(int)effectsInTheShop[i]][
-                           PlayerController.instance.effectInventory[effectsInTheShop[i]]].cost;
+                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].cost;
                      shopPanel.transform.GetChild(i + 1).GetChild(2).GetComponent<TextMeshProUGUI>().text =
                         effectManager.effectDictionary[(int)effectsInTheShop[i]][
-                           PlayerController.instance.effectInventory[effectsInTheShop[i]]].description;
+                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].description;
                   }
                   else
                   {
@@ -138,9 +147,8 @@ namespace Shop.UI
          
          for (var i = 0; i < effectManager.numberOfEffects; i++)
          {
-            if (PlayerController.instance.effectInventory[(EffectManager.Effect)i] < effectManager.effectMaxLevel)
+            if (EffectManager.instance.effectInventory[(EffectManager.Effect)i] < effectManager.effectMaxLevel)
             {
-               Debug.Log("Effect " + (EffectManager.Effect)i + " is available.");
                possibleEffects.Add((EffectManager.Effect)i);
             }
          }
@@ -167,6 +175,7 @@ namespace Shop.UI
    
       public void CloseWhipModificationMenu()
       {
+         isEffectEmplacementSelected = false;
          whipModificationMenu = GameObject.FindGameObjectWithTag("WhipModifMenu");
          whipModificationMenu.SetActive(false);
       
@@ -176,21 +185,50 @@ namespace Shop.UI
       public void OpenWhipModificationMenu(GameObject menu)
       {
          menu.SetActive(true);
-         for (var i = 0; i < PlayerController.instance.effectInventory.Count; i++)
+         for (var i = 0; i < EffectManager.instance.effectInventory.Count; i++)
          {
-            menu.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (EffectManager.Effect)i + "\n\n" + PlayerController.instance.effectInventory[(EffectManager.Effect)i];
+            menu.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (EffectManager.Effect)i + "\n\n" + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
          }
       }
       
       public void BuyEffect(int buttonNumber)
       {
-         if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None)
+         if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None/* && PlayerController.instance.soController.epAmount >=
+             effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
+                EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]]].cost*/)
          {
-            PlayerController.instance.effectInventory[effectsInTheShop[buttonNumber]]++;
+            currentNumberOfTakenObjects++;
+            EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]]++;
             PlayerController.instance.soController.epAmount -=
                effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
-                  PlayerController.instance.effectInventory[effectsInTheShop[buttonNumber]] - 1].cost;
-            CloseShop();
+                  EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]] - 1].cost;
+            effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
+            for (var j = 0; j < 3; j++)
+            {
+               shopPanel.transform.GetChild(buttonNumber+1).GetChild(j).GetComponent<TextMeshProUGUI>().text = "Closed.";
+            }
+
+            if (currentNumberOfTakenObjects == maxNumberOfTakenObjects || effectsInTheShop.All(effect => effect == EffectManager.Effect.None))
+            {
+               CloseShop();
+            }
+         }
+      }
+      
+      public void SelectEffectEmplacement(int buttonNumber)
+      {
+         selectedEffectEmplacement = buttonNumber;
+         isEffectEmplacementSelected = true;
+         canChooseEffect = true;
+      }
+      
+      public void SelectEffect(int buttonNumber)
+      {
+         if (isEffectEmplacementSelected && EffectManager.instance.effectInventory[(EffectManager.Effect)buttonNumber] > 0 && canChooseEffect && !effectManager.appliedEffects.Contains((EffectManager.Effect)buttonNumber))
+         {
+            EffectManager.instance.appliedEffects[selectedEffectEmplacement] = (EffectManager.Effect)buttonNumber;
+            whipModificationMenu.transform.GetChild(selectedEffectEmplacement+7).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[selectedEffectEmplacement] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[selectedEffectEmplacement]];
+            canChooseEffect = false;
          }
       }
    }

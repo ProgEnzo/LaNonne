@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using Pathfinding;
+using Shop;
 using UnityEngine;
 
 namespace AI
@@ -16,6 +17,8 @@ namespace AI
         /*[NonSerialized]*/ public bool isStunned;
         private AIPath aiPathComponent;
         private static readonly List<SpriteRenderer> PlayerSpriteRenderers = new();
+        internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
+        internal readonly float[] stackTimers = new float[3];
 
         protected virtual void Start()
         {
@@ -27,6 +30,13 @@ namespace AI
                 GetComponent<AIDestinationSetter>().target = playerController.transform;
             }
             isStunned = false;
+            
+            for (var i = 0; i < stacks.Length; i++)
+            {
+                stacks[i].effect = EffectManager.Effect.None; 
+                stacks[i].level = 0;
+                stackTimers[i] = 0;
+            }
         }
         
         protected virtual void Update()
@@ -40,9 +50,10 @@ namespace AI
                     PlayerSpriteRenderers.Add(spriteRenderer);
                 }
             }
-            
+
             HealCeiling();
             StunCheck();
+            EffectCheck();
         }
         
         #region HealthEnemy
@@ -73,6 +84,23 @@ namespace AI
         {
             aiPathComponent.enabled = !isStunned;
             
+        }
+        
+        private void EffectCheck()
+        {
+            for (var i = 0; i < stacks.Length; i++)
+            {
+                if (stacks[i].effect == EffectManager.Effect.None)
+                {
+                    continue;
+                }
+                stackTimers[i] -= Time.deltaTime;
+                if (stackTimers[i] <= 0)
+                {
+                    stacks[i].effect = EffectManager.Effect.None;
+                    stacks[i].level = 0;
+                }
+            }
         }
 
         protected internal static IEnumerator PlayerIsHit()

@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Core.Scripts.Utils;
-using Shop;
 using UnityEngine;
 
 [Serializable]
@@ -28,9 +26,12 @@ namespace Shop
 
         internal new static EffectManager instance;
         
+        [SerializeField] internal float effectDuration;
         [SerializeField] internal int effectMaxLevel;
         [SerializeField] internal int numberOfEffects;
         [SerializeField] internal List<ListOfShopSo> effectDictionary = new();
+        internal readonly Dictionary<Effect, int> effectInventory = new();
+        internal readonly Effect[] appliedEffects = new Effect[3];
 
         private void Awake()
         {
@@ -41,6 +42,15 @@ namespace Shop
             else
             {
                 instance = this;
+            }
+            
+            for (var i = 0; i < numberOfEffects; i++)
+            {
+                effectInventory.Add((Effect)i, 0);
+            }
+            for (var i = 0; i < appliedEffects.Length; i++)
+            {
+                appliedEffects[i] = Effect.None;
             }
         }
     }

@@ -5,11 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ShopObject", menuName = "ShopObject")]
 public class ShopObjectSO : ScriptableObject
 {
-   public string effectName = "weapon Name Here";
+   public string effectName = "Effect Name Here";
    public int level = 1;
    public int cost = 50;
    public string description;
 
+   public float chanceToBeApplied = 10;
    public float rateOfDamage = 0.5f;
    public int damage = 10;
    public int radius = 25;
