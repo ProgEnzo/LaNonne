@@ -28,6 +28,7 @@ namespace Shop.UI
       private EffectManager.Effect[] effectsInTheShop;
       private EffectManager effectManager;
       private bool isShopOpened;
+      private bool hasShopBeenOpened;
       private bool canChooseEffect;
       private int selectedEffectEmplacement;
       private bool isEffectEmplacementSelected;
@@ -43,6 +44,7 @@ namespace Shop.UI
 
          timerInputPressed = 0f;
          effectManager = EffectManager.instance;
+         hasShopBeenOpened = false;
          isShopOpened = false;
          canChooseEffect = false;
          isEffectEmplacementSelected = false;
@@ -98,8 +100,12 @@ namespace Shop.UI
                isShopOpened = true;
                shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
                Time.timeScale = 0;
-               currentNumberOfTakenObjects = 0;
-               ShopObjectsSelector();
+               if (!hasShopBeenOpened)
+               {
+                  hasShopBeenOpened = true;
+                  currentNumberOfTakenObjects = 0;
+                  ShopObjectsSelector();
+               }
                for (var i = 0; i < effectsInTheShop.Length; i++)
                {
                   if (effectsInTheShop[i] != EffectManager.Effect.None)
@@ -166,6 +172,11 @@ namespace Shop.UI
          shopPanel.SetActive(false);
 
          image.fillAmount = 0f;
+
+         if (currentNumberOfTakenObjects > 0)
+         {
+            Destroy(gameObject);
+         }
 
          Time.timeScale = 1;  
       }
