@@ -16,7 +16,7 @@ public class ShrinkingCircleManager : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindWithTag("Player");
-        boss = GameObject.FindWithTag("Boss");
+        boss = GameObject.Find("BOSS");
         
     }
     

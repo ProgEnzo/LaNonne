@@ -40,6 +40,9 @@ public class BossStateManager : MonoBehaviour
 
     [Header("Virtual Camera")] 
     public CinemachineVirtualCamera vCamPlayer;
+    public CinemachineVirtualCamera vCamPlayerShake;
+    public CinemachineVirtualCamera vCamBoss;
+    public CinemachineVirtualCamera vCamBossShake;
     
     [Header("----Dash----")] 
     public GameObject dashMine;
@@ -102,7 +105,7 @@ public class BossStateManager : MonoBehaviour
     public float timerBeforeBoxing;
     
     
-    public float numberOfSurroundingCircle;
+    public float numberOfBoxingCircle;
     
     
     public bool timerIsRunning;
@@ -118,8 +121,9 @@ public class BossStateManager : MonoBehaviour
         hpBossSlider = GameObject.FindGameObjectWithTag("Boss HealthBar").GetComponent<Slider>();
         player = PlayerController.instance;
         gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
+        
 
-        currentState = ToxicMineState; //starting state for the boss state machine
+        currentState = TransitionState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
@@ -139,6 +143,9 @@ public class BossStateManager : MonoBehaviour
 
         //VIRTUAL CAMERA
         vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
+        vCamPlayerShake = GameObject.Find("vCamPlayerShake").GetComponent<CinemachineVirtualCamera>();
+        vCamBoss = GameObject.Find("vCamBoss").GetComponent<CinemachineVirtualCamera>();
+        vCamBossShake = GameObject.Find("vCamBossShake").GetComponent<CinemachineVirtualCamera>();
 
         timerIsRunning = true;
     }
@@ -403,10 +410,26 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator Transition()
     {
         bossAI.maxSpeed = 0;
-        vCamPlayer.Priority = 1; //on laisse la priorité à la vCam du boss
-        takingDamage = false;
-        yield return new WaitForSeconds(3f);
+        player.soController.m_speed = 0;
+        yield return new WaitForSeconds(1f);
         
+        vCamPlayer.Priority = 1; //on laisse la priorité à la vCam du boss
+        vCamPlayerShake.Priority = 1; //on laisse la priorité à la vCam du boss
+        takingDamage = false;
+        yield return new WaitForSeconds(2f);
+
+        vCamBoss.Priority = 1;
+        vCamBossShake.Priority = 10; //Boss lâche un cri qui annonce la transition
+        yield return new WaitForSeconds(2f); //temps du cri
+        
+        vCamBossShake.Priority = 3;
+        vCamBoss.Priority = 5; //on redonne la priorité à la vCam du BOSS
+        yield return new WaitForSeconds(3f); //transition BOSS to player
+
+        vCamPlayer.Priority = 10;
+        player.soController.m_speed = 40f;
+        yield return new WaitForSeconds(3f);
+
         for (int i = 0; i < numberOfSpawn; i++)
         {
             yield return new WaitForSeconds(0.3f);
@@ -414,9 +437,7 @@ public class BossStateManager : MonoBehaviour
             var posBossBeforeSpawn = transform.position; //get la pos du boss
             var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
         }
-        yield return new WaitForSeconds(1f);
 
-        vCamPlayer.Priority = 10;
         yield return new WaitForSeconds(transitionCooldown);
         
         //CODE FOR THE EXPLOSION AFTER THE TRANSITION HERE
@@ -574,7 +595,7 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         
-        for (int i = 0; i < numberOfSurroundingCircle; i++)
+        for (int i = 0; i < numberOfBoxingCircle; i++)
         {
             if (distanceBetweenPlayer < aggroBoxingRange)
             {
@@ -586,9 +607,12 @@ public class BossStateManager : MonoBehaviour
                 var circleBoxingObject = Instantiate(circleBoxing, circleWarningObject.transform.position, Quaternion.identity);
                 
                 //DO SHAKE CAMERA
+                vCamPlayer.Priority = 6;
                 yield return new WaitForSeconds(0.3f);
+                vCamPlayer.Priority = 10;
 
-                Destroy(circleBoxingObject, 1f);
+
+                Destroy(circleBoxingObject);
             }
         }
         yield return new WaitForSeconds(0.5f);
