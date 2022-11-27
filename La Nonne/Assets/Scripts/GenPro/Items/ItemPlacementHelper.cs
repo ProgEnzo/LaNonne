@@ -20,7 +20,7 @@ public class ItemPlacementHelper
         {
             int neighboursCount8Dir = graph.GetNeighbours8Directions(position).Count;
             
-            PlacementType type = neighboursCount8Dir < 8 ? PlacementType.NearWall : PlacementType.OpenSpace; //ne pas faire un ternary si plus de 2 conditions
+            PlacementType type = neighboursCount8Dir < 8 ? PlacementType.NearWall : PlacementType.OpenSpace; //ne pas faire un ternary si plus de 2 conditions j'imagine
 
             if (tileByType.ContainsKey(type) == false)
                 tileByType[type] = new HashSet<Vector2Int>();

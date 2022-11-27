@@ -41,7 +41,7 @@ public abstract class PlacementData //class de base pour toutes les données de 
 [Serializable]
 public class ItemPlacementData : PlacementData
 {
-    public ItemData itemData;
+    public ItemData itemData; //je dois peut etre utiliser des gameObject à la place de Data pour les instancier comme les ennemis mais ca pose probleme
 }
 
 [Serializable]
