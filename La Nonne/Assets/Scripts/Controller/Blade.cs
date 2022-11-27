@@ -186,7 +186,8 @@ namespace Controller
 
         private void PutStack(GameObject enemy)
         {
-            var applicableEffects = (from effect in effectManager.appliedEffects let randomPercent = Random.Range(0, 100) where randomPercent < effectManager.effectDictionary[(int)effect][effectManager.effectInventory[effect] - 1].chanceToBeApplied select (effect, effectManager.effectInventory[effect])).ToList();
+            var applicableEffects = (from effect in effectManager.appliedEffects let randomPercent = Random.Range(0, 100) where effect != EffectManager.Effect.None && randomPercent < effectManager.effectDictionary[(int)effect][effectManager.effectInventory[effect] - 1].chanceToBeApplied select (effect, effectManager.effectInventory[effect])).ToList();
+            if (applicableEffects.Count <= 0) return;
             var randomNumber = Random.Range(0, applicableEffects.Count);
             ApplyStack(enemy, applicableEffects[randomNumber]);
         }
