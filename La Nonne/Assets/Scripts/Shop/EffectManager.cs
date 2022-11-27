@@ -26,6 +26,7 @@ namespace Shop
 
         internal new static EffectManager instance;
         
+        [SerializeField] internal float effectDuration;
         [SerializeField] internal int effectMaxLevel;
         [SerializeField] internal int numberOfEffects;
         [SerializeField] internal List<ListOfShopSo> effectDictionary = new();

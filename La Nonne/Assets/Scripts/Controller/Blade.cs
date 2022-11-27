@@ -191,14 +191,15 @@ namespace Controller
             ApplyStack(enemy, applicableEffects[randomNumber]);
         }
         
-        private static void ApplyStack(GameObject enemy, (EffectManager.Effect effect, int level) effectToApply)
+        private void ApplyStack(GameObject enemy, (EffectManager.Effect effect, int level) effectToApply)
         {
             var enemyController = enemy.GetComponent<EnemyController>();
-            if (!enemyController.stacks.Contains<>(EffectManager.Effect.None)) return;
+            if (!enemyController.stacks.Contains((EffectManager.Effect.None, 0))) return;
             for (var i = 0; i < enemyController.stacks.Length; i++)
             {
                 if (enemyController.stacks[i].effect != EffectManager.Effect.None) continue;
                 enemyController.stacks[i] = effectToApply;
+                enemyController.stackTimers[i] = effectManager.effectDuration;
                 break;
             }
         }
