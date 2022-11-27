@@ -189,6 +189,14 @@ namespace Shop.UI
          {
             menu.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (EffectManager.Effect)i + "\n\n" + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
          }
+
+         for (var i = 0; i < EffectManager.instance.appliedEffects.Length; i++)
+         {
+            if (EffectManager.instance.appliedEffects[i] != EffectManager.Effect.None)
+            {
+               menu.transform.GetChild(i+7).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[i] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[i]];
+            }
+         }
       }
       
       public void BuyEffect(int buttonNumber)
@@ -208,9 +216,9 @@ namespace Shop.UI
                shopPanel.transform.GetChild(buttonNumber+1).GetChild(j).GetComponent<TextMeshProUGUI>().text = "Closed.";
             }
 
-            if (currentNumberOfTakenObjects == maxNumberOfTakenObjects || effectsInTheShop.All(effect => effect == EffectManager.Effect.None))
+            if (currentNumberOfTakenObjects > maxNumberOfTakenObjects)
             {
-               CloseShop();
+               PlayerController.instance.soController.currentHealth = 0;
             }
          }
       }
