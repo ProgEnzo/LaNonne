@@ -9,12 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e5a0683d8c3771439977eb0902f3a41, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f789f89a3b2438e91c0c2698866c22f, type: 3}
   m_Name: Target - T1
   m_EditorClassIdentifier: 
+  effectName: Target
   level: 1
   cost: 50
   description: "L'attaque pose une marque sur les ennemis, ceux qui se font marquer
     prennent plus de d\xE9g\xE2ts."
-  chanceToBeApplied: 10
-  rateOfDamage: 1.5
+  rateOfDamage: 0.5
+  damage: 10
+  radius: 25
+  coolDown: 2
+  epDropRate: 5
+  movementSpeed: 10

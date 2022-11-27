@@ -9,13 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 431423be5852fd541b20b74b54be50c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f789f89a3b2438e91c0c2698866c22f, type: 3}
   m_Name: Bleed - T1
   m_EditorClassIdentifier: 
+  effectName: Bleed
   level: 1
   cost: 50
   description: "L'attaque fait saigner les ennemis qui prennent des d\xE9g\xE2ts
     sur la dur\xE9e."
-  chanceToBeApplied: 10
+  rateOfDamage: 0.5
   damage: 10
-  cooldown: 1
+  radius: 25
+  coolDown: 2
+  epDropRate: 5
+  movementSpeed: 10

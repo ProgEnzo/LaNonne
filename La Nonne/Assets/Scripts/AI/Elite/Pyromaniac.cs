@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Controller;
 using Pathfinding;
-using Tools;
 using UnityEngine;
 using UnityEngine.Serialization;
 // ReSharper disable CommentTypo
@@ -12,11 +11,12 @@ namespace AI.Elite
 {
     public class Pyromaniac : EnemyController
     {
+        [Header("Enemy Health")]
         private GameObject circleGameObject;
         [SerializeField] public float detectionRadius;
         [SerializeField] public float throwRadius;
         [SerializeField] public float projectileSpeed;
-        private Vector2 dashDirection;
+        [SerializeField] public float dashSpeed = 10f;
         [SerializeField] public float explosionRadius;
         private float currentFireTrailMaxLength;
         [SerializeField] public float fireTrailTolerance;
@@ -45,13 +45,11 @@ namespace AI.Elite
             canBoxCast = false;
             circleGameObject = transform.GetChild(1).gameObject; //Initialisation de l'accès au cercle
             circleGameObject.SetActive(false); //On le désactive pour le moment
-            currentVelocitySpeed = 0f;
         }
 
         protected override void Update()
         {
             base.Update();
-            rb.velocity = dashDirection * currentVelocitySpeed;
             
             //Initialisation de variables locales pour l'optimisation
             var playerPosition = playerController.transform.position; //Position du joueur
@@ -155,8 +153,7 @@ namespace AI.Elite
             dashInitialPosition = transform1.position; //Position du pyromane
             var projectile = transform1.GetChild(0).gameObject;
             isDashing = true;
-            dashDirection = (projectile.transform.position - dashInitialPosition).normalized;
-            currentVelocitySpeed = soEnemy.velocityBasicSpeed;
+            GetComponent<Rigidbody2D>().AddForce((projectile.transform.position - dashInitialPosition).normalized * dashSpeed);
         }
         
         private IEnumerator FireDamage()
@@ -215,7 +212,7 @@ namespace AI.Elite
 
             if (isStunned)
             {
-                currentVelocitySpeed = 0f;
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 isDashing = false;
                 isImpactOn = false;
                 canBoxCast = false;
@@ -233,7 +230,7 @@ namespace AI.Elite
         {
             if (isDashing)
             {
-                currentVelocitySpeed = 0f;
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 isDashing = false;
                 isImpactOn = true;
                 

@@ -10,12 +10,5 @@ namespace AI
     
         [Header("Attack Values")] 
         public int bodyDamage;
-        
-        [Header("Movement Values")]
-        public float aiPathBasicSpeed;
-        public float velocityBasicSpeed;
-        
-        [Header("EP Values")]
-        public int epDrop;
     }
 }
