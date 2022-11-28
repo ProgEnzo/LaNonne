@@ -110897,21 +110897,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: BOSS
       objectReference: {fileID: 0}
-    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
-      propertyPath: dashTime
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
-      propertyPath: dashCooldown
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
-      propertyPath: dashDistance
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
-      propertyPath: bossNormalSpeed
-      value: 1
+    - target: {fileID: 9006283483999273123, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: m_TagString
+      value: Boss
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
