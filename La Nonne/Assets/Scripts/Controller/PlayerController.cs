@@ -29,7 +29,6 @@ namespace Controller
         private bool isHitting;
         [SerializeField] public float hitSpeed = 1f;
         [SerializeField] public float revealingDashDetectionRadius = 1f;
-        [SerializeField] public int revealingDashEpCost;
         private GameObject revealingDashAimedEnemy;
         [SerializeField] public float toleranceDistance = 0.1f;
         private Vector3 newPosition;
@@ -54,6 +53,8 @@ namespace Controller
         internal Animator currentAnimPrefabAnimator;
         private (int parameterToChange, int value) animParametersToChange;
         private bool isMovingProfile;
+        private int currentHealth;
+        internal int epAmount;
 
         private void Awake()
         {
@@ -83,7 +84,7 @@ namespace Controller
         private void Start()
         {
             playerScale = transform.localScale.x;
-            soController.currentHealth = soController.maxHealth;
+            currentHealth = soController.maxHealth;
             isHitting = false;
             hpSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
             hpSlider.maxValue = soController.maxHealth;
@@ -122,7 +123,7 @@ namespace Controller
                 {
                     Physics2D.IgnoreLayerCollision(7, layer, false);
                 }
-                mTimerDash = soController.m_durationDash;
+                mTimerDash = soController.durationDash;
             }
             
             if (mTimerDash < -0.5f)
@@ -155,7 +156,7 @@ namespace Controller
         #region MovementPlayer
         private void ManageMove()
         {
-            var speed = mTimerDash <= 0 ? soController.m_speed : soController.m_dashSpeed;
+            var speed = mTimerDash <= 0 ? soController.moveSpeed : soController.dashSpeed;
 
             int nbInputs = (Input.GetKey(KeyCode.Z) ? 1 : 0) + (Input.GetKey(KeyCode.Q) ? 1 : 0) +
                            (Input.GetKey(KeyCode.S) ? 1 : 0) + (Input.GetKey(KeyCode.D) ? 1 : 0);
@@ -260,11 +261,11 @@ namespace Controller
         #region HealthPlayer
         public void TakeDamage(int damage)
         {
-            soController.currentHealth -= damage;
+            currentHealth -= damage;
             hpSlider.value -= damage;
             //Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
 
-            if (soController.currentHealth <= 0)
+            if (currentHealth <= 0)
             {
                 Die();
             }
@@ -272,13 +273,13 @@ namespace Controller
         
         public void LoadMenu()
         {
-            if (soController.currentHealth <= 0)
+            if (currentHealth <= 0)
             {
                 SceneManager.LoadScene("MainMenu");
             }
         }
 
-        private static void Die()
+        internal static void Die()
         {
             //Destroy(gameObject);
             Debug.Log("<color=green>PLAYER</color> IS NOW DEAD");
@@ -290,7 +291,7 @@ namespace Controller
 
         private void RevealingDash()
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !isHitting && soController.epAmount >= revealingDashEpCost && revealingDashTimerCount <= 0)
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !isHitting && revealingDashTimerCount <= 0)
             {
                 var enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, revealingDashDetectionRadius, Vector2.zero, new ContactFilter2D(), enemiesInArea);
@@ -301,7 +302,6 @@ namespace Controller
                 });
                 foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
                 {
-                    soController.epAmount -= revealingDashEpCost;
                     revealingDashAimedEnemy = enemy.collider.gameObject;
                     newPosition = revealingDashAimedEnemy.transform.position;
                     isHitting = true;

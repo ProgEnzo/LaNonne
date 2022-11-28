@@ -58,11 +58,11 @@ public class TilemapVisualizer : MonoBehaviour
     }*/
 
     //Appler cette fonction pour toute mes salles 
-    private List<Tile> GetWalls(int middleX, int middleY, PlacementType typeWanted) //surement remplacer le placement Type (actuellement mon script) 
+    public List<Vector2Int> GetWalls(int middleX, int middleY, PlacementType typeWanted) //surement remplacer le placement Type (actuellement mon script) 
     {
-        int count = 14;
+        int count = 16;
         
-        List<Tile> tileReturn = new List<Tile>();
+        List<Vector2Int> tileReturn = new ();
 
         for (int i = 0; i < count; i++)
         {
@@ -78,22 +78,91 @@ public class TilemapVisualizer : MonoBehaviour
                     case PlacementType.WallUp:
                         if (tile == wallTop)
                         {
-                            
+                            tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
                         break;
-                    case PlacementType.WallSide:
-                        if (tile == wallSideRight || tile == wallSideLeft)
+                    case PlacementType.wallRight:
+                        if (tile == wallSideRight)
                         {
-                            
+                            tileReturn.Add(new Vector2Int(cellX, cellY));
+                        }
+                        break;
+                    case PlacementType.wallLeft:
+                        if (tile == wallSideLeft)
+                        {
+                            tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
                         break;
                     case PlacementType.WallDown:
-                        if (tile == wallBottom)
+                        if (tile == wallBottom || tile == wallInnerCornerDownLeft || tile == wallInnerCornerDownRight)
                         {
-                            
+                            tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
                         break;
                 }
+            }
+        }
+
+        return tileReturn;
+    }
+    
+    public List<Vector2Int> GetFloors(int middleX, int middleY)
+    {
+        int count = 25;
+        
+        List<Vector2Int> tileReturn = new ();
+
+        for (int i = 0; i < count; i+=2)
+        {
+            for (int j = 0; j < count; j+=2)
+            {
+                var cellX = middleX - count / 2 + i;
+                var cellY = middleY - count / 2 + j;
+                
+                var tile = floorTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
+                var tileX = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
+                var tileY = floorTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
+                var tileXY = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
+
+
+                if (tile == floorTile && tileX == floorTile && tileY == floorTile && tileXY == floorTile) //pas instancier dans les couloirs 
+                {
+                    tileReturn.Add(new Vector2Int(cellX, cellY));
+                }
+
+            }
+        }
+
+        return tileReturn;
+    }
+    
+    public List<Vector2Int> GetFloorsNearWalls(int middleX, int middleY)
+    {
+        int count = 25;
+        
+        List<Vector2Int> tileReturn = new ();
+
+        for (int i = 0; i < count; i+=2)
+        {
+            for (int j = 0; j < count; j+=2)
+            {
+                var cellX = middleX - count / 2 + i;
+                var cellY = middleY - count / 2 + j;
+                
+                var tile = floorTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
+                var tileX = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
+                var tileY = floorTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
+                var tileXY = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
+
+
+                if (tile == floorTile && tileX == floorTile && tileY == floorTile && tileXY == floorTile) //pas instancier dans les couloirs 
+                {
+                    /*if (floorTile == wallBottom || floorTile == wallInnerCornerDownLeft || floorTile == wallInnerCornerDownRight || floorTile == wallTop || floorTile == wallSideRight || floorTile == wallSideLeft)
+                    {
+                        tileReturn.Add(new Vector2Int(cellX +1, cellY +1));
+                    }*/
+                }
+
             }
         }
 
