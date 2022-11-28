@@ -105,6 +105,69 @@ public class TilemapVisualizer : MonoBehaviour
 
         return tileReturn;
     }
+    
+    public List<Vector2Int> GetFloors(int middleX, int middleY)
+    {
+        int count = 25;
+        
+        List<Vector2Int> tileReturn = new ();
+
+        for (int i = 0; i < count; i+=2)
+        {
+            for (int j = 0; j < count; j+=2)
+            {
+                var cellX = middleX - count / 2 + i;
+                var cellY = middleY - count / 2 + j;
+                
+                var tile = floorTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
+                var tileX = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
+                var tileY = floorTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
+                var tileXY = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
+
+
+                if (tile == floorTile && tileX == floorTile && tileY == floorTile && tileXY == floorTile) //pas instancier dans les couloirs 
+                {
+                    tileReturn.Add(new Vector2Int(cellX, cellY));
+                }
+
+            }
+        }
+
+        return tileReturn;
+    }
+    
+    public List<Vector2Int> GetFloorsNearWalls(int middleX, int middleY)
+    {
+        int count = 25;
+        
+        List<Vector2Int> tileReturn = new ();
+
+        for (int i = 0; i < count; i+=2)
+        {
+            for (int j = 0; j < count; j+=2)
+            {
+                var cellX = middleX - count / 2 + i;
+                var cellY = middleY - count / 2 + j;
+                
+                var tile = floorTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
+                var tileX = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
+                var tileY = floorTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
+                var tileXY = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
+
+
+                if (tile == floorTile && tileX == floorTile && tileY == floorTile && tileXY == floorTile) //pas instancier dans les couloirs 
+                {
+                    /*if (floorTile == wallBottom || floorTile == wallInnerCornerDownLeft || floorTile == wallInnerCornerDownRight || floorTile == wallTop || floorTile == wallSideRight || floorTile == wallSideLeft)
+                    {
+                        tileReturn.Add(new Vector2Int(cellX +1, cellY +1));
+                    }*/
+                }
+
+            }
+        }
+
+        return tileReturn;
+    }
 
     public void PaintSingleBasicWall(Vector2Int positions, string binaryType)
     {

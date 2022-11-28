@@ -37,6 +37,8 @@ public class RoomContentGenerator : MonoBehaviour
         [SerializeField] private List<GameObject> wallDownCusto = new();
         [SerializeField] private List<GameObject> wallRightCusto = new();
         [SerializeField] private List<GameObject> wallLeftCusto = new();
+        [SerializeField] private List<GameObject> floorCusto = new();
+        [SerializeField] private List<GameObject> floorNearWallsCusto = new();
 
         #endregion
         
@@ -60,21 +62,17 @@ public class RoomContentGenerator : MonoBehaviour
             PopulateWallDown(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallDown));
             PopulateWallRight(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallRight));
             PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
+            PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y));
+            PopulateFloorNearWalls(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y));
             
         }
 
         SelectPlayerSpawnPoint(dungeonData);
         SelectBossSpawnPoints(dungeonData);
         SelectShopSpawnPoints(dungeonData);
-        
         SelectEnemySpawnPoints(dungeonData);
-        
-        /*EnemiesRoomLevelOne(dungeonData);
-        EnemiesRoomLevelTwo(dungeonData);
-        EnemiesRoomLevelThree(dungeonData);
-        EnemiesRoomLevelFour(dungeonData);*/
 
-        
+
         StartCoroutine(Scan());
 
         foreach (GameObject item in spawnedObjects)
@@ -88,7 +86,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in wallUpPos)
         {
-            if (Random.Range(0, 100) < 10)
+            //if (Random.Range(0, 100) < 10)
             {
                 GameObject item = Instantiate(wallUpCusto[Random.Range(0, wallUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
             }
@@ -99,7 +97,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in wallDownPos)
         {
-            if (Random.Range(0, 100) < 10)
+            //if (Random.Range(0, 100) < 10)
             {
                 GameObject item = Instantiate(wallDownCusto[Random.Range(0, wallDownCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
             }
@@ -110,7 +108,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in wallRightPos)
         {
-            if (Random.Range(0, 100) < 10)
+            //if (Random.Range(0, 100) < 10)
             {
                 GameObject item = Instantiate(wallRightCusto[Random.Range(0, wallRightCusto.Count)], new Vector3(pos.x, pos.y + 0.5f, 0), Quaternion.identity);
             }
@@ -121,13 +119,34 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in wallLeftPos)
         {
-            if (Random.Range(0, 100) < 10)
+            //if (Random.Range(0, 100) < 10)
             {
                 GameObject item = Instantiate(wallLeftCusto[Random.Range(0, wallLeftCusto.Count)], new Vector3(pos.x +1f, pos.y + 0.5f, 0), Quaternion.identity);
             }
         }
     }
     
+    private void PopulateFloor (List<Vector2Int> floorPos)
+    {
+        foreach (var pos in floorPos)
+        {
+            if (Random.Range(0, 100) < 10)
+            {
+                GameObject item = Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+            }
+        }
+    }
+    
+    private void PopulateFloorNearWalls (List<Vector2Int> floorPos)
+    {
+        foreach (var pos in floorPos)
+        {
+            //if (Random.Range(0, 100) < 10)
+            {
+                GameObject item = Instantiate(floorNearWallsCusto[Random.Range(0, floorNearWallsCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+            }
+        }
+    }
     
     private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas 
     {
