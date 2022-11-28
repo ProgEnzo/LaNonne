@@ -28,6 +28,9 @@ public class Item : MonoBehaviour
         
         itemCollider.size = itemData.size;
         itemCollider.offset = spriteRenderer.transform.localPosition;
+        
+        //spawn Prefabs
+        //itemData.prefab = Instantiate(itemData.prefab, transform.position, Quaternion.identity);
 
         /*if (itemData.nonDestructible)
             nonDestructible = true;
