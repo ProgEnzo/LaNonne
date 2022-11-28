@@ -2,6 +2,8 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR //si que dans l'editor pour eviter les problemes de compilation in Build
+
 namespace Tools
 {
     [CustomPropertyDrawer(typeof(ShowOnlyAttribute))]
@@ -23,3 +25,4 @@ namespace Tools
         }
     }
 }
+#endif
