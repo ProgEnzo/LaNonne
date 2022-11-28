@@ -15,7 +15,6 @@ public class WakeUpBoss : MonoBehaviour
     {
         boss = transform.parent.GetComponent<BossStateManager>();
         bossAIDestinationSetter = transform.parent.GetComponent<AIDestinationSetter>();
-        hpBossSlider = GameObject.FindGameObjectWithTag("Boss HealthBar").GetComponent<Slider>();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
