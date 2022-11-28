@@ -16,8 +16,8 @@ public class ShrinkingCircleManager : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindWithTag("Player");
-        boss = GameObject.Find("BOSS");
-        
+        boss = GameObject.FindWithTag("Boss");
+
     }
     
     private void OnTriggerStay2D(Collider2D col)
