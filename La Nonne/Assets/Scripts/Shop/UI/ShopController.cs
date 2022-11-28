@@ -178,7 +178,7 @@ namespace Shop.UI
             Destroy(gameObject);
          }
 
-         Time.timeScale = 1;  
+         Time.timeScale = 1;
       }
    
       public void CloseWhipModificationMenu()
@@ -225,6 +225,7 @@ namespace Shop.UI
 
             if (currentNumberOfTakenObjects > maxNumberOfTakenObjects)
             {
+               CloseShop();
                PlayerController.instance.soController.currentHealth = 0;
             }
          }
