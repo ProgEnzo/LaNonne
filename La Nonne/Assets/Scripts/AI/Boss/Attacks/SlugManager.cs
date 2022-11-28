@@ -11,15 +11,19 @@ public class SlugManager : MonoBehaviour
     private PlayerController player;
     public GameObject slugBullet;
 
+    public Rigidbody2D rb;
+
     public int numberOfBullets;
     public float bulletSpeed;
     public int dashAmount;
     public float massReduction;
     public float bulletMassReduction;
+    public float dashSpeed;
 
     private void Start()
     {
         player = PlayerController.instance;
+        rb = GetComponent<Rigidbody2D>();
 
         GoToNextPoint();
     }
@@ -33,9 +37,11 @@ public class SlugManager : MonoBehaviour
         
         dashAmount--;
         bulletMassReduction += 0.2f;
-        var directionDash = transform.position;
         
-        transform.DOMove(new Vector2(directionDash.x + Random.Range(-5f, 5f),directionDash.y +  Random.Range(-5f, 5f)), 3f);
+        //EN MAINTENANCE A REGLER PUTAIN
+        var directionDash = new Vector3(transform.position.x + Random.Range(-5f, 5f), transform.position.y + Random.Range(-5f, 5f), 0) - transform.position.normalized;
+        //transform.DOMove(new Vector2(directionDash.x + Random.Range(-5f, 5f),directionDash.y +  Random.Range(-5f, 5f)), 3f);
+        rb.velocity = directionDash * dashSpeed;
         yield return new WaitForSeconds(3f);
 
         var localScaleProj = slugBullet.transform.localScale;
