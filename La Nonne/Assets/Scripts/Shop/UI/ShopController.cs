@@ -208,13 +208,13 @@ namespace Shop.UI
       
       public void BuyEffect(int buttonNumber)
       {
-         if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None && PlayerController.instance.soController.epAmount >=
+         if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None && PlayerController.instance.epAmount >=
              effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
                 EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]]].cost)
          {
             currentNumberOfTakenObjects++;
             EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]]++;
-            PlayerController.instance.soController.epAmount -=
+            PlayerController.instance.epAmount -=
                effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
                   EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]] - 1].cost;
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
@@ -226,7 +226,7 @@ namespace Shop.UI
             if (currentNumberOfTakenObjects > maxNumberOfTakenObjects)
             {
                CloseShop();
-               PlayerController.instance.soController.currentHealth = 0;
+               PlayerController.Die();
             }
          }
       }
