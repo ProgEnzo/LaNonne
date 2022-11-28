@@ -12,7 +12,7 @@ public class RoomContentGenerator : MonoBehaviour
     #region Variables
 
         [SerializeField]
-        private RoomGenerator playerRoom, bossRoom, shopRoom, EnemyRoom; //généraliser lvl0
+        private RoomGenerator playerRoom, bossRoom, shopRoom; //généraliser lvl0
     
         List<GameObject> spawnedObjects = new List<GameObject>();
     
