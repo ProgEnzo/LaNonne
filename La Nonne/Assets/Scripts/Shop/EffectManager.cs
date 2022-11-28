@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AI;
 using Core.Scripts.Utils;
 using Shop;
+using TMPro;
 using UnityEngine;
 
 [Serializable]
@@ -36,6 +37,9 @@ namespace Shop
         internal readonly Dictionary<Effect, int> effectInventory = new();
         internal readonly Effect[] appliedEffects = new Effect[3];
 
+        //UI
+        [SerializeField] private TextMeshProUGUI epCount;
+
         private void Awake()
         {
             if (instance != null)
@@ -56,7 +60,13 @@ namespace Shop
                 appliedEffects[i] = Effect.None;
             }
         }
-        
+
+        private void Start()
+        {
+            epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            epCount.text = "EP COUNT : " + 0;
+        }
+
         internal void EffectSwitch(Effect effect, int level, GameObject enemy, int stackIndex)
         {
             switch (effect)

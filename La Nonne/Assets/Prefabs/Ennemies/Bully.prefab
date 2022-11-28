@@ -53,7 +53,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soEnemy: {fileID: 11400000, guid: 64aed33986fc5ff4ba0fe14bfa4249f3, type: 2}
   currentHealth: 100
+  currentAiPathSpeed: 0
+  currentVelocitySpeed: 0
+  currentDamageMultiplier: 0
+  currentEpDropMultiplier: 0
   isStunned: 0
+  stackTimers:
+  - 0
+  - 0
+  - 0
+  areStacksOn: 000000
+  epDrop: {fileID: 970073829185132471, guid: 2f3bcd94d8a30ae4e80b181e92acada0, type: 3}
+  numberOfEp: 5
   bullyDamage: 20
   knockbackPower: 10
 --- !u!212 &5813854497670849601

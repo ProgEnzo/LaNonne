@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Controller;
+using DG.Tweening;
 using Pathfinding;
 using Shop;
 using Tools;
@@ -27,6 +28,10 @@ namespace AI
         [SerializeField, ShowOnly] internal float[] stackTimers = new float[3];
         [SerializeField, ShowOnly] internal bool[] areStacksOn = new bool[3];
         private EffectManager effectManager;
+
+
+        public GameObject epDrop;
+        public int numberOfEp;
 
         protected virtual void Start()
         {
@@ -83,9 +88,19 @@ namespace AI
         {
             if (currentHealth <= 0)
             {
-                Destroy(gameObject);
+                for (int i = 0; i < numberOfEp; i++)
+                {
+                    var epPos = transform.position;
+                    var epDropObject = Instantiate(epDrop, new Vector2(epPos.x, epPos.y), Quaternion.identity);
+
+                    epDropObject.transform.DOMove(new Vector2(epPos.x + Random.Range(-1f, 0f), epPos.y + Random.Range(-0, 1f)), 0.5f).SetEase(Ease.OutBounce);
+                }
+
+                Destroy(gameObject); //Dies            
             }
         }
+
+        
 
         private void HealCeiling()
         {

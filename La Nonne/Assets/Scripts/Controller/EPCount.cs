@@ -13,7 +13,8 @@ public class EPCount : MonoBehaviour
 
     void Start()
     {
-        epCount.text = "EP COUNT : " + 0;
+        playerController = PlayerController.instance;
+        epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
     }        
 
 

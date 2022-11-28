@@ -36,7 +36,8 @@ public class BossStateManager : MonoBehaviour
     private Slider hpBossSlider;
     public int currentHealth;
     public int maxHealth;
-    public float normalSpeed;
+    public float playerNormalSpeed;
+    public float bossNormalSpeed;
 
     [Header("Virtual Camera")] 
     public CinemachineVirtualCamera vCamPlayer;
@@ -123,7 +124,7 @@ public class BossStateManager : MonoBehaviour
         gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
         
 
-        currentState = TransitionState; //starting state for the boss state machine
+        currentState = BoxingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
@@ -131,7 +132,9 @@ public class BossStateManager : MonoBehaviour
         hpBossSlider.maxValue = maxHealth;
         hpBossSlider.value = maxHealth;
 
-        bossAI.maxSpeed = normalSpeed;
+        player.soController.m_speed = playerNormalSpeed;
+        bossAI.maxSpeed = bossNormalSpeed;
+        
         
         //STATES
         firstStatesList.Add(DashingState);
@@ -268,7 +271,7 @@ public class BossStateManager : MonoBehaviour
         Physics2D.IgnoreLayerCollision(15, 7, false); //Active la collision avec le joueur
         yield return new WaitForSeconds(dashTime);
         
-        bossAI.maxSpeed = normalSpeed;
+        bossAI.maxSpeed = bossNormalSpeed;
         GetComponent<AIDestinationSetter>().enabled = true;
         GetComponent<AIPath>().enabled = true;
         yield return new WaitForSeconds(dashCooldown);
@@ -338,7 +341,7 @@ public class BossStateManager : MonoBehaviour
         }
         else if (currentHealth <= maxHealth / 2)
         {
-            bossAI.maxSpeed = normalSpeed;
+            bossAI.maxSpeed = bossNormalSpeed;
             SwitchState(TransitionState);
         }
     }
@@ -377,7 +380,7 @@ public class BossStateManager : MonoBehaviour
         Destroy(vacuumGameObject);
         vacuumParticle.SetActive(false);
         Destroy(toxicAreaObject);
-        bossAI.maxSpeed = normalSpeed; //Change the speed back to normal
+        bossAI.maxSpeed = bossNormalSpeed; //Change the speed back to normal
         
 
         if (currentVacuumAmount > 0 && currentHealth >= maxHealth / 2)
@@ -392,7 +395,7 @@ public class BossStateManager : MonoBehaviour
         }
         else if (currentHealth <= maxHealth / 2)
         {
-            bossAI.maxSpeed = normalSpeed;
+            bossAI.maxSpeed = bossNormalSpeed;
             SwitchState(TransitionState);
         }
         
@@ -442,7 +445,7 @@ public class BossStateManager : MonoBehaviour
         
         //CODE FOR THE EXPLOSION AFTER THE TRANSITION HERE
         
-        bossAI.maxSpeed = normalSpeed;
+        bossAI.maxSpeed = bossNormalSpeed;
         takingDamage = true;
         SwitchState(ThrowingState);
 
@@ -611,6 +614,7 @@ public class BossStateManager : MonoBehaviour
                 yield return new WaitForSeconds(0.3f);
                 vCamPlayer.Priority = 10;
 
+                yield return new WaitForSeconds(1f);
 
                 Destroy(circleBoxingObject);
             }
@@ -631,4 +635,5 @@ public class BossStateManager : MonoBehaviour
     }
 
     #endregion
+    
 }

@@ -136,13 +136,16 @@ MonoBehaviour:
   - {fileID: 9071314407910337641, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}
   - {fileID: 1593806974005075729, guid: 358aa556e8a060a4a9b452adb90fb974, type: 3}
   - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
+  - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
+  - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
+  - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
   currentHealth: 100
   maxHealth: 500
   normalSpeed: 0
-  knockbackForce: 2
   vCamPlayer: {fileID: 0}
-  amplitudeGain: 0
-  frequencyGain: 0
+  vCamPlayerShake: {fileID: 0}
+  vCamBoss: {fileID: 0}
+  vCamBossShake: {fileID: 0}
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   bodyDamage: 20
   dashDistance: 10
@@ -182,7 +185,7 @@ MonoBehaviour:
   distanceBetweenPlayer: 3
   aggroBoxingRange: 3
   timerBeforeBoxing: 3
-  numberOfSurroundingCircle: 5
+  numberOfBoxingCircle: 5
   timerIsRunning: 0
 --- !u!212 &9006283483999273128
 SpriteRenderer:
