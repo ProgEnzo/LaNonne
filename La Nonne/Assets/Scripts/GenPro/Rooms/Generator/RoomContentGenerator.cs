@@ -62,7 +62,7 @@ public class RoomContentGenerator : MonoBehaviour
             PopulateWallDown(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallDown));
             PopulateWallRight(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallRight));
             PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
-            PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y));
+            PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y)); //appeler ca dans la fonction qui fait aparaitre (playerRoom, etc....) les salles fait que l'on peux moduler pour chaque salle les objets qui apparaisse sur le sol
             PopulateFloorNearWalls(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y));
             
         }
