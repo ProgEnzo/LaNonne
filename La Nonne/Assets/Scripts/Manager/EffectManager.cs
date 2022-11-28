@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using AI;
 using Core.Scripts.Utils;
 using Shop;
-using TMPro;
 using UnityEngine;
 
 [Serializable]
@@ -58,9 +57,7 @@ namespace Shop
                 appliedEffects[i] = Effect.None;
             }
         }
-
         
-
         internal void EffectSwitch(Effect effect, int level, GameObject enemy, int stackIndex)
         {
             switch (effect)
