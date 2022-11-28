@@ -159,6 +159,7 @@ namespace Controller
 
             int nbInputs = (Input.GetKey(KeyCode.Z) ? 1 : 0) + (Input.GetKey(KeyCode.Q) ? 1 : 0) +
                            (Input.GetKey(KeyCode.S) ? 1 : 0) + (Input.GetKey(KeyCode.D) ? 1 : 0);
+            
             if (nbInputs > 1) speed *= 0.75f;
 
             if (Input.GetKey(KeyCode.Q))

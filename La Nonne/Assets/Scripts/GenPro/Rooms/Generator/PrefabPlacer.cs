@@ -51,9 +51,9 @@ public class PrefabPlacer : MonoBehaviour
         }
         return placedObjects;
     }
-    private GameObject PlaceItem(ItemData item, Vector2 placementPosition)
+    private GameObject PlaceItem(ItemData item, Vector2 placementPosition) //maybe ici pour faire spawn les prefabs et ne pas use des Data
     {
-        GameObject newItem = CreateObject(itemPrefab,placementPosition);
+        GameObject newItem = CreateObject(itemPrefab,placementPosition); //createObject = instantiate un SO
         //GameObject newItem = Instantiate(itemPrefab, placementPosition, Quaternion.identity); //je sais plus à quoi sert cette ligne sorry
         newItem.GetComponent<Item>().Initialize(item);
         return newItem;
