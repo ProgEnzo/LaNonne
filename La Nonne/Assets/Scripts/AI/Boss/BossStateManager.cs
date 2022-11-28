@@ -124,7 +124,7 @@ public class BossStateManager : MonoBehaviour
         gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
         
 
-        currentState = BoxingState; //starting state for the boss state machine
+        currentState = DashingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
@@ -262,13 +262,13 @@ public class BossStateManager : MonoBehaviour
         Physics2D.IgnoreLayerCollision(15, 7, true);
 
         StartCoroutine(DashMine());
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
         
         StartCoroutine(DashMine());
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
         
         StartCoroutine(DashMine());
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
         
         Physics2D.IgnoreLayerCollision(15, 7, false); //Active la collision avec le joueur
         yield return new WaitForSeconds(dashTime);
@@ -303,6 +303,7 @@ public class BossStateManager : MonoBehaviour
         dashMineObject.transform.DOScale(new Vector2(3, 3), 3f);
         Destroy(dashMineObject, 3f);
         yield return new WaitForSeconds(0.3f);
+
     }
     
 

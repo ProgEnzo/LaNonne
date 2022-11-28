@@ -369,7 +369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boss: {fileID: 0}
   bossAIDestinationSetter: {fileID: 0}
-  hpBossSlider: {fileID: 0}
+  hpBossSlider: {fileID: 122512754}
 --- !u!1 &9006283483999273123
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,16 +435,16 @@ MonoBehaviour:
   currentHealth: 100
   maxHealth: 500
   playerNormalSpeed: 30
-  bossNormalSpeed: 0
+  bossNormalSpeed: 1
   vCamPlayer: {fileID: 0}
   vCamPlayerShake: {fileID: 0}
   vCamBoss: {fileID: 0}
   vCamBossShake: {fileID: 0}
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   bodyDamage: 20
-  dashDistance: 10
-  dashTime: 3
-  dashCooldown: 1
+  dashDistance: 6
+  dashTime: 2
+  dashCooldown: 0.5
   timeBeforeDashing: 0.5
   dashAmount: 2
   currentDashAmount: 2
