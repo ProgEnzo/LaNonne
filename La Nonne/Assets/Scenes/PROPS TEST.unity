@@ -770,7 +770,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456407908}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5599997, y: 0.4800001, z: -10}
+  m_LocalPosition: {x: -1.5599998, y: 0.4800001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33277,7 +33277,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656192447}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5599997, y: 0.4800001, z: -10}
+  m_LocalPosition: {x: -1.5599998, y: 0.4800001, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33767,6 +33767,7 @@ MonoBehaviour:
   playerRoom: {fileID: 1671693011229352959, guid: bc1fe4c4e41e6dc48902bea9a8c193d9, type: 3}
   bossRoom: {fileID: 3553662050975420391, guid: 6c9745ac671e30143b5ab289e6e16301, type: 3}
   shopRoom: {fileID: 8254994962805580812, guid: fef2c70e5eb18de4d885fc16593d53c9, type: 3}
+  tilemapVisualizer: {fileID: 0}
   graphTest: {fileID: 1427748917}
   itemParent: {fileID: 130347694}
   cinemachineCamera: {fileID: 0}
@@ -33776,6 +33777,10 @@ MonoBehaviour:
   - 45
   - 75
   - 100
+  wallUpCusto: []
+  wallDownCusto: []
+  wallRightCusto: []
+  wallLeftCusto: []
   mapBoss: {x: 60, y: -180}
   firstShopPosition: {x: -90, y: -60}
   lastShopPosition: {x: 60, y: -210}
@@ -35869,6 +35874,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4900273021403327418, guid: 4354b915757e608448b37d400ee1d124, type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4900273021403327418, guid: 4354b915757e608448b37d400ee1d124, type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4900273021403327418, guid: 4354b915757e608448b37d400ee1d124, type: 3}
+      propertyPath: CollisionModule.radiusScale
+      value: 1.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4900273021403327418, guid: 4354b915757e608448b37d400ee1d124, type: 3}
+      propertyPath: CollisionModule.collisionMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4900273021403327418, guid: 4354b915757e608448b37d400ee1d124, type: 3}
+      propertyPath: CollisionModule.m_Bounce.scalar
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4900273021403327418, guid: 4354b915757e608448b37d400ee1d124, type: 3}
+      propertyPath: CollisionModule.m_Dampen.scalar
+      value: 0.81
+      objectReference: {fileID: 0}
     - target: {fileID: 8860681310838871273, guid: 4354b915757e608448b37d400ee1d124, type: 3}
       propertyPath: m_Name
       value: Prefab_champignons_1
@@ -35944,12 +35973,24 @@ PrefabInstance:
       value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4103335704215990631, guid: 7f9cf41ec6f556546b0732ab864b4536, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0942726
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103335704215990631, guid: 7f9cf41ec6f556546b0732ab864b4536, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.0942726
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103335704215990631, guid: 7f9cf41ec6f556546b0732ab864b4536, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.0942726
+      objectReference: {fileID: 0}
+    - target: {fileID: 4103335704215990631, guid: 7f9cf41ec6f556546b0732ab864b4536, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.357053
+      value: -1.637
       objectReference: {fileID: 0}
     - target: {fileID: 4103335704215990631, guid: 7f9cf41ec6f556546b0732ab864b4536, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.44202086
+      value: 1.507
       objectReference: {fileID: 0}
     - target: {fileID: 4103335704215990631, guid: 7f9cf41ec6f556546b0732ab864b4536, type: 3}
       propertyPath: m_LocalPosition.z

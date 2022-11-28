@@ -58,11 +58,11 @@ public class TilemapVisualizer : MonoBehaviour
     }*/
 
     //Appler cette fonction pour toute mes salles 
-    private List<Tile> GetWalls(int middleX, int middleY, PlacementType typeWanted) //surement remplacer le placement Type (actuellement mon script) 
+    public List<Vector2Int> GetWalls(int middleX, int middleY, PlacementType typeWanted) //surement remplacer le placement Type (actuellement mon script) 
     {
-        int count = 14;
+        int count = 16;
         
-        List<Tile> tileReturn = new List<Tile>();
+        List<Vector2Int> tileReturn = new ();
 
         for (int i = 0; i < count; i++)
         {
@@ -78,19 +78,25 @@ public class TilemapVisualizer : MonoBehaviour
                     case PlacementType.WallUp:
                         if (tile == wallTop)
                         {
-                            
+                            tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
                         break;
-                    case PlacementType.WallSide:
-                        if (tile == wallSideRight || tile == wallSideLeft)
+                    case PlacementType.wallRight:
+                        if (tile == wallSideRight)
                         {
-                            
+                            tileReturn.Add(new Vector2Int(cellX, cellY));
+                        }
+                        break;
+                    case PlacementType.wallLeft:
+                        if (tile == wallSideLeft)
+                        {
+                            tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
                         break;
                     case PlacementType.WallDown:
-                        if (tile == wallBottom)
+                        if (tile == wallBottom || tile == wallInnerCornerDownLeft || tile == wallInnerCornerDownRight)
                         {
-                            
+                            tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
                         break;
                 }

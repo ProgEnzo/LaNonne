@@ -5,6 +5,7 @@ using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Tilemaps;
 
 public class RoomContentGenerator : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class RoomContentGenerator : MonoBehaviour
 
         [SerializeField]
         private RoomGenerator playerRoom, bossRoom, shopRoom; //généraliser lvl0
+
+        [SerializeField] private TilemapVisualizer tilemapVisualizer;
+    
     
         List<GameObject> spawnedObjects = new List<GameObject>();
     
@@ -28,6 +32,11 @@ public class RoomContentGenerator : MonoBehaviour
         List<Vector2Int> shopRoomPos = new();
         
         [SerializeField] private List<float> multiplierPerDistance = new(){20, 45, 54, 67, 100};
+        
+        [SerializeField] private List<GameObject> wallUpCusto = new();
+        [SerializeField] private List<GameObject> wallDownCusto = new();
+        [SerializeField] private List<GameObject> wallRightCusto = new();
+        [SerializeField] private List<GameObject> wallLeftCusto = new();
 
         #endregion
         
@@ -44,6 +53,15 @@ public class RoomContentGenerator : MonoBehaviour
             DestroyImmediate(item);
         }
         spawnedObjects.Clear();
+        
+        foreach (var roomPos in dungeonData.roomsDictionary.Keys)
+        {
+            PopulateWallUp(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallUp)); //maybe les appeler que dans mes salle pour que ca n'apparaisse que sur les murs de certaines salles
+            PopulateWallDown(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallDown));
+            PopulateWallRight(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallRight));
+            PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
+            
+        }
 
         SelectPlayerSpawnPoint(dungeonData);
         SelectBossSpawnPoints(dungeonData);
@@ -55,6 +73,7 @@ public class RoomContentGenerator : MonoBehaviour
         EnemiesRoomLevelTwo(dungeonData);
         EnemiesRoomLevelThree(dungeonData);
         EnemiesRoomLevelFour(dungeonData);*/
+
         
         StartCoroutine(Scan());
 
@@ -64,6 +83,52 @@ public class RoomContentGenerator : MonoBehaviour
                 item.transform.SetParent(itemParent, false);
         }
     }
+    
+    private void PopulateWallUp (List<Vector2Int> wallUpPos)
+    {
+        foreach (var pos in wallUpPos)
+        {
+            if (Random.Range(0, 100) < 10)
+            {
+                GameObject item = Instantiate(wallUpCusto[Random.Range(0, wallUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+            }
+        }
+    }
+    
+    private void PopulateWallDown (List<Vector2Int> wallDownPos)
+    {
+        foreach (var pos in wallDownPos)
+        {
+            if (Random.Range(0, 100) < 10)
+            {
+                GameObject item = Instantiate(wallDownCusto[Random.Range(0, wallDownCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+            }
+        }
+    }
+    
+    private void PopulateWallRight (List<Vector2Int> wallRightPos)
+    {
+        foreach (var pos in wallRightPos)
+        {
+            if (Random.Range(0, 100) < 10)
+            {
+                GameObject item = Instantiate(wallRightCusto[Random.Range(0, wallRightCusto.Count)], new Vector3(pos.x, pos.y + 0.5f, 0), Quaternion.identity);
+            }
+        }
+    }
+    
+    private void PopulateWallLeft (List<Vector2Int> wallLeftPos)
+    {
+        foreach (var pos in wallLeftPos)
+        {
+            if (Random.Range(0, 100) < 10)
+            {
+                GameObject item = Instantiate(wallLeftCusto[Random.Range(0, wallLeftCusto.Count)], new Vector3(pos.x +1f, pos.y + 0.5f, 0), Quaternion.identity);
+            }
+        }
+    }
+    
+    
     private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas 
     {
         cinemachineCamera.LookAt = playerTransform;

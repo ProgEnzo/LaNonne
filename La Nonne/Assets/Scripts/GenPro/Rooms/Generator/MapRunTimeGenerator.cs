@@ -7,5 +7,6 @@ public class MapRunTimeGenerator : MonoBehaviour
     void Start()
     {
         OnStart?.Invoke();
+        Debug.Log("ca fonctionne ?");
     }
 }
