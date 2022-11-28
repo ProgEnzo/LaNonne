@@ -28,7 +28,7 @@ namespace AI
         [SerializeField, ShowOnly] internal float[] stackTimers = new float[3];
         [SerializeField, ShowOnly] internal bool[] areStacksOn = new bool[3];
         private EffectManager effectManager;
-
+        private Coroutine currentHitStopCoroutine;
 
         public GameObject epDrop;
         public int numberOfEp;
@@ -110,6 +110,27 @@ namespace AI
             }
         }
         #endregion
+        
+        internal void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
+        {
+            if (currentHitStopCoroutine != null)
+            {
+                StopCoroutine(currentHitStopCoroutine);
+            }
+            currentHitStopCoroutine = StartCoroutine(HitStop(hitStopDuration));
+            rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
+        }
+        
+        private IEnumerator HitStop(float hitStopDuration)
+        {
+            var velocitySpeed = currentVelocitySpeed;
+            aiPathComponent.canMove = false;
+            currentVelocitySpeed = 0;
+            yield return new WaitForSeconds(hitStopDuration);
+            currentVelocitySpeed = velocitySpeed;
+            aiPathComponent.canMove = true;
+            currentHitStopCoroutine = null;
+        }
 
         protected virtual void StunCheck()
         {
