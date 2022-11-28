@@ -129,9 +129,11 @@ public class BossStateManager : MonoBehaviour
         
         //HEALTH
         currentHealth = maxHealth;
+        
         hpBossSlider.maxValue = maxHealth;
-        hpBossSlider.value = maxHealth;
+        hpBossSlider.DOValue(maxHealth, 1f);
 
+        //MOVEMENT SPEED
         player.soController.m_speed = playerNormalSpeed;
         bossAI.maxSpeed = bossNormalSpeed;
         
