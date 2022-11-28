@@ -11,7 +11,9 @@ public class ItemData : ScriptableObject
     public PlacementType placementType;
     
     public bool addOffset;
-    
+
+    //public GameObject prefab;
+
     //public int health = 1;
     //public bool nonDestructible;
 }
