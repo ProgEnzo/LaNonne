@@ -30,11 +30,10 @@ namespace Controller
         [SerializeField] private float maxNextComboCooldown;
         private float currentNextComboCooldown;
         [SerializeField] private float maxDetectionAngle;
-        private float hitStopAndKnockBackMultiplier;
-        [SerializeField] private float littleHitStopAndKnockBackMultiplier;
-        [SerializeField] private float bigHitStopAndKnockBackMultiplier;
-        [SerializeField] private float hitStopDuration;
-        [SerializeField] private float knockBackForce;
+        [SerializeField] private float littleHitStopDuration;
+        [SerializeField] private float littleKnockBackForce;
+        [SerializeField] private float bigHitStopDuration;
+        [SerializeField] private float bigKnockBackForce;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         private EffectManager effectManager;
@@ -131,7 +130,6 @@ namespace Controller
 
             if (isHitting)
             {
-                hitStopAndKnockBackMultiplier = hitState == maxHitState ? bigHitStopAndKnockBackMultiplier : littleHitStopAndKnockBackMultiplier;
                 if (hitState % 2 == 1)
                 {
                     transform.rotation =
@@ -179,7 +177,14 @@ namespace Controller
             if (other.gameObject.CompareTag("Enemy"))
             {
                 other.gameObject.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.playerAttackDamage);
-                other.gameObject.GetComponent<EnemyController>().HitStopAndKnockBack(hitStopDuration * hitStopAndKnockBackMultiplier, knockBackForce * hitStopAndKnockBackMultiplier);
+                if (hitState == maxHitState)
+                {
+                    other.gameObject.GetComponent<EnemyController>().HitStopAndKnockBack(bigHitStopDuration, bigKnockBackForce);
+                }
+                else
+                {
+                    other.gameObject.GetComponent<EnemyController>().HitStopAndKnockBack(littleHitStopDuration, littleKnockBackForce);
+                }
                 PutStack(other.gameObject);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
             }

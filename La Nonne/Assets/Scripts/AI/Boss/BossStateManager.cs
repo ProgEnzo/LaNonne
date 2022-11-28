@@ -134,7 +134,7 @@ public class BossStateManager : MonoBehaviour
         hpBossSlider.DOValue(maxHealth, 1f);
 
         //MOVEMENT SPEED
-        player.soController.m_speed = playerNormalSpeed;
+        player.soController.moveSpeed = playerNormalSpeed;
         bossAI.maxSpeed = bossNormalSpeed;
         
         
@@ -416,7 +416,7 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator Transition()
     {
         bossAI.maxSpeed = 0;
-        player.soController.m_speed = 0;
+        player.soController.moveSpeed = 0;
         yield return new WaitForSeconds(1f);
         
         vCamPlayer.Priority = 1; //on laisse la priorité à la vCam du boss
@@ -433,7 +433,7 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(3f); //transition BOSS to player
 
         vCamPlayer.Priority = 10;
-        player.soController.m_speed = 40f;
+        player.soController.moveSpeed = 40f;
         yield return new WaitForSeconds(3f);
 
         for (int i = 0; i < numberOfSpawn; i++)
