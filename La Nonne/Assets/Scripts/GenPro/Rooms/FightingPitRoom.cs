@@ -11,6 +11,7 @@ public class FightingPitRoom : RoomGenerator
 
     public override List<GameObject> ProcessRoom(Vector2Int roomCenter, HashSet<Vector2Int> roomFloor, HashSet<Vector2Int> roomFloorNoCorridors)
     {
+        base.roomCenter = roomCenter;
         ItemPlacementHelper itemPlacementHelper =
             new ItemPlacementHelper(roomFloor, roomFloorNoCorridors);
 

@@ -51,6 +51,35 @@ public class TilemapVisualizer : MonoBehaviour
         wallTilemap.ClearAllTiles();
     }
 
+    /// <summary>
+    /// remove all tiles of a map
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    public void SwipeMap(int x, int y)
+    {
+        int count = 18;
+        
+        List<Vector2Int> tileReturn = new ();
+
+        for (int i = 0; i < count; i++)
+        {
+            for (int j = 0; j < count; j++)
+            {
+                var cellX = x - count / 2 + i;
+                var cellY = y - count / 2 + j;
+                
+                wallTilemap.SetTile(new Vector3Int(cellX, cellY, 0), null);
+                floorTilemap.SetTile(new Vector3Int(cellX, cellY, 0), null);
+            }
+        }
+    }
+
+    public bool hasCorridor(int x, int y)
+    {
+        return floorTilemap.GetTile( new Vector3Int( x, y)) != null;
+    }
+    
     /*public void Update()
     {
         var a = wallTilemap.GetTile(new Vector3Int(-8, 1, 0));
@@ -60,7 +89,7 @@ public class TilemapVisualizer : MonoBehaviour
     //Appler cette fonction pour toute mes salles 
     public List<Vector2Int> GetWalls(int middleX, int middleY, PlacementType typeWanted) //surement remplacer le placement Type (actuellement mon script) 
     {
-        int count = 16;
+        int count = 14;
         
         List<Vector2Int> tileReturn = new ();
 

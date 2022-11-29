@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
+using GenPro.Rooms;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -28,6 +29,13 @@ public class RoomContentGenerator : MonoBehaviour
     
         [SerializeField]
         private CinemachineVirtualCamera cinemachineCamera;
+
+        [SerializeField,Space, Header("Prefab Shop")]
+        private GameObject prefabShop;
+        
+        [SerializeField,Space, Header("Prefab Boss")]
+        private GameObject prefabBoss;
+
         
         List<Vector2Int> shopRoomPos = new();
         
@@ -48,15 +56,28 @@ public class RoomContentGenerator : MonoBehaviour
         AstarPath.active.Scan();
     }
     
+    Dictionary<Vector2Int, HashSet<Vector2Int>> copiedDico;
+    
+    
     public void GenerateRoomContent(DungeonData dungeonData)
-    {
+    { 
+        copiedDico = new Dictionary<Vector2Int, HashSet<Vector2Int>>(dungeonData.roomsDictionary);
+        
         foreach (GameObject item in spawnedObjects)
         {
             DestroyImmediate(item);
         }
         spawnedObjects.Clear();
-        
-        foreach (var roomPos in dungeonData.roomsDictionary.Keys)
+
+        SelectPlayerSpawnPoint(dungeonData);
+        SelectBossSpawnPoints(dungeonData);
+        SelectShopSpawnPoints(dungeonData);
+        SelectEnemySpawnPoints(dungeonData);
+
+        ModifyBossRoom();
+        ModifyShopsRoom();
+                
+        foreach (var roomPos in copiedDico.Keys)
         {
             PopulateWallUp(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallUp)); //maybe les appeler que dans mes salle pour que ca n'apparaisse que sur les murs de certaines salles
             PopulateWallDown(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallDown));
@@ -64,15 +85,8 @@ public class RoomContentGenerator : MonoBehaviour
             PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
             PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y)); //appeler ca dans la fonction qui fait aparaitre (playerRoom, etc....) les salles fait que l'on peux moduler pour chaque salle les objets qui apparaisse sur le sol
             PopulateFloorNearWalls(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y));
-            
         }
-
-        SelectPlayerSpawnPoint(dungeonData);
-        SelectBossSpawnPoints(dungeonData);
-        SelectShopSpawnPoints(dungeonData);
-        SelectEnemySpawnPoints(dungeonData);
-
-
+        
         StartCoroutine(Scan());
 
         foreach (GameObject item in spawnedObjects)
@@ -81,7 +95,65 @@ public class RoomContentGenerator : MonoBehaviour
                 item.transform.SetParent(itemParent, false);
         }
     }
+
+    private void ModifyBossRoom()
+    {
+        tilemapVisualizer.SwipeMap(bossRoom.roomCenter.x, bossRoom.roomCenter.y);
+        InstantiateBossRoom(bossRoom.roomCenter.x, bossRoom.roomCenter.y);
+        
+    }
+
+    private void InstantiateBossRoom(int x, int y)
+    {
+        var go = Instantiate(prefabBoss);
+        Vector2Int pos = new Vector2Int(x, y);
+        go.transform.position = new Vector3(x, y);
+        var detector = go.GetComponent<DoorDetector>();
+        detector.ManageDoors(hasTopMap(pos),hasBottomMap(pos), hasRightMap(pos),hasLeftMap(pos));
+        
+    }
     
+    private void ModifyShopsRoom()
+    {
+        foreach (var shops in shopRoomPos)
+        {
+            tilemapVisualizer.SwipeMap(shops.x, shops.y);
+            InstantiateShop(shops.x, shops.y);
+        }
+    }
+
+    private bool hasLeftMap(Vector2Int from)
+    {
+        return tilemapVisualizer.hasCorridor(from.x - 10, from.y);
+    }
+    
+    private bool hasRightMap(Vector2Int from)
+    {
+        return tilemapVisualizer.hasCorridor(from.x + 10, from.y);
+    }
+
+    private bool hasTopMap(Vector2Int from)
+    {
+  
+        return tilemapVisualizer.hasCorridor(from.x, from.y+10);
+    }
+    
+    private bool hasBottomMap(Vector2Int from)
+    {
+
+        return tilemapVisualizer.hasCorridor(from.x, from.y-10);
+    }
+    
+    
+    private void InstantiateShop(int x, int y)
+    {
+        var go = Instantiate(prefabShop);
+        Vector2Int pos = new Vector2Int(x, y);
+        go.transform.position = new Vector3(x, y);
+        var detector = go.GetComponent<DoorDetector>();
+        detector.ManageDoors(hasTopMap(pos),hasBottomMap(pos), hasRightMap(pos),hasLeftMap(pos));
+    }
+
     private void PopulateWallUp (List<Vector2Int> wallUpPos)
     {
         foreach (var pos in wallUpPos)
