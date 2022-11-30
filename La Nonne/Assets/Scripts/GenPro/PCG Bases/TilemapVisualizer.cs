@@ -58,7 +58,7 @@ public class TilemapVisualizer : MonoBehaviour
     /// <param name="y"></param>
     public void SwipeMap(int x, int y)
     {
-        int count = 18;
+        int count = 21;
         
         List<Vector2Int> tileReturn = new ();
 

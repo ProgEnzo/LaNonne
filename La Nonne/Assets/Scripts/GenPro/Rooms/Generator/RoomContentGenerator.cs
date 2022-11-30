@@ -124,24 +124,24 @@ public class RoomContentGenerator : MonoBehaviour
 
     private bool hasLeftMap(Vector2Int from)
     {
-        return tilemapVisualizer.hasCorridor(from.x - 10, from.y);
+        return tilemapVisualizer.hasCorridor(from.x - 12, from.y);
     }
     
     private bool hasRightMap(Vector2Int from)
     {
-        return tilemapVisualizer.hasCorridor(from.x + 10, from.y);
+        return tilemapVisualizer.hasCorridor(from.x + 12, from.y);
     }
 
     private bool hasTopMap(Vector2Int from)
     {
   
-        return tilemapVisualizer.hasCorridor(from.x, from.y+10);
+        return tilemapVisualizer.hasCorridor(from.x, from.y+12);
     }
     
     private bool hasBottomMap(Vector2Int from)
     {
 
-        return tilemapVisualizer.hasCorridor(from.x, from.y-10);
+        return tilemapVisualizer.hasCorridor(from.x, from.y-12);
     }
     
     
@@ -331,7 +331,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 22) //25 étant la longueur des couloirs ou "corridors Length" dans l'IDE
+            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 44) //25 étant la longueur des couloirs ou "corridors Length" dans l'IDE
             {
                 shopRoomPosition2 = shop;
                 
