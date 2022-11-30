@@ -1332,15 +1332,24 @@ MonoBehaviour:
   playerRoom: {fileID: 1671693011229352959, guid: bc1fe4c4e41e6dc48902bea9a8c193d9, type: 3}
   bossRoom: {fileID: 3553662050975420391, guid: 6c9745ac671e30143b5ab289e6e16301, type: 3}
   shopRoom: {fileID: 8254994962805580812, guid: fef2c70e5eb18de4d885fc16593d53c9, type: 3}
+  tilemapVisualizer: {fileID: 0}
   graphTest: {fileID: 1427748917}
   itemParent: {fileID: 130347694}
   cinemachineCamera: {fileID: 1656192450}
+  prefabShop: {fileID: 0}
+  prefabBoss: {fileID: 0}
   multiplierPerDistance:
   - 15
   - 30
   - 45
   - 75
   - 100
+  wallUpCusto: []
+  wallDownCusto: []
+  wallRightCusto: []
+  wallLeftCusto: []
+  floorCusto: []
+  floorNearWallsCusto: []
   mapBoss: {x: 25, y: 0}
   firstShopPosition: {x: -90, y: -60}
   lastShopPosition: {x: 60, y: -210}
@@ -1731,6 +1740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6266878fcaa21743b4ec1504ed17f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomCenter: {x: 0, y: 0}
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
   enemyPlacementData:
   - minQuantity: 1
@@ -2010,6 +2020,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6266878fcaa21743b4ec1504ed17f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomCenter: {x: 0, y: 0}
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
   enemyPlacementData: []
   itemData: []
@@ -110083,6 +110094,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6266878fcaa21743b4ec1504ed17f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomCenter: {x: 0, y: 0}
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
   enemyPlacementData:
   - minQuantity: 1
@@ -110416,6 +110428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6266878fcaa21743b4ec1504ed17f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomCenter: {x: 0, y: 0}
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
   enemyPlacementData:
   - minQuantity: 1
@@ -137730,6 +137743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6266878fcaa21743b4ec1504ed17f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomCenter: {x: 0, y: 0}
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
   enemyPlacementData:
   - minQuantity: 1
