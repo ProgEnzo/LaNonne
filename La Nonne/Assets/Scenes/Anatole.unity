@@ -610,8 +610,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456407908}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 37.76, y: -5.42, z: -10}
+  m_LocalRotation: {x: -0.007972375, y: -0.009714998, z: -0.00007745772, w: 0.999921}
+  m_LocalPosition: {x: 37.95427, y: -5.57945, z: -9.996841}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2154,8 +2154,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1656192447}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 37.76, y: -5.42, z: -10}
+  m_LocalRotation: {x: -0.007972375, y: -0.009714998, z: -0.00007745772, w: 0.999921}
+  m_LocalPosition: {x: 37.95427, y: -5.57945, z: -9.996841}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2232,6 +2232,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6022989991462447662, guid: 295b1223c8b2f9e47a361b63c8620000, type: 3}
+      propertyPath: soController
+      value: 
+      objectReference: {fileID: 11400000, guid: c88fd2fd0ecad754584e380ceb1d8d59, type: 2}
     - target: {fileID: 7101728686521003917, guid: 295b1223c8b2f9e47a361b63c8620000, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -2830,6 +2834,30 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Boss
       objectReference: {fileID: 0}
+    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: dashTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: dashPower
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: maxHealth
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: dashDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: numberOfMines
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9006283483999273181, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+      propertyPath: dashBounceDistance
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
 --- !u!1 &2080590973
@@ -2968,8 +2996,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
   m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 25
-  m_FrequencyGain: 25
+  m_AmplitudeGain: 10
+  m_FrequencyGain: 10
   mNoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!114 &2082948851
 MonoBehaviour:

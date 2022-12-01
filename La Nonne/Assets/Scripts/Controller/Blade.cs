@@ -91,7 +91,7 @@ namespace Controller
                 Physics2D.CircleCast(transform.position, hitLength, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'attaque
                 if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
                 {
-                    foreach (var hit in from hit in objectsInArea where hit.collider.CompareTag("Enemy") let enemyToAimPosition = hit.collider.transform.position let playerPosition = playerController.transform.position let directionToAim = enemyToAimPosition - playerPosition let angleToAim = Vector2.Angle(facingDirection, directionToAim) where angleToAim <= maxDetectionAngle/2 select hit)
+                    foreach (var hit in from hit in objectsInArea where hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Boss") let enemyToAimPosition = hit.collider.transform.position let playerPosition = playerController.transform.position let directionToAim = enemyToAimPosition - playerPosition let angleToAim = Vector2.Angle(facingDirection, directionToAim) where angleToAim <= maxDetectionAngle/2 select hit)
                     {
                         enemyToAim = hit.collider.gameObject;
                         break; //On sort de la boucle

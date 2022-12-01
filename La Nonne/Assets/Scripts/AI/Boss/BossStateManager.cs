@@ -49,13 +49,16 @@ public class BossStateManager : MonoBehaviour
     public GameObject dashMine;
     public int bodyDamage;
     
-    public float dashDistance;
+    public float dashPower;
     public float dashTime;
     public float dashCooldown;
     public float timeBeforeDashing;
     
+    private Vector3 lastVelocity;
+
     public int dashAmount;
     public int currentDashAmount;
+    public int numberOfMines;
 
     [Header("----AttackCircle----")]
     public GameObject attackCircleWarning;
@@ -180,12 +183,22 @@ public class BossStateManager : MonoBehaviour
         {
             timerIsRunning = true;
         }
+        
+        lastVelocity = rb.velocity; //Pour le Dash
     }
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player"))
         {
             player.TakeDamage(bodyDamage);
+        }
+
+        if (col.gameObject.CompareTag("BossWall"))
+        {
+            var speed = lastVelocity.magnitude;
+            var direction = Vector3.Reflect(lastVelocity.normalized, col.GetContact(0).normal);
+
+            rb.velocity = direction * Mathf.Max(speed, 0f);
         }
     }
 
@@ -194,7 +207,6 @@ public class BossStateManager : MonoBehaviour
         Reinit();
         currentState = state;
         state.EnterState(this);
-        
     }
 
     void Reinit()
@@ -257,19 +269,18 @@ public class BossStateManager : MonoBehaviour
 
         GetComponent<AIDestinationSetter>().enabled = false;
         GetComponent<AIPath>().enabled = false;
+        
         Vector2 direction = player.transform.position - transform.position;
-        rb.velocity = direction.normalized * dashDistance; // DASH
+        rb.velocity = direction.normalized * dashPower; // DASH
         Physics2D.IgnoreLayerCollision(15, 7, true);
 
-        StartCoroutine(DashMine());
-        yield return new WaitForSeconds(0.5f);
-        
-        StartCoroutine(DashMine());
-        yield return new WaitForSeconds(0.5f);
-        
-        StartCoroutine(DashMine());
-        yield return new WaitForSeconds(0.5f);
-        
+        //HOW MANY MINES DURING DASH
+        for (int i = 0; i < numberOfMines; i++)
+        {
+            StartCoroutine(DashMine());
+            yield return new WaitForSeconds(0.5f);
+        }
+
         Physics2D.IgnoreLayerCollision(15, 7, false); //Active la collision avec le joueur
         yield return new WaitForSeconds(dashTime);
         
@@ -416,7 +427,9 @@ public class BossStateManager : MonoBehaviour
     private IEnumerator Transition()
     {
         bossAI.maxSpeed = 0;
-        player.soController.moveSpeed = 0;
+        player.enabled = false;
+        player.transform.GetChild(0).gameObject.SetActive(false);
+        //player.soController.moveSpeed = 0;
         yield return new WaitForSeconds(1f);
         
         vCamPlayer.Priority = 1; //on laisse la priorité à la vCam du boss
@@ -433,7 +446,9 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(3f); //transition BOSS to player
 
         vCamPlayer.Priority = 10;
-        player.soController.moveSpeed = 40f;
+        player.enabled = true;
+        player.transform.GetChild(0).gameObject.SetActive(true);
+        //player.soController.moveSpeed = 40f;
         yield return new WaitForSeconds(3f);
 
         for (int i = 0; i < numberOfSpawn; i++)
