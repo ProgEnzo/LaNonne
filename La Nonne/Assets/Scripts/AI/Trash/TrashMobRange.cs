@@ -48,13 +48,14 @@ namespace AI.Trash
         
             if (distanceToPlayer <= shootingRange) //si le joueur est dans la SHOOTING RANGE du trashMob
             {
-                scriptAIPath.maxSpeed = 3;
+                scriptAIPath.maxSpeed = 1;
+                
                 Shoot();
             
             }
             else if (distanceToPlayer <= aggroRange) //si le joueur est dans l'AGGRO RANGE du trashMob
             {
-                scriptAIPath.maxSpeed = 6;
+                scriptAIPath.maxSpeed = 3;
             
             }
             else if (distanceToPlayer > aggroRange) //si le joueur est HORS de l'AGGRO RANGE

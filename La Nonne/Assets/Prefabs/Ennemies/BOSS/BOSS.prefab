@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 9006283483999273133}
   m_Layer: 15
   m_Name: BOSS
-  m_TagString: Enemy
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -434,7 +434,7 @@ MonoBehaviour:
   - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
   - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
   currentHealth: 100
-  maxHealth: 500
+  maxHealth: 1000
   playerNormalSpeed: 30
   bossNormalSpeed: 1
   vCamPlayer: {fileID: 0}
@@ -443,13 +443,13 @@ MonoBehaviour:
   vCamBossShake: {fileID: 0}
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   bodyDamage: 20
-  dashPower: 0
-  dashTime: 2
+  dashPower: 5
+  dashTime: 1
   dashCooldown: 0.5
   timeBeforeDashing: 0.5
   dashAmount: 2
   currentDashAmount: 2
-  numberOfMines: 0
+  numberOfMines: 5
   attackCircleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
   attackCircle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
   attackCircleSpacingCooldown: 0.3
@@ -461,10 +461,8 @@ MonoBehaviour:
   vacuumCooldown: 3
   vacuumAmount: 3
   currentVacuumAmount: 3
-  shockwaveGameObject: {fileID: 0}
-  shockwaveRadius: 0
   takingDamage: 1
-  numberOfSpawn: 3
+  numberOfSpawn: 5
   transitionCooldown: 15
   toxicMineList: []
   toxicMineAreaWarningList: []
@@ -695,7 +693,7 @@ Transform:
   m_GameObject: {fileID: 9210296997253653927}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9006283483999273122}
@@ -714,7 +712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  shockwaveForce: 20
+  shockwaveForce: 30
 --- !u!58 &394932183000240069
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -730,7 +728,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.0001
+  m_Radius: 1
 --- !u!1001 &2389888792290212120
 PrefabInstance:
   m_ObjectHideFlags: 0
