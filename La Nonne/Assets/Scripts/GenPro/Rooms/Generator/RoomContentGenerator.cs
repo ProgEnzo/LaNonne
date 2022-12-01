@@ -408,19 +408,19 @@ public class RoomContentGenerator : MonoBehaviour
 
                 if (distance <= 1) // Game Tutorial
                     spawnedObjects.AddRange(enemyRoom[0].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 1) 
+                else if (distance < 2) 
                     spawnedObjects.AddRange(enemyRoom[1].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 3)  //Pyro Tutorial
+                else if (distance < 4)  //Pyro Tutorial
                     spawnedObjects.AddRange(enemyRoom[2].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 4) 
+                else if (distance < 5) 
                     spawnedObjects.AddRange(enemyRoom[3].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 6) 
+                else if (distance < 7) 
                     spawnedObjects.AddRange(enemyRoom[4].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 7) //TDI Tutorial
+                else if (distance < 8) //TDI Tutorial
                     spawnedObjects.AddRange(enemyRoom[5].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 9) 
+                else if (distance < 10) 
                     spawnedObjects.AddRange(enemyRoom[6].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance > 12) 
+                else if (distance > 13) 
                     spawnedObjects.AddRange(enemyRoom[7].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
             }
         }
@@ -435,7 +435,7 @@ public class RoomContentGenerator : MonoBehaviour
             
             foreach (var preBoss in dungeonData.roomsDictionary.Keys)
             {
-                if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[lastShopPosition] + 22)
+                if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 22)
                 {
                     preBossRoomPosition = preBoss;
                     
