@@ -435,7 +435,7 @@ public class RoomContentGenerator : MonoBehaviour
             
             foreach (var preBoss in dungeonData.roomsDictionary.Keys)
             {
-                if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[lastShopPosition] + 22)
+                if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 22)
                 {
                     preBossRoomPosition = preBoss;
                     
