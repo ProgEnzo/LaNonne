@@ -208,13 +208,13 @@ namespace Shop.UI
       
       public void BuyEffect(int buttonNumber)
       {
-         if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None && PlayerController.instance.epAmount >=
+         if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None && PlayerController.instance.currentEp >=
              effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
                 EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]]].cost)
          {
             currentNumberOfTakenObjects++;
             EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]]++;
-            PlayerController.instance.epAmount -=
+            PlayerController.instance.currentEp -=
                effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
                   EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]] - 1].cost;
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
