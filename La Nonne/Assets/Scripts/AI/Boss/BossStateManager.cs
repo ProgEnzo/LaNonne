@@ -124,6 +124,10 @@ namespace AI.Boss
         [SerializeField, ShowOnly] internal float[] stackTimers = new float[3];
         [SerializeField, ShowOnly] internal bool[] areStacksOn = new bool[3];
         private EffectManager effectManager;
+        [SerializeField, ShowOnly] internal float currentAiPathSpeed;
+        [SerializeField, ShowOnly] internal float currentVelocitySpeed;
+        [SerializeField, ShowOnly] internal float currentDamageMultiplier;
+        [SerializeField, ShowOnly] internal float currentEpDropMultiplier;
 
 
         private void Start()

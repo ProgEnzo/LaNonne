@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AI;
+using AI.Boss;
 using Core.Scripts.Utils;
 using Shop;
 using UnityEngine;
@@ -83,49 +84,105 @@ namespace Shop
         private static IEnumerator Bleed(int level, GameObject enemy, int stackIndex)
         {
             var bleedSo = (BleedSO) instance.effectDictionary[(int)Effect.Bleed][level-1];
-            var enemyController = enemy.GetComponent<EnemyController>();
-            yield return new WaitForSeconds(bleedSo.cooldown);
-            while (enemyController.stacks[stackIndex].effect == Effect.Bleed)
+            switch (enemy.tag)
             {
-                enemyController.TakeDamageFromPlayer(bleedSo.damage);
-                yield return new WaitForSeconds(bleedSo.cooldown);
+                case "Enemy":
+                    var enemyController = enemy.GetComponent<EnemyController>();
+                    yield return new WaitForSeconds(bleedSo.cooldown);
+                    while (enemyController.stacks[stackIndex].effect == Effect.Bleed)
+                    {
+                        enemyController.TakeDamageFromPlayer(bleedSo.damage);
+                        yield return new WaitForSeconds(bleedSo.cooldown);
+                    }
+                    enemyController.areStacksOn[stackIndex] = false;
+                    break;
+                case "Boss":
+                    var bossController = enemy.GetComponent<BossStateManager>();
+                    yield return new WaitForSeconds(bleedSo.cooldown);
+                    while (bossController.stacks[stackIndex].effect == Effect.Bleed)
+                    {
+                        bossController.TakeDamageOnBossFromPlayer(bleedSo.damage);
+                        yield return new WaitForSeconds(bleedSo.cooldown);
+                    }
+                    bossController.areStacksOn[stackIndex] = false;
+                    break;
             }
-            enemyController.areStacksOn[stackIndex] = false;
         }
         
         private static IEnumerator Chill(int level, GameObject enemy, int stackIndex)
         {
             var chillSo = (ChillSO) instance.effectDictionary[(int)Effect.Chill][level-1];
-            var enemyController = enemy.GetComponent<EnemyController>();
-            enemyController.currentAiPathSpeed *= chillSo.rateOfBasicSpeed;
-            enemyController.currentVelocitySpeed *= chillSo.rateOfBasicSpeed;
-            bool Condition() => enemyController.stacks[stackIndex].effect != Effect.Chill;
-            yield return new WaitUntil(Condition);
-            enemyController.currentAiPathSpeed /= chillSo.rateOfBasicSpeed;
-            enemyController.currentVelocitySpeed /= chillSo.rateOfBasicSpeed;
-            enemyController.areStacksOn[stackIndex] = false;
+            switch (enemy.tag)
+            {
+                case "Enemy":
+                    var enemyController = enemy.GetComponent<EnemyController>();
+                    enemyController.currentAiPathSpeed *= chillSo.rateOfBasicSpeed;
+                    enemyController.currentVelocitySpeed *= chillSo.rateOfBasicSpeed;
+                    bool ConditionEnemy() => enemyController.stacks[stackIndex].effect != Effect.Chill;
+                    yield return new WaitUntil(ConditionEnemy);
+                    enemyController.currentAiPathSpeed /= chillSo.rateOfBasicSpeed;
+                    enemyController.currentVelocitySpeed /= chillSo.rateOfBasicSpeed;
+                    enemyController.areStacksOn[stackIndex] = false;
+                    break;
+                case "Boss":
+                    var bossController = enemy.GetComponent<BossStateManager>();
+                    bossController.currentAiPathSpeed *= chillSo.rateOfBasicSpeed;
+                    bossController.currentVelocitySpeed *= chillSo.rateOfBasicSpeed;
+                    bool ConditionBoss() => bossController.stacks[stackIndex].effect != Effect.Chill;
+                    yield return new WaitUntil(ConditionBoss);
+                    bossController.currentAiPathSpeed /= chillSo.rateOfBasicSpeed;
+                    bossController.currentVelocitySpeed /= chillSo.rateOfBasicSpeed;
+                    bossController.areStacksOn[stackIndex] = false;
+                    break;
+            }
         }
         
         private static IEnumerator Target(int level, GameObject enemy, int stackIndex)
         {
             var targetSo = (TargetSO) instance.effectDictionary[(int)Effect.Target][level-1];
-            var enemyController = enemy.GetComponent<EnemyController>();
-            enemyController.currentDamageMultiplier *= targetSo.rateOfDamage;
-            bool Condition() => enemyController.stacks[stackIndex].effect != Effect.Target;
-            yield return new WaitUntil(Condition);
-            enemyController.currentDamageMultiplier /= targetSo.rateOfDamage;
-            enemyController.areStacksOn[stackIndex] = false;
+            switch (enemy.tag)
+            {
+                case "Enemy":
+                    var enemyController = enemy.GetComponent<EnemyController>();
+                    enemyController.currentDamageMultiplier *= targetSo.rateOfDamage;
+                    bool ConditionEnemy() => enemyController.stacks[stackIndex].effect != Effect.Target;
+                    yield return new WaitUntil(ConditionEnemy);
+                    enemyController.currentDamageMultiplier /= targetSo.rateOfDamage;
+                    enemyController.areStacksOn[stackIndex] = false;
+                    break;
+                case "Boss":
+                    var bossController = enemy.GetComponent<BossStateManager>();
+                    bossController.currentDamageMultiplier *= targetSo.rateOfDamage;
+                    bool ConditionBoss() => bossController.stacks[stackIndex].effect != Effect.Target;
+                    yield return new WaitUntil(ConditionBoss);
+                    bossController.currentDamageMultiplier /= targetSo.rateOfDamage;
+                    bossController.areStacksOn[stackIndex] = false;
+                    break;
+            }
         }
         
         private static IEnumerator Wealth(int level, GameObject enemy, int stackIndex)
         {
             var wealthSo = (WealthSO) instance.effectDictionary[(int)Effect.Wealth][level-1];
-            var enemyController = enemy.GetComponent<EnemyController>();
-            enemyController.currentEpDropMultiplier *= wealthSo.epDropRate;
-            bool Condition() => enemyController.stacks[stackIndex].effect != Effect.Wealth;
-            yield return new WaitUntil(Condition);
-            enemyController.currentEpDropMultiplier /= wealthSo.epDropRate;
-            enemyController.areStacksOn[stackIndex] = false;
+            switch (enemy.tag)
+            {
+                case "Enemy":
+                    var enemyController = enemy.GetComponent<EnemyController>();
+                    enemyController.currentEpDropMultiplier *= wealthSo.epDropRate;
+                    bool ConditionEnemy() => enemyController.stacks[stackIndex].effect != Effect.Wealth;
+                    yield return new WaitUntil(ConditionEnemy);
+                    enemyController.currentEpDropMultiplier /= wealthSo.epDropRate;
+                    enemyController.areStacksOn[stackIndex] = false;
+                    break;
+                case "Boss":
+                    var bossController = enemy.GetComponent<BossStateManager>();
+                    bossController.currentEpDropMultiplier *= wealthSo.epDropRate;
+                    bool ConditionBoss() => bossController.stacks[stackIndex].effect != Effect.Wealth;
+                    yield return new WaitUntil(ConditionBoss);
+                    bossController.currentEpDropMultiplier /= wealthSo.epDropRate;
+                    bossController.areStacksOn[stackIndex] = false;
+                    break;
+            }
         }
     }
 }

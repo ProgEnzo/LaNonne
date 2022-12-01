@@ -88,7 +88,7 @@ namespace AI
         {
             if (currentHealth <= 0)
             {
-                for (int i = 0; i < numberOfEp; i++)
+                for (var i = 0; i < (int)(numberOfEp * currentEpDropMultiplier); i++)
                 {
                     var epPos = transform.position;
                     var epDropObject = Instantiate(epDrop, new Vector2(epPos.x, epPos.y), Quaternion.identity);
