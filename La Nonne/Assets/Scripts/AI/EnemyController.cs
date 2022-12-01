@@ -24,7 +24,7 @@ namespace AI
         private AIPath aiPathComponent;
         protected Rigidbody2D rb;
         private static readonly List<SpriteRenderer> PlayerSpriteRenderers = new();
-        [SerializeField, ShowOnly] internal (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
+        internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
         [SerializeField, ShowOnly] internal float[] stackTimers = new float[3];
         [SerializeField, ShowOnly] internal bool[] areStacksOn = new bool[3];
         private EffectManager effectManager;

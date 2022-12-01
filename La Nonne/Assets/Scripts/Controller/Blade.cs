@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AI;
+using AI.Boss;
 using Shop;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Controller
 {
@@ -173,26 +177,29 @@ namespace Controller
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            var o = other.gameObject;
+            
             //DMG du player sur les enemy
-            if (other.gameObject.CompareTag("Enemy"))
+            if (o.CompareTag("Enemy"))
             {
-                other.gameObject.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.playerAttackDamage);
+                o.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.playerAttackDamage);
                 if (hitState == maxHitState)
                 {
-                    other.gameObject.GetComponent<EnemyController>().HitStopAndKnockBack(bigHitStopDuration, bigKnockBackForce);
+                    o.GetComponent<EnemyController>().HitStopAndKnockBack(bigHitStopDuration, bigKnockBackForce);
                 }
                 else
                 {
-                    other.gameObject.GetComponent<EnemyController>().HitStopAndKnockBack(littleHitStopDuration, littleKnockBackForce);
+                    o.GetComponent<EnemyController>().HitStopAndKnockBack(littleHitStopDuration, littleKnockBackForce);
                 }
-                PutStack(other.gameObject);
+                PutStack(o);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
             }
             
             //DMG du player sur le BOSS
-            if (other.gameObject.CompareTag("Boss"))
+            if (o.CompareTag("Boss"))
             {
-                other.gameObject.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.playerAttackDamage);
+                o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.playerAttackDamage);
+                PutStack(o);
             }
         }
 
@@ -206,14 +213,32 @@ namespace Controller
         
         private void ApplyStack(GameObject enemy, (EffectManager.Effect effect, int level) effectToApply)
         {
-            var enemyController = enemy.GetComponent<EnemyController>();
-            if (!enemyController.stacks.Contains((EffectManager.Effect.None, 0))) return;
-            for (var i = 0; i < enemyController.stacks.Length; i++)
+            switch (enemy.tag)
             {
-                if (enemyController.stacks[i].effect != EffectManager.Effect.None) continue;
-                enemyController.stacks[i] = effectToApply;
-                enemyController.stackTimers[i] = effectManager.effectDuration;
-                break;
+                case "Enemy":
+                    var enemyController = enemy.GetComponent<EnemyController>();
+                    if (!enemyController.stacks.Contains((EffectManager.Effect.None, 0))) return;
+                    for (var i = 0; i < enemyController.stacks.Length; i++)
+                    {
+                        if (enemyController.stacks[i].effect != EffectManager.Effect.None) continue;
+                        enemyController.stacks[i] = effectToApply;
+                        enemyController.stackTimers[i] = effectManager.effectDuration;
+                        break;
+                    }
+                    break;
+                case "Boss":
+                    var bossController = enemy.GetComponent<BossStateManager>();
+                    if (!bossController.stacks.Contains((EffectManager.Effect.None, 0))) return;
+                    for (var i = 0; i < bossController.stacks.Length; i++)
+                    {
+                        if (bossController.stacks[i].effect != EffectManager.Effect.None) continue;
+                        bossController.stacks[i] = effectToApply;
+                        bossController.stackTimers[i] = effectManager.effectDuration;
+                        break;
+                    }
+                    break;
+                default:
+                    return;
             }
         }
         

@@ -1,3 +1,4 @@
+using AI.Boss;
 using UnityEngine;
 
 public class BossAttackCircleState : BossBaseState

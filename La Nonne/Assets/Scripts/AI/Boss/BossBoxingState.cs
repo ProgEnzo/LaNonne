@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AI.Boss;
 using UnityEngine;
 
 public class BossBoxingState : BossBaseState
