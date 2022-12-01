@@ -54,7 +54,6 @@ namespace Controller
         private (int parameterToChange, int value) animParametersToChange;
         private bool isMovingProfile;
         private int currentHealth;
-        internal int epAmount;
 
         private void Awake()
         {
