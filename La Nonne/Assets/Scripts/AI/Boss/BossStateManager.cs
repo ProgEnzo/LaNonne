@@ -75,10 +75,14 @@ public class BossStateManager : MonoBehaviour
     public int vacuumAmount;
     public int currentVacuumAmount;
 
+
     [Header("----TransitionState----")] 
+    private GameObject shockwaveGameObject;
+
     public bool takingDamage = true;
     public int numberOfSpawn;
     public float transitionCooldown;
+
 
     [Header("----ToxicMineState----")]
     public List<GameObject> toxicMineList = new List<GameObject>();
@@ -125,6 +129,7 @@ public class BossStateManager : MonoBehaviour
         hpBossSlider = GameObject.FindGameObjectWithTag("Boss HealthBar").GetComponent<Slider>();
         player = PlayerController.instance;
         gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
+        shockwaveGameObject = GameObject.Find("Shockwave");
         
 
         currentState = DashingState; //starting state for the boss state machine
@@ -193,6 +198,7 @@ public class BossStateManager : MonoBehaviour
             player.TakeDamage(bodyDamage);
         }
 
+        //DASH REBOND
         if (col.gameObject.CompareTag("BossWall"))
         {
             var speed = lastVelocity.magnitude;
@@ -457,12 +463,14 @@ public class BossStateManager : MonoBehaviour
             var posBossBeforeSpawn = transform.position; //get la pos du boss
             var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
         }
-
         yield return new WaitForSeconds(transitionCooldown);
         
         //CODE FOR THE EXPLOSION AFTER THE TRANSITION HERE
-        
-        
+        shockwaveGameObject.transform.DOScale(new Vector2(5f, 5f), 2.5f);
+        Debug.Log("AFEPIAEPFIAEPFIAJEPFAFJEPAEJFPAEFJPAFJPAFJE");
+        yield return new WaitForSeconds(2.5f);
+
+        Destroy(shockwaveGameObject);
         bossAI.maxSpeed = bossNormalSpeed;
         takingDamage = true;
         SwitchState(ThrowingState);
