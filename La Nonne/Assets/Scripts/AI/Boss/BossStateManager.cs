@@ -127,7 +127,7 @@ public class BossStateManager : MonoBehaviour
         gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
         
 
-        currentState = TransitionState; //starting state for the boss state machine
+        currentState = DashingState; //starting state for the boss state machine
         currentState.EnterState(this); //"this" is this Monobehavior script
         
         //HEALTH
