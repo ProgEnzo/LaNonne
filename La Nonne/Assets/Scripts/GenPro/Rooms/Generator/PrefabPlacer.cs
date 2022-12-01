@@ -24,7 +24,8 @@ public class PrefabPlacer : MonoBehaviour
                     );
                 if (possiblePlacementSpot.HasValue)
                 {
-                    placedObjects.Add(CreateObject(placementData.enemyPrefab, possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f))); //Instantiate(placementData.enemyPrefab,possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f), Quaternion.identity)
+                    placedObjects.Add(CreateObject(placementData.enemyPrefab, possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f))); 
+                    //Instantiate(placementData.enemyPrefab,possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f), Quaternion.identity)
                 }
             }
         }
@@ -33,11 +34,12 @@ public class PrefabPlacer : MonoBehaviour
 
     public List<GameObject> PlaceAllItems(List<ItemPlacementData> itemPlacementData, ItemPlacementHelper itemPlacementHelper)
     {
-        List<GameObject> placedObjects = new List<GameObject>();
+        var placedObjects = new List<GameObject>();
 
-        IEnumerable<ItemPlacementData> sortedList = new List<ItemPlacementData>(itemPlacementData).OrderByDescending(placementData => placementData.itemData.size.x * placementData.itemData.size.y);
+        /*IEnumerable<ItemPlacementData> sortedList = new List<ItemPlacementData>(itemPlacementData).
+            OrderByDescending(placementData => placementData.itemData.size.x * placementData.itemData.size.y);*/
 
-        foreach (var placementData in sortedList)
+        foreach (var placementData in itemPlacementData)
         {
             for (int i = 0; i < placementData.Quantity; i++)
             {

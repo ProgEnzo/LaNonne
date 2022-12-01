@@ -43,6 +43,7 @@ public abstract class PlacementData //class de base pour toutes les données de 
 public class ItemPlacementData : PlacementData
 {
     public ItemData itemData; //je dois peut etre utiliser des gameObject à la place de Data pour les instancier comme les ennemis mais ca pose probleme
+    public GameObject itemPrefab;
 }
 
 [Serializable]
@@ -50,5 +51,4 @@ public class EnemyPlacementData : PlacementData
 {
     public GameObject enemyPrefab;
     public Vector2Int enemySize = Vector2Int.one;
-    public Vector2Int bossSize = Vector2Int.one;
 }
