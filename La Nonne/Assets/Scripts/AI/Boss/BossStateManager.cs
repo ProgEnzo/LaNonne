@@ -253,7 +253,6 @@ public class BossStateManager : MonoBehaviour
     {
         StartCoroutine(Dash());
         Debug.Log($"<color=green>DASHING STATE HAS BEGUN</color>");
-
     }
 
     
@@ -462,6 +461,7 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(transitionCooldown);
         
         //CODE FOR THE EXPLOSION AFTER THE TRANSITION HERE
+        
         
         bossAI.maxSpeed = bossNormalSpeed;
         takingDamage = true;
