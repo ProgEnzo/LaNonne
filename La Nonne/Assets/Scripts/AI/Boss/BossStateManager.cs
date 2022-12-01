@@ -466,9 +466,9 @@ public class BossStateManager : MonoBehaviour
         yield return new WaitForSeconds(transitionCooldown);
         
         //CODE FOR THE EXPLOSION AFTER THE TRANSITION HERE
-        shockwaveGameObject.transform.DOScale(new Vector2(5f, 5f), 2.5f);
+        shockwaveGameObject.transform.DOScale(new Vector2(10f, 10f), 1f);
         Debug.Log("AFEPIAEPFIAEPFIAJEPFAFJEPAEJFPAEFJPAFJPAFJE");
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1f);
 
         Destroy(shockwaveGameObject);
         bossAI.maxSpeed = bossNormalSpeed;
