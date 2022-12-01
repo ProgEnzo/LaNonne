@@ -14,7 +14,7 @@ public class RoomContentGenerator : MonoBehaviour
     #region Variables
 
         [SerializeField]
-        private RoomGenerator playerRoom, bossRoom, shopRoom; //généraliser lvl0
+        private RoomGenerator playerRoom, bossRoom, shopRoom, preBossRoom; //généraliser lvl0
 
         [SerializeField] private TilemapVisualizer tilemapVisualizer;
     
@@ -72,6 +72,7 @@ public class RoomContentGenerator : MonoBehaviour
         SelectPlayerSpawnPoint(dungeonData);
         SelectBossSpawnPoints(dungeonData);
         SelectShopSpawnPoints(dungeonData);
+        PreBossRoomPosition(dungeonData);
         SelectEnemySpawnPoints(dungeonData);
 
         ModifyBossRoom();
@@ -331,7 +332,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 44) //25 étant la longueur des couloirs ou "corridors Length" dans l'IDE
+            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 44) //22 étant la longueur des couloirs ou "corridors Length" dans l'IDE
             {
                 shopRoomPosition2 = shop;
                 
@@ -405,19 +406,46 @@ public class RoomContentGenerator : MonoBehaviour
             {
                 var distance = Vector2Int.Distance(playerSpawnRoomPosition, roomData.Key) / 22; // room data bonne clés de distance ? Actuellement me donne la distance en ne passant pas par les couloirs
 
-                if (distance <= 4) 
+                if (distance <= 1) // Game Tutorial
                     spawnedObjects.AddRange(enemyRoom[0].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 7) 
+                else if (distance < 1) 
                     spawnedObjects.AddRange(enemyRoom[1].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 9) 
+                else if (distance < 3)  //Pyro Tutorial
                     spawnedObjects.AddRange(enemyRoom[2].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 10) 
+                else if (distance < 4) 
                     spawnedObjects.AddRange(enemyRoom[3].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 11) 
+                else if (distance < 6) 
                     spawnedObjects.AddRange(enemyRoom[4].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance > 11) 
+                else if (distance < 7) //TDI Tutorial
                     spawnedObjects.AddRange(enemyRoom[5].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+                else if (distance < 9) 
+                    spawnedObjects.AddRange(enemyRoom[6].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+                else if (distance > 12) 
+                    spawnedObjects.AddRange(enemyRoom[7].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+            }
+        }
+        
+        #endregion
+        
+        #region PreBossRoom
+        
+        private void PreBossRoomPosition(DungeonData dungeonData)
+        {
+            Vector2Int preBossRoomPosition = playerSpawnRoomPosition;
+            
+            foreach (var preBoss in dungeonData.roomsDictionary.Keys)
+            {
+                if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[lastShopPosition] + 22)
+                {
+                    preBossRoomPosition = preBoss;
+                    
+                    var preBossPos = GetMapFromTilePosition(preBossRoomPosition, dungeonData);
 
+                    spawnedObjects.AddRange(preBossRoom.ProcessRoom(preBossPos, dungeonData.roomsDictionary[preBossPos], dungeonData.GetRoomFloorWithoutCorridors(preBossPos)));
+                    dungeonData.roomsDictionary.Remove(preBossPos);
+
+                    break;
+                }
             }
         }
         

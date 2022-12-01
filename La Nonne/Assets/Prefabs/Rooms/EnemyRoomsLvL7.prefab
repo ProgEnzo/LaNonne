@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7327478629216608912
+--- !u!1 &5723994030806825877
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3862036121514157629}
-  - component: {fileID: 643198445}
+  - component: {fileID: 2253890672813588280}
+  - component: {fileID: 3089426204807984360}
   m_Layer: 0
-  m_Name: EnemyRoomsLvLFinal
+  m_Name: EnemyRoomsLvL7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3862036121514157629
+--- !u!4 &2253890672813588280
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7327478629216608912}
+  m_GameObject: {fileID: 5723994030806825877}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,18 +32,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &643198445
+--- !u!114 &3089426204807984360
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7327478629216608912}
+  m_GameObject: {fileID: 5723994030806825877}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6266878fcaa21743b4ec1504ed17f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomCenter: {x: 0, y: 0}
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
   enemyPlacementData:
   - minQuantity: 1
