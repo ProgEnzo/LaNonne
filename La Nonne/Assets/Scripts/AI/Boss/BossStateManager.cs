@@ -22,6 +22,7 @@ namespace AI.Boss
         public BossToxicMineState ToxicMineState = new();
         public BossTransitionState TransitionState = new();
         public BossBoxingState BoxingState = new();
+        public BossSpawnState SpawnState = new();
 
         public Rigidbody2D rb;
         private PlayerController player;
@@ -139,7 +140,7 @@ namespace AI.Boss
             shockwaveGameObject = GameObject.Find("Shockwave");
         
 
-            currentState = ToxicMineState; //starting state for the boss state machine
+            currentState = ThrowingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
         
             //HEALTH
@@ -157,6 +158,7 @@ namespace AI.Boss
             firstStatesList.Add(DashingState);
             firstStatesList.Add(AttackCircleState);
             firstStatesList.Add(VacuumState);
+            firstStatesList.Add(SpawnState);
         
             lastStatesList.Add(ThrowingState);
             lastStatesList.Add(ToxicMineState);
@@ -388,11 +390,11 @@ namespace AI.Boss
             var circleObjectWarning = Instantiate(attackCircleWarning, player.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
-            Destroy(circleObjectWarning, 1f);
+            Destroy(circleObjectWarning);
             var circleObject = Instantiate(attackCircle, circleObjectWarning.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
-        
-            Destroy(circleObject, 1f);
+            
+            Destroy(circleObject);
 
             if (currentAttackCircleAmount > 0 && currentHealth >= maxHealth / 2)
             {
@@ -439,7 +441,7 @@ namespace AI.Boss
         
             //TOXIC AREA
             var toxicAreaObject = Instantiate(toxicArea, bossPos, Quaternion.identity);
-            toxicAreaObject.transform.DOScale(new Vector2(2.5f, 2.5f), 2f);
+            toxicAreaObject.transform.DOScale(new Vector2(3.5f, 3.5f), 2f);
             yield return new WaitForSeconds(vacuumCooldown);
 
             Destroy(vacuumGameObject);
@@ -465,6 +467,26 @@ namespace AI.Boss
             }
         
         }
+        #endregion
+
+        #region SpawnEnemyState
+
+        public void SpawnEnemyManager()
+        {
+            StartCoroutine(SpawnEnemy());
+        }
+
+
+        private IEnumerator SpawnEnemy()
+        {
+            var posBossBeforeSpawn = transform.position; //get la pos du boss
+            var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+            yield return new WaitForSeconds(1f);
+            
+            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
+            SwitchState(nextState);
+        }
+        
         #endregion
 
         #region TransitionState

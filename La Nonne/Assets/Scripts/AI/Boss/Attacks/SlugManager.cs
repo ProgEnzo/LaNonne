@@ -39,7 +39,7 @@ public class SlugManager : MonoBehaviour
         bulletMassReduction += 0.2f;
         
         //EN MAINTENANCE A REGLER PUTAIN
-        var directionDash = new Vector3(transform.position.x + Random.Range(-5f, 5f), transform.position.y + Random.Range(-5f, 5f), 0) - transform.position.normalized;
+        var directionDash = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0) - transform.position.normalized;
         //transform.DOMove(new Vector2(directionDash.x + Random.Range(-5f, 5f),directionDash.y +  Random.Range(-5f, 5f)), 3f);
         rb.velocity = directionDash * dashSpeed;
         yield return new WaitForSeconds(3f);
