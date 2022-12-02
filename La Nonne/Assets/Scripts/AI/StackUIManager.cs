@@ -24,17 +24,19 @@ namespace AI
         
         private void StackSwitch(int i)
         {
-            Debug.Log(enemyController.stacks[i].effect != EffectManager.Effect.None);
             squareSpriteRenderers[i].enabled = enemyController.stacks[i].effect != EffectManager.Effect.None;
 
-            squareSpriteRenderers[i].color = enemyController.stacks[i].effect switch
+            if (squareSpriteRenderers[i].enabled)
             {
-                EffectManager.Effect.Bleed => Color.red,
-                EffectManager.Effect.Chill => Color.cyan,
-                EffectManager.Effect.Target => Color.green,
-                EffectManager.Effect.Wealth => Color.yellow,
-                _ => Color.white
-            };
+                squareSpriteRenderers[i].color = enemyController.stacks[i].effect switch
+                {
+                    EffectManager.Effect.Bleed => Color.red,
+                    EffectManager.Effect.Chill => Color.cyan,
+                    EffectManager.Effect.Target => Color.green,
+                    EffectManager.Effect.Wealth => Color.yellow,
+                    _ => Color.white
+                };
+            }
         }
     }
 }
