@@ -52,8 +52,8 @@ namespace Controller
             lineRenderer.enabled = false;
             boxCollider.enabled = false;
             isHitting = false;
-            currentDuringComboCooldown = maxDuringComboCooldown;
-            currentNextComboCooldown = maxNextComboCooldown;
+            currentDuringComboCooldown = 0;
+            currentNextComboCooldown = 0;
             hitState = 0;
         }
 
@@ -61,19 +61,7 @@ namespace Controller
         private void Update()
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
-            lineRenderer.SetPosition(1, new Vector3(0, hitLength/parentLocalScaleX, 0));
-        }
-
-        private void FixedUpdate()
-        {
-            var parentLocalScaleX = transform.parent.parent.localScale.x;
-            ZealousBlade();
-            boxCollider.size = new Vector2(0.1f/parentLocalScaleX, hitLength/parentLocalScaleX);
-            boxCollider.offset = new Vector2(0, hitLength/parentLocalScaleX/2);
-        }
-
-        private void ZealousBlade()
-        {
+            
             currentDuringComboCooldown -= Time.deltaTime;
             currentNextComboCooldown -= Time.deltaTime;
             if (currentDuringComboCooldown <= 0)
@@ -83,60 +71,73 @@ namespace Controller
 
             if (Input.GetMouseButtonDown(0) && !isHitting && currentNextComboCooldown <= 0)
             {
-                hitState += 1;
-                currentDuringComboCooldown = maxDuringComboCooldown;
-                
-                var facingDirection = (playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.transform.localScale.x) switch
-                {
-                    (0, > 0 or < 0) => Vector2.down,
-                    (1, > 0 or < 0) => Vector2.up,
-                    (2, > 0) => Vector2.right,
-                    (2, < 0) => Vector2.left,
-                    _ => Vector2.right
-                };
-                transform.rotation = Quaternion.LookRotation(Vector3.forward, facingDirection);
-                GameObject enemyToAim = null;
-                var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'attaque
-                Physics2D.CircleCast(transform.position, hitLength, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'attaque
-                if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
-                {
-                    foreach (var hit in from hit in objectsInArea where hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Boss") let enemyToAimPosition = hit.collider.transform.position let playerPosition = playerController.transform.position let directionToAim = enemyToAimPosition - playerPosition let angleToAim = Vector2.Angle(facingDirection, directionToAim) where angleToAim <= maxDetectionAngle/2 select hit)
-                    {
-                        enemyToAim = hit.collider.gameObject;
-                        break; //On sort de la boucle
-                    }
-                }
+                ZealousBladeStart();
+            }
+            
+            lineRenderer.SetPosition(1, new Vector3(0, hitLength/parentLocalScaleX, 0));
+        }
 
-                Vector3 newDirection;
-                if (enemyToAim)
-                {
-                    newDirection = enemyToAim.transform.position - transform.position;
-                    newDirection.z = 0;
-                    newDirection.Normalize();
-                }
-                else
-                {
-                    newDirection = facingDirection;
-                }
-                
-                var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
-                AnimationControllerBool(IsAttacking);
-                finalRotation1 = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
-                finalRotation2 = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
-                lineRenderer.enabled = true;
-                boxCollider.enabled = true;
-                isHitting = true;
+        private void FixedUpdate()
+        {
+            var parentLocalScaleX = transform.parent.parent.localScale.x;
+            
+            ZealousBlade();
+            
+            boxCollider.size = new Vector2(0.1f/parentLocalScaleX, hitLength/parentLocalScaleX);
+            boxCollider.offset = new Vector2(0, hitLength/parentLocalScaleX/2);
+        }
 
-                if (hitState % 2 == 1)
+        private void ZealousBladeStart()
+        {
+            hitState += 1;
+            currentDuringComboCooldown = maxDuringComboCooldown;
+            
+            var facingDirection = (playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.transform.localScale.x) switch
+            {
+                (0, > 0 or < 0) => Vector2.down,
+                (1, > 0 or < 0) => Vector2.up,
+                (2, > 0) => Vector2.right,
+                (2, < 0) => Vector2.left,
+                _ => Vector2.right
+            };
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, facingDirection);
+            GameObject enemyToAim = null;
+            var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'attaque
+            Physics2D.CircleCast(transform.position, hitLength, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'attaque
+            if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
+            {
+                foreach (var hit in from hit in objectsInArea where hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Boss") let enemyToAimPosition = hit.collider.transform.position let playerPosition = playerController.transform.position let directionToAim = enemyToAimPosition - playerPosition let angleToAim = Vector2.Angle(facingDirection, directionToAim) where angleToAim <= maxDetectionAngle/2 select hit)
                 {
-                    transform.rotation = finalRotation2;
-                }
-                else
-                {
-                    transform.rotation = finalRotation1;
+                    enemyToAim = hit.collider.gameObject;
+                    break; //On sort de la boucle
                 }
             }
 
+            Vector3 newDirection;
+            if (enemyToAim)
+            {
+                newDirection = enemyToAim.transform.position - transform.position;
+                newDirection.z = 0;
+                newDirection.Normalize();
+            }
+            else
+            {
+                newDirection = facingDirection;
+            }
+            
+            var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
+            AnimationControllerBool(IsAttacking);
+            finalRotation1 = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
+            finalRotation2 = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
+            lineRenderer.enabled = true;
+            boxCollider.enabled = true;
+            isHitting = true;
+
+            transform.rotation = hitState % 2 == 1 ? finalRotation2 : finalRotation1;
+        }
+
+        private void ZealousBlade()
+        {
             if (isHitting)
             {
                 if (hitState % 2 == 1)

@@ -55,6 +55,12 @@ namespace Controller
         private void Update()
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
+
+            if (Input.GetMouseButtonDown(1) && !isHitting && currentTime <= 0)
+            {
+                InquisitorialChainStart();
+            }
+
             chainLineRenderer.SetPosition(1, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
             bladeLineRenderer.SetPosition(0, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
             bladeLineRenderer.SetPosition(1, new Vector3(0, (chainHitLength+bladeHitLength)/parentLocalScaleX, 0));
@@ -64,49 +70,52 @@ namespace Controller
         private void FixedUpdate()
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
+            
             InquisitorialChain();
+            
             chainBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, chainHitLength/parentLocalScaleX);
             chainBoxCollider.offset = new Vector2(0, chainHitLength/parentLocalScaleX/2);
             bladeBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, bladeHitLength/parentLocalScaleX);
             bladeBoxCollider.offset = new Vector2(0, (chainHitLength+bladeHitLength/2)/parentLocalScaleX);
         }
 
+        private void InquisitorialChainStart()
+        {
+            currentTime = cooldownTime;
+            var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            newDirection.z = 0;
+            newDirection.Normalize();
+            var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
+            attackDirectionState = newRotation.eulerAngles.z switch
+            {
+                >= 45 and <= 135 => 2,
+                >= 225 and <= 315 => 2,
+                >= 0 and < 45 or > 315 and < 360 => 1,
+                > 135 and < 225 => 0,
+                _ => 0
+            };
+            localStateMult = newRotation.eulerAngles.z switch
+            {
+                >= 45 and <= 135 => -1,
+                >= 225 and <= 315 => 1,
+                >= 0 and < 45 or > 315 and < 360 => 1,
+                > 135 and < 225 => 1,
+                _ => 1
+            };
+            playerController.transform.localScale = new Vector3(playerScale * localStateMult,
+                playerController.transform.localScale.y, playerController.transform.localScale.z);
+            playerController.transform.GetChild(0).localScale = new Vector3(1, 1 * localStateMult, 1);
+            AnimationControllerBool(attackDirectionState, IsAttacking);
+            initialRotation = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
+            finalRotation = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
+            transform.rotation = initialRotation;
+            transform.GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(1).gameObject.SetActive(true);
+            isHitting = true;
+        }
+
         private void InquisitorialChain()
         {
-            if (Input.GetMouseButtonDown(1) && !isHitting && currentTime <= 0)
-            {
-                currentTime = cooldownTime;
-                var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-                newDirection.z = 0;
-                newDirection.Normalize();
-                var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
-                attackDirectionState = newRotation.eulerAngles.z switch
-                {
-                    >= 45 and <= 135 => 2,
-                    >= 225 and <= 315 => 2,
-                    >= 0 and < 45 or > 315 and < 360 => 1,
-                    > 135 and < 225 => 0,
-                    _ => 0
-                };
-                localStateMult = newRotation.eulerAngles.z switch
-                {
-                    >= 45 and <= 135 => -1,
-                    >= 225 and <= 315 => 1,
-                    >= 0 and < 45 or > 315 and < 360 => 1,
-                    > 135 and < 225 => 1,
-                    _ => 1
-                };
-                playerController.transform.localScale = new Vector3(playerScale * localStateMult, playerController.transform.localScale.y, playerController.transform.localScale.z);
-                playerController.transform.GetChild(0).localScale = new Vector3(1,  1 * localStateMult, 1);
-                AnimationControllerBool(attackDirectionState, IsAttacking);
-                initialRotation = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
-                finalRotation = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
-                transform.rotation = initialRotation;
-                transform.GetChild(0).gameObject.SetActive(true);
-                transform.GetChild(1).gameObject.SetActive(true);
-                isHitting = true;
-            }
-
             if (isHitting)
             {
                 transform.rotation =
@@ -122,7 +131,7 @@ namespace Controller
                 }
             }
         }
-        
+
         private void AnimationControllerBool(int directionState, int parameterToChange)
         {
             AnimationManagerBool(directionState, parameterToChange, true);
