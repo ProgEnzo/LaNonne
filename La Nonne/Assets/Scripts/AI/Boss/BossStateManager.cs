@@ -187,27 +187,25 @@ namespace AI.Boss
 
             distanceBetweenPlayer = Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(player.transform.position.x, player.transform.position.y));
 
-            // A METTRE UNE FOIS QUE LE BOXING STATE EST TERMINÉ
-            // if (currentHealth <= maxHealth / 2)
-            // {
-            //     
-            // }
-        
-            if (distanceBetweenPlayer < aggroBoxingRange)
+            //VERIF ON BOXING STATE
+            if (currentHealth <= maxHealth / 2)
             {
-                if (timerIsRunning)
+                if (distanceBetweenPlayer < aggroBoxingRange)
                 {
-                    if (timerBeforeBoxing > 0)
+                    if (timerIsRunning)
                     {
-                        timerBeforeBoxing -= Time.deltaTime;
+                        if (timerBeforeBoxing > 0)
+                        {
+                            timerBeforeBoxing -= Time.deltaTime;
+                        }
                     }
                 }
+                else
+                {
+                    timerIsRunning = true;
+                }
             }
-            else
-            {
-                timerIsRunning = true;
-            }
-        
+            
             lastVelocity = rb.velocity; //Pour le Dash
             
             EffectCheck();
@@ -688,10 +686,8 @@ namespace AI.Boss
 
         private IEnumerator Boxing()
         {
-
             yield return new WaitForSeconds(1f);
 
-        
             for (int i = 0; i < numberOfBoxingCircle; i++)
             {
                 if (distanceBetweenPlayer < aggroBoxingRange)
