@@ -77,10 +77,10 @@ public class RoomContentGenerator : MonoBehaviour
         PreBossRoomPosition(dungeonData);
         SelectEnemySpawnPoints(dungeonData);
 
+        ModifyHubRoom();
         ModifyBossRoom();
         ModifyShopsRoom();
-        ModifyHubRoom();
-                
+
         foreach (var roomPos in copiedDico.Keys)
         {
             PopulateWallUp(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallUp)); //maybe les appeler que dans mes salle pour que ca n'apparaisse que sur les murs de certaines salles
@@ -111,12 +111,22 @@ public class RoomContentGenerator : MonoBehaviour
     private void ModifyHubRoom()
     {
         tilemapVisualizer.SwipeMap(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
-        InstantiateBossRoom(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
+        InstantiateHubRoom(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
     }
 
     private void InstantiateBossRoom(int x, int y)
     {
         var go = Instantiate(prefabBoss);
+        Vector2Int pos = new Vector2Int(x, y);
+        go.transform.position = new Vector3(x, y);
+        var detector = go.GetComponent<DoorDetector>();
+        detector.ManageDoors(hasTopMap(pos),hasBottomMap(pos), hasRightMap(pos),hasLeftMap(pos));
+        
+    }
+    
+    private void InstantiateHubRoom(int x, int y)
+    {
+        var go = Instantiate(prefabHub);
         Vector2Int pos = new Vector2Int(x, y);
         go.transform.position = new Vector3(x, y);
         var detector = go.GetComponent<DoorDetector>();
@@ -342,7 +352,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 66) //22 étant la longueur des couloirs ou "corridors Length" dans l'IDE
+            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 44) //22 étant la longueur des couloirs ou "corridors Length" dans l'IDE
             {
                 shopRoomPosition2 = shop;
                 
