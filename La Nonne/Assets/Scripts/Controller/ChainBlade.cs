@@ -48,7 +48,7 @@ namespace Controller
             transform.GetChild(1).gameObject.SetActive(false);
             isHitting = false;
             playerScale = playerController.transform.localScale.x;
-            currentTime = cooldownTime;
+            currentTime = 0;
         }
 
         // Update is called once per frame
