@@ -140,7 +140,7 @@ namespace AI.Boss
             shockwaveGameObject = GameObject.Find("Shockwave");
         
 
-            currentState = TransitionState; //starting state for the boss state machine
+            currentState = DashingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
         
             //HEALTH
@@ -187,7 +187,7 @@ namespace AI.Boss
 
             distanceBetweenPlayer = Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(player.transform.position.x, player.transform.position.y));
 
-            //VERIF ON BOXING STATE
+            //VERIF POUR LE BOXING STATE
             if (currentHealth <= maxHealth / 2)
             {
                 if (distanceBetweenPlayer < aggroBoxingRange)
@@ -316,6 +316,9 @@ namespace AI.Boss
             yield return new WaitForSeconds(1);
 
             bossAI.maxSpeed = 0;
+            
+            //DO THE WARNING HERE
+            
             yield return new WaitForSeconds(timeBeforeDashing);
 
             GetComponent<AIDestinationSetter>().enabled = false;
