@@ -129,7 +129,7 @@ namespace AI.Boss
         [SerializeField, ShowOnly] internal float currentAiPathSpeed;
         [SerializeField, ShowOnly] internal float currentVelocitySpeed;
         [SerializeField, ShowOnly] internal float currentDamageMultiplier;
-        [SerializeField, ShowOnly] internal float currentEpDropMultiplier;
+        //[SerializeField, ShowOnly] internal float currentEpDropMultiplier;
 
 
         private void Start()
