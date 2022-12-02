@@ -22,6 +22,7 @@ namespace AI.Boss
         public BossToxicMineState ToxicMineState = new();
         public BossTransitionState TransitionState = new();
         public BossBoxingState BoxingState = new();
+        public BossSpawnState SpawnState = new();
 
         public Rigidbody2D rb;
         private PlayerController player;
@@ -124,10 +125,11 @@ namespace AI.Boss
         [SerializeField, ShowOnly] internal float[] stackTimers = new float[3];
         [SerializeField, ShowOnly] internal bool[] areStacksOn = new bool[3];
         private EffectManager effectManager;
+        [SerializeField, ShowOnly] internal float aiPathSpeed;
         [SerializeField, ShowOnly] internal float currentAiPathSpeed;
         [SerializeField, ShowOnly] internal float currentVelocitySpeed;
         [SerializeField, ShowOnly] internal float currentDamageMultiplier;
-        [SerializeField, ShowOnly] internal float currentEpDropMultiplier;
+        //[SerializeField, ShowOnly] internal float currentEpDropMultiplier;
 
 
         private void Start()
@@ -139,7 +141,7 @@ namespace AI.Boss
             shockwaveGameObject = GameObject.Find("Shockwave");
         
 
-            currentState = ToxicMineState; //starting state for the boss state machine
+            currentState = DashingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
         
             //HEALTH
@@ -150,13 +152,16 @@ namespace AI.Boss
 
             //MOVEMENT SPEED
             player.soController.moveSpeed = playerNormalSpeed;
-            bossAI.maxSpeed = bossNormalSpeed;
-        
-        
-            //STATES
+            currentAiPathSpeed = bossNormalSpeed;
+            aiPathSpeed = currentAiPathSpeed;
+            currentVelocitySpeed = dashPower;
+
+
+                //STATES
             firstStatesList.Add(DashingState);
             firstStatesList.Add(AttackCircleState);
             firstStatesList.Add(VacuumState);
+            firstStatesList.Add(SpawnState);
         
             lastStatesList.Add(ThrowingState);
             lastStatesList.Add(ToxicMineState);
@@ -181,31 +186,31 @@ namespace AI.Boss
 
         private void Update()
         {
+            bossAI.maxSpeed = aiPathSpeed;
+            
             currentState.UpdateState(this); //will call any code in Update State from the current state every frame
 
             distanceBetweenPlayer = Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(player.transform.position.x, player.transform.position.y));
 
-            // A METTRE UNE FOIS QUE LE BOXING STATE EST TERMINÉ
-            // if (currentHealth <= maxHealth / 2)
-            // {
-            //     
-            // }
-        
-            if (distanceBetweenPlayer < aggroBoxingRange)
+            //VERIF POUR LE BOXING STATE
+            if (currentHealth <= maxHealth / 2)
             {
-                if (timerIsRunning)
+                if (distanceBetweenPlayer < aggroBoxingRange)
                 {
-                    if (timerBeforeBoxing > 0)
+                    if (timerIsRunning)
                     {
-                        timerBeforeBoxing -= Time.deltaTime;
+                        if (timerBeforeBoxing > 0)
+                        {
+                            timerBeforeBoxing -= Time.deltaTime;
+                        }
                     }
                 }
+                else
+                {
+                    timerIsRunning = true;
+                }
             }
-            else
-            {
-                timerIsRunning = true;
-            }
-        
+            
             lastVelocity = rb.velocity; //Pour le Dash
             
             EffectCheck();
@@ -256,8 +261,8 @@ namespace AI.Boss
         {
             if (takingDamage)
             {
-                currentHealth -= damage;
-                hpBossSlider.value -= damage;
+                currentHealth -= (int)(damage * currentDamageMultiplier);
+                hpBossSlider.value -= (int)(damage * currentDamageMultiplier);
             }
         
             if (currentHealth <= 0)
@@ -315,14 +320,17 @@ namespace AI.Boss
             currentDashAmount--; //décrémente de 1 le nombre de dash restant
             yield return new WaitForSeconds(1);
 
-            bossAI.maxSpeed = 0;
+            aiPathSpeed = 0;
+            
+            //DO THE WARNING HERE
+            
             yield return new WaitForSeconds(timeBeforeDashing);
 
             GetComponent<AIDestinationSetter>().enabled = false;
             GetComponent<AIPath>().enabled = false;
         
             Vector2 direction = player.transform.position - transform.position;
-            rb.velocity = direction.normalized * dashPower; // DASH
+            rb.velocity = direction.normalized * currentVelocitySpeed; // DASH
             Physics2D.IgnoreLayerCollision(15, 7, true);
 
             //HOW MANY MINES DURING DASH
@@ -335,7 +343,7 @@ namespace AI.Boss
             Physics2D.IgnoreLayerCollision(15, 7, false); //Active la collision avec le joueur
             yield return new WaitForSeconds(dashTime);
         
-            bossAI.maxSpeed = bossNormalSpeed;
+            aiPathSpeed = currentAiPathSpeed;
             GetComponent<AIDestinationSetter>().enabled = true;
             GetComponent<AIPath>().enabled = true;
             yield return new WaitForSeconds(dashCooldown);
@@ -381,18 +389,18 @@ namespace AI.Boss
     
         private IEnumerator AttackCircle()
         {
-            bossAI.maxSpeed = 0;
+            aiPathSpeed = 0;
             currentAttackCircleAmount--;
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
             var circleObjectWarning = Instantiate(attackCircleWarning, player.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
-            Destroy(circleObjectWarning, 1f);
+            Destroy(circleObjectWarning);
             var circleObject = Instantiate(attackCircle, circleObjectWarning.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
-        
-            Destroy(circleObject, 1f);
+            
+            Destroy(circleObject);
 
             if (currentAttackCircleAmount > 0 && currentHealth >= maxHealth / 2)
             {
@@ -406,7 +414,7 @@ namespace AI.Boss
             }
             else if (currentHealth <= maxHealth / 2)
             {
-                bossAI.maxSpeed = bossNormalSpeed;
+                aiPathSpeed = currentAiPathSpeed;
                 SwitchState(TransitionState);
             }
         }
@@ -425,10 +433,10 @@ namespace AI.Boss
         private IEnumerator Vacuum()
         {
             currentVacuumAmount--;
-            bossAI.maxSpeed = 1f; // decrease speed
+            aiPathSpeed = 1f; // decrease speed
             yield return new WaitForSeconds(2f);
 
-            bossAI.maxSpeed = 0f; // STOP THE BOSS
+            aiPathSpeed = 0f; // STOP THE BOSS
         
             var bossPos = transform.position;
 
@@ -439,13 +447,13 @@ namespace AI.Boss
         
             //TOXIC AREA
             var toxicAreaObject = Instantiate(toxicArea, bossPos, Quaternion.identity);
-            toxicAreaObject.transform.DOScale(new Vector2(2.5f, 2.5f), 2f);
+            toxicAreaObject.transform.DOScale(new Vector2(3.5f, 3.5f), 2f);
             yield return new WaitForSeconds(vacuumCooldown);
 
             Destroy(vacuumGameObject);
             vacuumParticle.SetActive(false);
             Destroy(toxicAreaObject);
-            bossAI.maxSpeed = bossNormalSpeed; //Change the speed back to normal
+            aiPathSpeed = currentAiPathSpeed; //Change the speed back to normal
         
 
             if (currentVacuumAmount > 0 && currentHealth >= maxHealth / 2)
@@ -460,11 +468,31 @@ namespace AI.Boss
             }
             else if (currentHealth <= maxHealth / 2)
             {
-                bossAI.maxSpeed = bossNormalSpeed;
+                aiPathSpeed = currentAiPathSpeed;
                 SwitchState(TransitionState);
             }
         
         }
+        #endregion
+
+        #region SpawnEnemyState
+
+        public void SpawnEnemyManager()
+        {
+            StartCoroutine(SpawnEnemy());
+        }
+
+
+        private IEnumerator SpawnEnemy()
+        {
+            var posBossBeforeSpawn = transform.position; //get la pos du boss
+            var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+            yield return new WaitForSeconds(1f);
+            
+            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
+            SwitchState(nextState);
+        }
+        
         #endregion
 
         #region TransitionState
@@ -477,7 +505,7 @@ namespace AI.Boss
 
         private IEnumerator Transition()
         {
-            bossAI.maxSpeed = 0;
+            aiPathSpeed = 0;
             player.enabled = false;
             player.transform.GetChild(0).gameObject.SetActive(false);
             //player.soController.moveSpeed = 0;
@@ -517,7 +545,7 @@ namespace AI.Boss
             yield return new WaitForSeconds(1f);
 
             Destroy(shockwaveGameObject);
-            bossAI.maxSpeed = bossNormalSpeed;
+            aiPathSpeed = currentAiPathSpeed;
             takingDamage = true;
             SwitchState(ThrowingState);
 
@@ -630,7 +658,7 @@ namespace AI.Boss
             yield return new WaitForSeconds(1f);
 
             var posBossBeforeSpawn = transform.position; //get la pos du boss 
-            var slugObject = Instantiate(slug, new Vector2(posBossBeforeSpawn.x + Random.Range(2f, 3f),posBossBeforeSpawn.y +  Random.Range(2f, 3f)), Quaternion.identity);
+            var slugObject = Instantiate(slug, new Vector2(posBossBeforeSpawn.x,posBossBeforeSpawn.y), Quaternion.identity);
 
             yield return new WaitForSeconds(3f);
         
@@ -666,10 +694,8 @@ namespace AI.Boss
 
         private IEnumerator Boxing()
         {
-
             yield return new WaitForSeconds(1f);
 
-        
             for (int i = 0; i < numberOfBoxingCircle; i++)
             {
                 if (distanceBetweenPlayer < aggroBoxingRange)

@@ -34,15 +34,13 @@ public class SlugManager : MonoBehaviour
 
     private IEnumerator Go()
     {
+        yield return new WaitForSeconds(Random.Range(0f, 3f)); //Randomize
         
         dashAmount--;
         bulletMassReduction += 0.2f;
-        
-        //EN MAINTENANCE A REGLER PUTAIN
-        var directionDash = new Vector3(transform.position.x + Random.Range(-5f, 5f), transform.position.y + Random.Range(-5f, 5f), 0) - transform.position.normalized;
-        //transform.DOMove(new Vector2(directionDash.x + Random.Range(-5f, 5f),directionDash.y +  Random.Range(-5f, 5f)), 3f);
-        rb.velocity = directionDash * dashSpeed;
-        yield return new WaitForSeconds(3f);
+        var directionDash = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0) - transform.position.normalized; //Direction Dash
+        rb.velocity = directionDash * dashSpeed; //Dash Slug
+        yield return new WaitForSeconds(Random.Range(0f, 3f)); //Randomize
 
         var localScaleProj = slugBullet.transform.localScale;
 

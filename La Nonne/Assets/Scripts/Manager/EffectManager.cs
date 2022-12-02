@@ -174,14 +174,14 @@ namespace Shop
                     enemyController.currentEpDropMultiplier /= wealthSo.epDropRate;
                     enemyController.areStacksOn[stackIndex] = false;
                     break;
-                case "Boss":
+                /*case "Boss":
                     var bossController = enemy.GetComponent<BossStateManager>();
                     bossController.currentEpDropMultiplier *= wealthSo.epDropRate;
                     bool ConditionBoss() => bossController.stacks[stackIndex].effect != Effect.Wealth;
                     yield return new WaitUntil(ConditionBoss);
                     bossController.currentEpDropMultiplier /= wealthSo.epDropRate;
                     bossController.areStacksOn[stackIndex] = false;
-                    break;
+                    break;*/
             }
         }
     }

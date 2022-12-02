@@ -78,7 +78,7 @@ namespace AI.Trash
             var direction = playerController.transform.position - position; // direction entre player et enemy
             var bullet = Instantiate(bulletPrefab, position, Quaternion.identity); // spawn bullet
             var rbBullet = bullet.GetComponent<Rigidbody2D>(); // chope le rb de la bullet 
-            rbBullet.AddForce(direction * bulletSpeed, ForceMode2D.Impulse); // Addforce avec la direction + le rb
+            rbBullet.AddForce(direction.normalized * bulletSpeed, ForceMode2D.Impulse); // Addforce avec la direction + le rb
         
             Destroy(bullet, 3f);
         }

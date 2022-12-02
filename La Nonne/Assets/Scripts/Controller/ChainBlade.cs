@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using Unity.VisualScripting;
@@ -47,22 +48,27 @@ namespace Controller
             transform.GetChild(1).gameObject.SetActive(false);
             isHitting = false;
             playerScale = playerController.transform.localScale.x;
-            currentTime = cooldownTime;
+            currentTime = 0;
         }
 
         // Update is called once per frame
         private void Update()
         {
-            InquisitorialChain();
             var parentLocalScaleX = transform.parent.parent.localScale.x;
             chainLineRenderer.SetPosition(1, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
             bladeLineRenderer.SetPosition(0, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
             bladeLineRenderer.SetPosition(1, new Vector3(0, (chainHitLength+bladeHitLength)/parentLocalScaleX, 0));
+            currentTime -= Time.deltaTime;
+        }
+
+        private void FixedUpdate()
+        {
+            var parentLocalScaleX = transform.parent.parent.localScale.x;
+            InquisitorialChain();
             chainBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, chainHitLength/parentLocalScaleX);
             chainBoxCollider.offset = new Vector2(0, chainHitLength/parentLocalScaleX/2);
             bladeBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, bladeHitLength/parentLocalScaleX);
             bladeBoxCollider.offset = new Vector2(0, (chainHitLength+bladeHitLength/2)/parentLocalScaleX);
-            currentTime -= Time.deltaTime;
         }
 
         private void InquisitorialChain()
