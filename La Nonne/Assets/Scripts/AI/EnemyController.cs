@@ -12,13 +12,12 @@ namespace AI
     public class EnemyController : MonoBehaviour
     {
         protected PlayerController playerController;
-        [SerializeField] protected SO_Enemy soEnemy;
+        [SerializeField] internal SO_Enemy soEnemy;
         [SerializeField, ShowOnly] internal float currentHealth;
         [SerializeField, ShowOnly] internal float currentAiPathSpeed;
         [SerializeField, ShowOnly] internal float currentVelocitySpeed;
         [SerializeField, ShowOnly] internal float currentDamageMultiplier;
         [SerializeField, ShowOnly] internal float currentEpDropMultiplier;
-        //eds
 
         /*[NonSerialized]*/ public bool isStunned;
         private AIPath aiPathComponent;
@@ -88,15 +87,20 @@ namespace AI
         {
             if (currentHealth <= 0)
             {
-                for (var i = 0; i < (int)(numberOfEp * currentEpDropMultiplier); i++)
-                {
-                    var epPos = transform.position;
-                    var epDropObject = Instantiate(epDrop, new Vector2(epPos.x, epPos.y), Quaternion.identity);
-
-                    epDropObject.transform.DOMove(new Vector2(epPos.x + Random.Range(-1f, 0f), epPos.y + Random.Range(-0, 1f)), 0.5f).SetEase(Ease.OutBounce);
-                }
+                EpDrop((int)(numberOfEp * currentEpDropMultiplier));
 
                 Destroy(gameObject); //Dies            
+            }
+        }
+
+        internal void EpDrop(int epNumber)
+        {
+            for (var i = 0; i < epNumber; i++)
+            {
+                var epPos = transform.position;
+                var epDropObject = Instantiate(epDrop, new Vector2(epPos.x, epPos.y), Quaternion.identity);
+
+                epDropObject.transform.DOMove(new Vector2(epPos.x + Random.Range(-1f, 0f), epPos.y + Random.Range(-0, 1f)), 0.5f).SetEase(Ease.OutBounce);
             }
         }
 

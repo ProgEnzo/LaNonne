@@ -62,8 +62,8 @@ namespace Controller
             }
 
             chainLineRenderer.SetPosition(1, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
-            bladeLineRenderer.SetPosition(0, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
-            bladeLineRenderer.SetPosition(1, new Vector3(0, (chainHitLength+bladeHitLength)/parentLocalScaleX, 0));
+            bladeLineRenderer.SetPosition(0, new Vector3(0, (chainHitLength-bladeHitLength)/parentLocalScaleX, 0));
+            bladeLineRenderer.SetPosition(1, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
             currentTime -= Time.deltaTime;
         }
 
@@ -76,7 +76,7 @@ namespace Controller
             chainBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, chainHitLength/parentLocalScaleX);
             chainBoxCollider.offset = new Vector2(0, chainHitLength/parentLocalScaleX/2);
             bladeBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, bladeHitLength/parentLocalScaleX);
-            bladeBoxCollider.offset = new Vector2(0, (chainHitLength+bladeHitLength/2)/parentLocalScaleX);
+            bladeBoxCollider.offset = new Vector2(0, (chainHitLength-bladeHitLength/2)/parentLocalScaleX);
         }
 
         private void InquisitorialChainStart()

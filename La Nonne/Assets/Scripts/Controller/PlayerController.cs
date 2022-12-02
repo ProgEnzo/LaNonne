@@ -244,6 +244,7 @@ namespace Controller
         #endregion
 
         #region HealthPlayer
+        
         public void TakeDamage(int damage)
         {
             currentHealth -= damage;
@@ -270,6 +271,22 @@ namespace Controller
             Debug.Log("<color=green>PLAYER</color> IS NOW DEAD");
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+        
+        internal void HealPlayer(int heal)
+        {
+            currentHealth += heal;
+            hpSlider.value += heal;
+            HealCeiling();
+        }
+
+        private void HealCeiling()
+        {
+            if (currentHealth > soController.maxHealth)
+            {
+                currentHealth = soController.maxHealth;
+            }
+        }
+        
         #endregion
 
         #region AttackPlayer

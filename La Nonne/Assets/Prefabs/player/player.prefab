@@ -46,9 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d4a1c5cda15f5b498c88c8f41440c85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageMultiplier: 0.5
+  damageAndEffectMultiplier: 1
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
-  soEnemy: {fileID: 0}
 --- !u!61 &8777334782906009103
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -443,9 +442,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d4a1c5cda15f5b498c88c8f41440c85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageMultiplier: 1
+  damageAndEffectMultiplier: 1
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
-  soEnemy: {fileID: 0}
 --- !u!61 &5586780846923645881
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -618,8 +616,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHitting: 0
-  chainHitLength: 1.5
-  bladeHitLength: 0.67
+  chainHitLength: 2.5
+  bladeHitLength: 1
   hitAngle: 179
   hitSpeed: 800
   toleranceAngle: 0.5

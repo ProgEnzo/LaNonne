@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AI;
 using AI.Boss;
+using Controller;
 using Core.Scripts.Utils;
 using Shop;
 using UnityEngine;
@@ -30,12 +32,14 @@ namespace Shop
 
         internal new static EffectManager instance;
         
+        private PlayerController playerController;
         [SerializeField] internal float effectDuration;
         [SerializeField] internal int effectMaxLevel;
         [SerializeField] internal int numberOfEffects;
         [SerializeField] internal List<ListOfShopSo> effectDictionary = new();
         internal readonly Dictionary<Effect, int> effectInventory = new();
         internal readonly Effect[] appliedEffects = new Effect[3];
+        private Dictionary<GameObject, (Coroutine coroutine, int queue)> currentFreezeCoroutineOnEnemies = new();
 
 
         private void Awake()
@@ -57,6 +61,11 @@ namespace Shop
             {
                 appliedEffects[i] = Effect.None;
             }
+        }
+        
+        private void Start()
+        {
+            playerController = PlayerController.instance;
         }
         
         internal void EffectSwitch(Effect effect, int level, GameObject enemy, int stackIndex)
@@ -81,6 +90,37 @@ namespace Shop
             }
         }
         
+        internal void SuperEffectSwitch(Effect effect, int level, GameObject enemy, int damage, float multiplier)
+        {
+            switch (effect)
+            {
+                case Effect.Bleed:
+                    Vampirism(level, damage, multiplier);
+                    break;
+                case Effect.Chill:
+                    /*if (currentFreezeCoroutineOnEnemies.All(element => element.enemy != enemy))
+                    {
+                        StartCoroutine(Freeze(level, enemy, multiplier));
+                    }
+                    else
+                    {
+                        currentFreezeCoroutineOnEnemies
+                    }*/
+                    break;
+                case Effect.Target:
+                    Burst(level, enemy, multiplier);
+                    break;
+                case Effect.Wealth:
+                    Profusion(level, enemy, multiplier);
+                    break;
+                default:
+                    Debug.Log("None");
+                    break;
+            }
+        }
+
+        #region Effects
+
         private static IEnumerator Bleed(int level, GameObject enemy, int stackIndex)
         {
             var bleedSo = (BleedSO) instance.effectDictionary[(int)Effect.Bleed][level-1];
@@ -184,5 +224,69 @@ namespace Shop
                     break;*/
             }
         }
+
+        #endregion
+        
+        #region SuperEffects
+        
+        private void Vampirism(int level, int damage, float multiplier)
+        {
+            var bleedSo = (BleedSO)instance.effectDictionary[(int)Effect.Bleed][level-1];
+            playerController.HealPlayer((int)(damage * bleedSo.healPart * multiplier));
+        }
+        
+        private IEnumerator Freeze(int level, GameObject enemy, float multiplier)
+        {
+            var chillSo = (ChillSO)instance.effectDictionary[(int)Effect.Chill][level-1];
+            switch (enemy.tag)
+            {
+                case "Enemy":
+                    var enemyController = enemy.GetComponent<EnemyController>();
+                    enemyController.currentAiPathSpeed = 0;
+                    enemyController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+                    yield return new WaitForSeconds(chillSo.freezeTime * multiplier);
+                    enemyController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+                    enemyController.currentAiPathSpeed = enemyController.soEnemy.aiPathBasicSpeed;
+                    break;
+                case "Boss":
+                    var bossController = enemy.GetComponent<BossStateManager>();
+                    bossController.currentAiPathSpeed = 0;
+                    bossController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+                    yield return new WaitForSeconds(chillSo.freezeTime * multiplier);
+                    bossController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+                    bossController.currentAiPathSpeed = bossController.bossNormalSpeed;
+                    break;
+            }
+        }
+        
+        private static void Burst(int level, GameObject enemy, float multiplier)
+        {
+            var targetSo = (TargetSO)instance.effectDictionary[(int)Effect.Target][level-1];
+            switch (enemy.tag)
+            {
+                case "Enemy":
+                    var enemyController = enemy.GetComponent<EnemyController>();
+                    enemyController.TakeDamageFromPlayer((int)(targetSo.burstDamage * multiplier));
+                    break;
+                case "Boss":
+                    var bossController = enemy.GetComponent<BossStateManager>();
+                    bossController.TakeDamageOnBossFromPlayer((int)(targetSo.burstDamage * multiplier));
+                    break;
+            }
+        }
+        
+        private static void Profusion(int level, GameObject enemy, float multiplier)
+        {
+            var wealthSo = (WealthSO)instance.effectDictionary[(int)Effect.Wealth][level-1];
+            switch (enemy.tag)
+            {
+                case "Enemy":
+                    var enemyController = enemy.GetComponent<EnemyController>();
+                    enemyController.EpDrop((int)(wealthSo.epExtraDrop * multiplier));
+                    break;
+            }
+        }
+        
+        #endregion
     }
 }
