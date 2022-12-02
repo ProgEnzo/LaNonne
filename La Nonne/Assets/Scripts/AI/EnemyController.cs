@@ -100,8 +100,6 @@ namespace AI
             }
         }
 
-        
-
         private void HealCeiling()
         {
             if (currentHealth > soEnemy.maxHealth)
