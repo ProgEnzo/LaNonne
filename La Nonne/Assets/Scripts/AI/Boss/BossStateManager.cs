@@ -652,7 +652,7 @@ namespace AI.Boss
             yield return new WaitForSeconds(1f);
 
             var posBossBeforeSpawn = transform.position; //get la pos du boss 
-            var slugObject = Instantiate(slug, new Vector2(posBossBeforeSpawn.x + Random.Range(2f, 3f),posBossBeforeSpawn.y +  Random.Range(2f, 3f)), Quaternion.identity);
+            var slugObject = Instantiate(slug, new Vector2(posBossBeforeSpawn.x,posBossBeforeSpawn.y), Quaternion.identity);
 
             yield return new WaitForSeconds(3f);
         
