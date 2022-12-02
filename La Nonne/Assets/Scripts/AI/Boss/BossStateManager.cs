@@ -49,6 +49,7 @@ namespace AI.Boss
     
         [Header("----Dash----")] 
         public GameObject dashMine;
+        public GameObject dashWarning;
         public int bodyDamage;
     
         public float dashPower;
@@ -156,8 +157,7 @@ namespace AI.Boss
             aiPathSpeed = currentAiPathSpeed;
             currentVelocitySpeed = dashPower;
 
-
-                //STATES
+            //STATES
             firstStatesList.Add(DashingState);
             firstStatesList.Add(AttackCircleState);
             firstStatesList.Add(VacuumState);
@@ -222,13 +222,15 @@ namespace AI.Boss
                 player.TakeDamage(bodyDamage);
             }
 
-            //DASH REBOND
             if (col.gameObject.CompareTag("BossWall"))
             {
-                var speed = lastVelocity.magnitude;
-                var direction = Vector3.Reflect(lastVelocity.normalized, col.GetContact(0).normal);
+                //DASH REBOND
+                // var speed = lastVelocity.magnitude;
+                // var direction = Vector3.Reflect(lastVelocity.normalized, col.GetContact(0).normal);
+                //
+                // rb.velocity = direction * Mathf.Max(speed, 0f);
 
-                rb.velocity = direction * Mathf.Max(speed, 0f);
+                rb.velocity = Vector2.zero;
             }
         }
 
@@ -323,13 +325,15 @@ namespace AI.Boss
             aiPathSpeed = 0;
             
             //DO THE WARNING HERE
-            
+            Vector2 direction = player.transform.position - transform.position;
+            var dashWarningObject = Instantiate(dashWarning, transform.position, Quaternion.identity);
+            dashWarningObject.transform.DORotateQuaternion(Quaternion.FromToRotation(Vector3.right, player.transform.position - dashWarningObject.transform.position), 0f); //Rotate warning to the player
             yield return new WaitForSeconds(timeBeforeDashing);
 
             GetComponent<AIDestinationSetter>().enabled = false;
             GetComponent<AIPath>().enabled = false;
         
-            Vector2 direction = player.transform.position - transform.position;
+            
             rb.velocity = direction.normalized * currentVelocitySpeed; // DASH
             Physics2D.IgnoreLayerCollision(15, 7, true);
 
@@ -347,8 +351,7 @@ namespace AI.Boss
             GetComponent<AIDestinationSetter>().enabled = true;
             GetComponent<AIPath>().enabled = true;
             yield return new WaitForSeconds(dashCooldown);
-        
-       
+
             if (currentDashAmount > 0 && currentHealth >= maxHealth / 2)
             {
                 StartCoroutine(Dash());
@@ -375,7 +378,6 @@ namespace AI.Boss
             yield return new WaitForSeconds(0.3f);
 
         }
-    
 
         #endregion
 
