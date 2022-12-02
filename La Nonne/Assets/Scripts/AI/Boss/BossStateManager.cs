@@ -56,8 +56,8 @@ namespace AI.Boss
         public float dashTime;
         public float dashCooldown;
         public float timeBeforeDashing;
-    
-        private Vector3 lastVelocity;
+
+        public bool canShakeOnWallBump;
 
         public int dashAmount;
         public int currentDashAmount;
@@ -212,8 +212,6 @@ namespace AI.Boss
                 }
             }
             
-            lastVelocity = rb.velocity; //Pour le Dash
-            
             EffectCheck();
         }
         private void OnCollisionEnter2D(Collision2D col)
@@ -223,16 +221,15 @@ namespace AI.Boss
                 player.TakeDamage(bodyDamage);
             }
 
+            //Verif pour le Dashing State
             if (col.gameObject.CompareTag("BossWall"))
             {
-                //DASH REBOND
-                // var speed = lastVelocity.magnitude;
-                // var direction = Vector3.Reflect(lastVelocity.normalized, col.GetContact(0).normal);
-                //
-                // rb.velocity = direction * Mathf.Max(speed, 0f);
-
-                StartCoroutine(ShakeCam());
-                rb.velocity = Vector2.zero;
+                if (canShakeOnWallBump)
+                {
+                    StartCoroutine(ShakeCam());
+                    rb.velocity = Vector2.zero;
+                    canShakeOnWallBump = false;
+                }
             }
         }
 
@@ -323,15 +320,10 @@ namespace AI.Boss
             StartCoroutine(Dash());
             Debug.Log($"<color=green>DASHING STATE HAS BEGUN</color>");
         }
-
-    
-
         private IEnumerator Dash()
         {
-        
+            canShakeOnWallBump = true;
             currentDashAmount--; //décrémente de 1 le nombre de dash restant
-            yield return new WaitForSeconds(1);
-
             aiPathSpeed = 0;
             
             //DO THE WARNING HERE
@@ -342,21 +334,20 @@ namespace AI.Boss
 
             GetComponent<AIDestinationSetter>().enabled = false;
             GetComponent<AIPath>().enabled = false;
-        
-            
-            rb.velocity = direction.normalized * currentVelocitySpeed; // DASH
-            Physics2D.IgnoreLayerCollision(15, 7, true);
+
+            rb.velocity = direction.normalized * currentVelocitySpeed; // DO DASH
+            //Physics2D.IgnoreLayerCollision(15, 7, true);
 
             //HOW MANY MINES DURING DASH
             for (int i = 0; i < numberOfMines; i++)
             {
                 StartCoroutine(DashMine());
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.3f);
             }
 
-            Physics2D.IgnoreLayerCollision(15, 7, false); //Active la collision avec le joueur
+            //Physics2D.IgnoreLayerCollision(15, 7, false); //Active la collision avec le joueur
             yield return new WaitForSeconds(dashTime);
-        
+
             aiPathSpeed = currentAiPathSpeed;
             GetComponent<AIDestinationSetter>().enabled = true;
             GetComponent<AIPath>().enabled = true;
@@ -584,7 +575,7 @@ namespace AI.Boss
                 var posBossBeforeSpawn = transform.position; //get la pos du boss 
             
                 toxicMineObject = Instantiate(toxicMine, posBossBeforeSpawn, Quaternion.identity); //spawn toxic mines
-                toxicMineObject.transform.DOMove(new Vector2(posBossBeforeSpawn.x + Random.Range(-5f, 5f),posBossBeforeSpawn.y +  Random.Range(-5f, 5f)), 1.5f).SetEase(Ease.OutQuint); //send toxic mines everywhere
+                toxicMineObject.transform.DOMove(new Vector2(posBossBeforeSpawn.x + Random.Range(-7f, 7f),posBossBeforeSpawn.y +  Random.Range(-7f, 7f)), 1.5f).SetEase(Ease.OutQuint); //send toxic mines everywhere
             
                 toxicMineList.Add(toxicMineObject); //add toxic mines into the list
             }
