@@ -53,10 +53,9 @@ namespace AI.Boss
         public int bodyDamage;
     
         public float dashPower;
-        public float dashTime;
-        public float dashCooldown;
         public float timeBeforeDashing;
-
+        public float waitEndDash;
+        
         public bool canShakeOnWallBump;
 
         public int dashAmount;
@@ -332,33 +331,33 @@ namespace AI.Boss
             dashWarningObject.transform.DORotateQuaternion(Quaternion.FromToRotation(Vector3.right, player.transform.position - dashWarningObject.transform.position), 0f); //Rotate warning to the player
             yield return new WaitForSeconds(timeBeforeDashing);
 
+            Destroy(dashWarningObject);
             GetComponent<AIDestinationSetter>().enabled = false;
             GetComponent<AIPath>().enabled = false;
 
             rb.velocity = direction.normalized * currentVelocitySpeed; // DO DASH
-            //Physics2D.IgnoreLayerCollision(15, 7, true);
 
             //HOW MANY MINES DURING DASH
             for (int i = 0; i < numberOfMines; i++)
             {
                 StartCoroutine(DashMine());
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(0.4f);
             }
-
-            //Physics2D.IgnoreLayerCollision(15, 7, false); //Active la collision avec le joueur
-            yield return new WaitForSeconds(dashTime);
 
             aiPathSpeed = currentAiPathSpeed;
             GetComponent<AIDestinationSetter>().enabled = true;
             GetComponent<AIPath>().enabled = true;
-            yield return new WaitForSeconds(dashCooldown);
-
+            
             if (currentDashAmount > 0 && currentHealth >= maxHealth / 2)
             {
                 StartCoroutine(Dash());
             }
             else if (currentDashAmount == 0)
             {
+                aiPathSpeed = 0;
+                yield return new WaitForSeconds(waitEndDash);
+                
+                aiPathSpeed = currentAiPathSpeed;
                 var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
                 SwitchState(nextState);
@@ -374,8 +373,8 @@ namespace AI.Boss
             var dashMineObject = Instantiate(dashMine, transform.position, Quaternion.identity);
             yield return new WaitForSeconds(0.5f);
         
-            dashMineObject.transform.DOScale(new Vector2(3, 3), 3f);
-            Destroy(dashMineObject, 3f);
+            dashMineObject.transform.DOScale(new Vector2(3, 3), 1.5f);
+            Destroy(dashMineObject, 1.5f);
             yield return new WaitForSeconds(0.3f);
 
         }
@@ -387,6 +386,9 @@ namespace AI.Boss
         public void AttackCircleManager()
         {
             StartCoroutine(AttackCircle());
+            var posBossBeforeSpawn = transform.position; //get la pos du boss
+            var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+
             Debug.Log($"<color=green>ATTACK CIRCLE STATE HAS BEGUN</color>");
         }
     
