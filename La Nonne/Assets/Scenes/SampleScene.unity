@@ -117649,10 +117649,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 576200806}
     m_Modifications:
-    - target: {fileID: 1993969311, guid: 3dbe85c25c9313c42b517475ee0d2b1b, type: 3}
-      propertyPath: roomCenter.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1015420654190529235, guid: 3dbe85c25c9313c42b517475ee0d2b1b, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -117775,10 +117771,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 576200806}
     m_Modifications:
-    - target: {fileID: 49358237, guid: 6e0f2d80bf0d7e742aeeca6fdf5b1980, type: 3}
-      propertyPath: roomCenter.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5068190748374987145, guid: 6e0f2d80bf0d7e742aeeca6fdf5b1980, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -134142,6 +134134,7 @@ MonoBehaviour:
   cinemachineCamera: {fileID: 133929369}
   prefabShop: {fileID: 1944883718194242583, guid: fbd9691f6fed95540b9948633fe1b14e, type: 3}
   prefabBoss: {fileID: 1944883718194242583, guid: 1616b6f1bb376c649a778913ea70128e, type: 3}
+  prefabHub: {fileID: 1944883718194242583, guid: fbd9691f6fed95540b9948633fe1b14e, type: 3}
   multiplierPerDistance:
   - 15
   - 30
@@ -134151,16 +134144,17 @@ MonoBehaviour:
   wallUpCusto:
   - {fileID: 9125075138894493168, guid: feb89ad780005374dad64d00a9b81c3e, type: 3}
   wallDownCusto:
-  - {fileID: 9125075138894493168, guid: feb89ad780005374dad64d00a9b81c3e, type: 3}
+  - {fileID: 9125075138894493168, guid: 8be17e818cb82334caf5acf2a942d3d5, type: 3}
   wallRightCusto:
-  - {fileID: 9125075138894493168, guid: feb89ad780005374dad64d00a9b81c3e, type: 3}
+  - {fileID: 9125075138894493168, guid: 8be17e818cb82334caf5acf2a942d3d5, type: 3}
   wallLeftCusto:
-  - {fileID: 9125075138894493168, guid: feb89ad780005374dad64d00a9b81c3e, type: 3}
+  - {fileID: 9125075138894493168, guid: 8be17e818cb82334caf5acf2a942d3d5, type: 3}
   floorCusto:
   - {fileID: 9030111100557875032, guid: 7f9cf41ec6f556546b0732ab864b4536, type: 3}
   - {fileID: 8663388399271273813, guid: a2a14f1be5917144e921ccf9b188ff94, type: 3}
   floorNearWallsCusto:
   - {fileID: 8860681310838871273, guid: 4354b915757e608448b37d400ee1d124, type: 3}
+  - {fileID: 3801929322858841530, guid: d3355caee2f513a41b587dd02bb55f98, type: 3}
   mapBoss: {x: 198, y: -88}
   firstShopPosition: {x: 44, y: 0}
   lastShopPosition: {x: 176, y: -66}
@@ -134554,10 +134548,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 576200806}
     m_Modifications:
-    - target: {fileID: 1521101739, guid: e475e532cb0c44742a3ce80a21134cc4, type: 3}
-      propertyPath: itemData.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4061051299775453107, guid: e475e532cb0c44742a3ce80a21134cc4, type: 3}
       propertyPath: m_RootOrder
       value: 0

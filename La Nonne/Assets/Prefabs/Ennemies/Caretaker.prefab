@@ -101,7 +101,6 @@ GameObject:
   - component: {fileID: 6272501254927288824}
   - component: {fileID: 6272501254927288807}
   - component: {fileID: 6272501254927288831}
-  - component: {fileID: 6272501254927288816}
   m_Layer: 0
   m_Name: Caretaker
   m_TagString: Enemy
@@ -155,12 +154,12 @@ MonoBehaviour:
   circleDamage: 20
   bodyDamage: 20
   healAmount: 50
-  bodyKnockback: 10
+  bodyKnockBack: 0
   cooldownTimer: 2
   timeBetweenCircleSpawn: 1
   attackRange: 5
   blinkExecuted: 0
-  circle: {fileID: 6272501254927288816}
+  circle: {fileID: 6820275759136518904}
   circleSprite: {fileID: 6272501255602388926}
   y: []
 --- !u!212 &6272501254927288828
@@ -366,22 +365,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!58 &6272501254927288816
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6272501254927288805}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 3.3
 --- !u!1 &6272501255602388926
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,6 +375,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6272501255602388927}
   - component: {fileID: 6272501255602388912}
+  - component: {fileID: 6820275759136518904}
+  - component: {fileID: 8181842553384006544}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -408,7 +393,7 @@ Transform:
   m_GameObject: {fileID: 6272501255602388926}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.33999938, z: 0}
-  m_LocalScale: {x: 0.9513471, y: 0.9513471, z: 0.2854041}
+  m_LocalScale: {x: 0.9513471, y: 0.9513471, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6272501254927288829}
@@ -466,3 +451,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &6820275759136518904
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6272501255602388926}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 3.3
+--- !u!114 &8181842553384006544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6272501255602388926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77c0e96ad3d0697448f66fdef0a53cf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  careTaker: {fileID: 6272501254927288830}

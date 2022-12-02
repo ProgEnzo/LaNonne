@@ -35,8 +35,10 @@ public class RoomContentGenerator : MonoBehaviour
         
         [SerializeField,Space, Header("Prefab Boss")]
         private GameObject prefabBoss;
-
         
+        [SerializeField,Space, Header("Prefab Boss")]
+        private GameObject prefabHub;
+
         List<Vector2Int> shopRoomPos = new();
         
         [SerializeField] private List<float> multiplierPerDistance = new(){20, 45, 54, 67, 100};
@@ -77,6 +79,7 @@ public class RoomContentGenerator : MonoBehaviour
 
         ModifyBossRoom();
         ModifyShopsRoom();
+        ModifyHubRoom();
                 
         foreach (var roomPos in copiedDico.Keys)
         {
@@ -84,8 +87,9 @@ public class RoomContentGenerator : MonoBehaviour
             PopulateWallDown(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallDown));
             PopulateWallRight(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallRight));
             PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
-            PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y)); //appeler ca dans la fonction qui fait aparaitre (playerRoom, etc....) les salles fait que l'on peux moduler pour chaque salle les objets qui apparaisse sur le sol
             PopulateFloorNearWalls(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y));
+            PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y)); //appeler ca dans la fonction qui fait aparaitre (playerRoom, etc....) les salles fait que l'on peux moduler pour chaque salle les objets qui apparaisse sur le sol
+            
         }
         
         StartCoroutine(Scan());
@@ -102,6 +106,12 @@ public class RoomContentGenerator : MonoBehaviour
         tilemapVisualizer.SwipeMap(bossRoom.roomCenter.x, bossRoom.roomCenter.y);
         InstantiateBossRoom(bossRoom.roomCenter.x, bossRoom.roomCenter.y);
         
+    }
+    
+    private void ModifyHubRoom()
+    {
+        tilemapVisualizer.SwipeMap(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
+        InstantiateBossRoom(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
     }
 
     private void InstantiateBossRoom(int x, int y)
@@ -159,7 +169,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in wallUpPos)
         {
-            //if (Random.Range(0, 100) < 10)
+            if (Random.Range(0, 100) < 33)
             {
                 GameObject item = Instantiate(wallUpCusto[Random.Range(0, wallUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
             }
@@ -203,7 +213,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorPos)
         {
-            if (Random.Range(0, 100) < 10)
+            if (Random.Range(0, 100) < 25)
             {
                 GameObject item = Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
             }
@@ -214,7 +224,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorPos)
         {
-            //if (Random.Range(0, 100) < 10)
+            //if (Random.Range(0, 100) < 15)
             {
                 GameObject item = Instantiate(floorNearWallsCusto[Random.Range(0, floorNearWallsCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
             }
@@ -312,7 +322,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == 22)
+            if (DijkstraAlgorithm.distanceDictionary [shop] == 44)
             {
                 shopRoomPosition = shop;
                 
@@ -332,7 +342,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 44) //22 étant la longueur des couloirs ou "corridors Length" dans l'IDE
+            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 66) //22 étant la longueur des couloirs ou "corridors Length" dans l'IDE
             {
                 shopRoomPosition2 = shop;
                 

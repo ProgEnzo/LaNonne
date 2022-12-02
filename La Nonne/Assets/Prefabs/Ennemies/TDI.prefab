@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 1280591066966374505}
   - component: {fileID: 1280591066966374504}
   - component: {fileID: 1280591066966374488}
-  - component: {fileID: 1280591066966374491}
   m_Layer: 0
   m_Name: TDI
   m_TagString: Enemy
@@ -78,7 +77,7 @@ MonoBehaviour:
   healAmount: 20
   bully: {fileID: 5813854497670849624, guid: a0948d9d068470444ae080e8385eee73, type: 3}
   caretaker: {fileID: 6272501254927288805, guid: 095c4a11c967334409514fd419e7921e, type: 3}
-  circle: {fileID: 1280591066966374491}
+  circle: {fileID: 7161788274896244599}
   circleSprite: {fileID: 2031974246127490173}
 --- !u!212 &1280591066966374509
 SpriteRenderer:
@@ -283,22 +282,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!58 &1280591066966374491
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1280591066966374502}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 3.3
 --- !u!1 &2031974246127490173
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,6 +292,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2031974246127490172}
   - component: {fileID: 2031974246127490175}
+  - component: {fileID: 7161788274896244599}
+  - component: {fileID: 2553587198993684947}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -383,6 +368,35 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &7161788274896244599
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031974246127490173}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 3.3
+--- !u!114 &2553587198993684947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031974246127490173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77c0e96ad3d0697448f66fdef0a53cf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healer: {fileID: 1280591066966374489}
 --- !u!1 &3655909113043208429
 GameObject:
   m_ObjectHideFlags: 0
