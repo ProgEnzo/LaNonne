@@ -154,9 +154,10 @@ namespace AI.Boss
             player.soController.moveSpeed = playerNormalSpeed;
             currentAiPathSpeed = bossNormalSpeed;
             aiPathSpeed = currentAiPathSpeed;
-        
-        
-            //STATES
+            currentVelocitySpeed = dashPower;
+
+
+                //STATES
             firstStatesList.Add(DashingState);
             firstStatesList.Add(AttackCircleState);
             firstStatesList.Add(VacuumState);
@@ -329,7 +330,7 @@ namespace AI.Boss
             GetComponent<AIPath>().enabled = false;
         
             Vector2 direction = player.transform.position - transform.position;
-            rb.velocity = direction.normalized * dashPower; // DASH
+            rb.velocity = direction.normalized * currentVelocitySpeed; // DASH
             Physics2D.IgnoreLayerCollision(15, 7, true);
 
             //HOW MANY MINES DURING DASH
