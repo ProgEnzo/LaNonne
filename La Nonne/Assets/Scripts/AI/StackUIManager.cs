@@ -1,3 +1,4 @@
+using AI.Boss;
 using Shop;
 using UnityEngine;
 
@@ -5,12 +6,12 @@ namespace AI
 {
     public class StackUIManager : MonoBehaviour
     {
-        private EnemyController enemyController;
+        private Component entityController;
         private SpriteRenderer[] squareSpriteRenderers = new SpriteRenderer[3];
         
         private void Start()
         {
-            enemyController = transform.parent.GetComponent<EnemyController>();
+            entityController = transform.parent.CompareTag("Boss") ? transform.parent.GetComponent<BossStateManager>() : transform.parent.GetComponent<EnemyController>();
             squareSpriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         }
 
@@ -24,11 +25,11 @@ namespace AI
         
         private void StackSwitch(int i)
         {
-            squareSpriteRenderers[i].enabled = enemyController.stacks[i].effect != EffectManager.Effect.None;
+            squareSpriteRenderers[i].enabled = (entityController is BossStateManager boss ? boss.stacks[i].effect : ((EnemyController)entityController).stacks[i].effect) != EffectManager.Effect.None;
 
             if (squareSpriteRenderers[i].enabled)
             {
-                squareSpriteRenderers[i].color = enemyController.stacks[i].effect switch
+                squareSpriteRenderers[i].color = (entityController is BossStateManager boss2 ? boss2.stacks[i].effect : ((EnemyController)entityController).stacks[i].effect) switch
                 {
                     EffectManager.Effect.Bleed => Color.red,
                     EffectManager.Effect.Chill => Color.cyan,
