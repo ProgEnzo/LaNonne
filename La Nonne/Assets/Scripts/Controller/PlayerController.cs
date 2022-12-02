@@ -15,15 +15,13 @@ namespace Controller
     public class PlayerController : MonoSingleton<PlayerController>
     {
         [SerializeField] public Rigidbody2D mRigidbody;
+        private CapsuleCollider2D collider2d;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
     
         [SerializeField] public float mTimerDash;
 
         public new static PlayerController instance;
-        
-        [SerializeField] private List<int> layersToConsiderAnyway = new();
-        private readonly List<int> layersToUndoIgnore = new();
 
         [Header("Revealing Dash")]
         private bool isHitting;
@@ -66,8 +64,9 @@ namespace Controller
                 instance = this;
             }
             mRigidbody = GetComponent<Rigidbody2D>();
+            collider2d = GetComponent<CapsuleCollider2D>();
             
-            for (var i = 1; i < transform.childCount; i++)
+            for (var i = 2; i < transform.childCount; i++)
             {
                 animPrefabs.Add(transform.GetChild(i).gameObject);
             }
@@ -112,26 +111,13 @@ namespace Controller
         {
             if (Input.GetKeyDown(KeyCode.Space) && mTimerDash < -0.5f)
             {
-                for (var i = 0; i < 32; i++)
-                {
-                    if (Physics2D.GetIgnoreLayerCollision(7, i)) continue;
-                    Physics2D.IgnoreLayerCollision(7, i);
-                    layersToUndoIgnore.Add(i);
-                }
-                foreach (var layer in layersToConsiderAnyway)
-                {
-                    Physics2D.IgnoreLayerCollision(7, layer, false);
-                }
+                collider2d.enabled = false;
                 mTimerDash = soController.durationDash;
             }
             
             if (mTimerDash < -0.5f)
             {
-                foreach (var layer in layersToUndoIgnore)
-                {
-                    Physics2D.IgnoreLayerCollision(7, layer, false);
-                }
-                layersToUndoIgnore.Clear();
+                collider2d.enabled = true;
             }
             else
             {
