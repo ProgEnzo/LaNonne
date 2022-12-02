@@ -185,7 +185,7 @@ namespace AI.Boss
 
         private void Update()
         {
-            bossAI.maxSpeed = currentAiPathSpeed;
+            bossAI.maxSpeed = aiPathSpeed;
             
             currentState.UpdateState(this); //will call any code in Update State from the current state every frame
 
