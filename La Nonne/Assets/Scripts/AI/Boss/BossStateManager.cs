@@ -147,6 +147,7 @@ namespace AI.Boss
         
             //HEALTH
             currentHealth = maxHealth;
+            currentDamageMultiplier = 1f;
         
             hpBossSlider.maxValue = maxHealth;
             hpBossSlider.DOValue(maxHealth, 1f);
@@ -230,6 +231,7 @@ namespace AI.Boss
                 //
                 // rb.velocity = direction * Mathf.Max(speed, 0f);
 
+                StartCoroutine(ShakeCam());
                 rb.velocity = Vector2.zero;
             }
         }
@@ -255,6 +257,14 @@ namespace AI.Boss
         {
             var position = transform.position;
             Gizmos.DrawWireSphere(position, aggroBoxingRange);
+        }
+
+        private IEnumerator ShakeCam()
+        {
+            //DO SHAKE CAMERA
+            vCamPlayer.Priority = 6;
+            yield return new WaitForSeconds(0.3f);
+            vCamPlayer.Priority = 10;
         }
 
         #region Health Boss
@@ -710,9 +720,7 @@ namespace AI.Boss
                     var circleBoxingObject = Instantiate(circleBoxing, circleWarningObject.transform.position, Quaternion.identity);
                 
                     //DO SHAKE CAMERA
-                    vCamPlayer.Priority = 6;
-                    yield return new WaitForSeconds(0.3f);
-                    vCamPlayer.Priority = 10;
+                    StartCoroutine(ShakeCam());
 
                     yield return new WaitForSeconds(1f);
 
@@ -735,6 +743,5 @@ namespace AI.Boss
         }
 
         #endregion
-    
     }
 }
