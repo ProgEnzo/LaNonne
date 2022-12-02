@@ -429,10 +429,6 @@ MonoBehaviour:
   spawnerList:
   - {fileID: 9071314407910337641, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}
   - {fileID: 1593806974005075729, guid: 358aa556e8a060a4a9b452adb90fb974, type: 3}
-  - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
-  - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
-  - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
-  - {fileID: 5813854497670849624, guid: 5ddd5467a103d704d8ae369478b8e198, type: 3}
   currentHealth: 100
   maxHealth: 1000
   playerNormalSpeed: 30
@@ -452,7 +448,7 @@ MonoBehaviour:
   numberOfMines: 5
   attackCircleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
   attackCircle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
-  attackCircleSpacingCooldown: 0.3
+  attackCircleSpacingCooldown: 0.5
   attackCircleAmount: 5
   currentAttackCircleAmount: 5
   vacuumArea: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
@@ -483,6 +479,15 @@ MonoBehaviour:
   timerBeforeBoxing: 3
   numberOfBoxingCircle: 5
   timerIsRunning: 0
+  stackTimers:
+  - 0
+  - 0
+  - 0
+  areStacksOn: 000000
+  currentAiPathSpeed: 0
+  currentVelocitySpeed: 0
+  currentDamageMultiplier: 0
+  currentEpDropMultiplier: 0
 --- !u!212 &9006283483999273128
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -140,7 +140,7 @@ namespace AI.Boss
             shockwaveGameObject = GameObject.Find("Shockwave");
         
 
-            currentState = ThrowingState; //starting state for the boss state machine
+            currentState = TransitionState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
         
             //HEALTH
