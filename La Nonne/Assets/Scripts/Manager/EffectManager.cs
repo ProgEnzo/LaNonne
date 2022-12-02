@@ -39,7 +39,7 @@ namespace Shop
         [SerializeField] internal List<ListOfShopSo> effectDictionary = new();
         internal readonly Dictionary<Effect, int> effectInventory = new();
         internal readonly Effect[] appliedEffects = new Effect[3];
-        private Dictionary<GameObject, (Coroutine coroutine, int queue)> currentFreezeCoroutineOnEnemies = new();
+        private Dictionary<GameObject, int> currentFreezeCoroutineOnEnemies = new();
 
 
         private void Awake()
@@ -98,14 +98,15 @@ namespace Shop
                     Vampirism(level, damage, multiplier);
                     break;
                 case Effect.Chill:
-                    /*if (currentFreezeCoroutineOnEnemies.All(element => element.enemy != enemy))
+                    if (!currentFreezeCoroutineOnEnemies.ContainsKey(enemy))
                     {
+                        currentFreezeCoroutineOnEnemies.Add(enemy,  0);
                         StartCoroutine(Freeze(level, enemy, multiplier));
                     }
                     else
                     {
-                        currentFreezeCoroutineOnEnemies
-                    }*/
+                        currentFreezeCoroutineOnEnemies[enemy]++;
+                    }
                     break;
                 case Effect.Target:
                     Burst(level, enemy, multiplier);
@@ -245,16 +246,34 @@ namespace Shop
                     enemyController.currentAiPathSpeed = 0;
                     enemyController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
                     yield return new WaitForSeconds(chillSo.freezeTime * multiplier);
-                    enemyController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-                    enemyController.currentAiPathSpeed = enemyController.soEnemy.aiPathBasicSpeed;
+                    if (currentFreezeCoroutineOnEnemies[enemy] == 0)
+                    {
+                        enemyController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+                        enemyController.currentAiPathSpeed = enemyController.soEnemy.aiPathBasicSpeed;
+                        currentFreezeCoroutineOnEnemies.Remove(enemy);
+                    }
+                    else
+                    {
+                        currentFreezeCoroutineOnEnemies[enemy]--;
+                        StartCoroutine(Freeze(level, enemy, multiplier));
+                    }
                     break;
+                
                 case "Boss":
                     var bossController = enemy.GetComponent<BossStateManager>();
                     bossController.currentAiPathSpeed = 0;
                     bossController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
                     yield return new WaitForSeconds(chillSo.freezeTime * multiplier);
-                    bossController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-                    bossController.currentAiPathSpeed = bossController.bossNormalSpeed;
+                    if (currentFreezeCoroutineOnEnemies[enemy] == 0)
+                    {
+                        bossController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+                        bossController.currentAiPathSpeed = bossController.bossNormalSpeed;
+                    }
+                    else
+                    {
+                        currentFreezeCoroutineOnEnemies[enemy]--;
+                        StartCoroutine(Freeze(level, enemy, multiplier));
+                    }
                     break;
             }
         }

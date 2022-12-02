@@ -51,7 +51,7 @@ namespace Controller
                     {
                         for (var i = 0; i < enemyStacks.Length; i++)
                         {
-                            effectManager.SuperEffectSwitch(enemyStacks[i].effect, enemyStacks[i].level, gameObject, damage, damageAndEffectMultiplier);
+                            effectManager.SuperEffectSwitch(enemyStacks[i].effect, enemyStacks[i].level, enemy, damage, damageAndEffectMultiplier);
                             enemy.GetComponent<EnemyController>().stacks[i].effect = EffectManager.Effect.None;
                         }
                     }
