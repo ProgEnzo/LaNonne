@@ -60,11 +60,15 @@ namespace Controller
         // Update is called once per frame
         private void Update()
         {
-            ZealousBlade();
             var parentLocalScaleX = transform.parent.parent.localScale.x;
             lineRenderer.SetPosition(1, new Vector3(0, hitLength/parentLocalScaleX, 0));
             boxCollider.size = new Vector2(0.1f/parentLocalScaleX, hitLength/parentLocalScaleX);
             boxCollider.offset = new Vector2(0, hitLength/parentLocalScaleX/2);
+        }
+
+        private void FixedUpdate()
+        {
+            ZealousBlade();
         }
 
         private void ZealousBlade()
