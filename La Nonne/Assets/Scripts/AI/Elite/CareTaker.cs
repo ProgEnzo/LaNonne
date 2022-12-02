@@ -10,10 +10,10 @@ namespace AI.Elite
     public class CareTaker : EnemyController
     {
         [Header("Enemy Attack")]
-        [SerializeField] private int circleDamage;
+        [SerializeField] internal int circleDamage;
         [SerializeField] private int bodyDamage;
-        [SerializeField] private int healAmount;
-        [SerializeField] private float bodyKnockback;
+        [SerializeField] internal int healAmount;
+        [SerializeField] private float bodyKnockBack;
         [SerializeField] private float cooldownTimer;
         [SerializeField] private float timeBetweenCircleSpawn;
         [SerializeField] private float attackRange;
@@ -33,25 +33,6 @@ namespace AI.Elite
             //Zones de heal / dégâts
             circle.enabled = false;
             circleSprite.SetActive(false);
-        }
-
-        private void OnTriggerEnter2D(Collider2D col)
-        {
-            if (!isStunned)
-            {
-                //Heal le TrashMobCLose
-                if (col.gameObject.CompareTag("Enemy"))
-                {
-                    col.gameObject.GetComponent<EnemyController>().currentHealth += healAmount;
-                    //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobClose>().currentHealth);
-                }
-
-                if (col.gameObject.CompareTag("Player"))
-                {
-                    col.GetComponent<PlayerController>().TakeDamage(circleDamage); //Player takes damage
-                    StartCoroutine(PlayerIsHit());
-                }
-            }
         }
 
         private void CircleTimer()
@@ -82,7 +63,7 @@ namespace AI.Elite
 
         private void OnDrawGizmos()
         {
-            Vector3 position = transform.position;
+            var position = transform.position;
             Gizmos.DrawWireSphere(position, attackRange);
         }
 
@@ -97,7 +78,7 @@ namespace AI.Elite
             foreach (var gObject in y.ToList()) //pour chaque gObject dans y alors exécute le script
             {
                 //exécuter ce script pour tous les game objects sauf ces mobs 
-                if (!gObject.CompareTag("Enemy"))
+                if (!gObject.CompareTag("Enemy") || gObject == gameObject)
                 {
                     y.Remove(gObject);
                 }
@@ -128,11 +109,11 @@ namespace AI.Elite
                 StartCoroutine(PlayerIsHit());
                 playerController.TakeDamage(bodyDamage); //Player takes damage
 
-                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockback = direction * bodyKnockback;
+                var knockBack = direction * bodyKnockBack;
             
-                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
         }
     }
