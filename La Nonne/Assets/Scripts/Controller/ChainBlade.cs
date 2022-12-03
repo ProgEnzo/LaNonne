@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Linq;
 using Manager;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Controller
 {
@@ -24,17 +19,13 @@ namespace Controller
         public Quaternion finalRotation;
         private Camera camera1;
         private PlayerController playerController;
-        private static readonly int CanChange = Animator.StringToHash("canChange");
-        private static readonly int DirectionState = Animator.StringToHash("directionState");
-        private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
         private int attackDirectionState;
         private float playerScale;
         private float localStateMult;
         [SerializeField] private float cooldownTime;
         private float currentTime;
-    
-        [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
+        
         private AnimationManager animationManager;
 
         // Start is called before the first frame update
@@ -105,8 +96,10 @@ namespace Controller
                 > 135 and < 225 => 1,
                 _ => 1
             };
-            playerController.transform.localScale = new Vector3(playerScale * localStateMult,
-                playerController.transform.localScale.y, playerController.transform.localScale.z);
+            var playerTransform = playerController.transform;
+            var playerLocalScale = playerTransform.localScale;
+            playerTransform.localScale = new Vector3(playerScale * localStateMult,
+                playerLocalScale.y, playerLocalScale.z);
             playerController.transform.GetChild(0).localScale = new Vector3(1, 1 * localStateMult, 1);
             animationManager.AnimationControllerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, attackDirectionState, IsAttacking);
             initialRotation = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
@@ -128,8 +121,8 @@ namespace Controller
                 {
                     isHitting = false;
                     transform.GetChild(0).gameObject.SetActive(false);
-                    transform.GetChild(1).gameObject.SetActive(false);;
-                    animationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, attackDirectionState, IsAttacking, false);
+                    transform.GetChild(1).gameObject.SetActive(false);
+                    AnimationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, attackDirectionState, IsAttacking, false);
                     playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                 }
             }

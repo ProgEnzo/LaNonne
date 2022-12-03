@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using AI;
 using AI.Boss;
@@ -9,6 +7,7 @@ using Shop;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+// ReSharper disable CommentTypo
 
 namespace Controller
 {
@@ -24,9 +23,7 @@ namespace Controller
         public Quaternion finalRotation1;
         public Quaternion finalRotation2;
         private PlayerController playerController;
-        private static readonly int CanChange = Animator.StringToHash("canChange");
         private static readonly int DirectionState = Animator.StringToHash("directionState");
-        private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
         private int hitState;
         [SerializeField] private int maxHitState;
@@ -44,7 +41,6 @@ namespace Controller
         private EffectManager effectManager;
         private AnimationManager animationManager;
 
-        // Start is called before the first frame update
         private void Start()
         {
             playerController = PlayerController.instance;
@@ -60,7 +56,6 @@ namespace Controller
             hitState = 0;
         }
 
-        // Update is called once per frame
         private void Update()
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
@@ -103,10 +98,11 @@ namespace Controller
                 (2, < 0) => Vector2.left,
                 _ => Vector2.right
             };
-            transform.rotation = Quaternion.LookRotation(Vector3.forward, facingDirection);
+            var transform1 = transform;
+            transform1.rotation = Quaternion.LookRotation(Vector3.forward, facingDirection);
             GameObject enemyToAim = null;
             var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'attaque
-            Physics2D.CircleCast(transform.position, hitLength, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'attaque
+            Physics2D.CircleCast(transform1.position, hitLength, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'attaque
             if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
             {
                 foreach (var hit in from hit in objectsInArea where hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Boss") let enemyToAimPosition = hit.collider.transform.position let playerPosition = playerController.transform.position let directionToAim = enemyToAimPosition - playerPosition let angleToAim = Vector2.Angle(facingDirection, directionToAim) where angleToAim <= maxDetectionAngle/2 select hit)
@@ -119,7 +115,7 @@ namespace Controller
             Vector3 newDirection;
             if (enemyToAim)
             {
-                newDirection = enemyToAim.transform.position - transform.position;
+                newDirection = enemyToAim.transform.position - transform1.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
             }
@@ -136,7 +132,7 @@ namespace Controller
             boxCollider.enabled = true;
             isHitting = true;
 
-            transform.rotation = hitState % 2 == 1 ? finalRotation2 : finalRotation1;
+            transform1.rotation = hitState % 2 == 1 ? finalRotation2 : finalRotation1;
         }
 
         private void ZealousBlade()
@@ -153,7 +149,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        animationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
+                        AnimationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                         if (hitState == maxHitState)
                         {
@@ -172,7 +168,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        animationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
+                        AnimationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                         if (hitState == maxHitState)
                         {

@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
 using Core.Scripts.Utils;
 using Manager;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -41,7 +39,6 @@ namespace Controller
 
         [SerializeField] public Slider hpSlider;
         [SerializeField] public int currentEp;
-        private static readonly int CanChange = Animator.StringToHash("canChange");
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
@@ -137,7 +134,7 @@ namespace Controller
             ManageMove();
         }
         
-        public void AddEP(int epGain)
+        public void AddEp(int epGain)
         {
             currentEp += epGain;
         }
@@ -151,12 +148,14 @@ namespace Controller
                            (Input.GetKey(KeyCode.S) ? 1 : 0) + (Input.GetKey(KeyCode.D) ? 1 : 0);
             
             if (nbInputs > 1) speed *= 0.75f;
+            
+            var localScale = transform.localScale;
 
             if (Input.GetKey(KeyCode.Q))
             {
                 isMoving = true;
                 isMovingProfile = true;
-                transform.localScale = new Vector3(-playerScale, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(-playerScale, localScale.y, localScale.z);
                 transform.GetChild(0).localScale = new Vector3(1, -1, 1);
                 if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
                 {
@@ -169,7 +168,7 @@ namespace Controller
             {
                 isMoving = true;
                 isMovingProfile = true;
-                transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                transform.localScale = new Vector3(playerScale, localScale.y, localScale.z);
                 transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                 if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
                 {
@@ -183,7 +182,7 @@ namespace Controller
                 isMoving = true;
                 if (!isMovingProfile)
                 {
-                    transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                    transform.localScale = new Vector3(playerScale, localScale.y, localScale.z);
                     transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                     if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 1)
                     {
@@ -198,7 +197,7 @@ namespace Controller
                 isMoving = true;
                 if (!isMovingProfile)
                 {
-                    transform.localScale = new Vector3(playerScale, transform.localScale.y, transform.localScale.z);
+                    transform.localScale = new Vector3(playerScale, localScale.y, localScale.z);
                     transform.GetChild(0).localScale = new Vector3(1, 1, 1);
                     if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 0)
                     {
@@ -260,8 +259,8 @@ namespace Controller
                 Die();
             }
         }
-        
-        public void LoadMenu()
+
+        private void LoadMenu()
         {
             if (currentHealth <= 0)
             {
