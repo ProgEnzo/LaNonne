@@ -4,30 +4,32 @@ using System.Linq;
 using Cinemachine;
 using GenPro.Rooms;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
+using UnityEngine.Rendering.PostProcessing;
 
 public class RoomContentGenerator : MonoBehaviour
 {
 
     #region Variables
-
-        [SerializeField]
+    
+        [SerializeField, Space, Header ("RoomsTypes")]
         private RoomGenerator playerRoom, bossRoom, shopRoom, preBossRoom; //généraliser lvl0
-
-        [SerializeField] private TilemapVisualizer tilemapVisualizer;
-    
-    
+        
+        [SerializeField, Space, Header ("Tilemap")] 
+        private TilemapVisualizer tilemapVisualizer;
+        
         List<GameObject> spawnedObjects = new List<GameObject>();
-    
-        [SerializeField]
+        
+        [SerializeField, Space, Header ("Dijkstra")]
         private GraphTest graphTest;
-    
-    
+        
+        [Header("Transforms")]
         public Transform itemParent;
-    
-        [SerializeField]
+        
+        [SerializeField, Space, Header("Camera")]
         private CinemachineVirtualCamera cinemachineCamera;
 
         [SerializeField,Space, Header("Prefab Shop")]
@@ -41,14 +43,22 @@ public class RoomContentGenerator : MonoBehaviour
 
         List<Vector2Int> shopRoomPos = new();
         
-        [SerializeField] private List<float> multiplierPerDistance = new(){20, 45, 54, 67, 100};
+        [SerializeField,Space, Header("ShopApparitionFormula")] 
+        private List<float> multiplierPerDistance = new(){20, 45, 54, 67, 100};
         
+        [Header("CustomMap")]
         [SerializeField] private List<GameObject> wallUpCusto = new();
         [SerializeField] private List<GameObject> wallDownCusto = new();
         [SerializeField] private List<GameObject> wallRightCusto = new();
         [SerializeField] private List<GameObject> wallLeftCusto = new();
         [SerializeField] private List<GameObject> floorCusto = new();
         [SerializeField] private List<GameObject> floorNearWallsCusto = new();
+
+        [SerializeField, Space, Header("PostProcessing")]
+        private PostProcessVolume postProcessVolume;
+        private ChromaticAberration chromaticAberration;
+        private float minCA = 5f;
+        private float maxCA = 15f;
 
         #endregion
         
