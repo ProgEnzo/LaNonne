@@ -6,6 +6,7 @@ using GenPro.Rooms;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using UnityEngine.Rendering.PostProcessing;
@@ -55,10 +56,10 @@ public class RoomContentGenerator : MonoBehaviour
         [SerializeField] private List<GameObject> floorNearWallsCusto = new();
 
         [SerializeField, Space, Header("PostProcessing")]
-        private PostProcessVolume postProcessVolume;
+        private Volume volume;
         private ChromaticAberration chromaticAberration;
         private float minCA = 5f;
-        private float maxCA = 15f;
+        private float maxCA = 15f; //Lerp the value between those 2 en fonction de la distance player/boss, donc dans un update
 
         #endregion
         
