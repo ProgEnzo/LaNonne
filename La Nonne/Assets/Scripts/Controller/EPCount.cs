@@ -27,7 +27,7 @@ public class EPCount : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            playerController.AddEP(epValue);
+            playerController.AddEp(epValue);
             epCount.text = "EP COUNT : " + playerController.currentEp;
 
             Destroy(gameObject);
