@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using AI;
 using AI.Boss;
+using Manager;
 using Shop;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -41,12 +42,14 @@ namespace Controller
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         private EffectManager effectManager;
+        private AnimationManager animationManager;
 
         // Start is called before the first frame update
         private void Start()
         {
             playerController = PlayerController.instance;
             effectManager = EffectManager.instance;
+            animationManager = AnimationManager.instance;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
             lineRenderer.enabled = false;
@@ -126,7 +129,7 @@ namespace Controller
             }
             
             var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
-            AnimationControllerBool(IsAttacking);
+            animationManager.AnimationControllerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking);
             finalRotation1 = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
             finalRotation2 = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
             lineRenderer.enabled = true;
@@ -150,7 +153,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        AnimationManagerBool(IsAttacking, false);
+                        animationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                         if (hitState == maxHitState)
                         {
@@ -169,7 +172,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        AnimationManagerBool(IsAttacking, false);
+                        animationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
                         if (hitState == maxHitState)
                         {
@@ -245,25 +248,6 @@ namespace Controller
                     break;
                 default:
                     return;
-            }
-        }
-        
-        private void AnimationControllerBool(int parameterToChange)
-        {
-            AnimationManagerBool(parameterToChange, true);
-            StartCoroutine(playerController.CanChangeCoroutine());
-        }
-        
-        private void AnimationManagerBool(int parameterToChange, bool value)
-        {
-            if (parameterToChange  == IsAttacking)
-            {
-                playerController.AnimationManagerSwitch(playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.currentAnimPrefabAnimator.GetInteger(MovingState), value);
-            }
-
-            foreach (var prefab in playerController.animPrefabs.Where(prefab => prefab != playerController.currentAnimPrefab))
-            {
-                prefab.SetActive(false);
             }
         }
     }

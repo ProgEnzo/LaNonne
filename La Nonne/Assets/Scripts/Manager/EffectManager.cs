@@ -39,7 +39,7 @@ namespace Shop
         [SerializeField] internal List<ListOfShopSo> effectDictionary = new();
         internal readonly Dictionary<Effect, int> effectInventory = new();
         internal readonly Effect[] appliedEffects = new Effect[3];
-        private Dictionary<GameObject, int> currentFreezeCoroutineOnEnemies = new();
+        private readonly Dictionary<GameObject, int> currentFreezeCoroutineOnEnemies = new();
 
 
         private void Awake()
