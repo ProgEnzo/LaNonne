@@ -180,24 +180,24 @@ public class RoomContentGenerator : MonoBehaviour
     #region HasMap
     private bool hasLeftMap(Vector2Int from)
     {
-        return tilemapVisualizer.hasCorridor(from.x - 12, from.y);
+        return tilemapVisualizer.hasCorridor(from.x - 11, from.y);
     }
     
     private bool hasRightMap(Vector2Int from)
     {
-        return tilemapVisualizer.hasCorridor(from.x + 12, from.y);
+        return tilemapVisualizer.hasCorridor(from.x + 11, from.y);
     }
 
     private bool hasTopMap(Vector2Int from)
     {
   
-        return tilemapVisualizer.hasCorridor(from.x, from.y+12);
+        return tilemapVisualizer.hasCorridor(from.x, from.y+11);
     }
     
     private bool hasBottomMap(Vector2Int from)
     {
 
-        return tilemapVisualizer.hasCorridor(from.x, from.y-12);
+        return tilemapVisualizer.hasCorridor(from.x, from.y-11);
     }
     #endregion
 
