@@ -1,29 +1,25 @@
 using Manager;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Controller
 {
     public class ChainBlade : MonoBehaviour
     {
-        public bool isHitting;
-        public float chainHitLength;
-        public float bladeHitLength;
-        public float hitAngle = 100f;
-        public float hitSpeed = 1f;
-        public float toleranceAngle = 1f;
-        public LineRenderer chainLineRenderer;
-        public LineRenderer bladeLineRenderer;
-        public BoxCollider2D chainBoxCollider;
-        public BoxCollider2D bladeBoxCollider;
-        public Quaternion initialRotation;
-        public Quaternion finalRotation;
+        [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
+        private bool isHitting;
+        private LineRenderer chainLineRenderer;
+        private LineRenderer bladeLineRenderer;
+        private BoxCollider2D chainBoxCollider;
+        private BoxCollider2D bladeBoxCollider;
+        private Quaternion initialRotation;
+        private Quaternion finalRotation;
         private Camera camera1;
         private PlayerController playerController;
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
         private int attackDirectionState;
         private float playerScale;
         private float localStateMult;
-        [SerializeField] private float cooldownTime;
         private float currentTime;
         
         private AnimationManager animationManager;
@@ -55,9 +51,9 @@ namespace Controller
                 InquisitorialChainStart();
             }
 
-            chainLineRenderer.SetPosition(1, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
-            bladeLineRenderer.SetPosition(0, new Vector3(0, (chainHitLength-bladeHitLength)/parentLocalScaleX, 0));
-            bladeLineRenderer.SetPosition(1, new Vector3(0, chainHitLength/parentLocalScaleX, 0));
+            chainLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));
+            bladeLineRenderer.SetPosition(0, new Vector3(0, (soController.inquisitorialChainChainHitLength-soController.inquisitorialChainBladeHitLength)/parentLocalScaleX, 0));
+            bladeLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));
             currentTime -= Time.deltaTime;
         }
 
@@ -67,15 +63,15 @@ namespace Controller
             
             InquisitorialChain();
             
-            chainBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, chainHitLength/parentLocalScaleX);
-            chainBoxCollider.offset = new Vector2(0, chainHitLength/parentLocalScaleX/2);
-            bladeBoxCollider.size = new Vector2(0.11f/parentLocalScaleX, bladeHitLength/parentLocalScaleX);
-            bladeBoxCollider.offset = new Vector2(0, (chainHitLength-bladeHitLength/2)/parentLocalScaleX);
+            chainBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, soController.inquisitorialChainChainHitLength/parentLocalScaleX);
+            chainBoxCollider.offset = new Vector2(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX/2);
+            bladeBoxCollider.size = new Vector2(0.11f/parentLocalScaleX, soController.inquisitorialChainBladeHitLength/parentLocalScaleX);
+            bladeBoxCollider.offset = new Vector2(0, (soController.inquisitorialChainChainHitLength-soController.inquisitorialChainBladeHitLength/2)/parentLocalScaleX);
         }
 
         private void InquisitorialChainStart()
         {
-            currentTime = cooldownTime;
+            currentTime = soController.inquisitorialChainCooldownTime;
             var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             newDirection.z = 0;
             newDirection.Normalize();
@@ -102,8 +98,8 @@ namespace Controller
                 playerLocalScale.y, playerLocalScale.z);
             playerController.transform.GetChild(0).localScale = new Vector3(1, 1 * localStateMult, 1);
             animationManager.AnimationControllerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, attackDirectionState, IsAttacking);
-            initialRotation = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
-            finalRotation = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
+            initialRotation = newRotation * Quaternion.Euler(0, 0, soController.inquisitorialChainHitAngle / 2);
+            finalRotation = newRotation * Quaternion.Euler(0, 0, -soController.inquisitorialChainHitAngle / 2);
             transform.rotation = initialRotation;
             transform.GetChild(0).gameObject.SetActive(true);
             transform.GetChild(1).gameObject.SetActive(true);
@@ -115,9 +111,9 @@ namespace Controller
             if (isHitting)
             {
                 transform.rotation =
-                    Quaternion.RotateTowards(transform.rotation, finalRotation, hitSpeed * Time.deltaTime);
-                if (transform.rotation.eulerAngles.z < finalRotation.eulerAngles.z + toleranceAngle &&
-                    transform.rotation.eulerAngles.z > finalRotation.eulerAngles.z - toleranceAngle)
+                    Quaternion.RotateTowards(transform.rotation, finalRotation, soController.inquisitorialChainHitSpeed * Time.deltaTime);
+                if (transform.rotation.eulerAngles.z < finalRotation.eulerAngles.z + soController.inquisitorialChainToleranceAngle &&
+                    transform.rotation.eulerAngles.z > finalRotation.eulerAngles.z - soController.inquisitorialChainToleranceAngle)
                 {
                     isHitting = false;
                     transform.GetChild(0).gameObject.SetActive(false);

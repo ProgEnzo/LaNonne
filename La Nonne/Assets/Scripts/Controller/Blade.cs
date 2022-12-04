@@ -13,29 +13,20 @@ namespace Controller
 {
     public class Blade : MonoBehaviour
     {
-        public bool isHitting;
-        public float hitLength;
-        public float hitAngle = 45f;
-        public float hitSpeed = 1f;
-        public float toleranceAngle = 1f;
-        public LineRenderer lineRenderer;
-        public BoxCollider2D boxCollider;
-        public Quaternion finalRotation1;
-        public Quaternion finalRotation2;
+        private bool isHitting;
+        private LineRenderer lineRenderer;
+        private BoxCollider2D boxCollider;
+        private Quaternion finalRotation1;
+        private Quaternion finalRotation2;
         private PlayerController playerController;
+
+        [Header("Animations")]
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+        
         private int hitState;
-        [SerializeField] private int maxHitState;
-        [SerializeField] private float maxDuringComboCooldown;
         private float currentDuringComboCooldown;
-        [SerializeField] private float maxNextComboCooldown;
         private float currentNextComboCooldown;
-        [SerializeField] private float maxDetectionAngle;
-        [SerializeField] private float littleHitStopDuration;
-        [SerializeField] private float littleKnockBackForce;
-        [SerializeField] private float bigHitStopDuration;
-        [SerializeField] private float bigKnockBackForce;
     
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         private EffectManager effectManager;
@@ -72,7 +63,7 @@ namespace Controller
                 ZealousBladeStart();
             }
             
-            lineRenderer.SetPosition(1, new Vector3(0, hitLength/parentLocalScaleX, 0));
+            lineRenderer.SetPosition(1, new Vector3(0, soController.zealousBladeHitLength/parentLocalScaleX, 0));
         }
 
         private void FixedUpdate()
@@ -81,14 +72,14 @@ namespace Controller
             
             ZealousBlade();
             
-            boxCollider.size = new Vector2(0.1f/parentLocalScaleX, hitLength/parentLocalScaleX);
-            boxCollider.offset = new Vector2(0, hitLength/parentLocalScaleX/2);
+            boxCollider.size = new Vector2(0.1f/parentLocalScaleX, soController.zealousBladeHitLength/parentLocalScaleX);
+            boxCollider.offset = new Vector2(0, soController.zealousBladeHitLength/parentLocalScaleX/2);
         }
 
         private void ZealousBladeStart()
         {
             hitState += 1;
-            currentDuringComboCooldown = maxDuringComboCooldown;
+            currentDuringComboCooldown = soController.zealousBladeMaxDuringComboCooldown;
             
             var facingDirection = (playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.transform.localScale.x) switch
             {
@@ -102,10 +93,10 @@ namespace Controller
             transform1.rotation = Quaternion.LookRotation(Vector3.forward, facingDirection);
             GameObject enemyToAim = null;
             var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'attaque
-            Physics2D.CircleCast(transform1.position, hitLength, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'attaque
+            Physics2D.CircleCast(transform1.position, soController.zealousBladeHitLength, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'attaque
             if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
             {
-                foreach (var hit in from hit in objectsInArea where hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Boss") let enemyToAimPosition = hit.collider.transform.position let playerPosition = playerController.transform.position let directionToAim = enemyToAimPosition - playerPosition let angleToAim = Vector2.Angle(facingDirection, directionToAim) where angleToAim <= maxDetectionAngle/2 select hit)
+                foreach (var hit in from hit in objectsInArea where hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Boss") let enemyToAimPosition = hit.collider.transform.position let playerPosition = playerController.transform.position let directionToAim = enemyToAimPosition - playerPosition let angleToAim = Vector2.Angle(facingDirection, directionToAim) where angleToAim <= soController.zealousBladeMaxDetectionAngle/2 select hit)
                 {
                     enemyToAim = hit.collider.gameObject;
                     break; //On sort de la boucle
@@ -126,8 +117,8 @@ namespace Controller
             
             var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
             animationManager.AnimationControllerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking);
-            finalRotation1 = newRotation * Quaternion.Euler(0, 0, hitAngle / 2);
-            finalRotation2 = newRotation * Quaternion.Euler(0, 0, -hitAngle / 2);
+            finalRotation1 = newRotation * Quaternion.Euler(0, 0, soController.zealousBladeHitAngle / 2);
+            finalRotation2 = newRotation * Quaternion.Euler(0, 0, -soController.zealousBladeHitAngle / 2);
             lineRenderer.enabled = true;
             boxCollider.enabled = true;
             isHitting = true;
@@ -142,18 +133,18 @@ namespace Controller
                 if (hitState % 2 == 1)
                 {
                     transform.rotation =
-                        Quaternion.RotateTowards(transform.rotation, finalRotation1, hitSpeed * Time.deltaTime);
-                    if (transform.rotation.eulerAngles.z < finalRotation1.eulerAngles.z + toleranceAngle &&
-                        transform.rotation.eulerAngles.z > finalRotation1.eulerAngles.z - toleranceAngle)
+                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.deltaTime);
+                    if (transform.rotation.eulerAngles.z < finalRotation1.eulerAngles.z + soController.zealousBladeToleranceAngle &&
+                        transform.rotation.eulerAngles.z > finalRotation1.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
                         AnimationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
-                        if (hitState == maxHitState)
+                        if (hitState == soController.zealousBladeMaxHitState)
                         {
-                            currentNextComboCooldown = maxNextComboCooldown;
+                            currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
                             hitState = 0;
                         }
                     }
@@ -161,18 +152,18 @@ namespace Controller
                 else
                 {
                     transform.rotation =
-                        Quaternion.RotateTowards(transform.rotation, finalRotation2, hitSpeed * Time.deltaTime);
-                    if (transform.rotation.eulerAngles.z < finalRotation2.eulerAngles.z + toleranceAngle &&
-                        transform.rotation.eulerAngles.z > finalRotation2.eulerAngles.z - toleranceAngle)
+                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.deltaTime);
+                    if (transform.rotation.eulerAngles.z < finalRotation2.eulerAngles.z + soController.zealousBladeToleranceAngle &&
+                        transform.rotation.eulerAngles.z > finalRotation2.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
                         AnimationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
                         playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
-                        if (hitState == maxHitState)
+                        if (hitState == soController.zealousBladeMaxHitState)
                         {
-                            currentNextComboCooldown = maxNextComboCooldown;
+                            currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
                             hitState = 0;
                         }
                     }
@@ -187,14 +178,14 @@ namespace Controller
             //DMG du player sur les enemy
             if (o.CompareTag("Enemy"))
             {
-                o.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.playerAttackDamage);
-                if (hitState == maxHitState)
+                o.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.zealousBladeDamage);
+                if (hitState == soController.zealousBladeMaxHitState)
                 {
-                    o.GetComponent<EnemyController>().HitStopAndKnockBack(bigHitStopDuration, bigKnockBackForce);
+                    o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
                 }
                 else
                 {
-                    o.GetComponent<EnemyController>().HitStopAndKnockBack(littleHitStopDuration, littleKnockBackForce);
+                    o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
                 }
                 PutStack(o);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
@@ -203,7 +194,7 @@ namespace Controller
             //DMG du player sur le BOSS
             if (o.CompareTag("Boss"))
             {
-                o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.playerAttackDamage);
+                o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.zealousBladeDamage);
                 PutStack(o);
             }
         }

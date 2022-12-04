@@ -20,7 +20,7 @@ public class GrowingCircleManager : MonoBehaviour
     {
         Vector2 direction = (player.transform.position - transform.position).normalized;     
         
-        if (col.gameObject.CompareTag("Player") && PlayerController.instance.mTimerDash < 0)
+        if (col.gameObject.CompareTag("Player") && PlayerController.instance.timerDash < 0)
         {
             player.GetComponent<Rigidbody2D>().AddForce(direction * pushForce, ForceMode2D.Impulse);
         }
