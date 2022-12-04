@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Controller;
+using AI.So;
 using Pathfinding;
 using UnityEngine;
 
@@ -9,25 +9,22 @@ namespace AI.Elite
 {
     public class CareTaker : EnemyController
     {
+        internal SoCaretaker soCaretaker;
+        
         [Header("Enemy Attack")]
-        [SerializeField] internal int circleDamage;
-        [SerializeField] private int bodyDamage;
-        [SerializeField] internal int healAmount;
-        [SerializeField] private float bodyKnockBack;
-        [SerializeField] private float cooldownTimer;
-        [SerializeField] private float timeBetweenCircleSpawn;
-        [SerializeField] private float attackRange;
-        [SerializeField] public bool blinkExecuted;
+        private float cooldownTimer;
+        private bool blinkExecuted;
 
         [Header("Enemy Components")]
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
 
-        public List<GameObject> y;
+        private List<GameObject> y;
 
         protected override void Start()
         {
             base.Start();
+            soCaretaker = (SoCaretaker) soEnemy;
             GoToTheNearestMob();
             
             //Zones de heal / dégâts
@@ -53,18 +50,18 @@ namespace AI.Elite
         {
             circle.enabled = true;
             circleSprite.SetActive(true);
-            currentHealth += healAmount;
-            yield return new WaitForSeconds(timeBetweenCircleSpawn);
+            currentHealth += soCaretaker.healAmount;
+            yield return new WaitForSeconds(soCaretaker.timeBetweenCircleSpawn);
             circle.enabled = false;
             circleSprite.SetActive(false);
-            cooldownTimer = timeBetweenCircleSpawn;
+            cooldownTimer = soCaretaker.timeBetweenCircleSpawn;
             blinkExecuted = false;
         }
 
         private void OnDrawGizmos()
         {
             var position = transform.position;
-            Gizmos.DrawWireSphere(position, attackRange);
+            Gizmos.DrawWireSphere(position, soCaretaker.attackRange);
         }
 
         private void GoToTheNearestMob()
@@ -107,11 +104,11 @@ namespace AI.Elite
             if (col.gameObject.CompareTag("Player"))
             {
                 StartCoroutine(PlayerIsHit());
-                playerController.TakeDamage(bodyDamage); //Player takes damage
+                playerController.TakeDamage(soCaretaker.bodyDamage); //Player takes damage
 
                 var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                var knockBack = direction * bodyKnockBack;
+                var knockBack = direction * soCaretaker.bodyKnockBack;
             
                 playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }

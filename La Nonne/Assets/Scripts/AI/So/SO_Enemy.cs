@@ -1,8 +1,7 @@
 using UnityEngine;
 
-namespace AI
+namespace AI.So
 {
-    [CreateAssetMenu(fileName = "Enemy", menuName = "ScriptableObjects/EnemyStats", order = 1)]
     public class SO_Enemy : ScriptableObject
     {
         [Header("Enemy Health")] 
@@ -16,6 +15,6 @@ namespace AI
         public float velocityBasicSpeed;
         
         [Header("EP Values")]
-        public int epDrop;
+        public int numberOfEp;
     }
 }

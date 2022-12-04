@@ -1,26 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AI.So;
 using Controller;
 using Pathfinding;
 using Tools;
 using UnityEngine;
-using UnityEngine.Serialization;
 // ReSharper disable CommentTypo
 
 namespace AI.Elite
 {
     public class Pyromaniac : EnemyController
     {
+        private SoPyromaniac soPyromaniac;
         private GameObject circleGameObject;
-        [SerializeField] public float detectionRadius;
-        [SerializeField] public float throwRadius;
-        [SerializeField] public float projectileSpeed;
         private Vector2 dashDirection;
-        [SerializeField] public float explosionRadius;
         private float currentFireTrailMaxLength;
-        [SerializeField] public float fireTrailTolerance;
-        [SerializeField] public float fireTrailDisappearanceSpeed = 1f;
         private Vector3 boxCastOrigin;
         private Vector3 boxCastDestination;
         private Vector3 dashInitialPosition;
@@ -32,11 +27,11 @@ namespace AI.Elite
         private bool isProjectileOn;
         private bool isImpactOn;
         private bool canBoxCast;
-        [SerializeField] private float fireCooldown = 1f;
 
         protected override void Start()
         {
             base.Start();
+            soPyromaniac = (SoPyromaniac) soEnemy;
             scriptAIPath = GetComponent<AIPath>();
             scriptAIPathState = true;
             isDashing = false;
@@ -67,7 +62,7 @@ namespace AI.Elite
                 if (!isProjectileOn && !isDashing && !isImpactOn)
                 {
                     //Si le joueur est dans le rayon de détection
-                    if (Vector3.Distance(position, playerPosition) <= detectionRadius)
+                    if (Vector3.Distance(position, playerPosition) <= soPyromaniac.detectionRadius)
                     {
                         if (isProjectileOn) return;
                         isProjectileOn = true;
@@ -78,7 +73,7 @@ namespace AI.Elite
                         //Sinon, le pyromane lance sa zone de feu
                         var distanceToCross =
                             Mathf.Min(Vector3.Distance(position, playerPosition),
-                                throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
+                                soPyromaniac.throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
                         var newPositionVector =
                             (playerPosition - position).normalized *
                             distanceToCross; //On calcule le vecteur de déplacement du projectile
@@ -99,7 +94,7 @@ namespace AI.Elite
             //Une fois que le projectile a explosé
             else
             {
-                if (position.x < projectilePosition.x + fireTrailTolerance && position.x > projectilePosition.x - fireTrailTolerance && position.y < projectilePosition.y + fireTrailTolerance && position.y > projectilePosition.y - fireTrailTolerance)
+                if (position.x < projectilePosition.x + soPyromaniac.fireTrailTolerance && position.x > projectilePosition.x - soPyromaniac.fireTrailTolerance && position.y < projectilePosition.y + soPyromaniac.fireTrailTolerance && position.y > projectilePosition.y - soPyromaniac.fireTrailTolerance)
                 {
                     canBoxCast = true;
                 }
@@ -116,8 +111,8 @@ namespace AI.Elite
             {
                 if (!projectileScript.isExploded && !isProjectileOn && !isDashing && !isImpactOn)
                 {
-                    currentFireTrailMaxLength -= Time.deltaTime * fireTrailDisappearanceSpeed;
-                    if (currentFireTrailMaxLength <= fireTrailTolerance)
+                    currentFireTrailMaxLength -= Time.deltaTime * soPyromaniac.fireTrailDisappearanceSpeed;
+                    if (currentFireTrailMaxLength <= soPyromaniac.fireTrailTolerance)
                     {
                         canBoxCast = false;
                     }
@@ -144,7 +139,7 @@ namespace AI.Elite
             var projectile = transform1.GetChild(0).gameObject;
             projectile.transform.position = transform1.position;
             projectile.SetActive(true);
-            projectile.GetComponent<Rigidbody2D>().velocity = direction * projectileSpeed;
+            projectile.GetComponent<Rigidbody2D>().velocity = direction * soPyromaniac.projectileSpeed;
             projectile.GetComponent<PyromaniacProjectile>().destination = destination;
         }
         
@@ -176,7 +171,7 @@ namespace AI.Elite
             
             //Dégâts de feu
             var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'explosion
-            Physics2D.CircleCast(transform.position, explosionRadius, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
+            Physics2D.CircleCast(transform.position, soPyromaniac.explosionRadius, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
             if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
             {
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
@@ -188,7 +183,7 @@ namespace AI.Elite
             
             yield return new WaitForSeconds(0.1f);
             circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.25f); //Transparence du cercle
-            yield return new WaitForSeconds(fireCooldown);
+            yield return new WaitForSeconds(soPyromaniac.fireCooldown);
             
             circleGameObject.SetActive(false); //On désactive le cercle
             isImpactOn = false;
@@ -225,8 +220,8 @@ namespace AI.Elite
         private void OnDrawGizmos()
         {
             var position = transform.position;
-            Gizmos.DrawWireSphere(position, detectionRadius);
-            Gizmos.DrawWireSphere(position, throwRadius);
+            Gizmos.DrawWireSphere(position, soPyromaniac.detectionRadius);
+            Gizmos.DrawWireSphere(position, soPyromaniac.throwRadius);
         }
 
         private void OnCollisionEnter2D(Collision2D other)
@@ -239,7 +234,7 @@ namespace AI.Elite
                 
                 //Cercle d'explosion
                 circleGameObject.SetActive(true); //On active le cercle
-                circleGameObject.transform.localScale = Vector3.one * (explosionRadius * 8); //On le met à la bonne taille
+                circleGameObject.transform.localScale = Vector3.one * (soPyromaniac.explosionRadius * 8); //On le met à la bonne taille
                 var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
                 var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
                 circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle

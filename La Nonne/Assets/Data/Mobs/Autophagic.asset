@@ -9,11 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceab9461821508f498cfda454331f443, type: 3}
+  m_Script: {fileID: 11500000, guid: b525131f9c9717b4495e6c287fdd5120, type: 3}
   m_Name: Autophagic
   m_EditorClassIdentifier: 
   maxHealth: 400
   bodyDamage: 20
   aiPathBasicSpeed: 5
   velocityBasicSpeed: 0
-  epDrop: 0
+  numberOfEp: 25
+  detectionRadius: 10
+  avoidedAngle: 180
+  destinationMinRangeValue: 5
+  destinationMaxRangeValue: 10
+  autoDamagePart: 0.05
+  maxTimer: 1
+  stunBarMaxDamages: 20
+  stunBarDuration: 3

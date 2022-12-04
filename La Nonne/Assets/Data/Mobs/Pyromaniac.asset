@@ -9,11 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceab9461821508f498cfda454331f443, type: 3}
+  m_Script: {fileID: 11500000, guid: 512aa8daff5828f4982b3a77086c194c, type: 3}
   m_Name: Pyromaniac
   m_EditorClassIdentifier: 
   maxHealth: 150
   bodyDamage: 20
   aiPathBasicSpeed: 4
   velocityBasicSpeed: 10
-  epDrop: 0
+  numberOfEp: 5
+  detectionRadius: 4.5
+  throwRadius: 2.5
+  projectileSpeed: 3
+  fireTrailTolerance: 0.5
+  fireTrailDisappearanceSpeed: 30
+  explosionRadius: 1
+  fireCooldown: 1
+  explosionRadiusIndicator: 5
+  knockBackPower: 0.2
