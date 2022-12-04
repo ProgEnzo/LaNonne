@@ -1,13 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
+using AI.Boss;
 using Core.Scripts.Utils;
 using Manager;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 
 namespace Controller
 {
@@ -19,6 +24,7 @@ namespace Controller
         [Header("Components")]
         internal Rigidbody2D mRigidbody;
         private CapsuleCollider2D collider2d;
+        private CapsuleCollider2D childrenCollider2d;
     
         [Header("Scriptable Object")]
         [SerializeField][FormerlySerializedAs("SO_Controller")] internal SO_Controller soController;
@@ -53,6 +59,28 @@ namespace Controller
         private (int parameterToChange, int value) animParametersToChange;
         private bool isMovingProfile;
         
+        [SerializeField, Space, Header("PostProcessing")] //mettre ces variables dans le scripts du player
+        private Volume volume;
+        private ChromaticAberration chromaticAberration;
+        private float minCA = 5f;
+        private float maxCA = 15f; //Lerp the value between those 2 en fonction de la distance player/boss, donc dans un update
+
+
+        public Vector2 bossPos;
+        public Vector2 currentPos;
+
+        /*float GetDistanceBetweenBossAndPlayer(Vector2 currentPos)
+        {
+            float distance = 99999.9999f;
+
+            if (Vector2.Distance(currentPos, bossPos) < distance)
+            {
+                distance = Vector2.Distance(currentPos, bossPos);
+            }
+
+            return distance;
+        }*/
+
         private void Awake()
         {
             if (instance != null)
@@ -89,6 +117,7 @@ namespace Controller
             hpSlider.maxValue = soController.maxHealth;
             hpSlider.value = soController.maxHealth;
             currentEp = 0;
+            
         }
 
         private void OnDestroy()
@@ -115,6 +144,8 @@ namespace Controller
         
             RevealingDash();
             LoadMenu();
+
+            
         }
         public void FixedUpdate()
         {
@@ -338,5 +369,16 @@ namespace Controller
             enemy.GetComponent<EnemyController>().isStunned = false;
         }
         #endregion
+
+        /*private void OnTriggerEnter2D(Collider2D col)
+        {
+            if (col.CompareTag("ModifiedRoomEntry"))
+            {
+                for (int i = 0; i < i; i++)
+                {
+                    GetComponentInChildren<CapsuleCollider2D>().enabled = false;
+                }
+            }
+        }*/
     }
 }
