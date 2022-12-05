@@ -22,7 +22,7 @@ namespace Controller
         private void OnTriggerEnter2D(Collider2D other)
         {
             var o = other.gameObject;
-            var damage = (int)(soController.playerAttackDamage * damageAndEffectMultiplier);
+            var damage = (int)(soController.inquisitorialChainDamage * damageAndEffectMultiplier);
             
             //DMG du player sur le TrashMobClose
             if (o.CompareTag("Enemy"))

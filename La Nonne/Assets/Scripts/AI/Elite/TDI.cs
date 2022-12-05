@@ -1,4 +1,5 @@
 using System.Collections;
+using AI.So;
 using Controller;
 using DG.Tweening;
 using Unity.Mathematics;
@@ -8,28 +9,22 @@ namespace AI.Elite
 {
     public class TDI : EnemyController
     {
-        [Header("Enemy Attack")] 
-        [SerializeField] public int bodyDamage;
-        [SerializeField] public int bodyKnockBack;
-        [SerializeField] internal int circleDamage;
-        [SerializeField] public bool blinkExecuted;
+        [Header("Enemy Attack")]
+        private bool blinkExecuted;
+        private float cooldownTimer;
         
-        
-        [HideInInspector] public float cooldownTimer;
-        [SerializeField] private float timeBetweenCircleSpawn;
-        
-        [SerializeField] internal float healAmount;
-        
-        [Header("Components")] 
+        [Header("Components")]
         [SerializeField] public GameObject bully;
         [SerializeField] public GameObject caretaker;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
+        internal SoTdi soTdi;
         
         protected override void Start()
         {
             base.Start();
-            cooldownTimer = timeBetweenCircleSpawn;
+            soTdi = (SoTdi) soEnemy;
+            cooldownTimer = soTdi.timeBetweenCircleSpawn;
         }
 
         protected override void Update()
@@ -45,11 +40,11 @@ namespace AI.Elite
             if (col.gameObject.CompareTag("Player"))
             {
                 StartCoroutine(PlayerIsHit());
-                playerController.TakeDamage(bodyDamage); //Player takes damage
+                playerController.TakeDamage(soTdi.bodyDamage); //Player takes damage
 
                 var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                var knockBack = direction * bodyKnockBack;
+                var knockBack = direction * soTdi.bodyKnockBack;
             
                 playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
@@ -92,11 +87,11 @@ namespace AI.Elite
         {
             circle.enabled = true;
             circleSprite.SetActive(true);
-            currentHealth += healAmount;
-            yield return new WaitForSeconds(timeBetweenCircleSpawn);
+            currentHealth += soTdi.healAmount;
+            yield return new WaitForSeconds(soTdi.timeBetweenCircleSpawn);
             circle.enabled = false;
             circleSprite.SetActive(false);
-            cooldownTimer = timeBetweenCircleSpawn;
+            cooldownTimer = soTdi.timeBetweenCircleSpawn;
             blinkExecuted = false;
         }
     }

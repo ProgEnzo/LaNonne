@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AI.Boss;
 using Cinemachine;
+using Controller;
 using GenPro.Rooms;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
@@ -12,22 +17,22 @@ public class RoomContentGenerator : MonoBehaviour
 {
 
     #region Variables
-
-        [SerializeField]
+    
+        [SerializeField, Space, Header ("RoomsTypes")]
         private RoomGenerator playerRoom, bossRoom, shopRoom, preBossRoom; //généraliser lvl0
-
-        [SerializeField] private TilemapVisualizer tilemapVisualizer;
-    
-    
+        
+        [SerializeField, Space, Header ("Tilemap")] 
+        private TilemapVisualizer tilemapVisualizer;
+        
         List<GameObject> spawnedObjects = new List<GameObject>();
-    
-        [SerializeField]
+        
+        [SerializeField, Space, Header ("Dijkstra")]
         private GraphTest graphTest;
-    
-    
+        
+        [Header("Transforms")]
         public Transform itemParent;
-    
-        [SerializeField]
+        
+        [SerializeField, Space, Header("Camera")]
         private CinemachineVirtualCamera cinemachineCamera;
 
         [SerializeField,Space, Header("Prefab Shop")]
@@ -41,8 +46,10 @@ public class RoomContentGenerator : MonoBehaviour
 
         List<Vector2Int> shopRoomPos = new();
         
-        [SerializeField] private List<float> multiplierPerDistance = new(){20, 45, 54, 67, 100};
+        [SerializeField,Space, Header("ShopApparitionFormula")] 
+        private List<float> multiplierPerDistance = new(){20, 45, 54, 67, 100};
         
+        [Header("CustomMap")]
         [SerializeField] private List<GameObject> wallUpCusto = new();
         [SerializeField] private List<GameObject> wallDownCusto = new();
         [SerializeField] private List<GameObject> wallRightCusto = new();
@@ -50,9 +57,22 @@ public class RoomContentGenerator : MonoBehaviour
         [SerializeField] private List<GameObject> floorCusto = new();
         [SerializeField] private List<GameObject> floorNearWallsCusto = new();
 
+        /*[SerializeField, Space, Header("PostProcessing")] //mettre ces variables dans le scripts du player
+        private Volume volume;
+        private ChromaticAberration chromaticAberration;
+        private float minCA = 5f;
+        private float maxCA = 15f; //Lerp the value between those 2 en fonction de la distance player/boss, donc dans un update
+
+        [SerializeField, Space, Header("Instances")]
+        private PlayerController playerPosition;
+        private BossStateManager bossPosition;
+
+        [SerializeField, Header("Distances")] 
+        private Vector2 currentDistance;*/
+
         #endregion
-        
-    private IEnumerator Scan()
+
+        private IEnumerator Scan()
     {
         yield return new WaitForSeconds(0.4f);
         AstarPath.active.Scan();
@@ -101,6 +121,7 @@ public class RoomContentGenerator : MonoBehaviour
         }
     }
 
+    #region ModifyRooms
     private void ModifyBossRoom()
     {
         tilemapVisualizer.SwipeMap(bossRoom.roomCenter.x, bossRoom.roomCenter.y);
@@ -113,7 +134,19 @@ public class RoomContentGenerator : MonoBehaviour
         tilemapVisualizer.SwipeMap(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
         InstantiateHubRoom(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
     }
-
+    
+    private void ModifyShopsRoom()
+    {
+        foreach (var shops in shopRoomPos)
+        {
+            tilemapVisualizer.SwipeMap(shops.x, shops.y);
+            InstantiateShop(shops.x, shops.y);
+        }
+    }
+    
+    #endregion
+    
+    #region InstantiateRooms
     private void InstantiateBossRoom(int x, int y)
     {
         var go = Instantiate(prefabBoss);
@@ -134,38 +167,6 @@ public class RoomContentGenerator : MonoBehaviour
         
     }
     
-    private void ModifyShopsRoom()
-    {
-        foreach (var shops in shopRoomPos)
-        {
-            tilemapVisualizer.SwipeMap(shops.x, shops.y);
-            InstantiateShop(shops.x, shops.y);
-        }
-    }
-
-    private bool hasLeftMap(Vector2Int from)
-    {
-        return tilemapVisualizer.hasCorridor(from.x - 12, from.y);
-    }
-    
-    private bool hasRightMap(Vector2Int from)
-    {
-        return tilemapVisualizer.hasCorridor(from.x + 12, from.y);
-    }
-
-    private bool hasTopMap(Vector2Int from)
-    {
-  
-        return tilemapVisualizer.hasCorridor(from.x, from.y+12);
-    }
-    
-    private bool hasBottomMap(Vector2Int from)
-    {
-
-        return tilemapVisualizer.hasCorridor(from.x, from.y-12);
-    }
-    
-    
     private void InstantiateShop(int x, int y)
     {
         var go = Instantiate(prefabShop);
@@ -174,7 +175,33 @@ public class RoomContentGenerator : MonoBehaviour
         var detector = go.GetComponent<DoorDetector>();
         detector.ManageDoors(hasTopMap(pos),hasBottomMap(pos), hasRightMap(pos),hasLeftMap(pos));
     }
+    #endregion
+    
+    #region HasMap
+    private bool hasLeftMap(Vector2Int from)
+    {
+        return tilemapVisualizer.hasCorridor(from.x - 11, from.y);
+    }
+    
+    private bool hasRightMap(Vector2Int from)
+    {
+        return tilemapVisualizer.hasCorridor(from.x + 11, from.y);
+    }
 
+    private bool hasTopMap(Vector2Int from)
+    {
+  
+        return tilemapVisualizer.hasCorridor(from.x, from.y+11);
+    }
+    
+    private bool hasBottomMap(Vector2Int from)
+    {
+
+        return tilemapVisualizer.hasCorridor(from.x, from.y-11);
+    }
+    #endregion
+
+    #region PopulateMap
     private void PopulateWallUp (List<Vector2Int> wallUpPos)
     {
         foreach (var pos in wallUpPos)
@@ -241,11 +268,16 @@ public class RoomContentGenerator : MonoBehaviour
         }
     }
     
+    #endregion
+   
+    #region Cameras
     private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas 
     {
         cinemachineCamera.LookAt = playerTransform;
         cinemachineCamera.Follow = playerTransform;
     }
+    
+    #endregion
 
     #region PlayerRoom
 
@@ -417,7 +449,7 @@ public class RoomContentGenerator : MonoBehaviour
 
     #endregion
     
-     #region DefaultRoom 
+    #region DefaultRoom 
      
      [SerializeField] private List<EnemyRoom> enemyRoom;
          private void SelectEnemySpawnPoints(DungeonData dungeonData) //Ca fonctionne mais le fait que ce soit la distance à vol d'oiseau du hub est domageable ! Faire un A* serait trop compliqué et pas worth en fonction de la charge de taff demandée.
@@ -447,7 +479,7 @@ public class RoomContentGenerator : MonoBehaviour
         
         #endregion
         
-        #region PreBossRoom
+    #region PreBossRoom
         
         private void PreBossRoomPosition(DungeonData dungeonData)
         {

@@ -200,26 +200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 112054a0866ac3c4cbb61e52b158cbcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soEnemy: {fileID: 11400000, guid: 3d266add0c81b1e4b96d5eb236504880, type: 2}
-  currentHealth: 100
-  currentAiPathSpeed: 0
-  currentVelocitySpeed: 0
-  currentDamageMultiplier: 0
-  currentEpDropMultiplier: 0
-  isStunned: 0
-  stackTimers:
-  - 0
-  - 0
-  - 0
-  areStacksOn: 000000
+  soEnemy: {fileID: 11400000, guid: 9f2742f2ad53eb74ea348e51433f4c8a, type: 2}
   epDrop: {fileID: 970073829185132471, guid: 2f3bcd94d8a30ae4e80b181e92acada0, type: 3}
-  numberOfEp: 5
-  distanceToPlayer: 0
-  shootingRange: 3
-  aggroRange: 5
-  cooldownBetweenShots: 1
-  bulletSpeed: 3
-  knockbackBody: 10
   bulletPrefab: {fileID: 7573814369023995529, guid: c3d2734ae5220e0448bd075e9ebc39f4, type: 3}
 --- !u!114 &9071314407910337632
 MonoBehaviour:

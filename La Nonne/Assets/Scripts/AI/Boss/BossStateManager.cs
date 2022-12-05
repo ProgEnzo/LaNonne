@@ -108,13 +108,19 @@ namespace AI.Boss
         public int currentThrowAmount;
 
         [Header("----BoxingState----")] 
+        public List<GameObject> circleBoxingWarningObjectList = new();
+        public List<GameObject> circleBoxingObjectList = new();
+
         public GameObject circleBoxing;
         public GameObject circleBoxingWarning;
         public float distanceBetweenPlayer;
         public float aggroBoxingRange;
         public float timerBeforeBoxing;
+
+        public float currentDamageTaken;
+        public float maxDamageTaken;
     
-    
+        public float numberOfBoxingCircleWarning;
         public float numberOfBoxingCircle;
     
     
@@ -165,6 +171,7 @@ namespace AI.Boss
         
             lastStatesList.Add(ThrowingState);
             lastStatesList.Add(ToxicMineState);
+            lastStatesList.Add(SpawnState);
 
             //VIRTUAL CAMERA
             vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
@@ -192,25 +199,6 @@ namespace AI.Boss
 
             distanceBetweenPlayer = Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(player.transform.position.x, player.transform.position.y));
 
-            //VERIF POUR LE BOXING STATE
-            if (currentHealth <= maxHealth / 2)
-            {
-                if (distanceBetweenPlayer < aggroBoxingRange)
-                {
-                    if (timerIsRunning)
-                    {
-                        if (timerBeforeBoxing > 0)
-                        {
-                            timerBeforeBoxing -= Time.deltaTime;
-                        }
-                    }
-                }
-                else
-                {
-                    timerIsRunning = true;
-                }
-            }
-            
             EffectCheck();
         }
         private void OnCollisionEnter2D(Collision2D col)
@@ -251,8 +239,8 @@ namespace AI.Boss
 
         private void OnDrawGizmos()
         {
-            var position = transform.position;
-            Gizmos.DrawWireSphere(position, aggroBoxingRange);
+            // var position = transform.position;
+            // Gizmos.DrawWireSphere(position, aggroBoxingRange);
         }
 
         private IEnumerator ShakeCam()
@@ -271,6 +259,9 @@ namespace AI.Boss
             {
                 currentHealth -= (int)(damage * currentDamageMultiplier);
                 hpBossSlider.value -= (int)(damage * currentDamageMultiplier);
+
+                currentDamageTaken += damage;
+                
             }
         
             if (currentHealth <= 0)
@@ -493,9 +484,18 @@ namespace AI.Boss
             var posBossBeforeSpawn = transform.position; //get la pos du boss
             var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
             yield return new WaitForSeconds(1f);
+
+            if (currentHealth >= maxHealth / 2)
+            {
+                var nextStateFirst = firstStatesList[Random.Range(0, firstStatesList.Count)];
+                SwitchState(nextStateFirst);
+            }
+            else
+            {
+                var nextStateLast = lastStatesList[Random.Range(0, lastStatesList.Count)];
+                SwitchState(nextStateLast);
+            }
             
-            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
-            SwitchState(nextState);
         }
         
         #endregion
@@ -595,7 +595,7 @@ namespace AI.Boss
         
             foreach (var VARIABLE in toxicMineAreaWarningList)
             {
-                Destroy(VARIABLE, 1f); //destroy toxic mine
+                Destroy(VARIABLE, 1f); //destroy toxic mine area warning
             }
         
             yield return new WaitForSeconds(1f);
@@ -616,33 +616,29 @@ namespace AI.Boss
         
             for (int i = 0; i < numberOfToxicMines; i++)
             {
-                Destroy(toxicMineList[i].gameObject, 1f);
+                Destroy(toxicMineList[i].gameObject, 1f); //destroy toxic mine
             }
         
             //Clear toutes les list 
             toxicMineAreaWarningList.Clear();
             toxicMineAreaList.Clear();
             toxicMineList.Clear();
-
             yield return new WaitForSeconds(1f);
-        
-        
-        
-            if (currentToxicMineAmount > 0 && timerBeforeBoxing >= 0)
+            
+            if(distanceBetweenPlayer < aggroBoxingRange && currentDamageTaken > maxDamageTaken)
+            {
+                SwitchState(BoxingState);
+            }
+            else if(currentToxicMineAmount > 0)
             {
                 StartCoroutine(ToxicMine());
             }
-            else if(currentToxicMineAmount == 0 && timerBeforeBoxing >= 0)
+            else if(currentToxicMineAmount == 0)
             { 
                 var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
                 SwitchState(nextState);
             }
-            else if(timerBeforeBoxing <= 0)
-            {
-                //StopCoroutine(ToxicMine());
-                SwitchState(BoxingState);
-                timerBeforeBoxing = 3; //reset le timer
-            }
+            
         }
 
     
@@ -660,30 +656,24 @@ namespace AI.Boss
         private IEnumerator Throwing()
         {
             currentThrowAmount--;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
 
             var posBossBeforeSpawn = transform.position; //get la pos du boss 
             var slugObject = Instantiate(slug, new Vector2(posBossBeforeSpawn.x,posBossBeforeSpawn.y), Quaternion.identity);
-
             yield return new WaitForSeconds(3f);
-        
-        
-        
-            if (currentThrowAmount > 0 && timerBeforeBoxing >= 0)
+            
+            if (distanceBetweenPlayer < aggroBoxingRange && currentDamageTaken > maxDamageTaken)
+            {
+                SwitchState(BoxingState);
+            }
+            else if(currentThrowAmount > 0)
             {
                 StartCoroutine(Throwing());
             }
-            else if(currentThrowAmount == 0 && timerBeforeBoxing >= 0)
+            else if(currentThrowAmount == 0)
             { 
                 var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
                 SwitchState(nextState);
-            }
-            else if(timerBeforeBoxing <= 0)
-            {
-                //StopCoroutine(Throwing());
-                SwitchState(BoxingState);
-                timerBeforeBoxing = 3; //reset le timer
-
             }
         }
 
@@ -699,40 +689,47 @@ namespace AI.Boss
 
         private IEnumerator Boxing()
         {
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(1f);
 
-            for (int i = 0; i < numberOfBoxingCircle; i++)
+            if (currentDamageTaken > maxDamageTaken)
             {
-                if (distanceBetweenPlayer < aggroBoxingRange)
+                for (int i = 0; i < numberOfBoxingCircleWarning; i++)
                 {
                     var posPlayerBeforeSpawn = player.transform.position; //get la pos du boss
-                    var circleWarningObject = Instantiate(circleBoxingWarning, new Vector2(posPlayerBeforeSpawn.x + Random.Range(-1f, 1f),posPlayerBeforeSpawn.y +  Random.Range(-1, 1f)), Quaternion.identity);
-                    yield return new WaitForSeconds(0.3f);
-
-                    Destroy(circleWarningObject, 1f);
-                    var circleBoxingObject = Instantiate(circleBoxing, circleWarningObject.transform.position, Quaternion.identity);
-                
-                    //DO SHAKE CAMERA
-                    StartCoroutine(ShakeCam());
-
-                    yield return new WaitForSeconds(1f);
-
-                    Destroy(circleBoxingObject);
+                    var circleBoxingWarningObject = Instantiate(circleBoxingWarning, new Vector2(posPlayerBeforeSpawn.x,posPlayerBeforeSpawn.y), Quaternion.identity);
+                    
+                    circleBoxingWarningObjectList.Add(circleBoxingWarningObject);
+                    yield return new WaitForSeconds(0.2f);
                 }
-            }
-            yield return new WaitForSeconds(0.5f);
 
-        
-            if (distanceBetweenPlayer < aggroBoxingRange)
-            {
-                StartCoroutine(Boxing());
+                for (int i = 0; i < numberOfBoxingCircle; i++)
+                {
+                    var circleBoxingObject = Instantiate(circleBoxing, circleBoxingWarningObjectList[i].transform.position, Quaternion.identity);
+                    StartCoroutine(ShakeCam()); //DO SHAKE CAMERA
+
+                    //ADD to the list 
+                    circleBoxingObjectList.Add(circleBoxingObject);
+                    yield return new WaitForSeconds(0.2f);
+                }
+
+                foreach (var VARIABLEWARNING in circleBoxingWarningObjectList)
+                {
+                    Destroy(VARIABLEWARNING);
+                }
+
+                foreach (var VARIABLE in circleBoxingObjectList)
+                {
+                    Destroy(VARIABLE);
+                }
+                
+                //Clear toutes les list
+                circleBoxingWarningObjectList.Clear();
+                circleBoxingObjectList.Clear();
             }
-            else
-            {
-                Debug.Log($"<color=green>SWITCHING OUT TO ANOTHER STATE</color>");
-                var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
-                SwitchState(nextState);
-            }
+
+            currentDamageTaken = 0;
+            var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+            SwitchState(nextState);
         }
 
         #endregion

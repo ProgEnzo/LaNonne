@@ -1,18 +1,16 @@
-using System;
-using System.Collections;
-using Controller;
-using Pathfinding;
-using Unity.VisualScripting;
+using AI.So;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace AI.Elite
 {
     public class Bully : EnemyController
     {
-        [Header("Enemy Attack")]
-        [SerializeField] private int bullyDamage;
-        [SerializeField] private float knockbackPower;
+        private SoBully soBully;
+
+        private void Awake()
+        {
+            soBully = (SoBully) soEnemy;
+        }
 
         private void OnCollisionEnter2D(Collision2D col) 
         {
@@ -20,13 +18,13 @@ namespace AI.Elite
             if (col.gameObject.CompareTag("Player") && !isStunned)
             {
                 StartCoroutine(PlayerIsHit());
-                playerController.TakeDamage(bullyDamage); //Player takes damage
+                playerController.TakeDamage(soBully.bodyDamage); //Player takes damage
 
-                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockback = direction * knockbackPower;
+                var knockBack = direction * soBully.knockBackPower;
             
-                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
         }
     }

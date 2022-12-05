@@ -138,31 +138,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a2dd2e38e18d7a43a2f6a5903a0c9fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soEnemy: {fileID: 11400000, guid: df8a88526cafc9f4f8cb5e0ac56aae0a, type: 2}
-  currentHealth: 100
-  currentAiPathSpeed: 0
-  currentVelocitySpeed: 0
-  currentDamageMultiplier: 0
-  currentEpDropMultiplier: 0
-  isStunned: 0
-  stackTimers:
-  - 0
-  - 0
-  - 0
-  areStacksOn: 000000
+  soEnemy: {fileID: 11400000, guid: 2a582344b1676fa4193d4020473969bd, type: 2}
   epDrop: {fileID: 970073829185132471, guid: 2f3bcd94d8a30ae4e80b181e92acada0, type: 3}
-  numberOfEp: 5
-  circleDamage: 20
-  bodyDamage: 20
-  healAmount: 50
-  bodyKnockBack: 0
-  cooldownTimer: 2
-  timeBetweenCircleSpawn: 1
-  attackRange: 5
-  blinkExecuted: 0
   circle: {fileID: 6820275759136518904}
   circleSprite: {fileID: 6272501255602388926}
-  y: []
 --- !u!212 &6272501254927288828
 SpriteRenderer:
   m_ObjectHideFlags: 0

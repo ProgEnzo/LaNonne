@@ -1,4 +1,5 @@
 using System.Collections;
+using AI.So;
 using Pathfinding;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -7,24 +8,16 @@ namespace AI.Elite
 {
     public class Autophagic : EnemyController
     {
-        [SerializeField] private float detectionRadius;
-        [SerializeField] private float autoDamagePart;
-        [SerializeField] private float maxTimer;
         private float currentTimer;
         private bool isActivated;
-        [SerializeField] private float avoidedAngle;
-        [SerializeField] private float destinationMinRangeValue;
-        [SerializeField] private float destinationMaxRangeValue;
-        private readonly int[] positionMultiplierArray = new int[2];
+        private readonly int[] positionMultiplierArray = {-1, 1};
         private AIPath aiPath;
-        [SerializeField] private int stunBarMaxDamages;
         private int stunBarCurrentDamages;
-        [SerializeField] private float stunBarDuration;
+        private SoAutophagic soAutophagic;
 
         private void Awake()
         {
-            positionMultiplierArray[0] = -1;
-            positionMultiplierArray[1] = 1;
+            soAutophagic = (SoAutophagic) soEnemy;
             aiPath = GetComponent<AIPath>();
             stunBarCurrentDamages = 0;
         }
@@ -36,7 +29,7 @@ namespace AI.Elite
             if (!isActivated)
             {
                 var distanceToPlayer = Vector2.Distance(playerController.transform.position, transform.position);
-                if (distanceToPlayer < detectionRadius)
+                if (distanceToPlayer < soAutophagic.detectionRadius)
                 {
                     isActivated = true;
                 }
@@ -49,7 +42,7 @@ namespace AI.Elite
                     
                     ChangeDestination();
 
-                    currentTimer = maxTimer;
+                    currentTimer = soAutophagic.maxTimer;
                 }
                 currentTimer -= Time.deltaTime;
             }
@@ -66,15 +59,15 @@ namespace AI.Elite
             do
             {
                 destination = new Vector2(
-                    transform.position.x + Random.Range(destinationMinRangeValue, destinationMaxRangeValue) *
+                    transform.position.x + Random.Range(soAutophagic.destinationMinRangeValue, soAutophagic.destinationMaxRangeValue) *
                     positionMultiplierArray[Random.Range(0, 2)],
-                    transform.position.y + Random.Range(destinationMinRangeValue, destinationMaxRangeValue) *
+                    transform.position.y + Random.Range(soAutophagic.destinationMinRangeValue, soAutophagic.destinationMaxRangeValue) *
                     positionMultiplierArray[Random.Range(0, 2)]);
                 var newRotationLook = Quaternion.LookRotation(Vector3.forward, destination - (Vector2)transform.position);
                 isNewDirectionOk = (newRotationLook.eulerAngles.z - rotationLook.eulerAngles.z) switch
                 {
-                    var angle and >= 0 when angle < avoidedAngle / 2 => false,
-                    var angle and < 0 when angle > -avoidedAngle / 2 => false,
+                    var angle and >= 0 when angle < soAutophagic.avoidedAngle / 2 => false,
+                    var angle and < 0 when angle > -soAutophagic.avoidedAngle / 2 => false,
                     _ => true
                 };
             } while (!isNewDirectionOk);
@@ -84,7 +77,7 @@ namespace AI.Elite
 
         private void TakeAutoDamage()
         {
-            currentHealth -= (int)(soEnemy.maxHealth * autoDamagePart);
+            currentHealth -= (int)(soAutophagic.maxHealth * soAutophagic.autoDamagePart);
             EnemyDeath();
         }
         
@@ -93,7 +86,7 @@ namespace AI.Elite
             currentHealth -= damage;
             EnemyDeath();
             stunBarCurrentDamages += damage;
-            if (stunBarCurrentDamages < stunBarMaxDamages) return;
+            if (stunBarCurrentDamages < soAutophagic.stunBarMaxDamages) return;
             stunBarCurrentDamages = 0;
             StartCoroutine(FullStunBar());
         }
@@ -101,7 +94,7 @@ namespace AI.Elite
         private IEnumerator FullStunBar()
         {
             isStunned = true;
-            yield return new WaitForSeconds(stunBarDuration);
+            yield return new WaitForSeconds(soAutophagic.stunBarDuration);
             isStunned = false;
         }
     }

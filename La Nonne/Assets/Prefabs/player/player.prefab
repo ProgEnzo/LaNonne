@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d4a1c5cda15f5b498c88c8f41440c85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAndEffectMultiplier: 1
+  damageAndEffectMultiplier: 0.5
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
 --- !u!61 &8777334782906009103
 BoxCollider2D:
@@ -219,23 +219,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad616780a6d7ac045b84bd50a4ca0fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHitting: 0
-  hitLength: 1
-  hitAngle: 90
-  hitSpeed: 600
-  toleranceAngle: 1
-  lineRenderer: {fileID: 0}
-  boxCollider: {fileID: 0}
-  finalRotation1: {x: 0, y: 0, z: 0, w: 0}
-  finalRotation2: {x: 0, y: 0, z: 0, w: 0}
-  maxHitState: 3
-  maxDuringComboCooldown: 2
-  maxNextComboCooldown: 0.1
-  maxDetectionAngle: 270
-  littleHitStopDuration: 0.3
-  littleKnockBackForce: 3
-  bigHitStopDuration: 0.6
-  bigKnockBackForce: 10
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
 --- !u!61 &4579524371399318225
 BoxCollider2D:
@@ -615,19 +598,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: febdc04a016e4944eba2855f952341dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHitting: 0
-  chainHitLength: 2.5
-  bladeHitLength: 1
-  hitAngle: 179
-  hitSpeed: 800
-  toleranceAngle: 0.5
-  chainLineRenderer: {fileID: 0}
-  bladeLineRenderer: {fileID: 0}
-  chainBoxCollider: {fileID: 0}
-  bladeBoxCollider: {fileID: 0}
-  initialRotation: {x: 0, y: 0, z: 0, w: 0}
-  finalRotation: {x: 0, y: 0, z: 0, w: 0}
-  cooldownTime: 5
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
 --- !u!1 &5897168858263811049
 GameObject:
@@ -792,17 +762,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df078b996a24d6743b360f9950a4e431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mRigidbody: {fileID: 7595690208701357959}
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
-  mTimerDash: 0
-  hitSpeed: 500
-  revealingDashDetectionRadius: 5
-  toleranceDistance: 0.1
-  stunDuration: 3
-  damageMultiplier: 1
-  revealingDashTimer: 5
   hpSlider: {fileID: 0}
-  currentEp: 0
+  volume: {fileID: 0}
+  bossPos: {x: 0, y: 0}
+  currentPos: {x: 0, y: 0}
 --- !u!70 &3339834831573868976
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

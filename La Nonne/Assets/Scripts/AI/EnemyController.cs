@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AI.So;
 using Controller;
 using DG.Tweening;
 using Pathfinding;
@@ -13,24 +14,23 @@ namespace AI
     {
         protected PlayerController playerController;
         [SerializeField] internal SO_Enemy soEnemy;
-        [SerializeField, ShowOnly] internal float currentHealth;
-        [SerializeField, ShowOnly] internal float currentAiPathSpeed;
-        [SerializeField, ShowOnly] internal float currentVelocitySpeed;
-        [SerializeField, ShowOnly] internal float currentDamageMultiplier;
-        [SerializeField, ShowOnly] internal float currentEpDropMultiplier;
+        internal float currentHealth;
+        internal float currentAiPathSpeed;
+        internal float currentVelocitySpeed;
+        internal float currentDamageMultiplier;
+        internal float currentEpDropMultiplier;
 
-        /*[NonSerialized]*/ public bool isStunned;
+        internal bool isStunned;
         private AIPath aiPathComponent;
         protected Rigidbody2D rb;
         private static readonly List<SpriteRenderer> PlayerSpriteRenderers = new();
         internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
-        [SerializeField, ShowOnly] internal float[] stackTimers = new float[3];
-        [SerializeField, ShowOnly] internal bool[] areStacksOn = new bool[3];
+        internal readonly float[] stackTimers = new float[3];
+        internal readonly bool[] areStacksOn = new bool[3];
         private EffectManager effectManager;
         private Coroutine currentHitStopCoroutine;
 
-        public GameObject epDrop;
-        public int numberOfEp;
+        [SerializeField] private GameObject epDrop;
 
         protected virtual void Start()
         {
@@ -87,7 +87,7 @@ namespace AI
         {
             if (currentHealth <= 0)
             {
-                EpDrop((int)(numberOfEp * currentEpDropMultiplier));
+                EpDrop((int)(soEnemy.numberOfEp * currentEpDropMultiplier));
 
                 Destroy(gameObject); //Dies            
             }

@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70901ad9d79bf8d4b9f6d9d6cc680313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soEnemy: {fileID: 11400000, guid: b20d13ab50ca57540af421c040fca443, type: 2}
+  soEnemy: {fileID: 11400000, guid: a8bc4869809ffae45ac90a88af5ef1f8, type: 2}
   currentHealth: 0
   currentAiPathSpeed: 0
   currentVelocitySpeed: 0
@@ -149,15 +149,6 @@ MonoBehaviour:
   - 0
   areStacksOn: 000000
   epDrop: {fileID: 970073829185132471, guid: 2f3bcd94d8a30ae4e80b181e92acada0, type: 3}
-  numberOfEp: 25
-  detectionRadius: 10
-  autoDamagePart: 0.05
-  maxTimer: 1
-  avoidedAngle: 180
-  destinationMinRangeValue: 5
-  destinationMaxRangeValue: 10
-  stunBarMaxDamages: 20
-  stunBarDuration: 3
 --- !u!212 &5813854497670849601
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -1,32 +1,24 @@
-using System;
-using System.Collections;
-using Controller;
+using AI.So;
 using Pathfinding;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace AI.Trash
 {
     public class TrashMobRange : EnemyController
     {
         [Header("Enemy Detection")]
-        [SerializeField] float distanceToPlayer;
-        [SerializeField] float shootingRange;
-        [SerializeField] float aggroRange;
+        private float distanceToPlayer;
         private float cooldownTimer;
-    
-        [Header("Enemy Attack Values")]
-        [SerializeField] float cooldownBetweenShots;
-        [SerializeField] float bulletSpeed;
-        [SerializeField] float knockbackBody;
         
         [Header("Enemy Components")]
         private AIPath scriptAIPath;
         [SerializeField] private GameObject bulletPrefab;
+        private SoTrashMobRange soTrashMobRange;
 
         protected override void Start()
         {
             base.Start();
+            soTrashMobRange = (SoTrashMobRange) soEnemy;
             scriptAIPath = GetComponent<AIPath>();
         }
         
@@ -46,19 +38,19 @@ namespace AI.Trash
         {
             distanceToPlayer = Vector2.Distance(playerController.transform.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
         
-            if (distanceToPlayer <= shootingRange) //si le joueur est dans la SHOOTING RANGE du trashMob
+            if (distanceToPlayer <= soTrashMobRange.shootingRange) //si le joueur est dans la SHOOTING RANGE du trashMob
             {
                 scriptAIPath.maxSpeed = 1;
                 
                 Shoot();
             
             }
-            else if (distanceToPlayer <= aggroRange) //si le joueur est dans l'AGGRO RANGE du trashMob
+            else if (distanceToPlayer <= soTrashMobRange.aggroRange) //si le joueur est dans l'AGGRO RANGE du trashMob
             {
                 scriptAIPath.maxSpeed = 3;
             
             }
-            else if (distanceToPlayer > aggroRange) //si le joueur est HORS de l'AGGRO RANGE
+            else if (distanceToPlayer > soTrashMobRange.aggroRange) //si le joueur est HORS de l'AGGRO RANGE
             {
                 scriptAIPath.maxSpeed = 0;
             }
@@ -72,13 +64,13 @@ namespace AI.Trash
             {
                 return;
             }
-            cooldownTimer = cooldownBetweenShots;
+            cooldownTimer = soTrashMobRange.cooldownBetweenShots;
 
             var position = transform.position;
             var direction = playerController.transform.position - position; // direction entre player et enemy
             var bullet = Instantiate(bulletPrefab, position, Quaternion.identity); // spawn bullet
             var rbBullet = bullet.GetComponent<Rigidbody2D>(); // chope le rb de la bullet 
-            rbBullet.AddForce(direction.normalized * bulletSpeed, ForceMode2D.Impulse); // Addforce avec la direction + le rb
+            rbBullet.AddForce(direction.normalized * soTrashMobRange.bulletSpeed, ForceMode2D.Impulse); // Addforce avec la direction + le rb
         
             Destroy(bullet, 3f);
         }
@@ -93,17 +85,18 @@ namespace AI.Trash
 
                 var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                var knockback = direction * knockbackBody;
+                var knockBack = direction * soTrashMobRange.knockBackBody;
             
-                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
         }
 
         private void OnDrawGizmos()
         {
+            if (Application.isPlaying) return;
             var position = transform.position;
-            Gizmos.DrawWireSphere(position, shootingRange);
-            Gizmos.DrawWireSphere(position, aggroRange);
+            Gizmos.DrawWireSphere(position, soTrashMobRange.shootingRange);
+            Gizmos.DrawWireSphere(position, soTrashMobRange.aggroRange);
         }
         #endregion
     }
