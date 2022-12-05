@@ -5,6 +5,7 @@ using System.Linq;
 using AI;
 using AI.Boss;
 using Core.Scripts.Utils;
+using DG.Tweening;
 using Manager;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -329,6 +330,7 @@ namespace Controller
                     revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
                     isRevealingDashHitting = true;
                     revealingDashTimerCount = soController.revealingDashTimer;
+                    //DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0.1f, 0.1f);
                     break;
                 }
             }
