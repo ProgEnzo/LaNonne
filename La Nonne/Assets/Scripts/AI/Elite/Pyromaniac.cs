@@ -219,6 +219,7 @@ namespace AI.Elite
 
         private void OnDrawGizmos()
         {
+            if (Application.isPlaying) return;
             var position = transform.position;
             Gizmos.DrawWireSphere(position, soPyromaniac.detectionRadius);
             Gizmos.DrawWireSphere(position, soPyromaniac.throwRadius);

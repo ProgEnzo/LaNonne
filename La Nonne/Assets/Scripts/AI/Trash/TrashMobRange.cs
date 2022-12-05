@@ -93,6 +93,7 @@ namespace AI.Trash
 
         private void OnDrawGizmos()
         {
+            if (Application.isPlaying) return;
             var position = transform.position;
             Gizmos.DrawWireSphere(position, soTrashMobRange.shootingRange);
             Gizmos.DrawWireSphere(position, soTrashMobRange.aggroRange);
