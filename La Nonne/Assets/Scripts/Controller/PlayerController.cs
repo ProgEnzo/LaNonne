@@ -42,9 +42,10 @@ namespace Controller
         private Vector3 revealingDashNewPosition;
         private readonly Dictionary<GameObject, Coroutine> revealingDashRunningStunCoroutines = new();
         private float revealingDashTimerCount;
+        internal float currentSlowMoSpeed;
 
         [Header("UI elements")]
-        [SerializeField] private Slider hpSlider;
+        [SerializeField] private Image healthBar;
         internal int currentEp;
         
         [Header("Animations")]
@@ -114,11 +115,10 @@ namespace Controller
             playerScale = transform.localScale.x;
             currentHealth = soController.maxHealth;
             isRevealingDashHitting = false;
-            hpSlider = GameObject.Find("HealthBar").GetComponent<Slider>();
-            hpSlider.maxValue = soController.maxHealth;
-            hpSlider.value = soController.maxHealth;
+            healthBar = GameObject.Find("HealthBar").transform.GetChild(0).GetComponent<Image>();
+            healthBar.fillAmount = 1f;
             currentEp = 0;
-            
+            currentSlowMoSpeed = 1f;
         }
 
         private void OnDestroy()
@@ -181,7 +181,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2);
                 }
-                mRigidbody.AddForce(Vector2.left*speed);
+                mRigidbody.AddForce(Vector2.left * (speed * currentSlowMoSpeed));
             }
 
             if (Input.GetKey(KeyCode.D))
@@ -194,7 +194,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2);
                 }
-                mRigidbody.AddForce(Vector2.right*speed);
+                mRigidbody.AddForce(Vector2.right * (speed * currentSlowMoSpeed));
             }
 
             if (Input.GetKey(KeyCode.Z))
@@ -209,7 +209,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 1);
                     }
                 }
-                mRigidbody.AddForce(Vector2.up*speed);
+                mRigidbody.AddForce(Vector2.up * (speed * currentSlowMoSpeed));
             }
 
             if (Input.GetKey(KeyCode.S))
@@ -224,7 +224,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 0);
                     }
                 }
-                mRigidbody.AddForce(Vector2.down*speed);
+                mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoSpeed));
             }
 
             if (!currentAnimPrefabAnimator.GetBool(IsAttacking))
@@ -271,7 +271,7 @@ namespace Controller
         public void TakeDamage(int damage)
         {
             currentHealth -= damage;
-            hpSlider.value -= damage;
+            healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
             //Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
 
             if (currentHealth <= 0)
@@ -297,7 +297,7 @@ namespace Controller
         internal void HealPlayer(int heal)
         {
             currentHealth += heal;
-            hpSlider.value += heal;
+            healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
             HealCeiling();
         }
 
@@ -330,7 +330,9 @@ namespace Controller
                     revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
                     isRevealingDashHitting = true;
                     revealingDashTimerCount = soController.revealingDashTimer;
-                    //DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0.1f, 0.1f);
+                    currentSlowMoSpeed = soController.revealingDashSlowTimeSpeed;
+                    // DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
+                    // DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
                     break;
                 }
             }
@@ -354,10 +356,11 @@ namespace Controller
                 //DMG du player sur le TrashMobClose
                 if (revealingDashAimedEnemy.CompareTag("Enemy"))
                 {
-                    revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer((int)(soController.revealingDashDamage));
+                    revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.revealingDashDamage);
                     //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobClose>().currentHealth);
                 }
 
+                currentSlowMoSpeed = 1f;
                 isRevealingDashHitting = false;
             }
         }
