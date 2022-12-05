@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 6570
+  controlID: 27485
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_UseMipMap: 0
   m_VSyncEnabled: 0
   m_Gizmos: 0
-  m_Stats: 1
+  m_Stats: 0
   m_SelectedSizes: 03000000000000000000000000000000000000000000000000000000000000000000000000000000
   m_ZoomArea:
     m_HRangeLocked: 0
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 6571
+  controlID: 27486
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 6632
+  controlID: 27457
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -292,7 +292,7 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: 0, y: 0}
+      snapOffset: {x: 0, y: 25}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: unity-transform-toolbar
@@ -440,9 +440,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 92.09464, y: -27.89402, z: 1.5452079}
+    m_Target: {x: -104.6234, y: 4.7829075, z: 10.237255}
     speed: 2
-    m_Value: {x: 92.09464, y: -27.89402, z: 1.5452079}
+    m_Value: {x: -104.6234, y: 4.7829075, z: 10.237255}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -493,9 +493,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 79.311905
+    m_Target: 113.40381
     speed: 2
-    m_Value: 79.311905
+    m_Value: 113.40381
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -577,9 +577,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 32c30000
-      m_LastClickedID: 0
-      m_ExpandedIDs: 4eedfffff28600000a87000078870000f0870000
+      m_SelectedIDs: 164fedff
+      m_LastClickedID: -1224938
+      m_ExpandedIDs: 4eedffffca860000f28600000a8700001e87000056870000788700008c870000f0870000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -627,7 +627,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 6572
+  controlID: 27487
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -721,22 +721,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Prefabs/Ennemies/BOSS
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Prefabs/Ennemies/BOSS
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 289a0000
-    m_LastClickedID: 39464
-    m_ExpandedIDs: 00000000289a00002a9a00002c9a00002e9a0000309a0000329a0000349a0000369a0000389a00003a9a0000489a00005a9a000000ca9a3b
+    m_SelectedIDs: 6c9c0000
+    m_LastClickedID: 40044
+    m_ExpandedIDs: 00000000289a00002a9a00002c9a00002e9a0000309a0000329a0000349a0000369a0000389a00003a9a00004e9a000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -789,10 +789,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 32c30000
-    m_LastClickedInstanceID: 49970
+    m_SelectedInstanceIDs: 164fedff
+    m_LastClickedInstanceID: -1224938
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000
+    m_ExpandedInstanceIDs: c6230000f0b100009aab0000ceb30000ba040100be040100d0740000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -844,7 +844,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 6596
+  controlID: 27481
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
