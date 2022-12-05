@@ -439,14 +439,15 @@ MonoBehaviour:
   vCamBoss: {fileID: 0}
   vCamBossShake: {fileID: 0}
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
+  dashWarning: {fileID: 2869619142739270497, guid: a424c7e5d50d4a9498ca3a75cb347711, type: 3}
   bodyDamage: 20
-  dashPower: 5
-  dashTime: 1
-  dashCooldown: 0.5
+  dashPower: 10
   timeBeforeDashing: 0.5
-  dashAmount: 2
-  currentDashAmount: 2
-  numberOfMines: 5
+  waitEndDash: 0
+  canShakeOnWallBump: 0
+  dashAmount: 3
+  currentDashAmount: 3
+  numberOfMines: 3
   attackCircleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
   attackCircle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
   attackCircleSpacingCooldown: 0.5

@@ -141,7 +141,7 @@ namespace AI.Boss
             shockwaveGameObject = GameObject.Find("Shockwave");
         
 
-            currentState = ToxicMineState; //starting state for the boss state machine
+            currentState = DashingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
         
             //HEALTH
