@@ -7,8 +7,8 @@ using Pathfinding;
 using Shop;
 using Tools;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
-using Slider = UnityEngine.UI.Slider;
 
 namespace AI.Boss
 {
@@ -35,7 +35,7 @@ namespace AI.Boss
         public List<GameObject> spawnerList = new();
 
         [Header("Overall Stats")]
-        private Slider hpBossSlider;
+        private Image hpBossBar;
         public int currentHealth;
         public int maxHealth;
         public float playerNormalSpeed;
@@ -140,7 +140,7 @@ namespace AI.Boss
 
         private void Start()
         {
-            hpBossSlider = GameObject.FindGameObjectWithTag("Boss HealthBar").GetComponent<Slider>();
+            hpBossBar = GameObject.FindGameObjectWithTag("Boss HealthBar").transform.GetChild(0).GetComponent<Image>();
             player = PlayerController.instance;
             effectManager = EffectManager.instance;
             gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
@@ -154,8 +154,7 @@ namespace AI.Boss
             currentHealth = maxHealth;
             currentDamageMultiplier = 1f;
         
-            hpBossSlider.maxValue = maxHealth;
-            hpBossSlider.DOValue(maxHealth, 1f);
+            hpBossBar.DOFillAmount(maxHealth, 1f);
 
             //MOVEMENT SPEED
             player.soController.moveSpeed = playerNormalSpeed;
@@ -258,7 +257,7 @@ namespace AI.Boss
             if (takingDamage)
             {
                 currentHealth -= (int)(damage * currentDamageMultiplier);
-                hpBossSlider.value -= (int)(damage * currentDamageMultiplier);
+                hpBossBar.fillAmount -= (float)currentHealth / maxHealth;
 
                 currentDamageTaken += damage;
                 
