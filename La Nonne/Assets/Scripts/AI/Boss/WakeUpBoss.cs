@@ -10,12 +10,15 @@ public class WakeUpBoss : MonoBehaviour
 {
     public BossStateManager boss;
     public AIDestinationSetter bossAIDestinationSetter;
-    public Slider hpBossSlider;
+    public GameObject healthBarBoss;
 
     void Start()
     {
         boss = transform.parent.GetComponent<BossStateManager>();
         bossAIDestinationSetter = transform.parent.GetComponent<AIDestinationSetter>();
+        healthBarBoss = GameObject.FindWithTag("Boss HealthBar");
+        healthBarBoss.SetActive(false);
+
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -24,7 +27,7 @@ public class WakeUpBoss : MonoBehaviour
         {
             boss.enabled = true;
             bossAIDestinationSetter.enabled = true;
-            hpBossSlider.gameObject.SetActive(true);
+            healthBarBoss.SetActive(true);
         }
     }
 
