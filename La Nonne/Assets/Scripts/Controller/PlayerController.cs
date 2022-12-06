@@ -30,6 +30,9 @@ namespace Controller
         [Header("Scriptable Object")]
         [SerializeField][FormerlySerializedAs("SO_Controller")] internal SO_Controller soController;
         
+        [Header("Inputs")]
+        private InputManager inputManager;
+        
         [Header("Dash")]
         internal float timerDash;
         
@@ -68,8 +71,8 @@ namespace Controller
         private float maxCA = 15f; //Lerp the value between those 2 en fonction de la distance player/boss, donc dans un update
 
 
-        public Vector2 bossPos;
-        public Vector2 currentPos;
+        // public Vector2 bossPos;
+        // public Vector2 currentPos;
 
         /*float GetDistanceBetweenBossAndPlayer(Vector2 currentPos)
         {
@@ -112,6 +115,7 @@ namespace Controller
         private void Start()
         {
             animationManager = AnimationManager.instance;
+            inputManager = InputManager.instance;
             playerScale = transform.localScale.x;
             currentHealth = soController.maxHealth;
             isRevealingDashHitting = false;
@@ -128,7 +132,7 @@ namespace Controller
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && timerDash < -0.5f)
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f)
             {
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
@@ -145,9 +149,8 @@ namespace Controller
         
             RevealingDash();
             LoadMenu();
-
-            
         }
+        
         public void FixedUpdate()
         {
             mRigidbody.drag = soController.dragDeceleration * soController.dragMultiplier;
@@ -160,74 +163,75 @@ namespace Controller
         }
     
         #region MovementPlayer
+        
         private void ManageMove()
         {
-            var speed = timerDash <= 0 ? soController.moveSpeed : soController.dashSpeed;
+            var speed = timerDash <= 0 ? soController.moveSpeed : soController.dashSpeed; // for movement
 
-            int nbInputs = (Input.GetKey(KeyCode.Z) ? 1 : 0) + (Input.GetKey(KeyCode.Q) ? 1 : 0) +
-                           (Input.GetKey(KeyCode.S) ? 1 : 0) + (Input.GetKey(KeyCode.D) ? 1 : 0);
+            int nbInputs = (Input.GetKey(inputManager.upMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.leftMoveKey) ? 1 : 0) +
+                           (Input.GetKey(inputManager.downMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.rightMoveKey) ? 1 : 0); // for movement
             
-            if (nbInputs > 1) speed *= 0.75f;
+            if (nbInputs > 1) speed *= 0.75f; // for movement
             
-            var localScale = transform.localScale;
+            var localScale = transform.localScale; // for animation
 
-            if (Input.GetKey(KeyCode.Q))
+            if (Input.GetKey(inputManager.leftMoveKey)) // for input
             {
-                isMoving = true;
-                isMovingProfile = true;
-                transform.localScale = new Vector3(-playerScale, localScale.y, localScale.z);
-                transform.GetChild(0).localScale = new Vector3(1, -1, 1);
-                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
+                isMoving = true; // for animation
+                isMovingProfile = true; // for movement
+                transform.localScale = new Vector3(-playerScale, localScale.y, localScale.z); // for animation
+                transform.GetChild(0).localScale = new Vector3(1, -1, 1); // for animation
+                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2) // for animation
                 {
-                    animParametersToChange = (DirectionState, 2);
+                    animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.left * (speed * currentSlowMoSpeed));
+                mRigidbody.AddForce(Vector2.left * (speed * currentSlowMoSpeed)); // for movement
             }
 
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(inputManager.rightMoveKey)) // for input
             {
-                isMoving = true;
-                isMovingProfile = true;
-                transform.localScale = new Vector3(playerScale, localScale.y, localScale.z);
-                transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2)
+                isMoving = true; // for animation
+                isMovingProfile = true; // for movement
+                transform.localScale = new Vector3(playerScale, localScale.y, localScale.z); // for animation
+                transform.GetChild(0).localScale = new Vector3(1, 1, 1); // for animation
+                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 2) // for animation
                 {
-                    animParametersToChange = (DirectionState, 2);
+                    animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.right * (speed * currentSlowMoSpeed));
+                mRigidbody.AddForce(Vector2.right * (speed * currentSlowMoSpeed)); // for movement
             }
 
-            if (Input.GetKey(KeyCode.Z))
+            if (Input.GetKey(inputManager.upMoveKey)) // for input
             {
-                isMoving = true;
-                if (!isMovingProfile)
+                isMoving = true; // for animation
+                if (!isMovingProfile) // for movement
                 {
-                    transform.localScale = new Vector3(playerScale, localScale.y, localScale.z);
-                    transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-                    if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 1)
+                    transform.localScale = new Vector3(playerScale, localScale.y, localScale.z); // for animation
+                    transform.GetChild(0).localScale = new Vector3(1, 1, 1); // for animation
+                    if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 1) // for animation
                     {
-                        animParametersToChange = (DirectionState, 1);
+                        animParametersToChange = (DirectionState, 1); // for animation
                     }
                 }
-                mRigidbody.AddForce(Vector2.up * (speed * currentSlowMoSpeed));
+                mRigidbody.AddForce(Vector2.up * (speed * currentSlowMoSpeed)); // for movement
             }
 
-            if (Input.GetKey(KeyCode.S))
+            if (Input.GetKey(inputManager.downMoveKey)) // for input
             {
-                isMoving = true;
-                if (!isMovingProfile)
+                isMoving = true; // for animation
+                if (!isMovingProfile) // for movement
                 {
-                    transform.localScale = new Vector3(playerScale, localScale.y, localScale.z);
-                    transform.GetChild(0).localScale = new Vector3(1, 1, 1);
-                    if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 0)
+                    transform.localScale = new Vector3(playerScale, localScale.y, localScale.z); // for animation
+                    transform.GetChild(0).localScale = new Vector3(1, 1, 1); // for animation
+                    if (currentAnimPrefabAnimator.GetInteger(DirectionState) != 0) // for animation
                     {
-                        animParametersToChange = (DirectionState, 0);
+                        animParametersToChange = (DirectionState, 0); // for movement
                     }
                 }
-                mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoSpeed));
+                mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoSpeed)); // for movement
             }
 
-            if (!currentAnimPrefabAnimator.GetBool(IsAttacking))
+            if (!currentAnimPrefabAnimator.GetBool(IsAttacking)) // all for movement
             {
                 if (isMoving)
                 {
@@ -260,10 +264,11 @@ namespace Controller
                     }
                 }
             }
-            isMoving = false;
-            isMovingProfile = false;
-            animParametersToChange = (0, 0);
+            isMoving = false; // for animation
+            isMovingProfile = false; // for movement
+            animParametersToChange = (0, 0); // for animation
         }
+        
         #endregion
 
         #region HealthPlayer
@@ -315,7 +320,7 @@ namespace Controller
 
         private void RevealingDash()
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && !isRevealingDashHitting && revealingDashTimerCount <= 0)
+            if (Input.GetKeyDown(inputManager.slowMoKey) && !isRevealingDashHitting && revealingDashTimerCount <= 0)
             {
                 var enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero, new ContactFilter2D(), enemiesInArea);

@@ -23,12 +23,14 @@ namespace Controller
         private float currentTime;
         
         private AnimationManager animationManager;
+        private InputManager inputManager;
 
         // Start is called before the first frame update
         private void Start()
         {
             playerController = PlayerController.instance;
             animationManager = AnimationManager.instance;
+            inputManager = InputManager.instance;
             camera1 = Camera.main;
             chainLineRenderer = transform.GetChild(0).GetComponent<LineRenderer>();
             bladeLineRenderer = transform.GetChild(1).GetComponent<LineRenderer>();
@@ -46,7 +48,7 @@ namespace Controller
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
 
-            if (Input.GetMouseButtonDown(1) && !isHitting && currentTime <= 0)
+            if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !isHitting && currentTime <= 0)
             {
                 InquisitorialChainStart();
             }

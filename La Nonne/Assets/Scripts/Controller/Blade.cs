@@ -28,15 +28,17 @@ namespace Controller
         private float currentDuringComboCooldown;
         private float currentNextComboCooldown;
     
-        [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
+        [SerializeField] private SO_Controller soController;
         private EffectManager effectManager;
         private AnimationManager animationManager;
+        private InputManager inputManager;
 
         private void Start()
         {
             playerController = PlayerController.instance;
             effectManager = EffectManager.instance;
             animationManager = AnimationManager.instance;
+            inputManager = InputManager.instance;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
             lineRenderer.enabled = false;
@@ -58,7 +60,7 @@ namespace Controller
                 hitState = 0;
             }
 
-            if (Input.GetMouseButtonDown(0) && !isHitting && currentNextComboCooldown <= 0)
+            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0)
             {
                 ZealousBladeStart();
             }
