@@ -132,13 +132,13 @@ namespace Controller
 
         public void Update()
         {
-            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f) // for input and time
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f)
             {
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
             }
             
-            if (timerDash < -0.5f) // for time
+            if (timerDash < -0.5f)
             {
                 collider2d.enabled = true;
             }
@@ -148,12 +148,12 @@ namespace Controller
             }
         
             RevealingDashStart();
-            LoadMenu(); // for mechanics
+            LoadMenu();
         }
         
         public void FixedUpdate()
         {
-            mRigidbody.drag = soController.dragDeceleration * soController.dragMultiplier; // for movement
+            mRigidbody.drag = soController.dragDeceleration * soController.dragMultiplier;
             ManageMove();
             RevealingDash();
         }
