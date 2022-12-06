@@ -153,8 +153,9 @@ namespace AI.Boss
             //HEALTH
             currentHealth = maxHealth;
             currentDamageMultiplier = 1f;
-        
-            hpBossBar.DOFillAmount(maxHealth, 1f);
+
+            hpBossBar.fillAmount = 0f;
+            hpBossBar.DOFillAmount((float)currentHealth / maxHealth, 1f);
 
             //MOVEMENT SPEED
             player.soController.moveSpeed = playerNormalSpeed;
