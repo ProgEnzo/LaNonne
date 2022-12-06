@@ -132,13 +132,13 @@ namespace Controller
 
         public void Update()
         {
-            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f)
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f) // for input and time
             {
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
             }
             
-            if (timerDash < -0.5f)
+            if (timerDash < -0.5f) // for time
             {
                 collider2d.enabled = true;
             }
@@ -147,14 +147,15 @@ namespace Controller
                 timerDash -= Time.deltaTime;
             }
         
-            RevealingDash();
-            LoadMenu();
+            RevealingDashStart();
+            LoadMenu(); // for mechanics
         }
         
         public void FixedUpdate()
         {
-            mRigidbody.drag = soController.dragDeceleration * soController.dragMultiplier;
+            mRigidbody.drag = soController.dragDeceleration * soController.dragMultiplier; // for movement
             ManageMove();
+            RevealingDash();
         }
         
         public void AddEp(int epGain)
@@ -168,7 +169,7 @@ namespace Controller
         {
             var speed = timerDash <= 0 ? soController.moveSpeed : soController.dashSpeed; // for movement
 
-            int nbInputs = (Input.GetKey(inputManager.upMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.leftMoveKey) ? 1 : 0) +
+            var nbInputs = (Input.GetKey(inputManager.upMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.leftMoveKey) ? 1 : 0) +
                            (Input.GetKey(inputManager.downMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.rightMoveKey) ? 1 : 0); // for movement
             
             if (nbInputs > 1) speed *= 0.75f; // for movement
@@ -320,32 +321,6 @@ namespace Controller
 
         private void RevealingDash()
         {
-            if (Input.GetKeyDown(inputManager.slowMoKey) && !isRevealingDashHitting && revealingDashTimerCount <= 0)
-            {
-                var enemiesInArea = new List<RaycastHit2D>();
-                Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero, new ContactFilter2D(), enemiesInArea);
-                enemiesInArea.Sort((x, y) =>
-                {
-                    var position = transform.position;
-                    return (Vector3.Distance(position, x.transform.position).CompareTo(Vector3.Distance(position, y.transform.position)));
-                });
-                foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
-                {
-                    revealingDashAimedEnemy = enemy.collider.gameObject;
-                    revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
-                    isRevealingDashHitting = true;
-                    revealingDashTimerCount = soController.revealingDashTimer;
-                    currentSlowMoSpeed = soController.revealingDashSlowTimeSpeed;
-                    // DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
-                    // DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
-                    break;
-                }
-            }
-            else if (revealingDashTimerCount > 0)
-            {
-                revealingDashTimerCount -= Time.deltaTime;
-            }
-
             if (isRevealingDashHitting)
             {
                 transform.position = Vector2.MoveTowards(transform.position, revealingDashNewPosition, soController.revealingDashHitSpeed * Time.deltaTime);
@@ -367,6 +342,37 @@ namespace Controller
 
                 currentSlowMoSpeed = 1f;
                 isRevealingDashHitting = false;
+            }
+        }
+
+        private void RevealingDashStart()
+        {
+            if (Input.GetKeyDown(inputManager.slowMoKey) && !isRevealingDashHitting && revealingDashTimerCount <= 0)
+            {
+                var enemiesInArea = new List<RaycastHit2D>();
+                Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero,
+                    new ContactFilter2D(), enemiesInArea);
+                enemiesInArea.Sort((x, y) =>
+                {
+                    var position = transform.position;
+                    return (Vector3.Distance(position, x.transform.position)
+                        .CompareTo(Vector3.Distance(position, y.transform.position)));
+                });
+                foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
+                {
+                    revealingDashAimedEnemy = enemy.collider.gameObject;
+                    revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
+                    isRevealingDashHitting = true;
+                    revealingDashTimerCount = soController.revealingDashTimer;
+                    currentSlowMoSpeed = soController.revealingDashSlowTimeSpeed;
+                    // DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
+                    // DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
+                    break;
+                }
+            }
+            else if (revealingDashTimerCount > 0)
+            {
+                revealingDashTimerCount -= Time.deltaTime;
             }
         }
 
