@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5662915391901168718
+--- !u!114 &-352287188072154480
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: EffectTest
+  m_Name: mat_mort_Etloi
   m_Shader: {fileID: 4800000, guid: 0406db5a14f94604a8c57ccfbc9f3b46, type: 3}
   m_ValidKeywords:
   - _EMISSION
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
-        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Texture: {fileID: 2800000, guid: 89b320af8f16e1a488938fb8260dc1ea, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -52,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Texture: {fileID: 2800000, guid: 89b320af8f16e1a488938fb8260dc1ea, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -95,11 +95,11 @@ Material:
     - _Surface: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.07769966, g: 0, b: 0.43529412, a: 1}
+    - _BaseColor: {r: 0.74994326, g: 0.254539, b: 0.9811321, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.07769966, g: 0, b: 0.43529412, a: 1}
-    - _EmissionColor: {r: 2.2851737, g: 0.5526658, b: 6.8920665, a: 1}
+    - _Color: {r: 0.74994326, g: 0.254539, b: 0.9811321, a: 1}
+    - _EmissionColor: {r: 2.0328434, g: 0.54684675, b: 2.270603, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
