@@ -1,13 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
-using AI.Boss;
 using Core.Scripts.Utils;
 using DG.Tweening;
 using Manager;
-using Unity.VisualScripting;
+using Pathfinding.Util;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -39,16 +37,22 @@ namespace Controller
         [Header("Health")]
         private int currentHealth;
 
+        [Header("Slow Motion")]
+        internal bool isSlowMoOn;
+        private float currentSlowMoCooldown;
+        private float currentSlowMoDuration;
+        private Sequence slowMoSequence;
+        private Guid slowMoUid;
+
         [Header("Revealing Dash")]
         private bool isRevealingDashHitting;
         private GameObject revealingDashAimedEnemy;
         private Vector3 revealingDashNewPosition;
         private readonly Dictionary<GameObject, Coroutine> revealingDashRunningStunCoroutines = new();
-        private float revealingDashTimerCount;
-        internal float currentSlowMoSpeed;
 
         [Header("UI elements")]
-        [SerializeField] private Image healthBar;
+        private Image healthBar;
+        private Image chrono;
         internal int currentEp;
         
         [Header("Animations")]
@@ -121,8 +125,9 @@ namespace Controller
             isRevealingDashHitting = false;
             healthBar = GameObject.Find("HealthBar").transform.GetChild(0).GetComponent<Image>();
             healthBar.fillAmount = 1f;
+            chrono = GameObject.Find("Chrono").GetComponent<Image>();
+            chrono.fillAmount = 1f;
             currentEp = 0;
-            currentSlowMoSpeed = 1f;
         }
 
         private void OnDestroy()
@@ -146,9 +151,11 @@ namespace Controller
             {
                 timerDash -= Time.deltaTime;
             }
-        
+            
+            SlowMoManager();
             RevealingDashStart();
             LoadMenu();
+            chrono.fillAmount = 1 - currentSlowMoCooldown / soController.slowMoCooldown;
         }
         
         public void FixedUpdate()
@@ -186,7 +193,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.left * (speed * currentSlowMoSpeed)); // for movement
+                mRigidbody.AddForce(Vector2.left * (speed * 1)); // for movement
             }
 
             if (Input.GetKey(inputManager.rightMoveKey)) // for input
@@ -199,7 +206,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.right * (speed * currentSlowMoSpeed)); // for movement
+                mRigidbody.AddForce(Vector2.right * (speed * 1)); // for movement
             }
 
             if (Input.GetKey(inputManager.upMoveKey)) // for input
@@ -214,7 +221,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 1); // for animation
                     }
                 }
-                mRigidbody.AddForce(Vector2.up * (speed * currentSlowMoSpeed)); // for movement
+                mRigidbody.AddForce(Vector2.up * (speed * 1)); // for movement
             }
 
             if (Input.GetKey(inputManager.downMoveKey)) // for input
@@ -229,7 +236,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 0); // for movement
                     }
                 }
-                mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoSpeed)); // for movement
+                mRigidbody.AddForce(Vector2.down * (speed * 1)); // for movement
             }
 
             if (!currentAnimPrefabAnimator.GetBool(IsAttacking)) // all for movement
@@ -319,6 +326,58 @@ namespace Controller
 
         #region AttackPlayer
 
+        private void SlowMoManager()
+        {
+            if (Input.GetKeyDown(inputManager.slowMoKey) && currentSlowMoCooldown <= 0)
+            {
+                isSlowMoOn = true;
+                currentSlowMoDuration = soController.slowMoDuration;
+                // currentSlowMoSpeed = soController.slowMoSpeed;
+                Time.timeScale = 1 / soController.slowMoSpeed;
+                Time.fixedDeltaTime = Time.timeScale * 0.02f;
+                if (slowMoSequence == null)
+                {
+                    slowMoSequence = DOTween.Sequence();
+                    slowMoSequence
+                        .Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, currentSlowMoDuration)
+                            .SetEase(Ease.InQuad)).Append(DOTween.To(() => Time.fixedDeltaTime,
+                            x => Time.fixedDeltaTime = x, 0.02f, currentSlowMoDuration).SetEase(Ease.InQuad));
+                    slowMoUid = Guid.NewGuid();
+                    slowMoSequence.id = slowMoUid;
+                }
+            }
+            if (Input.GetKey(inputManager.slowMoKey) && currentSlowMoCooldown <= 0)
+            {
+                if (currentSlowMoDuration > 0)
+                {
+                    currentSlowMoDuration -= Time.deltaTime;
+                }
+                else
+                {
+                    isSlowMoOn = false;
+                    currentSlowMoCooldown = soController.slowMoCooldown;
+                    DOTween.Kill(slowMoUid);
+                    slowMoSequence = null;
+                    Time.timeScale = 1;
+                    Time.fixedDeltaTime = 0.02f;
+                }
+            }
+            if (Input.GetKeyUp(inputManager.slowMoKey) && currentSlowMoCooldown <= 0)
+            {
+                isSlowMoOn = false;
+                currentSlowMoCooldown = soController.slowMoCooldown;
+                DOTween.Kill(slowMoUid);
+                slowMoSequence = null;
+                DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
+                DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
+            }
+            
+            if (currentSlowMoCooldown > 0)
+            {
+                currentSlowMoCooldown -= Time.deltaTime;
+            }
+        }
+
         private void RevealingDash()
         {
             if (isRevealingDashHitting)
@@ -340,14 +399,13 @@ namespace Controller
                     //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobClose>().currentHealth);
                 }
 
-                currentSlowMoSpeed = 1f;
                 isRevealingDashHitting = false;
             }
         }
 
         private void RevealingDashStart()
         {
-            if (Input.GetKeyDown(inputManager.slowMoKey) && !isRevealingDashHitting && revealingDashTimerCount <= 0)
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashHitting && isSlowMoOn)
             {
                 var enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero,
@@ -363,16 +421,9 @@ namespace Controller
                     revealingDashAimedEnemy = enemy.collider.gameObject;
                     revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
                     isRevealingDashHitting = true;
-                    revealingDashTimerCount = soController.revealingDashTimer;
-                    currentSlowMoSpeed = soController.revealingDashSlowTimeSpeed;
-                    // DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
-                    // DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
+                    DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
                     break;
                 }
-            }
-            else if (revealingDashTimerCount > 0)
-            {
-                revealingDashTimerCount -= Time.deltaTime;
             }
         }
 

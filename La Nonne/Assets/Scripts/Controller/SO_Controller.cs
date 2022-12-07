@@ -42,11 +42,15 @@ namespace Controller
 
         [Header("Revealing Dash")]
         [SerializeField] public int revealingDashDamage;
-        [SerializeField] public float revealingDashTimer;
         [SerializeField] public float revealingDashStunDuration;
         [SerializeField] public float revealingDashToleranceDistance;
         [SerializeField] public float revealingDashHitSpeed;
         [SerializeField] public float revealingDashDetectionRadius;
         [SerializeField] public float revealingDashSlowTimeSpeed;
+        
+        [Header("Slow Motion")]
+        [SerializeField] public float slowMoCooldown;
+        [SerializeField] public float slowMoDuration;
+        [SerializeField] public float slowMoSpeed;
     }
 }
