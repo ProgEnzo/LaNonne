@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AI.Boss;
+using DG.Tweening;
 using Pathfinding;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class WakeUpBoss : MonoBehaviour
     public BossStateManager boss;
     public AIDestinationSetter bossAIDestinationSetter;
     public GameObject healthBarBoss;
+    private Image hpBossBarImage;
 
     void Start()
     {
@@ -25,15 +27,10 @@ public class WakeUpBoss : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
+            healthBarBoss.SetActive(true);
             boss.enabled = true;
             bossAIDestinationSetter.enabled = true;
-            healthBarBoss.SetActive(true);
+            Destroy(gameObject);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

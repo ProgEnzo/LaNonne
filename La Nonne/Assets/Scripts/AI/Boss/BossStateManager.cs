@@ -153,7 +153,6 @@ namespace AI.Boss
             //HEALTH
             currentHealth = maxHealth;
             currentDamageMultiplier = 1f;
-
             hpBossBar.fillAmount = 0f;
             hpBossBar.DOFillAmount((float)currentHealth / maxHealth, 1f);
 
@@ -258,7 +257,7 @@ namespace AI.Boss
             if (takingDamage)
             {
                 currentHealth -= (int)(damage * currentDamageMultiplier);
-                hpBossBar.fillAmount -= (float)currentHealth / maxHealth;
+                hpBossBar.DOFillAmount((float)currentHealth / maxHealth, 0.1f);
 
                 currentDamageTaken += damage;
                 
