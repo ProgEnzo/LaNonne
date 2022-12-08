@@ -137,7 +137,7 @@ namespace Controller
 
         public void Update()
         {
-            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f)
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isSlowMoOn)
             {
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
@@ -151,6 +151,7 @@ namespace Controller
             {
                 timerDash -= Time.deltaTime;
             }
+            Debug.Log(Time.fixedDeltaTime);
             
             SlowMoManager();
             RevealingDashStart();
@@ -193,7 +194,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.left * (speed * 1)); // for movement
+                mRigidbody.AddForce(Vector2.left * speed / Time.timeScale); // for movement
             }
 
             if (Input.GetKey(inputManager.rightMoveKey)) // for input
@@ -206,7 +207,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.right * (speed * 1)); // for movement
+                mRigidbody.AddForce(Vector2.right * speed / Time.timeScale); // for movement
             }
 
             if (Input.GetKey(inputManager.upMoveKey)) // for input
@@ -221,7 +222,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 1); // for animation
                     }
                 }
-                mRigidbody.AddForce(Vector2.up * (speed * 1)); // for movement
+                mRigidbody.AddForce(Vector2.up * speed / Time.timeScale); // for movement
             }
 
             if (Input.GetKey(inputManager.downMoveKey)) // for input
@@ -236,7 +237,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 0); // for movement
                     }
                 }
-                mRigidbody.AddForce(Vector2.down * (speed * 1)); // for movement
+                mRigidbody.AddForce(Vector2.down * speed / Time.timeScale); // for movement
             }
 
             if (!currentAnimPrefabAnimator.GetBool(IsAttacking)) // all for movement
@@ -362,7 +363,7 @@ namespace Controller
                     Time.fixedDeltaTime = 0.02f;
                 }
             }
-            if (Input.GetKeyUp(inputManager.slowMoKey) && currentSlowMoCooldown <= 0)
+            if (Input.GetKeyUp(inputManager.slowMoKey) && currentSlowMoCooldown <= 0 && isSlowMoOn)
             {
                 isSlowMoOn = false;
                 currentSlowMoCooldown = soController.slowMoCooldown;
