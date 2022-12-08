@@ -52,5 +52,6 @@ namespace Controller
         [SerializeField] public float slowMoCooldown;
         [SerializeField] public float slowMoDuration;
         [SerializeField] public float slowMoSpeed;
+        [SerializeField] public float slowMoPlayerSpeed;
     }
 }
