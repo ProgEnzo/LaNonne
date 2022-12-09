@@ -88,6 +88,8 @@ public class RoomContentGenerator : MonoBehaviour
         ModifyBossRoom();
         ModifyShopsRoom();
 
+        #region teamWork avec le bro
+
         int maxPosX = 0; //j'aime ca, J'aime Yalentin
         int minPosX = 0;
         int maxPosY = 0;
@@ -106,6 +108,8 @@ public class RoomContentGenerator : MonoBehaviour
         
         Pathfinding.GridGraph gg = AstarPath.active.data.gridGraph;
         gg.center = new Vector3(gridPosX, gridPosY, 0);
+
+        #endregion
         
         StartCoroutine(Scan());
 
