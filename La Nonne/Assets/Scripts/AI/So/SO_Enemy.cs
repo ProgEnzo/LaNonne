@@ -16,5 +16,8 @@ namespace AI.So
         
         [Header("EP Values")]
         public int numberOfEp;
+
+        [Header("Score Values")] 
+        public int scorePoint;
     }
 }

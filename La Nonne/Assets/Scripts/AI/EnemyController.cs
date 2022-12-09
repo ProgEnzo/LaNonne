@@ -14,6 +14,7 @@ namespace AI
     {
         protected PlayerController playerController;
         [SerializeField] internal SO_Enemy soEnemy;
+        public ScoreManager scoreManager;
         internal float currentHealth;
         internal float currentAiPathSpeed;
         internal float currentVelocitySpeed;
@@ -38,6 +39,7 @@ namespace AI
             rb = GetComponent<Rigidbody2D>();
             playerController = PlayerController.instance;
             effectManager = EffectManager.instance;
+            scoreManager = ScoreManager.instance;
             currentHealth = soEnemy.maxHealth;
             currentAiPathSpeed = soEnemy.aiPathBasicSpeed;
             currentVelocitySpeed = soEnemy.velocityBasicSpeed;
@@ -88,6 +90,8 @@ namespace AI
             if (currentHealth <= 0)
             {
                 EpDrop((int)(soEnemy.numberOfEp * currentEpDropMultiplier));
+                
+                scoreManager.AddScore(soEnemy.scorePoint);
 
                 Destroy(gameObject); //Dies            
             }
