@@ -74,7 +74,7 @@ public class RoomContentGenerator : MonoBehaviour
         
     private IEnumerator Scan()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.01f);
         AstarPath.active.Scan();
     }
     
@@ -100,6 +100,8 @@ public class RoomContentGenerator : MonoBehaviour
         ModifyHubRoom();
         ModifyBossRoom();
         ModifyShopsRoom();
+        
+        StartCoroutine(Scan());
 
         foreach (var roomPos in copiedDico.Keys)
         {
@@ -109,10 +111,7 @@ public class RoomContentGenerator : MonoBehaviour
             PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
             PopulateFloorNearWalls(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y));
             PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y)); //appeler ca dans la fonction qui fait aparaitre (playerRoom, etc....) les salles fait que l'on peux moduler pour chaque salle les objets qui apparaisse sur le sol
-            
         }
-        
-        StartCoroutine(Scan());
 
         foreach (GameObject item in spawnedObjects)
         {
