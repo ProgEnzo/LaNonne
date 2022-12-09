@@ -71,10 +71,10 @@ public class RoomContentGenerator : MonoBehaviour
         private Vector2 currentDistance;*/
 
         #endregion
-
-        private IEnumerator Scan()
+        
+    private IEnumerator Scan()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.1f);
         AstarPath.active.Scan();
     }
     
