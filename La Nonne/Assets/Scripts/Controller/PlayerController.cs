@@ -41,6 +41,7 @@ namespace Controller
         internal bool isSlowMoOn;
         private float currentSlowMoCooldown;
         private float currentSlowMoDuration;
+        private float currentSlowMoPlayerSpeedFactor;
         private Sequence slowMoSequence;
         private Guid slowMoUid;
 
@@ -60,6 +61,7 @@ namespace Controller
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+        private static readonly int SlowMoSpeed = Animator.StringToHash("slowMoSpeed");
         private bool isMoving;
         private float playerScale;
         internal readonly List<GameObject> animPrefabs = new();
@@ -128,6 +130,7 @@ namespace Controller
             chrono = GameObject.Find("Chrono").GetComponent<Image>();
             chrono.fillAmount = 1f;
             currentEp = 0;
+            currentSlowMoPlayerSpeedFactor = 1f;
         }
 
         private void OnDestroy()
@@ -151,11 +154,11 @@ namespace Controller
             {
                 timerDash -= Time.deltaTime;
             }
-            Debug.Log(Time.fixedDeltaTime);
             
             SlowMoManager();
             RevealingDashStart();
             LoadMenu();
+            currentAnimPrefabAnimator.SetFloat(SlowMoSpeed, currentSlowMoPlayerSpeedFactor);
             chrono.fillAmount = 1 - currentSlowMoCooldown / soController.slowMoCooldown;
         }
         
@@ -194,7 +197,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.left * speed / Time.timeScale); // for movement
+                mRigidbody.AddForce(Vector2.left * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
             }
 
             if (Input.GetKey(inputManager.rightMoveKey)) // for input
@@ -207,7 +210,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.right * speed / Time.timeScale); // for movement
+                mRigidbody.AddForce(Vector2.right * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
             }
 
             if (Input.GetKey(inputManager.upMoveKey)) // for input
@@ -222,7 +225,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 1); // for animation
                     }
                 }
-                mRigidbody.AddForce(Vector2.up * speed / Time.timeScale); // for movement
+                mRigidbody.AddForce(Vector2.up * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
             }
 
             if (Input.GetKey(inputManager.downMoveKey)) // for input
@@ -237,7 +240,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 0); // for movement
                     }
                 }
-                mRigidbody.AddForce(Vector2.down * speed / Time.timeScale); // for movement
+                mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
             }
 
             if (!currentAnimPrefabAnimator.GetBool(IsAttacking)) // all for movement
@@ -333,7 +336,7 @@ namespace Controller
             {
                 isSlowMoOn = true;
                 currentSlowMoDuration = soController.slowMoDuration;
-                // currentSlowMoSpeed = soController.slowMoSpeed;
+                currentSlowMoPlayerSpeedFactor = soController.slowMoPlayerSpeedFactor;
                 Time.timeScale = 1 / soController.slowMoSpeed;
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
                 if (slowMoSequence == null)
@@ -342,7 +345,9 @@ namespace Controller
                     slowMoSequence
                         .Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, currentSlowMoDuration)
                             .SetEase(Ease.InQuad)).Append(DOTween.To(() => Time.fixedDeltaTime,
-                            x => Time.fixedDeltaTime = x, 0.02f, currentSlowMoDuration).SetEase(Ease.InQuad));
+                            x => Time.fixedDeltaTime = x, 0.02f, currentSlowMoDuration).SetEase(Ease.InQuad))
+                        .Append(DOTween.To(() => currentSlowMoPlayerSpeedFactor, x => currentSlowMoPlayerSpeedFactor = x,
+                            1, currentSlowMoDuration).SetEase(Ease.InQuad));
                     slowMoUid = Guid.NewGuid();
                     slowMoSequence.id = slowMoUid;
                 }
@@ -359,6 +364,7 @@ namespace Controller
                     currentSlowMoCooldown = soController.slowMoCooldown;
                     DOTween.Kill(slowMoUid);
                     slowMoSequence = null;
+                    currentSlowMoPlayerSpeedFactor = 1f;
                     Time.timeScale = 1;
                     Time.fixedDeltaTime = 0.02f;
                 }
@@ -367,10 +373,12 @@ namespace Controller
             {
                 isSlowMoOn = false;
                 currentSlowMoCooldown = soController.slowMoCooldown;
+                currentSlowMoPlayerSpeedFactor = 1f;
                 DOTween.Kill(slowMoUid);
                 slowMoSequence = null;
                 DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
                 DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
+                DOTween.To(() => currentSlowMoPlayerSpeedFactor, x => currentSlowMoPlayerSpeedFactor = x, 1, 0.01f);
             }
             
             if (currentSlowMoCooldown > 0)
