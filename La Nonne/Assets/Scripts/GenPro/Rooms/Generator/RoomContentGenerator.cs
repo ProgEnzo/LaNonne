@@ -102,6 +102,9 @@ public class RoomContentGenerator : MonoBehaviour
         ModifyShopsRoom();
         
         StartCoroutine(Scan());
+        
+        Pathfinding.GridGraph gg = AstarPath.active.data.gridGraph;
+        gg.center = new Vector3(enemyRoom[4].roomCenter.x, enemyRoom[4].roomCenter.y, 0);
 
         foreach (var roomPos in copiedDico.Keys)
         {
