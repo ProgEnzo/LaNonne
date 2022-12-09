@@ -28,8 +28,7 @@ public class RoomContentGenerator : MonoBehaviour
         
         [SerializeField, Space, Header ("Dijkstra")]
         private GraphTest graphTest;
-        public Vector3 MedScanPos;
-        
+
         [Header("Transforms")]
         public Transform itemParent;
         
@@ -58,24 +57,11 @@ public class RoomContentGenerator : MonoBehaviour
         [SerializeField] private List<GameObject> floorCusto = new();
         [SerializeField] private List<GameObject> floorNearWallsCusto = new();
 
-        /*[SerializeField, Space, Header("PostProcessing")] //mettre ces variables dans le scripts du player
-        private Volume volume;
-        private ChromaticAberration chromaticAberration;
-        private float minCA = 5f;
-        private float maxCA = 15f; //Lerp the value between those 2 en fonction de la distance player/boss, donc dans un update
-
-        [SerializeField, Space, Header("Instances")]
-        private PlayerController playerPosition;
-        private BossStateManager bossPosition;
-
-        [SerializeField, Header("Distances")] 
-        private Vector2 currentDistance;*/
-
         #endregion
         
     private IEnumerator Scan()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.01f);
         AstarPath.active.Scan();
     }
     
@@ -101,13 +87,28 @@ public class RoomContentGenerator : MonoBehaviour
         ModifyHubRoom();
         ModifyBossRoom();
         ModifyShopsRoom();
+
+        int maxPosX = 0; //j'aime ca, J'aime Yalentin
+        int minPosX = 0;
+        int maxPosY = 0;
+        int minPosY = 0;
+
+        foreach (var roomData in dungeonData.roomsDictionary.Keys)
+        {
+            maxPosX = Mathf.Max(maxPosX, roomData.x);
+            minPosX = Mathf.Min(minPosX, roomData.x);
+            maxPosY = Mathf.Max(maxPosY, roomData.y);
+            minPosY = Mathf.Min(minPosY, roomData.y);
+        }
+        
+        int gridPosX = (minPosX + maxPosX) / 2;
+        int gridPosY = (minPosY + maxPosY) / 2;
+        
+        Pathfinding.GridGraph gg = AstarPath.active.data.gridGraph;
+        gg.center = new Vector3(gridPosX, gridPosY, 0);
         
         StartCoroutine(Scan());
-        
-        MedScanPos = new Vector3(enemyRoom[2].roomCenter.x - enemyRoom[4].roomCenter.x, enemyRoom[2].roomCenter.x - enemyRoom[4].roomCenter.x, 0);
-        Pathfinding.GridGraph gg = AstarPath.active.data.gridGraph;
-        gg.center = new Vector3(MedScanPos.x, MedScanPos.y, 0);
-        
+
         foreach (var roomPos in copiedDico.Keys)
         {
             PopulateWallUp(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallUp)); //maybe les appeler que dans mes salle pour que ca n'apparaisse que sur les murs de certaines salles
