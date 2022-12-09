@@ -27,9 +27,7 @@ namespace Manager
                 instance = this;
             }
         }
-
-        #region Int
-
+        
         internal void AnimationControllerInt(List<GameObject> animPrefabs, ref GameObject currentAnimPrefab, ref Animator currentAnimPrefabAnimator, int parameterToChange, int value)
         {
             if (parameterToChange  == DirectionState || parameterToChange == MovingState)
@@ -49,6 +47,13 @@ namespace Manager
                     StartCoroutine(CanChangeCoroutine(currentAnimPrefabAnimator));
                 }
             }
+        }
+
+        private static IEnumerator CanChangeCoroutine(Animator currentAnimPrefabAnimator)
+        {
+            currentAnimPrefabAnimator.SetBool(CanChange, true);
+            yield return new WaitForNextFrameUnit();
+            currentAnimPrefabAnimator.SetBool(CanChange, false);
         }
 
         private static void AnimationManagerInt(IReadOnlyList<GameObject> animPrefabs, out GameObject currentAnimPrefab, ref Animator currentAnimPrefabAnimator, int parameterToChange, int value)
@@ -76,9 +81,29 @@ namespace Manager
             }
         }
 
-        #endregion
+        private static void AnimationManagerSwitch(IReadOnlyList<GameObject> animPrefabs, out GameObject currentAnimPrefab, out Animator currentAnimPrefabAnimator, int directionState, int movingState, bool isAttacking)
+        {
+            currentAnimPrefab = (directionState, movingState, isAttacking) switch
+            {
+                (0, 0, false) => animPrefabs[0],
+                (0, 1, false) => animPrefabs[1],
+                (0, >= 0, true) => animPrefabs[2],
+                (1, 0, false) => animPrefabs[3],
+                (1, 1, false) => animPrefabs[4],
+                (1, >= 0, true) => animPrefabs[5],
+                (2, 0, false) => animPrefabs[6],
+                (2, 1, false) => animPrefabs[7],
+                (2, >= 0, true) => animPrefabs[8],
+                _ => animPrefabs[0]
+            };
 
-        #region Bool
+            currentAnimPrefab.SetActive(true);
+            currentAnimPrefabAnimator = currentAnimPrefab.GetComponent<Animator>();
+            
+            currentAnimPrefabAnimator.SetInteger(DirectionState, directionState);
+            currentAnimPrefabAnimator.SetInteger(MovingState, movingState);
+            currentAnimPrefabAnimator.SetBool(IsAttacking, isAttacking);
+        }
         
         internal void AnimationControllerBool(List<GameObject> animPrefabs, ref GameObject currentAnimPrefab, ref Animator currentAnimPrefabAnimator, int parameterToChange)
         {
@@ -118,39 +143,6 @@ namespace Manager
             {
                 prefab.SetActive(false);
             }
-        }
-
-        #endregion
-
-        private static IEnumerator CanChangeCoroutine(Animator currentAnimPrefabAnimator)
-        {
-            currentAnimPrefabAnimator.SetBool(CanChange, true);
-            yield return new WaitForNextFrameUnit();
-            currentAnimPrefabAnimator.SetBool(CanChange, false);
-        }
-
-        private static void AnimationManagerSwitch(IReadOnlyList<GameObject> animPrefabs, out GameObject currentAnimPrefab, out Animator currentAnimPrefabAnimator, int directionState, int movingState, bool isAttacking)
-        {
-            currentAnimPrefab = (directionState, movingState, isAttacking) switch
-            {
-                (0, 0, false) => animPrefabs[0],
-                (0, 1, false) => animPrefabs[1],
-                (0, >= 0, true) => animPrefabs[2],
-                (1, 0, false) => animPrefabs[3],
-                (1, 1, false) => animPrefabs[4],
-                (1, >= 0, true) => animPrefabs[5],
-                (2, 0, false) => animPrefabs[6],
-                (2, 1, false) => animPrefabs[7],
-                (2, >= 0, true) => animPrefabs[8],
-                _ => animPrefabs[0]
-            };
-
-            currentAnimPrefab.SetActive(true);
-            currentAnimPrefabAnimator = currentAnimPrefab.GetComponent<Animator>();
-            
-            currentAnimPrefabAnimator.SetInteger(DirectionState, directionState);
-            currentAnimPrefabAnimator.SetInteger(MovingState, movingState);
-            currentAnimPrefabAnimator.SetBool(IsAttacking, isAttacking);
         }
     }
 }
