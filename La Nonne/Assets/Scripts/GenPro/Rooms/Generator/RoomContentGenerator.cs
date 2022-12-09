@@ -28,6 +28,7 @@ public class RoomContentGenerator : MonoBehaviour
         
         [SerializeField, Space, Header ("Dijkstra")]
         private GraphTest graphTest;
+        public Vector3 MedScanPos;
         
         [Header("Transforms")]
         public Transform itemParent;
@@ -74,7 +75,7 @@ public class RoomContentGenerator : MonoBehaviour
         
     private IEnumerator Scan()
     {
-        yield return new WaitForSeconds(0.01f);
+        yield return new WaitForSeconds(0.3f);
         AstarPath.active.Scan();
     }
     
@@ -103,9 +104,10 @@ public class RoomContentGenerator : MonoBehaviour
         
         StartCoroutine(Scan());
         
+        MedScanPos = new Vector3(enemyRoom[2].roomCenter.x - enemyRoom[4].roomCenter.x, enemyRoom[2].roomCenter.x - enemyRoom[4].roomCenter.x, 0);
         Pathfinding.GridGraph gg = AstarPath.active.data.gridGraph;
-        gg.center = new Vector3(enemyRoom[4].roomCenter.x, enemyRoom[4].roomCenter.y, 0);
-
+        gg.center = new Vector3(MedScanPos.x, MedScanPos.y, 0);
+        
         foreach (var roomPos in copiedDico.Keys)
         {
             PopulateWallUp(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallUp)); //maybe les appeler que dans mes salle pour que ca n'apparaisse que sur les murs de certaines salles
