@@ -88,7 +88,7 @@ public class RoomContentGenerator : MonoBehaviour
         ModifyBossRoom();
         ModifyShopsRoom();
 
-        #region teamWork avec le bro
+        #region teamWork avec le bro A* fonctionne bien
 
         int maxPosX = 0; //j'aime ca, J'aime Yalentin
         int minPosX = 0;
@@ -113,7 +113,7 @@ public class RoomContentGenerator : MonoBehaviour
         
         StartCoroutine(Scan());
 
-        foreach (var roomPos in copiedDico.Keys)
+        foreach (var roomPos in copiedDico.Keys)  //pas besoin de ca si je le fais par salle
         {
             PopulateWallUp(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallUp)); //maybe les appeler que dans mes salle pour que ca n'apparaisse que sur les murs de certaines salles
             PopulateWallDown(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallDown));

@@ -184,12 +184,12 @@ public class TilemapVisualizer : MonoBehaviour
                 var tileXY = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
 
 
-                if (tile == floorTile && tileX == floorTile && tileY == floorTile && tileXY == floorTile) //pas instancier dans les couloirs 
+                if (tile == wallBottom && tileX == wallBottom && tileY == floorTile && tileXY == floorTile ||
+                    tile == wallSideLeft && tileX == floorTile && tileY == wallSideLeft && tileXY == floorTile ||
+                    tile == wallSideRight && tileX == floorTile && tileY == wallSideRight && tileXY == floorTile ||
+                    tile == wallTop && tileX == wallTop && tileY == floorTile && tileXY == floorTile) //pas instancier dans les couloirs 
                 {
-                    /*if (floorTile == wallBottom || floorTile == wallInnerCornerDownLeft || floorTile == wallInnerCornerDownRight || floorTile == wallTop || floorTile == wallSideRight || floorTile == wallSideLeft)
-                    {
-                        tileReturn.Add(new Vector2Int(cellX +1, cellY +1));
-                    }*/
+                    tileReturn.Add(new Vector2Int(cellX, cellY));
                 }
 
             }
