@@ -55,12 +55,6 @@ public class UIManager : MonoBehaviour
         {
             pauseMenu.SetActive(true);
             Time.timeScale = 0;
-            
-            /*if(Input.GetKeyDown(KeyCode.Escape) && pauseMenu == true)
-            {
-                pauseMenu.SetActive(false);
-                Time.timeScale = 1;
-            }*/
         }
     }
 
