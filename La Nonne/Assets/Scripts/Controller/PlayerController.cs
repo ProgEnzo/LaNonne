@@ -179,6 +179,7 @@ namespace Controller
         private void ManageMove()
         {
             var speed = timerDash <= 0 ? soController.moveSpeed : soController.dashSpeed; // for movement
+            var movingState = timerDash <= 0 ? 2 : 3; // for animation
 
             var nbInputs = (Input.GetKey(inputManager.upMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.leftMoveKey) ? 1 : 0) +
                            (Input.GetKey(inputManager.downMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.rightMoveKey) ? 1 : 0); // for movement
@@ -243,34 +244,51 @@ namespace Controller
                 mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
             }
 
-            if (currentAnimPrefabAnimator.GetInteger(AttackState) == 0) // all for movement
+            if (!isRevealingDashHitting)
             {
-                if (isMoving)
+                if (currentAnimPrefabAnimator.GetInteger(AttackState) == 0) // all for animation
                 {
-                    if (currentAnimPrefabAnimator.GetInteger(MovingState) != 2)
+                    if (isMoving)
                     {
-                        animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 2);
+                        if (currentAnimPrefabAnimator.GetInteger(MovingState) != movingState)
+                        {
+                            animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, movingState);
+                        }
+                        else
+                        {
+                            if (animParametersToChange != (0, 0))
+                            {
+                                animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, animParametersToChange.value);
+                            }
+                        }
                     }
                     else
                     {
-                        if (animParametersToChange != (0, 0))
+                        if (currentAnimPrefabAnimator.GetInteger(MovingState) != 1)
                         {
-                            animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, animParametersToChange.value);
+                            animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 1);
+                        }
+                        else
+                        {
+                            if (animParametersToChange != (0, 0))
+                            {
+                                animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, animParametersToChange.value);
+                            }
                         }
                     }
                 }
+            }
+            else
+            {
+                if (currentAnimPrefabAnimator.GetInteger(MovingState) != 3)
+                {
+                    animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 3);
+                }
                 else
                 {
-                    if (currentAnimPrefabAnimator.GetInteger(MovingState) != 1)
+                    if (animParametersToChange != (0, 0))
                     {
-                        animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 1);
-                    }
-                    else
-                    {
-                        if (animParametersToChange != (0, 0))
-                        {
-                            animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, animParametersToChange.value);
-                        }
+                        animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, 3);
                     }
                 }
             }
