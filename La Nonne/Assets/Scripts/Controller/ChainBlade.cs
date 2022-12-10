@@ -16,7 +16,8 @@ namespace Controller
         private Quaternion finalRotation;
         private Camera camera1;
         private PlayerController playerController;
-        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+        private static readonly int DirectionState = Animator.StringToHash("directionState");
+        private static readonly int AttackState = Animator.StringToHash("attackState");
         private int attackDirectionState;
         private float playerScale;
         private float localStateMult;
@@ -99,7 +100,8 @@ namespace Controller
             playerTransform.localScale = new Vector3(playerScale * localStateMult,
                 playerLocalScale.y, playerLocalScale.z);
             playerController.transform.GetChild(0).localScale = new Vector3(1, 1 * localStateMult, 1);
-            animationManager.AnimationControllerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, attackDirectionState, IsAttacking);
+            animationManager.AnimationControllerPlayer(DirectionState, attackDirectionState);
+            animationManager.AnimationControllerPlayer(AttackState, 4);
             initialRotation = newRotation * Quaternion.Euler(0, 0, soController.inquisitorialChainHitAngle / 2);
             finalRotation = newRotation * Quaternion.Euler(0, 0, -soController.inquisitorialChainHitAngle / 2);
             transform.rotation = initialRotation;
@@ -120,8 +122,7 @@ namespace Controller
                     isHitting = false;
                     transform.GetChild(0).gameObject.SetActive(false);
                     transform.GetChild(1).gameObject.SetActive(false);
-                    AnimationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, attackDirectionState, IsAttacking, false);
-                    playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
+                    animationManager.AnimationControllerPlayer(AttackState, 0);
                 }
             }
         }

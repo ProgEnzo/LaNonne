@@ -22,6 +22,8 @@ namespace Manager
         [SerializeField] internal KeyCode inquisitorialChainKey;
         [SerializeField] internal KeyCode revealingDashKey;
         
+        [Header("Map Inputs")]
+        [SerializeField] internal KeyCode mapKey;
         private void Awake()
         {
             if (instance != null)
