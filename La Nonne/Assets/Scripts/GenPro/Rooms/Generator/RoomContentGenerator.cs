@@ -119,8 +119,9 @@ public class RoomContentGenerator : MonoBehaviour
             PopulateWallDown(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallDown));
             PopulateWallRight(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallRight));
             PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
-            PopulateFloorNearWalls(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y));
+            
             PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y)); //appeler ca dans la fonction qui fait aparaitre (playerRoom, etc....) les salles fait que l'on peux moduler pour chaque salle les objets qui apparaisse sur le sol
+            PopulateFloorNearWalls(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y));
         }
 
         foreach (GameObject item in spawnedObjects)
@@ -259,20 +260,20 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorPos)
         {
-            if (Random.Range(0, 100) < 25)
+            //if (Random.Range(0, 100) < 25)
             {
                 GameObject item = Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
             }
         }
     }
     
-    private void PopulateFloorNearWalls (List<Vector2Int> floorPos)
+    private void PopulateFloorNearWalls (List<Vector2Int> floorNearWallsPos)
     {
-        foreach (var pos in floorPos)
+        foreach (var pos in floorNearWallsPos)
         {
             //if (Random.Range(0, 100) < 15)
             {
-                GameObject item = Instantiate(floorNearWallsCusto[Random.Range(0, floorNearWallsCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+                GameObject item = Instantiate(floorNearWallsCusto[Random.Range(0, floorNearWallsCusto.Count)], new Vector3(pos.x, pos.y, 0), Quaternion.identity);
             }
         }
     }

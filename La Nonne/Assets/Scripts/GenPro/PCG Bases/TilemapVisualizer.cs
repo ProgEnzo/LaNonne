@@ -178,16 +178,33 @@ public class TilemapVisualizer : MonoBehaviour
                 var cellX = middleX - count / 2 + i;
                 var cellY = middleY - count / 2 + j;
                 
-                var tile = floorTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
+                var tile = floorTilemap.GetTile(new Vector3Int(cellX, cellY, 0)); 
+                var wallTile = wallTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
+                
                 var tileX = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
+                var wallTileX = wallTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
+                var tileXBis = floorTilemap.GetTile(new Vector3Int(cellX -1, cellY, 0));
+                var wallTileXBis = wallTilemap.GetTile(new Vector3Int(cellX -1, cellY, 0));
+                
                 var tileY = floorTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
+                var wallTileY = wallTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
+                var tileYBis = floorTilemap.GetTile(new Vector3Int(cellX, cellY +1, 0));
+                var wallTileYBis = wallTilemap.GetTile(new Vector3Int(cellX, cellY +1, 0));
+                
                 var tileXY = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
+                var wallTileXY = wallTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
+                var tileXYBis = floorTilemap.GetTile(new Vector3Int(cellX -1, cellY +1, 0));
+                var wallTileXYBis = wallTilemap.GetTile(new Vector3Int(cellX -1, cellY +1, 0));
 
 
-                if (tile == wallBottom && tileX == wallBottom && tileY == floorTile && tileXY == floorTile ||
-                    tile == wallSideLeft && tileX == floorTile && tileY == wallSideLeft && tileXY == floorTile ||
-                    tile == wallSideRight && tileX == floorTile && tileY == wallSideRight && tileXY == floorTile ||
-                    tile == wallTop && tileX == wallTop && tileY == floorTile && tileXY == floorTile) //pas instancier dans les couloirs 
+                if (wallTile == wallBottom && wallTileX == wallBottom && tileYBis == floorTile && tileXYBis == floorTile ||
+                    wallTile == wallBottom && wallTileX == wallSideRight && tileYBis == floorTile && tileXYBis == floorTile ||
+                    wallTile == wallSideLeft && tileX == floorTile && wallTileY == wallSideLeft && tileXY == floorTile ||
+                    wallTile == wallSideLeft && tileX == floorTile && wallTileY == wallBottom && tileXY == floorTile||
+                    wallTile == wallSideRight && tileXBis == floorTile && wallTileY == wallSideRight && tileXYBis == floorTile ||
+                    wallTile == wallSideRight && tileXBis == floorTile && wallTileY == wallBottom && tileXYBis == floorTile ||
+                    wallTile == wallTop && wallTileX == wallTop && tileY == floorTile && tileXY == floorTile||
+                    wallTile == wallTop && wallTileX == wallSideRight && tileY == wallSideLeft && tileXY == floorTile) //faire toutes les possibilités et ajouté un offset pour les objets 
                 {
                     tileReturn.Add(new Vector2Int(cellX, cellY));
                 }
