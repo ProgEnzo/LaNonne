@@ -56,6 +56,10 @@ public class RoomContentGenerator : MonoBehaviour
         [SerializeField] private List<GameObject> wallLeftCusto = new();
         [SerializeField] private List<GameObject> floorCusto = new();
         [SerializeField] private List<GameObject> floorNearWallsCusto = new();
+        [SerializeField] private List<GameObject> floorNearWallsUpCusto = new();
+        [SerializeField] private List<GameObject> floorNearWallsDownCusto = new();
+        [SerializeField] private List<GameObject> floorNearWallsRightCusto = new();
+        [SerializeField] private List<GameObject> floorNearWallsLeftCusto = new();
 
         #endregion
         
@@ -121,7 +125,13 @@ public class RoomContentGenerator : MonoBehaviour
             PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
             
             PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y)); //appeler ca dans la fonction qui fait aparaitre (playerRoom, etc....) les salles fait que l'on peux moduler pour chaque salle les objets qui apparaisse sur le sol
-            PopulateFloorNearWalls(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y));
+            
+            //PopulateFloorNearWalls(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y));
+            
+            PopulateFloorNearWallUp(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallUp));
+            PopulateFloorNearWallRight(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallRight));
+            PopulateFloorNearWallDown(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallDown));
+            PopulateFloorNearWallLeft(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallLeft));
         }
 
         foreach (GameObject item in spawnedObjects)
@@ -267,13 +277,57 @@ public class RoomContentGenerator : MonoBehaviour
         }
     }
     
-    private void PopulateFloorNearWalls (List<Vector2Int> floorNearWallsPos)
+    /*private void PopulateFloorNearWalls (List<Vector2Int> floorNearWallsPos)
     {
         foreach (var pos in floorNearWallsPos)
         {
             //if (Random.Range(0, 100) < 15)
             {
                 GameObject item = Instantiate(floorNearWallsCusto[Random.Range(0, floorNearWallsCusto.Count)], new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+            }
+        }
+    }*/
+
+    private void PopulateFloorNearWallUp(List<Vector2Int> floorNearWallsUpPos)
+    {
+        foreach (var pos in floorNearWallsUpPos)
+        {
+            //if (Random.Range(0, 100) < 15)
+            {
+                GameObject item = Instantiate(floorNearWallsUpCusto[Random.Range(0, floorNearWallsUpCusto.Count)], new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+            }
+        }
+    }
+    
+    private void PopulateFloorNearWallDown(List<Vector2Int> floorNearWallsDownPos)
+    {
+        foreach (var pos in floorNearWallsDownPos)
+        {
+            //if (Random.Range(0, 100) < 15)
+            {
+                GameObject item = Instantiate(floorNearWallsDownCusto[Random.Range(0, floorNearWallsDownCusto.Count)], new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+            }
+        }
+    }
+    
+    private void PopulateFloorNearWallRight(List<Vector2Int> floorNearWallsRightPos)
+    {
+        foreach (var pos in floorNearWallsRightPos)
+        {
+            //if (Random.Range(0, 100) < 15)
+            {
+                GameObject item = Instantiate(floorNearWallsRightCusto[Random.Range(0, floorNearWallsRightCusto.Count)], new Vector3(pos.x, pos.y, 0), Quaternion.identity);
+            }
+        }
+    }
+    
+    private void PopulateFloorNearWallLeft(List<Vector2Int> floorNearWallsLeftPos)
+    {
+        foreach (var pos in floorNearWallsLeftPos)
+        {
+            //if (Random.Range(0, 100) < 15)
+            {
+                GameObject item = Instantiate(floorNearWallsLeftCusto[Random.Range(0, floorNearWallsLeftCusto.Count)], new Vector3(pos.x, pos.y, 0), Quaternion.identity);
             }
         }
     }

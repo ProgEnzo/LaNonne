@@ -102,5 +102,9 @@ public enum PlacementType
     WallUp,
     WallDown,
     wallRight,
-    wallLeft
+    wallLeft,
+    nearWallUp,
+    nearWallDown,
+    nearWallRight,
+    nearWallLeft
 }
