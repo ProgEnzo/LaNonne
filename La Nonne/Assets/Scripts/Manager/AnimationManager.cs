@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Linq;
 using Controller;
 using Core.Scripts.Utils;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Manager
