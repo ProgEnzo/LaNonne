@@ -64,8 +64,10 @@ public class RoomContentGenerator : MonoBehaviour
         
     private IEnumerator Scan()
     {
-        yield return new WaitForSeconds(0.01f);
+        yield return null;
         AstarPath.active.Scan();
+        yield return new WaitForSeconds(0.5f);
+        LoadingScreen.instance.HideLoadingScreen();
     }
     
     Dictionary<Vector2Int, HashSet<Vector2Int>> copiedDico;
@@ -277,7 +279,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorNearWallsUpPos)
         {
-            if (Random.Range(0, 100) < 100)
+            //if (Random.Range(0, 100) < 100)
             {
                 GameObject item = Instantiate(floorNearWallsUpCusto[Random.Range(0, floorNearWallsUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y, 0), Quaternion.identity);
             }

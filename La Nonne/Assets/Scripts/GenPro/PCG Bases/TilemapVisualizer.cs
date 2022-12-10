@@ -171,9 +171,9 @@ public class TilemapVisualizer : MonoBehaviour
         
         List<Vector2Int> tileReturn = new ();
 
-        for (int i = 0; i < count; i+=2)
+        for (int i = 0; i < count; i+=1)
         {
-            for (int j = 0; j < count; j+=2)
+            for (int j = 0; j < count; j+=1)
             {
                 var cellX = middleX - count / 2 + i;
                 var cellY = middleY - count / 2 + j;
@@ -199,29 +199,25 @@ public class TilemapVisualizer : MonoBehaviour
                 switch (typeWanted)
                 {
                     case PlacementType.nearWallUp :
-                        if (wallTile == wallTop && wallTileX == wallTop && tileY == floorTile && tileXY == floorTile||
-                            wallTile == wallTop && wallTileX == wallSideRight && tileY == wallSideLeft && tileXY == floorTile) //pas instancier dans les couloirs 
+                        if (wallTile == wallTop && tileY == floorTile) //pas instancier dans les couloirs 
                         {
                             tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
                         break;
                     case PlacementType.nearWallRight :
-                        if (wallTile == wallSideRight && tileXBis == floorTile && wallTileY == wallSideRight && tileXYBis == floorTile ||
-                            wallTile == wallSideRight && tileXBis == floorTile && wallTileY == wallBottom && tileXYBis == floorTile) //pas instancier dans les couloirs 
+                        if (wallTile == wallSideRight && tileXBis == floorTile) //pas instancier dans les couloirs 
                         {
                             tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
                         break;
                     case PlacementType.nearWallDown :
-                        if (wallTile == wallBottom && wallTileX == wallBottom && tileYBis == floorTile && tileXYBis == floorTile ||
-                            wallTile == wallBottom && wallTileX == wallSideRight && tileYBis == floorTile && tileXYBis == floorTile)
+                        if (wallTile == wallBottom && tileYBis == floorTile)
                         {
                             tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
                         break;
                     case PlacementType.nearWallLeft :
-                        if (wallTile == wallSideLeft && tileX == floorTile && wallTileY == wallSideLeft && tileXY == floorTile ||
-                            wallTile == wallSideLeft && tileX == floorTile && wallTileY == wallBottom && tileXY == floorTile)
+                        if (wallTile == wallSideLeft && tileX == floorTile)
                         {
                             tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
