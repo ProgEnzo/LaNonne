@@ -60,7 +60,7 @@ namespace Controller
         private AnimationManager animationManager;
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int MovingState = Animator.StringToHash("movingState");
-        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+        private static readonly int AttackState = Animator.StringToHash("attackState");
         private static readonly int SlowMoSpeed = Animator.StringToHash("slowMoSpeed");
         private bool isMoving;
         private float playerScale;
@@ -243,35 +243,33 @@ namespace Controller
                 mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
             }
 
-            if (!currentAnimPrefabAnimator.GetBool(IsAttacking)) // all for movement
+            if (currentAnimPrefabAnimator.GetInteger(AttackState) == 0) // all for movement
             {
                 if (isMoving)
                 {
-                    if (currentAnimPrefabAnimator.GetInteger(MovingState) != 1)
+                    if (currentAnimPrefabAnimator.GetInteger(MovingState) != 2)
                     {
-                        animationManager.AnimationControllerInt(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator,
-                            animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 1);
+                        animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 2);
                     }
                     else
                     {
                         if (animParametersToChange != (0, 0))
                         {
-                            animationManager.AnimationControllerInt(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, animParametersToChange.parameterToChange, animParametersToChange.value);
+                            animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, animParametersToChange.value);
                         }
                     }
                 }
                 else
                 {
-                    if (currentAnimPrefabAnimator.GetInteger(MovingState) != 0)
+                    if (currentAnimPrefabAnimator.GetInteger(MovingState) != 1)
                     {
-                        animationManager.AnimationControllerInt(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator,
-                            animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 0);
+                        animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 1);
                     }
                     else
                     {
                         if (animParametersToChange != (0, 0))
                         {
-                            animationManager.AnimationControllerInt(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, animParametersToChange.parameterToChange, animParametersToChange.value);
+                            animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, animParametersToChange.value);
                         }
                     }
                 }

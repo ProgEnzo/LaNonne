@@ -5,7 +5,6 @@ using AI.Boss;
 using Manager;
 using Shop;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 // ReSharper disable CommentTypo
 
@@ -22,7 +21,7 @@ namespace Controller
 
         [Header("Animations")]
         private static readonly int DirectionState = Animator.StringToHash("directionState");
-        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+        private static readonly int AttackState = Animator.StringToHash("attackState");
         
         private int hitState;
         private float currentDuringComboCooldown;
@@ -74,7 +73,7 @@ namespace Controller
             
             ZealousBlade();
             
-            boxCollider.size = new Vector2(0.1f/parentLocalScaleX, soController.zealousBladeHitLength/parentLocalScaleX);
+            boxCollider.size = new Vector2(0.1f/Mathf.Abs(parentLocalScaleX), soController.zealousBladeHitLength/Mathf.Abs(parentLocalScaleX));
             boxCollider.offset = new Vector2(0, soController.zealousBladeHitLength/parentLocalScaleX/2);
         }
 
@@ -118,7 +117,7 @@ namespace Controller
             }
             
             var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
-            animationManager.AnimationControllerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking);
+            animationManager.AnimationControllerPlayer(AttackState, hitState);
             finalRotation1 = newRotation * Quaternion.Euler(0, 0, soController.zealousBladeHitAngle / 2);
             finalRotation2 = newRotation * Quaternion.Euler(0, 0, -soController.zealousBladeHitAngle / 2);
             lineRenderer.enabled = true;
@@ -142,8 +141,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        AnimationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
-                        playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
+                        animationManager.AnimationControllerPlayer(AttackState, 0);
                         if (hitState == soController.zealousBladeMaxHitState)
                         {
                             currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
@@ -161,8 +159,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        AnimationManager.AnimationManagerBool(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, IsAttacking, false);
-                        playerController.currentAnimPrefabAnimator.SetBool(IsAttacking, false);
+                        animationManager.AnimationControllerPlayer(AttackState, 0);
                         if (hitState == soController.zealousBladeMaxHitState)
                         {
                             currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
