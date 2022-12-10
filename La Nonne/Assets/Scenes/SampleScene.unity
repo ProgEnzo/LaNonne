@@ -94734,6 +94734,17 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1615015038}
+--- !u!114 &1110664833 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1242916246171096704, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+  m_PrefabInstance: {fileID: 1242916246802691872}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1171006219
 GameObject:
   m_ObjectHideFlags: 0
@@ -115728,6 +115739,16 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1238641759 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1242916246912822502, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+  m_PrefabInstance: {fileID: 1242916246802691872}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1239862275 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5453485849054165246, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+  m_PrefabInstance: {fileID: 1242916246802691872}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1371520011
 GameObject:
   m_ObjectHideFlags: 0
@@ -116105,6 +116126,18 @@ PrefabInstance:
       propertyPath: epCount
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1029935344, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: mapPanel
+      value: 
+      objectReference: {fileID: 1110664833}
+    - target: {fileID: 1029935344, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: pauseMenu
+      value: 
+      objectReference: {fileID: 1239862275}
+    - target: {fileID: 1029935344, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: gameOverMenu
+      value: 
+      objectReference: {fileID: 1238641759}
     - target: {fileID: 1029935344, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: hpBossSlider
       value: 
