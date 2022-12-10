@@ -100,8 +100,8 @@ namespace Controller
             playerTransform.localScale = new Vector3(playerScale * localStateMult,
                 playerLocalScale.y, playerLocalScale.z);
             playerController.transform.GetChild(0).localScale = new Vector3(1, 1 * localStateMult, 1);
-            animationManager.AnimationControllerPlayer(DirectionState, attackDirectionState);
-            animationManager.AnimationControllerPlayer(AttackState, 4);
+            animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, DirectionState, attackDirectionState);
+            animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 4);
             initialRotation = newRotation * Quaternion.Euler(0, 0, soController.inquisitorialChainHitAngle / 2);
             finalRotation = newRotation * Quaternion.Euler(0, 0, -soController.inquisitorialChainHitAngle / 2);
             transform.rotation = initialRotation;
@@ -122,7 +122,7 @@ namespace Controller
                     isHitting = false;
                     transform.GetChild(0).gameObject.SetActive(false);
                     transform.GetChild(1).gameObject.SetActive(false);
-                    animationManager.AnimationControllerPlayer(AttackState, 0);
+                    animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 0);
                 }
             }
         }

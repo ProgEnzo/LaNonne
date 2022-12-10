@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Controller;
 using Core.Scripts.Utils;
@@ -9,7 +10,6 @@ namespace Manager
     {
         internal new static AnimationManager instance;
 
-        private PlayerController playerController;
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int AttackState = Animator.StringToHash("attackState");
@@ -25,57 +25,52 @@ namespace Manager
                 instance = this;
             }
         }
-        
-        private void Start()
-        {
-            playerController = PlayerController.instance;
-        }
 
         #region Player
 
-        internal void AnimationControllerPlayer(int parameterToChange, int value)
+        internal void AnimationControllerPlayer(List<GameObject> animPrefabs, ref GameObject currentAnimPrefab, ref Animator currentAnimPrefabAnimator, int parameterToChange, int value)
         {
             if (parameterToChange == DirectionState || parameterToChange == MovingState || parameterToChange == AttackState)
             {
-                if (playerController.currentAnimPrefabAnimator.GetInteger(parameterToChange) != value)
+                if (currentAnimPrefabAnimator.GetInteger(parameterToChange) != value)
                 {
                     if (parameterToChange == AttackState && value != 0)
                     {
-                        AnimationManagerPlayer(MovingState, 0);
+                        AnimationManagerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, MovingState, 0);
                     }
-                    AnimationManagerPlayer(parameterToChange, value);
+                    AnimationManagerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, parameterToChange, value);
                 }
             }
             else
             {
-                if (playerController.currentAnimPrefabAnimator.GetInteger(DirectionState) != parameterToChange || playerController.currentAnimPrefabAnimator.GetInteger(MovingState) != value)
+                if (currentAnimPrefabAnimator.GetInteger(DirectionState) != parameterToChange || currentAnimPrefabAnimator.GetInteger(MovingState) != value)
                 {
-                    AnimationManagerPlayer(DirectionState, parameterToChange);
-                    AnimationManagerPlayer(MovingState, value);
+                    AnimationManagerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, DirectionState, parameterToChange);
+                    AnimationManagerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, MovingState, value);
                 }
             }
         }
 
-        private void AnimationManagerPlayer(int parameterToChange, int value)
+        private void AnimationManagerPlayer(List<GameObject> animPrefabs, ref GameObject currentAnimPrefab, ref Animator currentAnimPrefabAnimator, int parameterToChange, int value)
         {
             if (parameterToChange == DirectionState)
             {
-                AnimationManagerSwitchPlayer(value, playerController.currentAnimPrefabAnimator.GetInteger(MovingState),
-                    playerController.currentAnimPrefabAnimator.GetInteger(AttackState));
+                AnimationManagerSwitchPlayer(animPrefabs, out currentAnimPrefab, out currentAnimPrefabAnimator, value, currentAnimPrefabAnimator.GetInteger(MovingState),
+                    currentAnimPrefabAnimator.GetInteger(AttackState));
             }
             else if (parameterToChange == MovingState)
             {
-                AnimationManagerSwitchPlayer(playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), value,
-                    playerController.currentAnimPrefabAnimator.GetInteger(AttackState));
+                AnimationManagerSwitchPlayer(animPrefabs, out currentAnimPrefab, out currentAnimPrefabAnimator, currentAnimPrefabAnimator.GetInteger(DirectionState), value,
+                    currentAnimPrefabAnimator.GetInteger(AttackState));
             }
             else if (parameterToChange == AttackState)
             {
-                AnimationManagerSwitchPlayer(playerController.currentAnimPrefabAnimator.GetInteger(DirectionState),
-                    playerController.currentAnimPrefabAnimator.GetInteger(MovingState), value);
+                AnimationManagerSwitchPlayer(animPrefabs, out currentAnimPrefab, out currentAnimPrefabAnimator, currentAnimPrefabAnimator.GetInteger(DirectionState),
+                    currentAnimPrefabAnimator.GetInteger(MovingState), value);
             }
             
-            var currentAnimPrefabTemp = playerController.currentAnimPrefab;
-            foreach (var prefab in playerController.animPrefabs.Where(prefab => prefab != currentAnimPrefabTemp))
+            var currentAnimPrefabTemp = currentAnimPrefab;
+            foreach (var prefab in animPrefabs.Where(prefab => prefab != currentAnimPrefabTemp))
             {
                 prefab.SetActive(false);
             }
@@ -83,27 +78,27 @@ namespace Manager
 
         #endregion
 
-        private void AnimationManagerSwitchPlayer(int directionState, int movingState, int attackState)
+        private void AnimationManagerSwitchPlayer(List<GameObject> animPrefabs, out GameObject currentAnimPrefab, out Animator currentAnimPrefabAnimator, int directionState, int movingState, int attackState)
         {
-            playerController.currentAnimPrefab = (directionState, movingState, attackState) switch
+            currentAnimPrefab = (directionState, movingState, attackState) switch
             {
-                (0, 1, 0) => playerController.animPrefabs[0],
-                (0, 2, 0) => playerController.animPrefabs[1],
-                (1, 1, 0) => playerController.animPrefabs[2],
-                (1, 2, 0) => playerController.animPrefabs[3],
-                (2, 1, 0) => playerController.animPrefabs[4],
-                (2, 2, 0) => playerController.animPrefabs[5],
-                (>= 0, 3, 0) => playerController.animPrefabs[6],
-                (>= 0, >= 0, >= 1) => playerController.animPrefabs[7],
-                _ => playerController.animPrefabs[0]
+                (0, 1, 0) => animPrefabs[0],
+                (0, 2, 0) => animPrefabs[1],
+                (1, 1, 0) => animPrefabs[2],
+                (1, 2, 0) => animPrefabs[3],
+                (2, 1, 0) => animPrefabs[4],
+                (2, 2, 0) => animPrefabs[5],
+                (>= 0, 3, 0) => animPrefabs[6],
+                (>= 0, >= 0, >= 1) => animPrefabs[7],
+                _ => animPrefabs[0]
             };
 
-            playerController.currentAnimPrefab.SetActive(true);
-            playerController.currentAnimPrefabAnimator = playerController.currentAnimPrefab.GetComponent<Animator>();
+            currentAnimPrefab.SetActive(true);
+            currentAnimPrefabAnimator = currentAnimPrefab.GetComponent<Animator>();
             
-            playerController.currentAnimPrefabAnimator.SetInteger(DirectionState, directionState);
-            playerController.currentAnimPrefabAnimator.SetInteger(MovingState, movingState);
-            playerController.currentAnimPrefabAnimator.SetInteger(AttackState, attackState);
+            currentAnimPrefabAnimator.SetInteger(DirectionState, directionState);
+            currentAnimPrefabAnimator.SetInteger(MovingState, movingState);
+            currentAnimPrefabAnimator.SetInteger(AttackState, attackState);
         }
     }
 }

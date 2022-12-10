@@ -117,7 +117,7 @@ namespace Controller
             }
             
             var newRotation = Quaternion.LookRotation(Vector3.forward, newDirection);
-            animationManager.AnimationControllerPlayer(AttackState, hitState);
+            animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, hitState);
             finalRotation1 = newRotation * Quaternion.Euler(0, 0, soController.zealousBladeHitAngle / 2);
             finalRotation2 = newRotation * Quaternion.Euler(0, 0, -soController.zealousBladeHitAngle / 2);
             lineRenderer.enabled = true;
@@ -141,7 +141,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        animationManager.AnimationControllerPlayer(AttackState, 0);
+                        animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 0);
                         if (hitState == soController.zealousBladeMaxHitState)
                         {
                             currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
@@ -159,7 +159,7 @@ namespace Controller
                         isHitting = false;
                         lineRenderer.enabled = false;
                         boxCollider.enabled = false;
-                        animationManager.AnimationControllerPlayer(AttackState, 0);
+                        animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 0);
                         if (hitState == soController.zealousBladeMaxHitState)
                         {
                             currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;

@@ -252,13 +252,13 @@ namespace Controller
                     {
                         if (currentAnimPrefabAnimator.GetInteger(MovingState) != movingState)
                         {
-                            animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, movingState);
+                            animationManager.AnimationControllerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, movingState);
                         }
                         else
                         {
                             if (animParametersToChange != (0, 0))
                             {
-                                animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, animParametersToChange.value);
+                                animationManager.AnimationControllerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, animParametersToChange.parameterToChange, animParametersToChange.value);
                             }
                         }
                     }
@@ -266,13 +266,13 @@ namespace Controller
                     {
                         if (currentAnimPrefabAnimator.GetInteger(MovingState) != 1)
                         {
-                            animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 1);
+                            animationManager.AnimationControllerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 1);
                         }
                         else
                         {
                             if (animParametersToChange != (0, 0))
                             {
-                                animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, animParametersToChange.value);
+                                animationManager.AnimationControllerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, animParametersToChange.parameterToChange, animParametersToChange.value);
                             }
                         }
                     }
@@ -282,13 +282,13 @@ namespace Controller
             {
                 if (currentAnimPrefabAnimator.GetInteger(MovingState) != 3)
                 {
-                    animationManager.AnimationControllerPlayer(animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 3);
+                    animationManager.AnimationControllerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, animParametersToChange == (0, 0) ? MovingState : animParametersToChange.value, 3);
                 }
                 else
                 {
                     if (animParametersToChange != (0, 0))
                     {
-                        animationManager.AnimationControllerPlayer(animParametersToChange.parameterToChange, 3);
+                        animationManager.AnimationControllerPlayer(animPrefabs, ref currentAnimPrefab, ref currentAnimPrefabAnimator, animParametersToChange.parameterToChange, 3);
                     }
                 }
             }
