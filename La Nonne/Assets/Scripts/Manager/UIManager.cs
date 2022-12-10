@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
         inputManager = InputManager.instance;
         epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
-        mapPanel = GameObject.Find("ScorePanel").GetComponent<Image>();
+        // mapPanel = GameObject.Find("ScorePanel").GetComponent<Image>();
         
         epCount.text = "EP COUNT : " + 0;
     }
