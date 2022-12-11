@@ -115,8 +115,6 @@ public class RoomContentGenerator : MonoBehaviour
         gg.center = new Vector3(gridPosX, gridPosY, 0);
 
         #endregion
-        
-        StartCoroutine(Scan());
 
         foreach (var roomPos in copiedDico.Keys)  //pas besoin de ca si je le fais par salle
         {
@@ -132,6 +130,8 @@ public class RoomContentGenerator : MonoBehaviour
             PopulateFloorNearWallDown(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallDown));
             PopulateFloorNearWallLeft(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallLeft));
         }
+        
+        StartCoroutine(Scan());
 
         foreach (GameObject item in spawnedObjects)
         {
@@ -221,7 +221,7 @@ public class RoomContentGenerator : MonoBehaviour
     #endregion
 
     #region PopulateMap
-    private void PopulateWallUp (List<Vector2Int> wallUpPos)
+    public void PopulateWallUp (List<Vector2Int> wallUpPos)
     {
         foreach (var pos in wallUpPos)
         {
@@ -232,7 +232,7 @@ public class RoomContentGenerator : MonoBehaviour
         }
     }
     
-    private void PopulateWallDown (List<Vector2Int> wallDownPos)
+    public void PopulateWallDown (List<Vector2Int> wallDownPos)
     {
         foreach (var pos in wallDownPos)
         {
@@ -243,7 +243,7 @@ public class RoomContentGenerator : MonoBehaviour
         }
     }
     
-    private void PopulateWallRight (List<Vector2Int> wallRightPos)
+    public void PopulateWallRight (List<Vector2Int> wallRightPos)
     {
         foreach (var pos in wallRightPos)
         {
@@ -254,7 +254,7 @@ public class RoomContentGenerator : MonoBehaviour
         }
     }
     
-    private void PopulateWallLeft (List<Vector2Int> wallLeftPos)
+    public void PopulateWallLeft (List<Vector2Int> wallLeftPos)
     {
         foreach (var pos in wallLeftPos)
         {
@@ -264,55 +264,55 @@ public class RoomContentGenerator : MonoBehaviour
             }
         }
     }
-    private void PopulateFloor (List<Vector2Int> floorPos)
+    public void PopulateFloor (List<Vector2Int> floorPos)
     {
         foreach (var pos in floorPos)
         {
-            if (Random.Range(0, 100) < 25)
+            if (Random.Range(0, 100) < 33)
             {
                 GameObject item = Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
             }
         }
     }
 
-    private void PopulateFloorNearWallUp(List<Vector2Int> floorNearWallsUpPos)
+    public void PopulateFloorNearWallUp(List<Vector2Int> floorNearWallsUpPos)
     {
         foreach (var pos in floorNearWallsUpPos)
         {
-            //if (Random.Range(0, 100) < 100)
+            if (Random.Range(0, 100) < 15)
             {
                 GameObject item = Instantiate(floorNearWallsUpCusto[Random.Range(0, floorNearWallsUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y, 0), Quaternion.identity);
             }
         }
     }
     
-    private void PopulateFloorNearWallDown(List<Vector2Int> floorNearWallsDownPos)
+    public void PopulateFloorNearWallDown(List<Vector2Int> floorNearWallsDownPos)
     {
         foreach (var pos in floorNearWallsDownPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 15)
             {
-                GameObject item = Instantiate(floorNearWallsDownCusto[Random.Range(0, floorNearWallsDownCusto.Count)], new Vector3(pos.x, pos.y + 1f, 0), Quaternion.identity);
+                GameObject item = Instantiate(floorNearWallsDownCusto[Random.Range(0, floorNearWallsDownCusto.Count)], new Vector3(pos.x, pos.y + 1.5f, 0), Quaternion.identity);
             }
         }
     }
     
-    private void PopulateFloorNearWallRight(List<Vector2Int> floorNearWallsRightPos)
+    public void PopulateFloorNearWallRight(List<Vector2Int> floorNearWallsRightPos)
     {
         foreach (var pos in floorNearWallsRightPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 15)
             {
-                GameObject item = Instantiate(floorNearWallsRightCusto[Random.Range(0, floorNearWallsRightCusto.Count)], new Vector3(pos.x - 0.5f, pos.y, 0), Quaternion.identity);
+                GameObject item = Instantiate(floorNearWallsRightCusto[Random.Range(0, floorNearWallsRightCusto.Count)], new Vector3(pos.x - 1f, pos.y + 0.5f, 0), Quaternion.identity);
             }
         }
     }
     
-    private void PopulateFloorNearWallLeft(List<Vector2Int> floorNearWallsLeftPos)
+    public void PopulateFloorNearWallLeft(List<Vector2Int> floorNearWallsLeftPos)
     {
         foreach (var pos in floorNearWallsLeftPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 15)
             {
                 GameObject item = Instantiate(floorNearWallsLeftCusto[Random.Range(0, floorNearWallsLeftCusto.Count)], new Vector3(pos.x + 1f, pos.y, 0), Quaternion.identity);
             }
