@@ -1,22 +1,33 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Controller;
 using UnityEngine;
 
 public class Attractor : MonoBehaviour
 {
-    public float attractorSpeed = 5f;
+    [SerializeField] private float attractorSpeed = 5f;
+    private bool isAttracted;
+    private PlayerController playerController;
+
+    private void Start()
+    {
+        playerController = PlayerController.instance;
+        isAttracted = false;
+    }
 
     private void OnTriggerStay2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag("WallCollider"))
         {
-            transform.position = Vector2.MoveTowards(transform.position, col.transform.position, attractorSpeed * Time.deltaTime);
+            isAttracted = true;
         }
     }
 
     private void Update()
     {
+        if (isAttracted)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, playerController.transform.position, attractorSpeed * Time.deltaTime);
+        }
+        
         if (transform.childCount < 1)
         {
             Destroy(gameObject);

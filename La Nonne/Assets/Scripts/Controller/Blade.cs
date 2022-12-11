@@ -59,7 +59,7 @@ namespace Controller
                 hitState = 0;
             }
 
-            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0)
+            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !playerController.isSlowMoOn && !isHitting && currentNextComboCooldown <= 0)
             {
                 ZealousBladeStart();
             }
