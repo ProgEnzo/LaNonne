@@ -41,7 +41,8 @@ namespace Controller
         internal bool isSlowMoOn;
         private float currentSlowMoCooldown;
         private float currentSlowMoDuration;
-        internal float currentSlowMoPlayerSpeedFactor;
+        internal float currentSlowMoPlayerMoveSpeedFactor;
+        internal float currentSlowMoPlayerAttackSpeedFactor;
         internal Sequence slowMoSequence;
         internal Guid slowMoUid;
 
@@ -50,6 +51,10 @@ namespace Controller
         private GameObject revealingDashAimedEnemy;
         private Vector3 revealingDashNewPosition;
         private readonly Dictionary<GameObject, Coroutine> revealingDashRunningStunCoroutines = new();
+        private float revealingDashTotalDistance;
+        private bool isRevealingDashOn;
+        private bool isRevealingDashFocusOn;
+        private float currentRevealingDashFocusCooldown;
 
         [Header("UI elements")]
         private Image healthBar;
@@ -61,7 +66,8 @@ namespace Controller
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int MovingState = Animator.StringToHash("movingState");
         private static readonly int AttackState = Animator.StringToHash("attackState");
-        private static readonly int SlowMoSpeed = Animator.StringToHash("slowMoSpeed");
+        private static readonly int SlowMoMoveSpeed = Animator.StringToHash("slowMoMoveSpeed");
+        private static readonly int SlowMoAttackSpeed = Animator.StringToHash("slowMoAttackSpeed");
         private bool isMoving;
         private float playerScale;
         internal readonly List<GameObject> animPrefabs = new();
@@ -125,12 +131,14 @@ namespace Controller
             playerScale = transform.localScale.x;
             currentHealth = soController.maxHealth;
             isRevealingDashHitting = false;
+            isRevealingDashOn = false;
             healthBar = GameObject.Find("HealthBar").transform.GetChild(0).GetComponent<Image>();
             healthBar.fillAmount = 1f;
             chrono = GameObject.Find("Chrono").GetComponent<Image>();
             chrono.fillAmount = 1f;
             currentEp = 0;
-            currentSlowMoPlayerSpeedFactor = 1f;
+            currentSlowMoPlayerMoveSpeedFactor = 1f;
+            currentSlowMoPlayerAttackSpeedFactor = 1f;
         }
 
         private void OnDestroy()
@@ -157,8 +165,10 @@ namespace Controller
             
             SlowMoManager();
             RevealingDashStart();
+            RevealingDashFocus();
             LoadMenu();
-            currentAnimPrefabAnimator.SetFloat(SlowMoSpeed, currentSlowMoPlayerSpeedFactor);
+            currentAnimPrefabAnimator.SetFloat(SlowMoMoveSpeed, currentSlowMoPlayerMoveSpeedFactor);
+            currentAnimPrefabAnimator.SetFloat(SlowMoAttackSpeed, currentSlowMoPlayerAttackSpeedFactor);
             chrono.fillAmount = 1 - currentSlowMoCooldown / soController.slowMoCooldown;
         }
         
@@ -198,7 +208,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.left * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
+                mRigidbody.AddForce(Vector2.left * (speed * currentSlowMoPlayerMoveSpeedFactor) / Time.timeScale); // for movement
             }
 
             if (Input.GetKey(inputManager.rightMoveKey)) // for input
@@ -211,7 +221,7 @@ namespace Controller
                 {
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
-                mRigidbody.AddForce(Vector2.right * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
+                mRigidbody.AddForce(Vector2.right * (speed * currentSlowMoPlayerMoveSpeedFactor) / Time.timeScale); // for movement
             }
 
             if (Input.GetKey(inputManager.upMoveKey)) // for input
@@ -226,7 +236,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 1); // for animation
                     }
                 }
-                mRigidbody.AddForce(Vector2.up * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
+                mRigidbody.AddForce(Vector2.up * (speed * currentSlowMoPlayerMoveSpeedFactor) / Time.timeScale); // for movement
             }
 
             if (Input.GetKey(inputManager.downMoveKey)) // for input
@@ -241,7 +251,7 @@ namespace Controller
                         animParametersToChange = (DirectionState, 0); // for movement
                     }
                 }
-                mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoPlayerSpeedFactor) / Time.timeScale); // for movement
+                mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoPlayerMoveSpeedFactor) / Time.timeScale); // for movement
             }
 
             if (!isRevealingDashHitting)
@@ -352,7 +362,8 @@ namespace Controller
             {
                 isSlowMoOn = true;
                 currentSlowMoDuration = soController.slowMoDuration;
-                currentSlowMoPlayerSpeedFactor = soController.slowMoPlayerSpeedFactor;
+                currentSlowMoPlayerMoveSpeedFactor = soController.slowMoPlayerSpeedFactor;
+                currentSlowMoPlayerAttackSpeedFactor = soController.slowMoPlayerSpeedFactor;
                 Time.timeScale = 1 / soController.slowMoSpeed;
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
                 if (slowMoSequence == null)
@@ -362,13 +373,14 @@ namespace Controller
                         .Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, currentSlowMoDuration)
                             .SetEase(Ease.InQuad)).Append(DOTween.To(() => Time.fixedDeltaTime,
                             x => Time.fixedDeltaTime = x, 0.02f, currentSlowMoDuration).SetEase(Ease.InQuad))
-                        .Append(DOTween.To(() => currentSlowMoPlayerSpeedFactor, x => currentSlowMoPlayerSpeedFactor = x,
-                            1, currentSlowMoDuration).SetEase(Ease.InQuad));
+                        .Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x,
+                            1, currentSlowMoDuration).SetEase(Ease.InQuad)).Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, 
+                            x => currentSlowMoPlayerAttackSpeedFactor = x, 1, currentSlowMoDuration).SetEase(Ease.InQuad));
                     slowMoUid = Guid.NewGuid();
                     slowMoSequence.id = slowMoUid;
                 }
             }
-            if (Input.GetKey(inputManager.slowMoKey) && currentSlowMoCooldown <= 0)
+            if (Input.GetKey(inputManager.slowMoKey) && currentSlowMoCooldown <= 0 && isSlowMoOn)
             {
                 if (currentSlowMoDuration > 0)
                 {
@@ -380,7 +392,8 @@ namespace Controller
                     currentSlowMoCooldown = soController.slowMoCooldown;
                     DOTween.Kill(slowMoUid);
                     slowMoSequence = null;
-                    currentSlowMoPlayerSpeedFactor = 1f;
+                    currentSlowMoPlayerMoveSpeedFactor = 1f;
+                    currentSlowMoPlayerAttackSpeedFactor = 1f;
                     Time.timeScale = 1;
                     Time.fixedDeltaTime = 0.02f;
                 }
@@ -389,12 +402,13 @@ namespace Controller
             {
                 isSlowMoOn = false;
                 currentSlowMoCooldown = soController.slowMoCooldown;
-                currentSlowMoPlayerSpeedFactor = 1f;
+                currentSlowMoPlayerMoveSpeedFactor = 1f;
                 DOTween.Kill(slowMoUid);
                 slowMoSequence = null;
                 DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
                 DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
-                DOTween.To(() => currentSlowMoPlayerSpeedFactor, x => currentSlowMoPlayerSpeedFactor = x, 1, 0.01f);
+                DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, 0.01f);
+                DOTween.To(() => currentSlowMoPlayerAttackSpeedFactor, x => currentSlowMoPlayerAttackSpeedFactor = x, 1, 0.01f);
             }
             
             if (currentSlowMoCooldown > 0)
@@ -403,12 +417,62 @@ namespace Controller
             }
         }
 
+        private void RevealingDashStart()
+        {
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashHitting && isSlowMoOn)
+            {
+                DOTween.Kill(slowMoUid);
+                slowMoSequence = null;
+                isSlowMoOn = false;
+                isRevealingDashOn = true;
+                
+                var enemiesInArea = new List<RaycastHit2D>();
+                Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero,
+                    new ContactFilter2D(), enemiesInArea);
+                
+                enemiesInArea.Sort((x, y) =>
+                {
+                    var position = transform.position;
+                    return (Vector3.Distance(position, x.transform.position)
+                        .CompareTo(Vector3.Distance(position, y.transform.position)));
+                });
+                
+                foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
+                {
+                    revealingDashAimedEnemy = enemy.collider.gameObject;
+                    revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
+                    isRevealingDashHitting = true;
+                    revealingDashTotalDistance = Vector3.Distance(transform.position, revealingDashNewPosition);
+                    return;
+                }
+                
+                currentSlowMoPlayerMoveSpeedFactor = 1f;
+                currentSlowMoPlayerAttackSpeedFactor = 1f;
+                Time.timeScale = 1;
+                Time.fixedDeltaTime = 0.02f;
+            }
+        }
+
         private void RevealingDash()
         {
             if (isRevealingDashHitting)
             {
-                transform.position = Vector2.MoveTowards(transform.position, revealingDashNewPosition, soController.revealingDashHitSpeed * Time.deltaTime);
+                //Variables pour code optimisé
+                var position = transform.position;
+                
+                //Dash
+                transform.position = Vector2.MoveTowards(position, revealingDashNewPosition, soController.revealingDashHitSpeed * Time.deltaTime);
+                
+                //Gestion du slow mo
+                Time.timeScale = Mathf.Lerp(Time.timeScale, 0.1f, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.deltaTime);
+                Time.fixedDeltaTime = Time.timeScale * 0.02f;
+                currentSlowMoPlayerMoveSpeedFactor = Mathf.Lerp(currentSlowMoPlayerMoveSpeedFactor, 1, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.deltaTime);
+                currentSlowMoPlayerAttackSpeedFactor = Mathf.Lerp(currentSlowMoPlayerAttackSpeedFactor, 1, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.deltaTime);
+                
+                //Tant que l'ennemi n'est pas atteint, on ne passe pas à la suite
                 if (!(Vector3.Distance(transform.position, revealingDashNewPosition) < soController.revealingDashToleranceDistance)) return;
+                
+                //Gestion du stun
                 foreach (var enemy in revealingDashRunningStunCoroutines.Keys.Where(enemy => enemy == revealingDashAimedEnemy))
                 {
                     StopCoroutine(revealingDashRunningStunCoroutines[enemy]);
@@ -417,38 +481,46 @@ namespace Controller
                 }
                 revealingDashRunningStunCoroutines.Add(revealingDashAimedEnemy, StartCoroutine(StunEnemy(revealingDashAimedEnemy)));
                 
-                //DMG du player sur le TrashMobClose
+                //Dégâts
                 if (revealingDashAimedEnemy.CompareTag("Enemy"))
                 {
                     revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.revealingDashDamage);
-                    //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + revealingDashAimedEnemy.GetComponent<TrashMobClose>().currentHealth);
                 }
-
+                
+                //Fin du dash
                 isRevealingDashHitting = false;
+                
+                //Gestion du slow mo
+                DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 0.1f, 0.1f).SetEase(Ease.InQuad);
+                currentRevealingDashFocusCooldown = soController.revealingDashFocusDuration;
+                isRevealingDashFocusOn = true;
             }
         }
-
-        private void RevealingDashStart()
+        
+        private void RevealingDashFocus()
         {
-            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashHitting && isSlowMoOn)
+            if (!isRevealingDashFocusOn) return;
+            if (currentRevealingDashFocusCooldown > 0)
             {
-                var enemiesInArea = new List<RaycastHit2D>();
-                Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero,
-                    new ContactFilter2D(), enemiesInArea);
-                enemiesInArea.Sort((x, y) =>
+                if (revealingDashAimedEnemy == null)
                 {
-                    var position = transform.position;
-                    return (Vector3.Distance(position, x.transform.position)
-                        .CompareTo(Vector3.Distance(position, y.transform.position)));
-                });
-                foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
-                {
-                    revealingDashAimedEnemy = enemy.collider.gameObject;
-                    revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
-                    isRevealingDashHitting = true;
-                    DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1/soController.revealingDashSlowTimeSpeed, 0.1f);
-                    break;
+                    DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
+                    DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
+                    DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, 0.01f);
+                
+                    isRevealingDashFocusOn = false;
+                    isRevealingDashOn = false;
                 }
+                currentRevealingDashFocusCooldown -= Time.deltaTime;
+            }
+            else
+            {
+                DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
+                DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
+                DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, 0.01f);
+                
+                isRevealingDashFocusOn = false;
+                isRevealingDashOn = false;
             }
         }
 
@@ -460,6 +532,7 @@ namespace Controller
             if (!enemy) yield break;
             enemy.GetComponent<EnemyController>().isStunned = false;
         }
+        
         #endregion
 
         /*private void OnTriggerEnter2D(Collider2D col)
