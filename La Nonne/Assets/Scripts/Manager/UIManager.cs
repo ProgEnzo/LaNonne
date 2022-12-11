@@ -16,7 +16,8 @@ public class UIManager : MonoBehaviour
     [Header("Map & MiniMap")] 
     public Image mapPanel;
     public GameObject inGameUI;
-    public CinemachineVirtualCamera vCamBigMap;
+    public GameObject bigMapRender;
+    public Camera camBigMap;
     
     [Header("Menus")]
     public GameObject pauseMenu;
@@ -29,13 +30,13 @@ public class UIManager : MonoBehaviour
         
         //BIG MAP
         inGameUI = GameObject.Find("InGameUI");
-        vCamBigMap = GameObject.Find("vCamBigMap").GetComponent<CinemachineVirtualCamera>();
-        
-        
+        camBigMap = GameObject.Find("BigMapCamera").GetComponent<Camera>();
+        bigMapRender = GameObject.Find("BigMapRender");
+
         inputManager = InputManager.instance;
         epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
-        mapPanel = GameObject.Find("ScorePanel").GetComponent<Image>();
+        mapPanel = GameObject.Find("BigMapCanvas").GetComponent<Image>();
         
         epCount.text = "EP COUNT : " + 0;
         
@@ -47,13 +48,20 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKey(inputManager.mapKey))
         {
+            camBigMap.enabled = true;
+            bigMapRender.SetActive(true);
+            camBigMap.orthographicSize = 300;
+            
             inGameUI.SetActive(false);
-            vCamBigMap.Priority = 100;
             mapPanel.DOFade(0.7f, 0.3f);
             
         }
         else
         {
+            camBigMap.enabled = false;
+            bigMapRender.SetActive(false);
+            camBigMap.orthographicSize = 0;
+            
             inGameUI.SetActive(true);
             mapPanel.DOFade(0f, 0.3f);
         }
