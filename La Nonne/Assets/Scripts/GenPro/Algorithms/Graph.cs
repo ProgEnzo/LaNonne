@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Graph : MonoBehaviour
+public class Graph 
 {
     private static List<Vector2Int> neighbourse4directions = new List<Vector2Int>
     {

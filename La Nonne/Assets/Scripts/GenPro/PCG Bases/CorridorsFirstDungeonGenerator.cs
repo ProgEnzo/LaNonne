@@ -30,12 +30,14 @@ public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
     protected override void RunProceduralGeneration()
     {
         CorridorFirstGeneration();
-        DungeonData data = new DungeonData
+        
+        var data = new DungeonData
         {
-            roomsDictionary = this.roomsDictionary,
-            corridorPositions = this.corridorPositions,
-            floorPositions = this.floorPositions
+            roomsDictionary = roomsDictionary,
+            corridorPositions = corridorPositions,
+            floorPositions = floorPositions
         };
+
         OnDungeonFloorReady?.Invoke(data);
     }
 

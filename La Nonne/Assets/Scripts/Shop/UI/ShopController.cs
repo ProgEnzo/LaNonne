@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Controller;
 using DG.Tweening;
+using Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +27,7 @@ namespace Shop.UI
 
       [SerializeField] private int numberOfOfferedObjects;
       private EffectManager.Effect[] effectsInTheShop;
+      private UIManager uiManager;
       private EffectManager effectManager;
       private bool isShopOpened;
       private bool hasShopBeenOpened;
@@ -44,6 +46,7 @@ namespace Shop.UI
 
          timerInputPressed = 0f;
          effectManager = EffectManager.instance;
+         uiManager = UIManager.instance;
          hasShopBeenOpened = false;
          isShopOpened = false;
          canChooseEffect = false;
@@ -98,6 +101,9 @@ namespace Shop.UI
             if (timerInputPressed > timeToAccess - 0.05f && !isShopOpened)
             {
                isShopOpened = true;
+               
+               uiManager.DesactivateInGameUI();
+               
                shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
                Time.timeScale = 0;
                if (!hasShopBeenOpened)
@@ -170,6 +176,8 @@ namespace Shop.UI
       {
          isShopOpened = false;
          shopPanel.SetActive(false);
+         
+         uiManager.ActivateInGameUI();
 
          image.fillAmount = 0f;
 
