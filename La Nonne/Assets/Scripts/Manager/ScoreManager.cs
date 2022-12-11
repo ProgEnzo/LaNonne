@@ -24,6 +24,11 @@ public class ScoreManager : MonoSingleton<ScoreManager>
         }
     }
 
+    private void Start()
+    {
+        scoreText.enabled = false;
+    }
+
     public void AddScore(int _score)
     {
         score += _score;

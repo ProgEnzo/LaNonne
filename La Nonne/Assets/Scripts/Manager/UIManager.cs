@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI epCount;
     private InputManager inputManager;
+    private ScoreManager scoreManager;
 
     [Header("Map & MiniMap")] 
     public Image mapPanel;
@@ -32,7 +33,8 @@ public class UIManager : MonoBehaviour
         inGameUI = GameObject.Find("InGameUI");
         camBigMap = GameObject.Find("BigMapCamera").GetComponent<Camera>();
         bigMapRender = GameObject.Find("BigMapRender");
-
+        scoreManager = ScoreManager.instance;
+        
         inputManager = InputManager.instance;
         epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
@@ -48,6 +50,7 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKey(inputManager.mapKey))
         {
+            scoreManager.scoreText.enabled = true;
             camBigMap.enabled = true;
             bigMapRender.SetActive(true);
             camBigMap.orthographicSize = 300;
@@ -58,6 +61,7 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            scoreManager.scoreText.enabled = false;
             camBigMap.enabled = false;
             bigMapRender.SetActive(false);
             camBigMap.orthographicSize = 0;
