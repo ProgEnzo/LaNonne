@@ -134,7 +134,7 @@ namespace Controller
                 if (hitState % 2 == 1)
                 {
                     transform.rotation =
-                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.deltaTime);
+                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor / Time.timeScale);
                     if (transform.rotation.eulerAngles.z < finalRotation1.eulerAngles.z + soController.zealousBladeToleranceAngle &&
                         transform.rotation.eulerAngles.z > finalRotation1.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {
@@ -152,7 +152,7 @@ namespace Controller
                 else
                 {
                     transform.rotation =
-                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.deltaTime);
+                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor / Time.timeScale);
                     if (transform.rotation.eulerAngles.z < finalRotation2.eulerAngles.z + soController.zealousBladeToleranceAngle &&
                         transform.rotation.eulerAngles.z > finalRotation2.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {

@@ -54,13 +54,13 @@ namespace Controller
             {
                 DOTween.Kill(playerController.slowMoUid);
                 playerController.slowMoSequence = null;
-                playerController.currentSlowMoPlayerSpeedFactor = 0f;
+                playerController.currentSlowMoPlayerMoveSpeedFactor = 0f;
                 Time.timeScale = 0.001f;
                 Time.fixedDeltaTime = 0.001f * Time.timeScale;
             }
             if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && playerController.isSlowMoOn && currentTime <= 0)
             {
-                playerController.currentSlowMoPlayerSpeedFactor = 1f;
+                playerController.currentSlowMoPlayerMoveSpeedFactor = 1f;
                 Time.timeScale = 1f;
                 Time.fixedDeltaTime = 0.02f;
                 InquisitorialChainStart();
