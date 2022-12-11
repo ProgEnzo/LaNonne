@@ -44,13 +44,16 @@ public class UIManager : MonoBehaviour
         
         pauseMenu.SetActive(false);
         gameOverMenu.SetActive(false);
+        bigMapRender.SetActive(false);
+        //scoreManager.scoreText.enabled = false;
+
     }
 
     private void Update()
     {
         if (Input.GetKey(inputManager.mapKey))
         {
-            scoreManager.scoreText.enabled = true;
+            //scoreManager.scoreText.enabled = true;
             camBigMap.enabled = true;
             bigMapRender.SetActive(true);
             camBigMap.orthographicSize = 300;
@@ -61,7 +64,7 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            scoreManager.scoreText.enabled = false;
+            //scoreManager.scoreText.enabled = false;
             camBigMap.enabled = false;
             bigMapRender.SetActive(false);
             camBigMap.orthographicSize = 0;
