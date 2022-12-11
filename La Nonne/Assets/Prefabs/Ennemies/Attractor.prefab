@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 7918672572570658565}
   - component: {fileID: 6403119377724141689}
   - component: {fileID: 5814178513993876049}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Attractor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -376,9 +376,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.1391244, y: -0.019970417}
+  m_Offset: {x: 0.14, y: -0.02}
   serializedVersion: 2
-  m_Radius: 1.0445333
+  m_Radius: 1.1
 --- !u!114 &5814178513993876049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,4 +391,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbd5a039613379645a533896815c60a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attractorSpeed: 3
+  attractorSpeed: 5
