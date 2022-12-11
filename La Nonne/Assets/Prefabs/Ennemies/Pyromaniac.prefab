@@ -132,9 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07019be1e4051ef498bc939c3f50ba4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tolerance: 0.1
-  destination: {x: 0, y: 0, z: 0}
-  isExploded: 0
   soPyromaniac: {fileID: 11400000, guid: 5ffef636d03189c41a3958d6edcccbfa, type: 2}
 --- !u!212 &2111184171189557222
 SpriteRenderer:
@@ -427,7 +424,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soEnemy: {fileID: 11400000, guid: 5ffef636d03189c41a3958d6edcccbfa, type: 2}
-  epDrop: {fileID: 970073829185132471, guid: 2f3bcd94d8a30ae4e80b181e92acada0, type: 3}
+  scoreManager: {fileID: 0}
+  epDrop: {fileID: 5299797763731125753, guid: b319eb7fdaf9e0f41b2adcacbe08d82e, type: 3}
 --- !u!212 &5813854497670849601
 SpriteRenderer:
   m_ObjectHideFlags: 0
