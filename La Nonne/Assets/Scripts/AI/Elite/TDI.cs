@@ -18,6 +18,8 @@ namespace AI.Elite
         [SerializeField] public GameObject caretaker;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
+        [SerializeField] private ParticleSystem particleHeal;
+        [SerializeField] private ParticleSystem particleHeal2;
         internal SoTdi soTdi;
         
         protected override void Start()
@@ -25,6 +27,12 @@ namespace AI.Elite
             base.Start();
             soTdi = (SoTdi) soEnemy;
             cooldownTimer = soTdi.timeBetweenCircleSpawn;
+
+            particleHeal = GameObject.Find("ParticleHealZone").GetComponent<ParticleSystem>();
+            particleHeal2 = GameObject.Find("ParticleHealZone2").GetComponent<ParticleSystem>();
+            particleHeal.Stop();
+            particleHeal2.Stop();
+
         }
 
         protected override void Update()
@@ -87,10 +95,16 @@ namespace AI.Elite
         {
             circle.enabled = true;
             circleSprite.SetActive(true);
+            particleHeal.Play();
+            particleHeal2.Play();
+            
             currentHealth += soTdi.healAmount;
             yield return new WaitForSeconds(soTdi.timeBetweenCircleSpawn);
             circle.enabled = false;
             circleSprite.SetActive(false);
+            particleHeal.Stop();
+            particleHeal2.Stop();
+
             cooldownTimer = soTdi.timeBetweenCircleSpawn;
             blinkExecuted = false;
         }

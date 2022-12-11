@@ -41,9 +41,9 @@ namespace Controller
         internal bool isSlowMoOn;
         private float currentSlowMoCooldown;
         private float currentSlowMoDuration;
-        private float currentSlowMoPlayerSpeedFactor;
-        private Sequence slowMoSequence;
-        private Guid slowMoUid;
+        internal float currentSlowMoPlayerSpeedFactor;
+        internal Sequence slowMoSequence;
+        internal Guid slowMoUid;
 
         [Header("Revealing Dash")]
         private bool isRevealingDashHitting;

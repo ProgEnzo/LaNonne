@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Manager;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -49,8 +50,19 @@ namespace Controller
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
 
-            if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !isHitting && currentTime <= 0)
+            if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && playerController.isSlowMoOn && currentTime <= 0)
             {
+                DOTween.Kill(playerController.slowMoUid);
+                playerController.slowMoSequence = null;
+                playerController.currentSlowMoPlayerSpeedFactor = 0f;
+                Time.timeScale = 0.001f;
+                Time.fixedDeltaTime = 0.001f * Time.timeScale;
+            }
+            if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && playerController.isSlowMoOn && currentTime <= 0)
+            {
+                playerController.currentSlowMoPlayerSpeedFactor = 1f;
+                Time.timeScale = 1f;
+                Time.fixedDeltaTime = 0.02f;
                 InquisitorialChainStart();
             }
 
