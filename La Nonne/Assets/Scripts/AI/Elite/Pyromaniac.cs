@@ -82,13 +82,13 @@ namespace AI.Elite
                             newPositionVector
                                 .normalized); //On lance le projectile à la nouvelle position, avec la nouvelle direction
                     }
-                    else
-                    {
-                        //Déplacement du pyromane
-                        GetComponent<AIDestinationSetter>().enabled = true;
-                        scriptAIPathState = true;
-                        scriptAIPath.maxSpeed = 3f;
-                    }
+                    // else
+                    // {
+                    //     //Déplacement du pyromane
+                    //     GetComponent<AIDestinationSetter>().enabled = true;
+                    //     scriptAIPathState = true;
+                    //     scriptAIPath.maxSpeed = 3f;
+                    // }
                 }
             }
             //Une fois que le projectile a explosé

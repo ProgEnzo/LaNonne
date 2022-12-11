@@ -134751,10 +134751,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TDI
       objectReference: {fileID: 0}
-    - target: {fileID: 1280591066966374502, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1280591066966374503, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -134798,54 +134794,6 @@ PrefabInstance:
     - target: {fileID: 1280591066966374503, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5106940038195419166, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5106940038195419166, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: looping
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: lengthInSec
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: simulationSpeed
-      value: 0.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: ForceModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: TrailModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: VelocityModule.enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: ShapeModule.radius.value
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: InitialModule.startSpeed.scalar
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: InitialModule.startSpeed.minMaxState
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7903439917440274269, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
-      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
-      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d714b52a0953aa94eb072364cc73280e, type: 3}
