@@ -1,4 +1,5 @@
 using System;
+using Cinemachine;
 using DG.Tweening;
 using Manager;
 using TMPro;
@@ -14,6 +15,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Map & MiniMap")] 
     public Image mapPanel;
+    public GameObject inGameUI;
+    public CinemachineVirtualCamera vCamBigMap;
     
     [Header("Menus")]
     public GameObject pauseMenu;
@@ -23,10 +26,16 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         //Reference
+        
+        //BIG MAP
+        inGameUI = GameObject.Find("InGameUI");
+        vCamBigMap = GameObject.Find("vCamBigMap").GetComponent<CinemachineVirtualCamera>();
+        
+        
         inputManager = InputManager.instance;
         epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
-        //mapPanel = GameObject.Find("ScorePanel").GetComponent<Image>();
+        mapPanel = GameObject.Find("ScorePanel").GetComponent<Image>();
         
         epCount.text = "EP COUNT : " + 0;
         
@@ -38,11 +47,14 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKey(inputManager.mapKey))
         {
+            inGameUI.SetActive(false);
+            vCamBigMap.Priority = 100;
             mapPanel.DOFade(0.7f, 0.3f);
             
         }
         else
         {
+            inGameUI.SetActive(true);
             mapPanel.DOFade(0f, 0.3f);
         }
         
