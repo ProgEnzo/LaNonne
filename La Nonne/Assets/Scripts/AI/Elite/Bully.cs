@@ -1,4 +1,6 @@
+using System.Collections;
 using AI.So;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace AI.Elite
@@ -6,10 +8,13 @@ namespace AI.Elite
     public class Bully : EnemyController
     {
         private SoBully soBully;
+        private Animator animator;
+        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
 
         private void Awake()
         {
             soBully = (SoBully) soEnemy;
+            animator = transform.GetChild(2).GetComponent<Animator>();
         }
 
         private void OnCollisionEnter2D(Collision2D col) 
@@ -17,6 +22,9 @@ namespace AI.Elite
             //Si le bully touche le player
             if (col.gameObject.CompareTag("Player") && !isStunned)
             {
+                animator.SetBool(IsAttacking, true);
+                StartCoroutine(AnimationAttackFalse());
+                
                 StartCoroutine(PlayerIsHit());
                 playerController.TakeDamage(soBully.bodyDamage); //Player takes damage
 
@@ -26,6 +34,12 @@ namespace AI.Elite
             
                 playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
+        }
+        
+        private IEnumerator AnimationAttackFalse()
+        {
+            yield return new WaitForNextFrameUnit();
+            animator.SetBool(IsAttacking, false);
         }
     }
 }

@@ -3,6 +3,7 @@ using AI.So;
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
+// ReSharper disable CommentTypo
 
 namespace AI.Trash
 {
