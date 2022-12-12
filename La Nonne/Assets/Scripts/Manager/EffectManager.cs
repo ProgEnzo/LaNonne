@@ -133,6 +133,7 @@ namespace Shop
                     while (enemyController.stacks[stackIndex].effect == Effect.Bleed)
                     {
                         enemyController.TakeDamageFromPlayer(bleedSo.damage);
+                        EffectVFXManager(enemy, Effect.Bleed, false);
                         yield return new WaitForSeconds(bleedSo.cooldown);
                     }
                     enemyController.areStacksOn[stackIndex] = false;
@@ -159,10 +160,12 @@ namespace Shop
                     var enemyController = enemy.GetComponent<EnemyController>();
                     enemyController.currentAiPathSpeed *= chillSo.rateOfBasicSpeed;
                     enemyController.currentVelocitySpeed *= chillSo.rateOfBasicSpeed;
+                    EffectVFXManager(enemy, Effect.Chill, false);
                     bool ConditionEnemy() => enemyController.stacks[stackIndex].effect != Effect.Chill;
                     yield return new WaitUntil(ConditionEnemy);
                     enemyController.currentAiPathSpeed /= chillSo.rateOfBasicSpeed;
                     enemyController.currentVelocitySpeed /= chillSo.rateOfBasicSpeed;
+                    EffectVFXManager(enemy, Effect.Chill, false, false);
                     enemyController.areStacksOn[stackIndex] = false;
                     break;
                 case "Boss":
@@ -245,6 +248,7 @@ namespace Shop
                     var enemyController = enemy.GetComponent<EnemyController>();
                     enemyController.currentAiPathSpeed = 0;
                     enemyController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+                    EffectVFXManager(enemy, Effect.Chill, true);
                     yield return new WaitForSeconds(chillSo.freezeTime * multiplier);
                     if (currentFreezeCoroutineOnEnemies[enemy] == 0)
                     {
@@ -306,6 +310,44 @@ namespace Shop
             }
         }
         
+        #endregion
+
+        #region VFX
+
+        private static void EffectVFXManager(GameObject enemy, Effect effect, bool isSuperEffect, bool value = true)
+        {
+            switch (effect)
+            {
+                case Effect.Bleed:
+                    if (!isSuperEffect)
+                    {
+                        enemy.GetComponent<EnemyController>().effectVFXGameObject.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+                    }
+                    else
+                    {
+                        //Missing
+                    }
+                    break;
+                case Effect.Chill:
+                    if (!isSuperEffect)
+                    {
+                        if (value)
+                        {
+                            enemy.GetComponent<EnemyController>().effectVFXGameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
+                        }
+                        else
+                        {
+                            enemy.GetComponent<EnemyController>().effectVFXGameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
+                        }
+                    }
+                    else
+                    {
+                        enemy.GetComponent<EnemyController>().effectVFXGameObject.transform.GetChild(2).GetComponent<ParticleSystem>().Play();
+                    }
+                    break;
+            }
+        }
+
         #endregion
     }
 }
