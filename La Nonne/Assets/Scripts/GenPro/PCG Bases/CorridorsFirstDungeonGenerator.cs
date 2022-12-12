@@ -16,15 +16,13 @@ public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
     private float roomPercent = 0.8f;
 
     //PCG Data
-    private Dictionary<Vector2Int, HashSet<Vector2Int>> roomsDictionary 
-        = new Dictionary<Vector2Int, HashSet<Vector2Int>>();
+    private Dictionary<Vector2Int, HashSet<Vector2Int>> roomsDictionary = new Dictionary<Vector2Int, HashSet<Vector2Int>>();
     
     private HashSet<Vector2Int> floorPositions, corridorPositions;
 
     //Gizmos Data
     private List<Color> roomColors = new List<Color>();
-    [SerializeField]
-    private bool showRoomGizmo = false, showCorridorsGizmo;
+    [SerializeField] private bool showRoomGizmo = false, showCorridorsGizmo, showCornersGizmo;
 
     //Events
     public UnityEvent<DungeonData> OnDungeonFloorReady;
@@ -32,12 +30,14 @@ public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
     protected override void RunProceduralGeneration()
     {
         CorridorFirstGeneration();
-        DungeonData data = new DungeonData
+        
+        var data = new DungeonData
         {
-            roomsDictionary = this.roomsDictionary,
-            corridorPositions = this.corridorPositions,
-            floorPositions = this.floorPositions
+            roomsDictionary = roomsDictionary,
+            corridorPositions = corridorPositions,
+            floorPositions = floorPositions
         };
+
         OnDungeonFloorReady?.Invoke(data);
     }
 
@@ -143,8 +143,7 @@ public class CorridorsFirstDungeonGenerator : SimpleRandomWalkMapGenerator
         roomColors.Add(UnityEngine.Random.ColorHSV());
     }
 
-    private void CreateCorridors(HashSet<Vector2Int> floorPositions, 
-        HashSet<Vector2Int> potentialRoomPositions)
+    private void CreateCorridors(HashSet<Vector2Int> floorPositions, HashSet<Vector2Int> potentialRoomPositions)
     {
         var currentPosition = startPosition;
         potentialRoomPositions.Add(currentPosition);

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Controller;
+using AI.So;
 using Pathfinding;
 using UnityEngine;
 
@@ -9,62 +9,41 @@ namespace AI.Elite
 {
     public class CareTaker : EnemyController
     {
+        internal SoCaretaker soCaretaker;
+        
         [Header("Enemy Attack")]
-        [SerializeField] private int circleDamage;
-        [SerializeField] private int bodyDamage;
-        [SerializeField] private int healAmount;
-        [SerializeField] private float bodyKnockback;
-        [SerializeField] private float cooldownTimer;
-        [SerializeField] private float timeBetweenCircleSpawn;
-        [SerializeField] private float attackRange;
-        [SerializeField] public bool blinkExecuted;
+        private float cooldownTimer;
+        private bool blinkExecuted;
 
         [Header("Enemy Components")]
-        public PlayerController playerController;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
+        private ParticleSystem particleHeal;
+        private ParticleSystem particleHeal2;
 
-        public List<GameObject> y;
+        private List<GameObject> y;
 
         protected override void Start()
         {
             base.Start();
+            soCaretaker = (SoCaretaker) soEnemy;
             GoToTheNearestMob();
             
             //Zones de heal / dégâts
             circle.enabled = false;
             circleSprite.SetActive(false);
-        }
 
-        private void Awake()
-        {
-            //Assignation du script au prefab ON SPAWN
-            playerController = PlayerController.instance;
+            particleHeal = GameObject.Find("ParticleHealZone").GetComponent<ParticleSystem>();
+            particleHeal2 = GameObject.Find("ParticleHealZone2").GetComponent<ParticleSystem>();
+            particleHeal.Stop();
+            particleHeal2.Stop();
         }
-
+        
         protected override void Update()
         {
             base.Update();
-            EnemyDeath();
-        }
-
-        private void OnTriggerEnter2D(Collider2D col)
-        {
-            if (!isStunned)
-            {
-                //Heal le TrashMobCLose
-                if (col.gameObject.CompareTag("Enemy"))
-                {
-                    col.gameObject.GetComponent<EnemyController>().currentHealth += healAmount;
-                    //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobClose>().currentHealth);
-                }
-
-                if (col.gameObject.CompareTag("Player"))
-                {
-                    col.GetComponent<PlayerController>().TakeDamage(circleDamage); //Player takes damage
-                    StartCoroutine(PlayerIsHit());
-                }
-            }
+            CircleTimer();
+            CheckIfTargetIsDead();
         }
 
         private void CircleTimer()
@@ -85,18 +64,23 @@ namespace AI.Elite
         {
             circle.enabled = true;
             circleSprite.SetActive(true);
-            currentHealth += healAmount;
-            yield return new WaitForSeconds(timeBetweenCircleSpawn);
+            particleHeal.Play();
+            particleHeal2.Play();
+            currentHealth += soCaretaker.healAmount;
+            yield return new WaitForSeconds(soCaretaker.timeBetweenCircleSpawn);
             circle.enabled = false;
             circleSprite.SetActive(false);
-            cooldownTimer = timeBetweenCircleSpawn;
+            particleHeal.Stop();
+            particleHeal2.Stop();
+            cooldownTimer = soCaretaker.timeBetweenCircleSpawn;
             blinkExecuted = false;
         }
 
         private void OnDrawGizmos()
         {
-            Vector3 position = transform.position;
-            Gizmos.DrawWireSphere(position, attackRange);
+            if (!Application.isPlaying) return;
+            var position = transform.position;
+            Gizmos.DrawWireSphere(position, soCaretaker.attackRange);
         }
 
         private void GoToTheNearestMob()
@@ -110,18 +94,25 @@ namespace AI.Elite
             foreach (var gObject in y.ToList()) //pour chaque gObject dans y alors exécute le script
             {
                 //exécuter ce script pour tous les game objects sauf ces mobs 
-                if (!gObject.CompareTag("Enemy"))
+                if (!gObject.CompareTag("Enemy") || gObject == gameObject)
                 {
                     y.Remove(gObject);
                 }
             }
-        
-            y = y.OrderBy(x => Vector2.Distance(transform.position, x.transform.position)).ToList();
-        
-            //prendre l'enemy le plus proche en new target (le premier de la liste)
-            if (y[0])
+
+            if (y.Count != 0)
             {
-                GetComponent<AIDestinationSetter>().target = y[0].transform;
+                y = y.OrderBy(x => Vector2.Distance(transform.position, x.transform.position)).ToList();
+        
+                //prendre l'enemy le plus proche en new target (le premier de la liste)
+                if (y[0])
+                {
+                    GetComponent<AIDestinationSetter>().target = y[0].transform;
+                }
+            }
+            else
+            {
+                GetComponent<AIDestinationSetter>().target = playerController.transform;
             }
         }
     
@@ -139,13 +130,13 @@ namespace AI.Elite
             if (col.gameObject.CompareTag("Player"))
             {
                 StartCoroutine(PlayerIsHit());
-                playerController.TakeDamage(bodyDamage); //Player takes damage
+                playerController.TakeDamage(soCaretaker.bodyDamage); //Player takes damage
 
-                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockback = direction * bodyKnockback;
+                var knockBack = direction * soCaretaker.bodyKnockBack;
             
-                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
         }
     }

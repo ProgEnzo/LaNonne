@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3786407124578739001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3786407124578739007}
+  - component: {fileID: 3786407124578739006}
+  - component: {fileID: 1029935344}
+  - component: {fileID: 3958210052896844946}
+  - component: {fileID: 604355164}
+  - component: {fileID: 6466677163502996521}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: GameManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3786407124578739007
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786407124578739001}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3786407124578739006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786407124578739001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1998cc00992028540b7fa8a3168de8b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectDuration: 5
+  effectMaxLevel: 3
+  numberOfEffects: 4
+  effectDictionary:
+  - shopObjects:
+    - {fileID: 11400000, guid: 1177300c01511d14d847d025bf8e5d43, type: 2}
+    - {fileID: 11400000, guid: c928bedec8e15b34594e6b1dc47b8740, type: 2}
+    - {fileID: 11400000, guid: a136863c79f69c84aaea54ecf87f3372, type: 2}
+  - shopObjects:
+    - {fileID: 11400000, guid: 5c018fef041b92646810499f29d4097a, type: 2}
+    - {fileID: 11400000, guid: 8931dd82f5803a347b722cc562f1abc5, type: 2}
+    - {fileID: 11400000, guid: e72a7de9b2353bb4e9bd781054176564, type: 2}
+  - shopObjects:
+    - {fileID: 11400000, guid: 1f7b950de9926cd4d91a6a76a41ac29a, type: 2}
+    - {fileID: 11400000, guid: f40f6f24ff6fc8b44b827ccda8fb106c, type: 2}
+    - {fileID: 11400000, guid: a29e3c6eaf72c744ab6f3cd0fb3c7a34, type: 2}
+  - shopObjects:
+    - {fileID: 11400000, guid: 5ffd0c3898ceeb84f8756af97271bcb3, type: 2}
+    - {fileID: 11400000, guid: 7cd3362ea90e55742aa43b1bdbf31085, type: 2}
+    - {fileID: 11400000, guid: b8695f523a501bd429e8e591cab9a7f0, type: 2}
+--- !u!114 &1029935344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786407124578739001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee040d66388c0364ca0b89ef143b5556, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  epCount: {fileID: 0}
+  mapPanel: {fileID: 0}
+  inGameUI: {fileID: 0}
+  bigMapRender: {fileID: 0}
+  bigMapCanvas: {fileID: 0}
+  camBigMap: {fileID: 0}
+  gameOverMenu: {fileID: 0}
+--- !u!114 &3958210052896844946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786407124578739001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee817392df0cf4c49ac4a3dd294a8325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &604355164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786407124578739001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6cb0d46d6eb384db0cdb1d649aeca6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftMoveKey: 113
+  rightMoveKey: 100
+  upMoveKey: 122
+  downMoveKey: 115
+  dashKey: 32
+  slowMoKey: 304
+  zealousBladeKey: 323
+  inquisitorialChainKey: 324
+  revealingDashKey: 32
+  mapKey: 109
+--- !u!114 &6466677163502996521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786407124578739001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 661bd8ba870b59a42bd2bb1d9b161b05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 0}

@@ -9,9 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceab9461821508f498cfda454331f443, type: 3}
+  m_Script: {fileID: 11500000, guid: 963402c4ce589024b8a11e7b60ce14e4, type: 3}
   m_Name: TDI
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 250
+  maxHealth: 160
   bodyDamage: 20
+  aiPathBasicSpeed: 1.5
+  velocityBasicSpeed: 0
+  numberOfEp: 20
+  scorePoint: 210
+  circleDamage: 20
+  timeBetweenCircleSpawn: 1
+  healAmount: 20
+  bodyKnockBack: 0

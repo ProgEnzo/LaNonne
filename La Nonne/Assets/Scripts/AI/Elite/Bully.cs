@@ -1,33 +1,20 @@
-using System;
 using System.Collections;
-using Controller;
-using Pathfinding;
+using AI.So;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace AI.Elite
 {
     public class Bully : EnemyController
     {
-        [Header("Enemy Attack")]
-        [SerializeField] private int bullyDamage;
-        [SerializeField] private float knockbackPower;
-
-        [Header("Enemy Components")]
-        public PlayerController playerController;
+        private SoBully soBully;
+        private Animator animator;
+        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
 
         private void Awake()
         {
-            //Assignation du script au prefab ON SPAWN
-            playerController = PlayerController.instance;
-            GetComponent<AIDestinationSetter>().target = playerController.transform;
-        }
-        
-        protected override void Update()
-        {
-            base.Update();
-            EnemyDeath();
+            soBully = (SoBully) soEnemy;
+            animator = transform.GetChild(2).GetComponent<Animator>();
         }
 
         private void OnCollisionEnter2D(Collision2D col) 
@@ -35,15 +22,24 @@ namespace AI.Elite
             //Si le bully touche le player
             if (col.gameObject.CompareTag("Player") && !isStunned)
             {
+                animator.SetBool(IsAttacking, true);
+                StartCoroutine(AnimationAttackFalse());
+                
                 StartCoroutine(PlayerIsHit());
-                playerController.TakeDamage(bullyDamage); //Player takes damage
+                playerController.TakeDamage(soBully.bodyDamage); //Player takes damage
 
-                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockback = direction * knockbackPower;
+                var knockBack = direction * soBully.knockBackPower;
             
-                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
+        }
+        
+        private IEnumerator AnimationAttackFalse()
+        {
+            yield return new WaitForNextFrameUnit();
+            animator.SetBool(IsAttacking, false);
         }
     }
 }

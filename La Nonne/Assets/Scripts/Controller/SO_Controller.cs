@@ -1,24 +1,57 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "playerController", menuName = "ScriptableObjects/new player Controller", order = 1)]
 
-public class SO_Controller : ScriptableObject
+namespace Controller
 {
-    [Header("Mouvement")]
-    public float m_speed;
-    public float m_dashSpeed = 750f;
-    public float m_durationDash = 0.35f;
-    public float dragDeceleration = 12f;
-    public float dragMultiplier = 12f;
+    [CreateAssetMenu(fileName = "playerController", menuName = "ScriptableObjects/new player Controller", order = 1)]
+
+    public class SO_Controller : ScriptableObject
+    {
+        [Header("Movement")]
+        [SerializeField] public float moveSpeed;
+        [SerializeField] public float dashSpeed;
+        [SerializeField] public float durationDash;
+        [SerializeField] public float dragDeceleration;
+        [SerializeField] public float dragMultiplier;
     
-    [Header("Life")] 
-    public int maxHealth;
-    public int currentHealth;
+        [Header("Health")]
+        [SerializeField] public int maxHealth;
 
-    [Header("Attack Values")] 
-    public int playerAttackDamage;
+        [Header("Zealous Blade")]
+        [SerializeField] public int zealousBladeDamage;
+        [SerializeField] public float zealousBladeHitLength;
+        [SerializeField] public float zealousBladeHitAngle;
+        [SerializeField] public float zealousBladeHitSpeed;
+        [SerializeField] public float zealousBladeToleranceAngle;
+        [SerializeField] public int zealousBladeMaxHitState;
+        [SerializeField] public float zealousBladeMaxDuringComboCooldown;
+        [SerializeField] public float zealousBladeMaxNextComboCooldown;
+        [SerializeField] public float zealousBladeMaxDetectionAngle;
+        [SerializeField] public float zealousBladeLittleHitStopDuration;
+        [SerializeField] public float zealousBladeLittleKnockBackForce;
+        [SerializeField] public float zealousBladeBigHitStopDuration;
+        [SerializeField] public float zealousBladeBigKnockBackForce;
 
-    [Header("EP")] 
-    public int epAmount;
+        [Header("Inquisitorial Chain")]
+        [SerializeField] public int inquisitorialChainDamage;
+        [SerializeField] public float inquisitorialChainChainHitLength;
+        [SerializeField] public float inquisitorialChainBladeHitLength;
+        [SerializeField] public float inquisitorialChainHitAngle;
+        [SerializeField] public float inquisitorialChainHitSpeed;
+        [SerializeField] public float inquisitorialChainToleranceAngle;
+        [SerializeField] public float inquisitorialChainCooldownTime;
+
+        [Header("Revealing Dash")]
+        [SerializeField] public int revealingDashDamage;
+        [SerializeField] public float revealingDashStunDuration;
+        [SerializeField] public float revealingDashToleranceDistance;
+        [SerializeField] public float revealingDashHitSpeed;
+        [SerializeField] public float revealingDashDetectionRadius;
+        [SerializeField] public float revealingDashFocusDuration;
+        
+        [Header("Slow Motion")]
+        [SerializeField] public float slowMoCooldown;
+        [SerializeField] public float slowMoDuration;
+        [SerializeField] public float slowMoSpeed;
+        [SerializeField] public float slowMoPlayerSpeedFactor;
+    }
 }

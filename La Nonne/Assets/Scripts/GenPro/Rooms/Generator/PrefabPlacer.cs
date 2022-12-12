@@ -24,7 +24,8 @@ public class PrefabPlacer : MonoBehaviour
                     );
                 if (possiblePlacementSpot.HasValue)
                 {
-                    placedObjects.Add(CreateObject(placementData.enemyPrefab, possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f))); //Instantiate(placementData.enemyPrefab,possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f), Quaternion.identity)
+                    placedObjects.Add(CreateObject(placementData.enemyPrefab, possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f))); 
+                    //Instantiate(placementData.enemyPrefab,possiblePlacementSpot.Value + new Vector2(0.5f, 0.5f), Quaternion.identity)
                 }
             }
         }
@@ -33,11 +34,12 @@ public class PrefabPlacer : MonoBehaviour
 
     public List<GameObject> PlaceAllItems(List<ItemPlacementData> itemPlacementData, ItemPlacementHelper itemPlacementHelper)
     {
-        List<GameObject> placedObjects = new List<GameObject>();
+        var placedObjects = new List<GameObject>();
 
-        IEnumerable<ItemPlacementData> sortedList = new List<ItemPlacementData>(itemPlacementData).OrderByDescending(placementData => placementData.itemData.size.x * placementData.itemData.size.y);
+        /*IEnumerable<ItemPlacementData> sortedList = new List<ItemPlacementData>(itemPlacementData).
+            OrderByDescending(placementData => placementData.itemData.size.x * placementData.itemData.size.y);*/
 
-        foreach (var placementData in sortedList)
+        foreach (var placementData in itemPlacementData)
         {
             for (int i = 0; i < placementData.Quantity; i++)
             {
@@ -51,9 +53,9 @@ public class PrefabPlacer : MonoBehaviour
         }
         return placedObjects;
     }
-    private GameObject PlaceItem(ItemData item, Vector2 placementPosition)
+    private GameObject PlaceItem(ItemData item, Vector2 placementPosition) //maybe ici pour faire spawn les prefabs et ne pas use des Data
     {
-        GameObject newItem = CreateObject(itemPrefab,placementPosition);
+        GameObject newItem = CreateObject(itemPrefab,placementPosition); //createObject = instantiate un SO
         //GameObject newItem = Instantiate(itemPrefab, placementPosition, Quaternion.identity); //je sais plus à quoi sert cette ligne sorry
         newItem.GetComponent<Item>().Initialize(item);
         return newItem;
@@ -71,7 +73,8 @@ public class PrefabPlacer : MonoBehaviour
         }
         else
         {
-            newItem = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+            newItem = Instantiate(prefab);
+            //newItem = PrefabUtility.InstantiatePrefab(prefab) as GameObject; //previously used
             newItem.transform.position = placementPosition;
             newItem.transform.rotation = Quaternion.identity;
         }

@@ -1,22 +1,16 @@
-using System.Collections;
-using Controller;
+using System;
+using AI.So;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace AI.Trash
 {
     public class TrashMobClose : EnemyController
     {
-        [Header("Enemy Attack")]
-        [SerializeField] private float knockbackPower;
+        private SoTrashMobClose soTrashMobClose;
 
-        [Header("Enemy Components")]
-        public PlayerController playerController;
-
-        protected override void Update()
+        private void Awake()
         {
-            base.Update();
-            EnemyDeath();
+            soTrashMobClose = (SoTrashMobClose) soEnemy;
         }
 
         private void OnCollisionEnter2D(Collision2D col) 
@@ -27,11 +21,11 @@ namespace AI.Trash
                 StartCoroutine(PlayerIsHit());
                 playerController.TakeDamage(soEnemy.bodyDamage); //Player takes damage
 
-                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockback = direction * knockbackPower;
+                var knockBack = direction * soTrashMobClose.knockBackPower;
             
-                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
         }
     }

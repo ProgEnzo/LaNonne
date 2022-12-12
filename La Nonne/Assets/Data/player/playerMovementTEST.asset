@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b238cc4a3ea964faba7793b2d325e0, type: 3}
+  m_Name: playerMovementTEST
+  m_EditorClassIdentifier: 
+  moveSpeed: 30
+  dashSpeed: 300
+  durationDash: 0.09
+  dragDeceleration: 6
+  dragMultiplier: 1.6
+  maxHealth: 1000
+  zealousBladeDamage: 15
+  zealousBladeHitLength: 1
+  zealousBladeHitAngle: 90
+  zealousBladeHitSpeed: 600
+  zealousBladeToleranceAngle: 1
+  zealousBladeMaxHitState: 3
+  zealousBladeMaxDuringComboCooldown: 2
+  zealousBladeMaxNextComboCooldown: 0.1
+  zealousBladeMaxDetectionAngle: 270
+  zealousBladeLittleHitStopDuration: 0.3
+  zealousBladeLittleKnockBackForce: 3
+  zealousBladeBigHitStopDuration: 0.6
+  zealousBladeBigKnockBackForce: 10
+  inquisitorialChainDamage: 25
+  inquisitorialChainChainHitLength: 2.5
+  inquisitorialChainBladeHitLength: 1
+  inquisitorialChainHitAngle: 179
+  inquisitorialChainHitSpeed: 800
+  inquisitorialChainToleranceAngle: 0.5
+  inquisitorialChainCooldownTime: 5
+  revealingDashDamage: 20
+  revealingDashTimer: 5
+  revealingDashStunDuration: 3
+  revealingDashToleranceDistance: 0.1
+  revealingDashHitSpeed: 500
+  revealingDashDetectionRadius: 5

@@ -1,57 +1,110 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using AI.So;
 using Controller;
+using DG.Tweening;
+using Manager;
 using Pathfinding;
+using Shop;
 using UnityEngine;
 
 namespace AI
 {
     public class EnemyController : MonoBehaviour
     {
-        [SerializeField] protected SO_Enemy soEnemy;
-        [SerializeField] public float currentHealth;
+        protected PlayerController playerController;
+        [SerializeField] internal SO_Enemy soEnemy;
+        public ScoreManager scoreManager;
+        internal float currentHealth;
+        internal float currentAiPathSpeed;
+        internal float currentVelocitySpeed;
+        internal float currentDamageMultiplier;
+        internal float currentEpDropMultiplier;
 
-        [NonSerialized] public bool isStunned;
+        internal bool isStunned;
         private AIPath aiPathComponent;
+        protected Rigidbody2D rb;
         private static readonly List<SpriteRenderer> PlayerSpriteRenderers = new();
+        internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
+        internal readonly float[] stackTimers = new float[3];
+        internal readonly bool[] areStacksOn = new bool[3];
+        private EffectManager effectManager;
+        private Coroutine currentHitStopCoroutine;
+
+        [SerializeField] private GameObject epDrop;
 
         protected virtual void Start()
         {
             aiPathComponent = GetComponent<AIPath>();
-            var playerRef = PlayerController.instance;
+            rb = GetComponent<Rigidbody2D>();
+            playerController = PlayerController.instance;
+            effectManager = EffectManager.instance;
+            scoreManager = ScoreManager.instance;
             currentHealth = soEnemy.maxHealth;
-            GetComponent<AIDestinationSetter>().target = playerRef.transform;
+            currentAiPathSpeed = soEnemy.aiPathBasicSpeed;
+            currentVelocitySpeed = soEnemy.velocityBasicSpeed;
+            currentDamageMultiplier = 1f;
+            currentEpDropMultiplier = 1f;
+            if (GetComponent<AIDestinationSetter>() != null)
+            {
+                GetComponent<AIDestinationSetter>().target = playerController.transform;
+            }
             isStunned = false;
+            
+            for (var i = 0; i < stacks.Length; i++)
+            {
+                stacks[i].effect = EffectManager.Effect.None; 
+                stacks[i].level = 0;
+                stackTimers[i] = 0;
+                areStacksOn[i] = false;
+            }
         }
         
         protected virtual void Update()
         {
-            var playerRef = PlayerController.instance;
+            aiPathComponent.maxSpeed = currentAiPathSpeed;
+            
             PlayerSpriteRenderers.Clear();
-            for (var i = 0; i < playerRef.transform.childCount; i++)
+            for (var i = 0; i < playerController.transform.childCount; i++)
             {
-                if (playerRef.transform.GetChild(i).TryGetComponent(out SpriteRenderer spriteRenderer))
+                if (playerController.transform.GetChild(i).TryGetComponent(out SpriteRenderer spriteRenderer))
                 {
                     PlayerSpriteRenderers.Add(spriteRenderer);
                 }
             }
-            
+
             HealCeiling();
             StunCheck();
+            EffectCheck();
         }
         
         #region HealthEnemy
-        public void TakeDamageFromPlayer(int damage)
+        public virtual void TakeDamageFromPlayer(int damage)
         {
-            currentHealth -= damage;
+            currentHealth -= damage * currentDamageMultiplier;
+            EnemyDeath();
         }
 
         protected void EnemyDeath()
         {
             if (currentHealth <= 0)
             {
-                Destroy(gameObject);
+                EpDrop((int)(soEnemy.numberOfEp * currentEpDropMultiplier));
+                
+                scoreManager.AddScore(soEnemy.scorePoint);
+
+                Destroy(gameObject); //Dies            
+            }
+        }
+
+        internal void EpDrop(int epNumber)
+        {
+            for (var i = 0; i < epNumber; i++)
+            {
+                var epPos = transform.position;
+                var epDropObject = Instantiate(epDrop, new Vector2(epPos.x, epPos.y), Quaternion.identity);
+
+                epDropObject.transform.DOMove(new Vector2(epPos.x + Random.Range(-1f, 0f), epPos.y + Random.Range(-0, 1f)), 0.5f).SetEase(Ease.OutBounce);
             }
         }
 
@@ -63,10 +116,54 @@ namespace AI
             }
         }
         #endregion
+        
+        internal void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
+        {
+            if (currentHitStopCoroutine != null)
+            {
+                StopCoroutine(currentHitStopCoroutine);
+            }
+            currentHitStopCoroutine = StartCoroutine(HitStop(hitStopDuration));
+            rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
+        }
+        
+        private IEnumerator HitStop(float hitStopDuration)
+        {
+            var velocitySpeed = currentVelocitySpeed;
+            aiPathComponent.canMove = false;
+            currentVelocitySpeed = 0;
+            yield return new WaitForSeconds(hitStopDuration);
+            currentVelocitySpeed = velocitySpeed;
+            aiPathComponent.canMove = true;
+            currentHitStopCoroutine = null;
+        }
 
         protected virtual void StunCheck()
         {
             aiPathComponent.enabled = !isStunned;
+        }
+        
+        private void EffectCheck()
+        {
+            for (var i = 0; i < stacks.Length; i++)
+            {
+                if (stacks[i].effect == EffectManager.Effect.None)
+                {
+                    continue;
+                }
+                stackTimers[i] -= Time.deltaTime;
+                if (stackTimers[i] <= 0)
+                {
+                    stackTimers[i] = 0;
+                    stacks[i].effect = EffectManager.Effect.None;
+                    stacks[i].level = 0;
+                    continue;
+                }
+
+                if (areStacksOn[i]) continue;
+                areStacksOn[i] = true;
+                effectManager.EffectSwitch(stacks[i].effect, stacks[i].level, gameObject, i);
+            }
         }
 
         protected internal static IEnumerator PlayerIsHit()

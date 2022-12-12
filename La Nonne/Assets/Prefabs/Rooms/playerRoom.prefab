@@ -44,18 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 857fa896f5b09834498d9d045274ff5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomCenter: {x: 0, y: 0}
   player: {fileID: 8234393531196798958, guid: 295b1223c8b2f9e47a361b63c8620000, type: 3}
-  itemData:
-  - minQuantity: 4
-    maxQuantity: 6
-    itemData: {fileID: 11400000, guid: 4495acd69af8fa9498d3d9d1683315a4, type: 2}
-  - minQuantity: 2
-    maxQuantity: 6
-    itemData: {fileID: 11400000, guid: 959da7038438b9c47bee5656975a2629, type: 2}
-  - minQuantity: 4
-    maxQuantity: 6
-    itemData: {fileID: 11400000, guid: 3793436cc813cda429901ebd28a09097, type: 2}
-  - minQuantity: 2
-    maxQuantity: 4
-    itemData: {fileID: 11400000, guid: 29b870c635b910a42815d70b50c846b9, type: 2}
+  itemData: []
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}

@@ -1,6 +1,5 @@
 using System.Collections;
-using AI.Trash;
-using Controller;
+using AI.So;
 using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,59 +8,37 @@ namespace AI.Elite
 {
     public class TDI : EnemyController
     {
-        [Header("Enemy Attack")] 
-        [SerializeField] public int bodyDamage;
-        [SerializeField] public int bodyKnockback;
-        [SerializeField] public int circleDamage;
-        [SerializeField] public bool blinkExecuted;
+        [Header("Enemy Attack")]
+        private bool blinkExecuted;
+        private float cooldownTimer;
         
-        
-        [HideInInspector] public float cooldownTimer;
-        [SerializeField] private float timeBetweenCircleSpawn;
-        
-        [SerializeField] public float healAmount;
-        
-        [Header("Components")] 
+        [Header("Components")]
         [SerializeField] public GameObject bully;
         [SerializeField] public GameObject caretaker;
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
-        [HideInInspector] public PlayerController playerController;
+        [SerializeField] private ParticleSystem particleHeal;
+        [SerializeField] private ParticleSystem particleHeal2;
+        internal SoTdi soTdi;
         
         protected override void Start()
         {
             base.Start();
-            cooldownTimer = timeBetweenCircleSpawn;
+            soTdi = (SoTdi) soEnemy;
+            cooldownTimer = soTdi.timeBetweenCircleSpawn;
+
+            particleHeal = GameObject.Find("ParticleHealZone").GetComponent<ParticleSystem>();
+            particleHeal2 = GameObject.Find("ParticleHealZone2").GetComponent<ParticleSystem>();
+            particleHeal.Stop();
+            particleHeal2.Stop();
+
         }
 
         protected override void Update()
         {
             base.Update();
-            StartCoroutine(EnemyDeath());
 
             CircleTimer();
-        }
-
-        private void Awake()
-        {
-            //Assignation du script playerController au prefab ON SPAWN
-            playerController = PlayerController.instance;
-        }
-
-        private void OnTriggerEnter2D(Collider2D col)
-        {
-            //Heal le TrashMobCLose
-            if (col.gameObject.CompareTag("Enemy"))
-            {
-                col.gameObject.GetComponent<EnemyController>().currentHealth += healAmount;
-                //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + col.gameObject.GetComponent<TrashMobClose>().currentHealth);
-            }
-
-            if (col.gameObject.CompareTag("Player"))
-            {
-                col.GetComponent<PlayerController>().TakeDamage(circleDamage); //Player takes damage
-                StartCoroutine(PlayerIsHit());
-            }
         }
 
         private void OnCollisionEnter2D(Collision2D col) 
@@ -70,18 +47,24 @@ namespace AI.Elite
             if (col.gameObject.CompareTag("Player"))
             {
                 StartCoroutine(PlayerIsHit());
-                playerController.TakeDamage(bodyDamage); //Player takes damage
+                playerController.TakeDamage(soTdi.bodyDamage); //Player takes damage
 
-                Collider2D colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
+                var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
                 Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                Vector2 knockback = direction * bodyKnockback;
+                var knockBack = direction * soTdi.bodyKnockBack;
             
-                playerController.mRigidbody.AddForce(knockback, ForceMode2D.Impulse);
+                playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
             }
         }
 
         #region HealthEnemy
-        private new IEnumerator EnemyDeath()
+        public override void TakeDamageFromPlayer(int damage)
+        {
+            currentHealth -= damage;
+            StartCoroutine(Split());
+        }
+        
+        private IEnumerator Split()
         {
             if (!(currentHealth <= 50)) yield break;
             transform.DOScale(new Vector3(3, 0, 3), 0.1f);
@@ -111,11 +94,17 @@ namespace AI.Elite
         {
             circle.enabled = true;
             circleSprite.SetActive(true);
-            currentHealth += healAmount;
-            yield return new WaitForSeconds(timeBetweenCircleSpawn);
+            particleHeal.Play();
+            particleHeal2.Play();
+            
+            currentHealth += soTdi.healAmount;
+            yield return new WaitForSeconds(soTdi.timeBetweenCircleSpawn);
             circle.enabled = false;
             circleSprite.SetActive(false);
-            cooldownTimer = timeBetweenCircleSpawn;
+            particleHeal.Stop();
+            particleHeal2.Stop();
+
+            cooldownTimer = soTdi.timeBetweenCircleSpawn;
             blinkExecuted = false;
         }
     }

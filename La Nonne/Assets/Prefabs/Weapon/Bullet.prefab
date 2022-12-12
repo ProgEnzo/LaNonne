@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -136,5 +136,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a778908344208a9439f61a2d0ad7ff5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 4401665247276526673, guid: 12a79cf39fe43e940932366b0ff2dffe, type: 3}
-  bulletDamage: 20
+  soTrashMobRange: {fileID: 11400000, guid: 9f2742f2ad53eb74ea348e51433f4c8a, type: 2}
