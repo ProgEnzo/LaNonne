@@ -26,6 +26,8 @@ public class TilemapVisualizer : MonoBehaviour
         wallDiagonalCornerUpRight,
         wallDiagonalCornerUpLeft; //les différentes tiles utilisables
 
+    private DungeonData dungeonData;
+
     public void PaintFloorTiles(IEnumerable<Vector2Int> floorPositions)
     {
         PaintTiles(floorPositions, floorTilemap, floorTile);
@@ -165,61 +167,61 @@ public class TilemapVisualizer : MonoBehaviour
         return tileReturn;
     }
     
-    public List<Vector2Int> GetFloorsNearWalls(int middleX, int middleY, PlacementType typeWanted)
+    public List<Vector2Int> GetFloorsNearWalls(float middleX, float middleY, PlacementType typeWanted)
     {
-        int count = 25;
+        float count = 25;
         
         List<Vector2Int> tileReturn = new ();
 
-        for (int i = 0; i < count; i+=1)
+        for (float i = 0; i < count; i+=1.2f)
         {
-            for (int j = 0; j < count; j+=1)
+            for (float j = 0; j < count; j+=1.2f)
             {
                 var cellX = middleX - count / 2 + i;
                 var cellY = middleY - count / 2 + j;
                 
-                var tile = floorTilemap.GetTile(new Vector3Int(cellX, cellY, 0)); 
-                var wallTile = wallTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
+                //var tile = floorTilemap.GetTile(new Vector3Int(cellX, cellY, 0)); 
+                var wallTile = wallTilemap.GetTile(new Vector3Int((int) cellX, (int) cellY, 0));
                 
-                var tileX = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
-                var wallTileX = wallTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
-                var tileXBis = floorTilemap.GetTile(new Vector3Int(cellX -1, cellY, 0));
-                var wallTileXBis = wallTilemap.GetTile(new Vector3Int(cellX -1, cellY, 0));
+                var tileX = floorTilemap.GetTile(new Vector3Int((int) (cellX +1), (int) cellY, 0));
+                //var wallTileX = wallTilemap.GetTile(new Vector3Int((int) (cellX +1), cellY, 0));
+                var tileXBis = floorTilemap.GetTile(new Vector3Int((int) (cellX -1), (int) cellY, 0));
+                //var wallTileXBis = wallTilemap.GetTile(new Vector3Int(cellX -1, cellY, 0));
                 
-                var tileY = floorTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
-                var wallTileY = wallTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
-                var tileYBis = floorTilemap.GetTile(new Vector3Int(cellX, cellY +1, 0));
-                var wallTileYBis = wallTilemap.GetTile(new Vector3Int(cellX, cellY +1, 0));
+                var tileY = floorTilemap.GetTile(new Vector3Int((int) cellX, (int) cellY -1, 0));
+                //var wallTileY = wallTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
+                var tileYBis = floorTilemap.GetTile(new Vector3Int((int) cellX, (int) cellY +1, 0));
+                //var wallTileYBis = wallTilemap.GetTile(new Vector3Int(cellX, cellY +1, 0));
                 
-                var tileXY = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
-                var wallTileXY = wallTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
-                var tileXYBis = floorTilemap.GetTile(new Vector3Int(cellX -1, cellY +1, 0));
-                var wallTileXYBis = wallTilemap.GetTile(new Vector3Int(cellX -1, cellY +1, 0));
+                //var tileXY = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
+                //var wallTileXY = wallTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
+                //var tileXYBis = floorTilemap.GetTile(new Vector3Int(cellX -1, cellY +1, 0));
+                //var wallTileXYBis = wallTilemap.GetTile(new Vector3Int(cellX -1, cellY +1, 0));
 
                 switch (typeWanted)
                 {
                     case PlacementType.nearWallUp :
                         if (wallTile == wallTop && tileY == floorTile) //pas instancier dans les couloirs 
                         {
-                            tileReturn.Add(new Vector2Int(cellX, cellY));
+                            tileReturn.Add(new Vector2Int((int) cellX, (int) cellY));
                         }
                         break;
                     case PlacementType.nearWallRight :
                         if (wallTile == wallSideRight && tileXBis == floorTile) //pas instancier dans les couloirs 
                         {
-                            tileReturn.Add(new Vector2Int(cellX, cellY));
+                            tileReturn.Add(new Vector2Int((int) cellX, (int) cellY));
                         }
                         break;
                     case PlacementType.nearWallDown :
                         if (wallTile == wallBottom && tileYBis == floorTile)
                         {
-                            tileReturn.Add(new Vector2Int(cellX, cellY));
+                            tileReturn.Add(new Vector2Int((int) cellX, (int) cellY));
                         }
                         break;
                     case PlacementType.nearWallLeft :
                         if (wallTile == wallSideLeft && tileX == floorTile)
                         {
-                            tileReturn.Add(new Vector2Int(cellX, cellY));
+                            tileReturn.Add(new Vector2Int((int) cellX, (int) cellY));
                         }
                         break;
                 }
