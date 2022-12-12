@@ -52,14 +52,14 @@ namespace Controller
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
             
-            currentDuringComboCooldown -= Time.deltaTime;
-            currentNextComboCooldown -= Time.deltaTime;
+            currentDuringComboCooldown -= Time.unscaledDeltaTime;
+            currentNextComboCooldown -= Time.unscaledDeltaTime;
             if (currentDuringComboCooldown <= 0)
             {
                 hitState = 0;
             }
 
-            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !playerController.isSlowMoOn && !isHitting && currentNextComboCooldown <= 0)
+            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0 && !playerController.isRevealingDashHitting)
             {
                 ZealousBladeStart();
             }
@@ -138,7 +138,7 @@ namespace Controller
                 if (hitState % 2 == 1)
                 {
                     transform.rotation =
-                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor / Time.timeScale);
+                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor);
                     if (transform.rotation.eulerAngles.z < finalRotation1.eulerAngles.z + soController.zealousBladeToleranceAngle &&
                         transform.rotation.eulerAngles.z > finalRotation1.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {
@@ -156,7 +156,7 @@ namespace Controller
                 else
                 {
                     transform.rotation =
-                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor / Time.timeScale);
+                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor);
                     if (transform.rotation.eulerAngles.z < finalRotation2.eulerAngles.z + soController.zealousBladeToleranceAngle &&
                         transform.rotation.eulerAngles.z > finalRotation2.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {

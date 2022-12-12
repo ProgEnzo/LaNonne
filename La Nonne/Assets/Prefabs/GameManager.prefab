@@ -81,11 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   epCount: {fileID: 0}
-  mapPanel: {fileID: 0}
   inGameUI: {fileID: 0}
-  bigMapRender: {fileID: 0}
-  bigMapCanvas: {fileID: 0}
-  camBigMap: {fileID: 0}
   gameOverMenu: {fileID: 0}
 --- !u!114 &3958210052896844946
 MonoBehaviour:
@@ -116,10 +112,9 @@ MonoBehaviour:
   upMoveKey: 122
   downMoveKey: 115
   dashKey: 32
-  slowMoKey: 304
   zealousBladeKey: 323
   inquisitorialChainKey: 324
-  revealingDashKey: 32
+  revealingDashKey: 304
   mapKey: 109
 --- !u!114 &6466677163502996521
 MonoBehaviour:
@@ -133,4 +128,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 661bd8ba870b59a42bd2bb1d9b161b05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreText: {fileID: 0}

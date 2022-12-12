@@ -5,7 +5,6 @@ using AI;
 using Core.Scripts.Utils;
 using DG.Tweening;
 using Manager;
-using Pathfinding.Util;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -40,28 +39,22 @@ namespace Controller
         [Header("Health")]
         private int currentHealth;
 
-        [Header("Slow Motion")]
-        internal bool isSlowMoOn;
-        private float currentSlowMoCooldown;
-        private float currentSlowMoDuration;
-        internal float currentSlowMoPlayerMoveSpeedFactor;
-        internal float currentSlowMoPlayerAttackSpeedFactor;
-        internal Sequence slowMoSequence;
-        internal Guid slowMoUid;
-
         [Header("Revealing Dash")]
-        private bool isRevealingDashHitting;
+        internal bool isRevealingDashHitting;
         private GameObject revealingDashAimedEnemy;
         private Vector3 revealingDashNewPosition;
         private readonly Dictionary<GameObject, Coroutine> revealingDashRunningStunCoroutines = new();
         private float revealingDashTotalDistance;
-        private bool isRevealingDashOn;
+        internal bool isRevealingDashOn;
         private bool isRevealingDashFocusOn;
         private float currentRevealingDashFocusCooldown;
+        private float currentRevealingDashCooldown;
+        internal float currentSlowMoPlayerMoveSpeedFactor;
+        internal float currentSlowMoPlayerAttackSpeedFactor;
 
         [Header("UI elements")]
         private Image healthBar;
-        private Image chrono;
+        private Image revealingDashCooldownBar;
         internal int currentEp;
         private UIManager uiManager;
         
@@ -138,8 +131,8 @@ namespace Controller
             isRevealingDashOn = false;
             healthBar = GameObject.Find("HealthBar").transform.GetChild(0).GetComponent<Image>();
             healthBar.fillAmount = 1f;
-            chrono = GameObject.Find("Chrono").GetComponent<Image>();
-            chrono.fillAmount = 1f;
+            revealingDashCooldownBar = GameObject.Find("RevealingDashCooldown").GetComponent<Image>();
+            revealingDashCooldownBar.fillAmount = 1f;
             currentEp = 0;
             currentSlowMoPlayerMoveSpeedFactor = 1f;
             currentSlowMoPlayerAttackSpeedFactor = 1f;
@@ -152,7 +145,7 @@ namespace Controller
 
         public void Update()
         {
-            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isSlowMoOn)
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn)
             {
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
@@ -167,20 +160,25 @@ namespace Controller
                 timerDash -= Time.deltaTime;
             }
             
-            SlowMoManager();
+            // SlowMoManager();
             RevealingDashStart();
+            RevealingDash();
             RevealingDashFocus();
-            
+
             currentAnimPrefabAnimator.SetFloat(SlowMoMoveSpeed, currentSlowMoPlayerMoveSpeedFactor);
             currentAnimPrefabAnimator.SetFloat(SlowMoAttackSpeed, currentSlowMoPlayerAttackSpeedFactor);
-            chrono.fillAmount = 1 - currentSlowMoCooldown / soController.slowMoCooldown;
+            
+            if (currentRevealingDashCooldown > 0)
+            {
+                currentRevealingDashCooldown -= Time.deltaTime;
+            }
+            revealingDashCooldownBar.fillAmount = 1 - currentRevealingDashCooldown / soController.revealingDashCooldown;
         }
         
         public void FixedUpdate()
         {
             mRigidbody.drag = soController.dragDeceleration * soController.dragMultiplier;
             ManageMove();
-            RevealingDash();
         }
         
         public void AddEp(int epGain)
@@ -356,9 +354,9 @@ namespace Controller
         
         #endregion
 
-        #region AttackPlayer
+        #region Ex-SlowMo
 
-        private void SlowMoManager()
+        /*private void SlowMoManager()
         {
             if (Input.GetKeyDown(inputManager.slowMoKey) && currentSlowMoCooldown <= 0)
             {
@@ -417,15 +415,16 @@ namespace Controller
             {
                 currentSlowMoCooldown -= Time.deltaTime;
             }
-        }
-
+        }*/
+        
+        #endregion
+        
+        #region RevealingDash
+        
         private void RevealingDashStart()
         {
-            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashHitting && isSlowMoOn)
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashHitting)
             {
-                DOTween.Kill(slowMoUid);
-                slowMoSequence = null;
-                isSlowMoOn = false;
                 isRevealingDashOn = true;
                 
                 var enemiesInArea = new List<RaycastHit2D>();
@@ -445,18 +444,11 @@ namespace Controller
                     revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
                     isRevealingDashHitting = true;
                     revealingDashTotalDistance = Vector3.Distance(transform.position, revealingDashNewPosition);
+                    
+                    DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0.1f, revealingDashTotalDistance / soController.revealingDashHitSpeed);
+                    DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.002f, revealingDashTotalDistance / soController.revealingDashHitSpeed);
                     return;
                 }
-                
-                currentSlowMoPlayerMoveSpeedFactor = 1f;
-                currentSlowMoPlayerAttackSpeedFactor = 1f;
-                Time.timeScale = 1;
-                Time.fixedDeltaTime = 0.02f;
-                
-                DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0.1f, revealingDashTotalDistance / (soController.revealingDashHitSpeed * Time.deltaTime));
-                DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, revealingDashTotalDistance / (soController.revealingDashHitSpeed * Time.deltaTime));
-                DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, revealingDashTotalDistance / (soController.revealingDashHitSpeed * Time.deltaTime));
-                DOTween.To(() => currentSlowMoPlayerAttackSpeedFactor, x => currentSlowMoPlayerAttackSpeedFactor = x, 1, revealingDashTotalDistance / (soController.revealingDashHitSpeed * Time.deltaTime));
             }
         }
 
@@ -511,6 +503,7 @@ namespace Controller
                 
                     isRevealingDashFocusOn = false;
                     isRevealingDashOn = false;
+                    currentRevealingDashCooldown = soController.revealingDashCooldown;
                 }
                 currentRevealingDashFocusCooldown -= Time.deltaTime;
             }
@@ -522,6 +515,7 @@ namespace Controller
                 
                 isRevealingDashFocusOn = false;
                 isRevealingDashOn = false;
+                currentRevealingDashCooldown = soController.revealingDashCooldown;
             }
         }
 
