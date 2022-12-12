@@ -173,7 +173,7 @@ public class TilemapVisualizer : MonoBehaviour
         
         List<Vector2Int> tileReturn = new ();
 
-        for (int i = 0; i < count; i+=2)
+        for (int i = 0; i < count; i+=2) //bypass les couloirs (trouver une solution plus clean) verif avec la fonction GetRoomFloorWithourCorridor
         {
             for (int j = 0; j < count; j+=2)
             {
