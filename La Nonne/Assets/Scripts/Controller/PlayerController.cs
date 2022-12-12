@@ -424,7 +424,7 @@ namespace Controller
         
         private void RevealingDashStart()
         {
-            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashHitting)
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn)
             {
                 isRevealingDashOn = true;
                 
