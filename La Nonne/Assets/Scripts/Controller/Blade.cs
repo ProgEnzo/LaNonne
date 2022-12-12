@@ -83,6 +83,17 @@ namespace Controller
             currentDuringComboCooldown = soController.zealousBladeMaxDuringComboCooldown;
             
             var facingDirection = playerController.direction.horizontal + playerController.direction.vertical;
+            if (facingDirection == Vector2.zero)
+            {
+                facingDirection = (playerController.currentAnimPrefabAnimator.GetInteger(DirectionState), playerController.transform.localScale.x) switch
+                {
+                    (0, > 0 or < 0) => Vector2.down,
+                    (1, > 0 or < 0) => Vector2.up,
+                    (2, > 0) => Vector2.right,
+                    (2, < 0) => Vector2.left,
+                    _ => Vector2.right
+                };
+            }
             var transform1 = transform;
             transform1.rotation = Quaternion.LookRotation(Vector3.forward, facingDirection);
             GameObject enemyToAim = null;
