@@ -1,5 +1,7 @@
+using System.Collections;
 using AI.So;
 using Pathfinding;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace AI.Trash
@@ -14,12 +16,15 @@ namespace AI.Trash
         private AIPath scriptAIPath;
         [SerializeField] private GameObject bulletPrefab;
         private SoTrashMobRange soTrashMobRange;
+        private Animator animator;
+        private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
 
         protected override void Start()
         {
             base.Start();
             soTrashMobRange = (SoTrashMobRange) soEnemy;
             scriptAIPath = GetComponent<AIPath>();
+            animator = transform.GetChild(3).GetComponent<Animator>();
         }
         
         protected override void Update()
@@ -65,16 +70,26 @@ namespace AI.Trash
                 return;
             }
             cooldownTimer = soTrashMobRange.cooldownBetweenShots;
+            
+            animator.SetBool(IsAttacking, true);
 
             var position = transform.position;
             var direction = playerController.transform.position - position; // direction entre player et enemy
             var bullet = Instantiate(bulletPrefab, position, Quaternion.identity); // spawn bullet
             var rbBullet = bullet.GetComponent<Rigidbody2D>(); // chope le rb de la bullet 
             rbBullet.AddForce(direction.normalized * soTrashMobRange.bulletSpeed, ForceMode2D.Impulse); // Addforce avec la direction + le rb
-        
+
+            StartCoroutine(AnimationAttackFalse());
+            
             Destroy(bullet, 3f);
         }
         
+        private IEnumerator AnimationAttackFalse()
+        {
+            yield return new WaitForNextFrameUnit();
+            animator.SetBool(IsAttacking, false);
+        }
+
         private void OnCollisionEnter2D(Collision2D col) 
         {
             //Si le TrashMobRange touche le player
@@ -98,6 +113,7 @@ namespace AI.Trash
             Gizmos.DrawWireSphere(position, soTrashMobRange.shootingRange);
             Gizmos.DrawWireSphere(position, soTrashMobRange.aggroRange);
         }
+        
         #endregion
     }
 }
