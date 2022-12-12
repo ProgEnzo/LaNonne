@@ -31,6 +31,13 @@ namespace AI.Elite
             circle.enabled = false;
             circleSprite.SetActive(false);
         }
+        
+        protected override void Update()
+        {
+            base.Update();
+            CircleTimer();
+            CheckIfTargetIsDead();
+        }
 
         private void CircleTimer()
         {
@@ -81,13 +88,20 @@ namespace AI.Elite
                     y.Remove(gObject);
                 }
             }
-        
-            y = y.OrderBy(x => Vector2.Distance(transform.position, x.transform.position)).ToList();
-        
-            //prendre l'enemy le plus proche en new target (le premier de la liste)
-            if (y[0])
+
+            if (y.Count != 0)
             {
-                GetComponent<AIDestinationSetter>().target = y[0].transform;
+                y = y.OrderBy(x => Vector2.Distance(transform.position, x.transform.position)).ToList();
+        
+                //prendre l'enemy le plus proche en new target (le premier de la liste)
+                if (y[0])
+                {
+                    GetComponent<AIDestinationSetter>().target = y[0].transform;
+                }
+            }
+            else
+            {
+                GetComponent<AIDestinationSetter>().target = playerController.transform;
             }
         }
     
