@@ -205,14 +205,14 @@ namespace Shop.UI
          menu.SetActive(true);
          for (var i = 0; i < EffectManager.instance.effectInventory.Count; i++)
          {
-            menu.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (EffectManager.Effect)i + "\n\n" + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
+            menu.transform.GetChild(1).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (EffectManager.Effect)i + "\n\n" + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
          }
 
          for (var i = 0; i < EffectManager.instance.appliedEffects.Length; i++)
          {
             if (EffectManager.instance.appliedEffects[i] != EffectManager.Effect.None)
             {
-               menu.transform.GetChild(i+7).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[i] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[i]];
+               menu.transform.GetChild(i+2).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[i] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[i]];
             }
          }
       }
@@ -254,7 +254,7 @@ namespace Shop.UI
          if (isEffectEmplacementSelected && EffectManager.instance.effectInventory[(EffectManager.Effect)buttonNumber] > 0 && canChooseEffect && !effectManager.appliedEffects.Contains((EffectManager.Effect)buttonNumber))
          {
             EffectManager.instance.appliedEffects[selectedEffectEmplacement] = (EffectManager.Effect)buttonNumber;
-            whipModificationMenu.transform.GetChild(selectedEffectEmplacement+7).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[selectedEffectEmplacement] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[selectedEffectEmplacement]];
+            whipModificationMenu.transform.GetChild(selectedEffectEmplacement+2).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[selectedEffectEmplacement] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[selectedEffectEmplacement]];
             canChooseEffect = false;
          }
       }
