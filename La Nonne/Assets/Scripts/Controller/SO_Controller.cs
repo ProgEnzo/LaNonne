@@ -47,11 +47,6 @@ namespace Controller
         [SerializeField] public float revealingDashHitSpeed;
         [SerializeField] public float revealingDashDetectionRadius;
         [SerializeField] public float revealingDashFocusDuration;
-        
-        [Header("Slow Motion")]
-        [SerializeField] public float slowMoCooldown;
-        [SerializeField] public float slowMoDuration;
-        [SerializeField] public float slowMoSpeed;
-        [SerializeField] public float slowMoPlayerSpeedFactor;
+        [SerializeField] public float revealingDashCooldown;
     }
 }
