@@ -483,11 +483,23 @@ namespace Controller
                 
                 //Fin du dash
                 isRevealingDashHitting = false;
+
+                if (revealingDashAimedEnemy != null)
+                {
+                    //Gestion du slow mo
+                    DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 0.1f, 0.1f).SetEase(Ease.InQuad);
+                    currentRevealingDashFocusCooldown = soController.revealingDashFocusDuration;
+                    isRevealingDashFocusOn = true;
+                }
+                else
+                {
+                    DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
+                    DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
+                    DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, 0.01f);
                 
-                //Gestion du slow mo
-                DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 0.1f, 0.1f).SetEase(Ease.InQuad);
-                currentRevealingDashFocusCooldown = soController.revealingDashFocusDuration;
-                isRevealingDashFocusOn = true;
+                    isRevealingDashOn = false;
+                    currentRevealingDashCooldown = soController.revealingDashCooldown;
+                }
             }
         }
         
