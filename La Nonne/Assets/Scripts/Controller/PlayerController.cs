@@ -466,10 +466,11 @@ namespace Controller
                 transform.position = Vector2.MoveTowards(position, revealingDashNewPosition, soController.revealingDashHitSpeed * Time.deltaTime);
                 
                 //Gestion du slow mo
-                Time.timeScale = Mathf.Lerp(Time.timeScale, 0.1f, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.deltaTime);
+                Time.timeScale = Mathf.Lerp(Time.timeScale, 0.1f, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.timeScale);
+                Debug.Log(Time.timeScale);
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
-                currentSlowMoPlayerMoveSpeedFactor = Mathf.Lerp(currentSlowMoPlayerMoveSpeedFactor, 1, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.deltaTime);
-                currentSlowMoPlayerAttackSpeedFactor = Mathf.Lerp(currentSlowMoPlayerAttackSpeedFactor, 1, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.deltaTime);
+                currentSlowMoPlayerMoveSpeedFactor = Mathf.Lerp(currentSlowMoPlayerMoveSpeedFactor, 1, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.timeScale);
+                currentSlowMoPlayerAttackSpeedFactor = Mathf.Lerp(currentSlowMoPlayerAttackSpeedFactor, 1, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.timeScale);
                 
                 //Tant que l'ennemi n'est pas atteint, on ne passe pas à la suite
                 if (!(Vector3.Distance(transform.position, revealingDashNewPosition) < soController.revealingDashToleranceDistance)) return;
