@@ -31,6 +31,9 @@ namespace Controller
         [Header("Inputs")]
         private InputManager inputManager;
         
+        [Header("Movement")]
+        internal (Vector2 horizontal, Vector2 vertical) direction = (new Vector2(0, 0), new Vector2(0, 0));
+        
         [Header("Dash")]
         internal float timerDash;
         
@@ -199,6 +202,8 @@ namespace Controller
             
             var localScale = transform.localScale; // for animation
 
+            direction = (Vector2.zero, Vector2.zero);
+
             if (Input.GetKey(inputManager.leftMoveKey)) // for input
             {
                 isMoving = true; // for animation
@@ -210,6 +215,7 @@ namespace Controller
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
                 mRigidbody.AddForce(Vector2.left * (speed * currentSlowMoPlayerMoveSpeedFactor) / Time.timeScale); // for movement
+                direction.horizontal = Vector2.left;
             }
 
             if (Input.GetKey(inputManager.rightMoveKey)) // for input
@@ -223,6 +229,7 @@ namespace Controller
                     animParametersToChange = (DirectionState, 2); // for animation
                 }
                 mRigidbody.AddForce(Vector2.right * (speed * currentSlowMoPlayerMoveSpeedFactor) / Time.timeScale); // for movement
+                direction.horizontal = direction.horizontal == Vector2.left ? Vector2.zero : Vector2.right;
             }
 
             if (Input.GetKey(inputManager.upMoveKey)) // for input
@@ -238,6 +245,7 @@ namespace Controller
                     }
                 }
                 mRigidbody.AddForce(Vector2.up * (speed * currentSlowMoPlayerMoveSpeedFactor) / Time.timeScale); // for movement
+                direction.vertical = Vector2.up;
             }
 
             if (Input.GetKey(inputManager.downMoveKey)) // for input
@@ -253,6 +261,7 @@ namespace Controller
                     }
                 }
                 mRigidbody.AddForce(Vector2.down * (speed * currentSlowMoPlayerMoveSpeedFactor) / Time.timeScale); // for movement
+                direction.vertical = direction.vertical == Vector2.up ? Vector2.zero : Vector2.down;
             }
 
             if (!isRevealingDashHitting)
