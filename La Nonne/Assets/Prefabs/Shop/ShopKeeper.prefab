@@ -433,6 +433,7 @@ MonoBehaviour:
   whipModificationMenu: {fileID: 7374594419546855717}
   shopCanvas: {fileID: 1673445986217189897}
   image: {fileID: 1587969764645661724}
+  epCountText: {fileID: 7235569693496466780}
   timeToAccess: 0.5
   numberOfOfferedObjects: 3
   maxNumberOfTakenObjects: 2
@@ -1985,6 +1986,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SelectEffectEmplacement
       objectReference: {fileID: 0}
+    - target: {fileID: 5032034568221170622, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 5182334780188998357, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -31
@@ -2291,6 +2296,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
+--- !u!114 &7235569693496466780 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5032034568221170622, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
+  m_PrefabInstance: {fileID: 2430968032009340642}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7374594417885645765 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5182334780596309287, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
