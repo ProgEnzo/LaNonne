@@ -28,8 +28,6 @@ namespace AI.Elite
             soTdi = (SoTdi) soEnemy;
             cooldownTimer = soTdi.timeBetweenCircleSpawn;
             
-            particleHeal = GameObject.Find("ParticleHealZone").GetComponent<ParticleSystem>();
-            particleHeal2 = GameObject.Find("ParticleHealZone2").GetComponent<ParticleSystem>();
             particleHeal.Stop();
             particleHeal2.Stop();
 

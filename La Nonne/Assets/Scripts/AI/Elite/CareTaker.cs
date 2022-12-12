@@ -19,8 +19,8 @@ namespace AI.Elite
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
         [SerializeField] private GameObject circleSpriteWarning;
-        private ParticleSystem particleHeal;
-        private ParticleSystem particleHeal2;
+        [SerializeField] private ParticleSystem particleHeal;
+        [SerializeField] private ParticleSystem particleHeal2;
 
         private List<GameObject> y;
 
@@ -32,9 +32,7 @@ namespace AI.Elite
             
             //Zones de heal / dégâts
             circle.enabled = false;
-
-            particleHeal = GameObject.Find("ParticleCaretakerHealZone").GetComponent<ParticleSystem>();
-            particleHeal2 = GameObject.Find("ParticleCaretakerHealZone2").GetComponent<ParticleSystem>();
+            
             particleHeal.Stop();
             particleHeal2.Stop();
         }
