@@ -18,8 +18,9 @@ namespace AI.Elite
         [Header("Enemy Components")]
         [SerializeField] private CircleCollider2D circle;
         [SerializeField] private GameObject circleSprite;
-        private ParticleSystem particleHeal;
-        private ParticleSystem particleHeal2;
+        [SerializeField] private GameObject circleSpriteWarning;
+        [SerializeField] private ParticleSystem particleHeal;
+        [SerializeField] private ParticleSystem particleHeal2;
 
         private List<GameObject> y;
 
@@ -31,10 +32,7 @@ namespace AI.Elite
             
             //Zones de heal / dégâts
             circle.enabled = false;
-            circleSprite.SetActive(false);
-
-            particleHeal = GameObject.Find("ParticleHealZone").GetComponent<ParticleSystem>();
-            particleHeal2 = GameObject.Find("ParticleHealZone2").GetComponent<ParticleSystem>();
+            
             particleHeal.Stop();
             particleHeal2.Stop();
         }
@@ -62,6 +60,10 @@ namespace AI.Elite
 
         private IEnumerator BlinkCircle()
         {
+            circleSpriteWarning.SetActive(true);
+            yield return new WaitForSeconds(0.8f);
+
+            circleSpriteWarning.SetActive(false);
             circle.enabled = true;
             circleSprite.SetActive(true);
             particleHeal.Play();
