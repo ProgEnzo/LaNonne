@@ -19,6 +19,7 @@ namespace Shop.UI
       [SerializeField] private GameObject whipModificationMenu;
       public GameObject shopCanvas;
       public Image image;
+      [SerializeField] private TextMeshProUGUI epCountText;
    
       [SerializeField] private float timeToAccess;
 
@@ -89,6 +90,8 @@ namespace Shop.UI
          {
             OpenShop();
          }
+         
+         epCountText.text = "EP : " + PlayerController.instance.currentEp;
       }
 
       private void OpenShop()
