@@ -279,7 +279,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorNearWallsUpPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 25)
             {
                 GameObject item = Instantiate(floorNearWallsUpCusto[Random.Range(0, floorNearWallsUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y, 0), Quaternion.identity);
             }
@@ -290,7 +290,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorNearWallsDownPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 25)
             {
                 GameObject item = Instantiate(floorNearWallsDownCusto[Random.Range(0, floorNearWallsDownCusto.Count)], new Vector3(pos.x, pos.y + 1.5f, 0), Quaternion.identity);
             }
@@ -301,7 +301,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorNearWallsRightPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 25)
             {
                 GameObject item = Instantiate(floorNearWallsRightCusto[Random.Range(0, floorNearWallsRightCusto.Count)], new Vector3(pos.x - 1f, pos.y + 0.5f, 0), Quaternion.identity);
             }
@@ -312,7 +312,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorNearWallsLeftPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 25)
             {
                 GameObject item = Instantiate(floorNearWallsLeftCusto[Random.Range(0, floorNearWallsLeftCusto.Count)], new Vector3(pos.x + 1f, pos.y, 0), Quaternion.identity);
             }
