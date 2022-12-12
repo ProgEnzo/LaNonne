@@ -116,16 +116,16 @@ namespace Shop.UI
                {
                   if (effectsInTheShop[i] != EffectManager.Effect.None)
                   {
-                     /*shopPanel.transform.GetChild(i + 1).GetChild(0).GetComponent<Image>().sprite =
-                        "Cost : " + effectManager.effectDictionary[(int)effectsInTheShop[i]][
-                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].image;*/
-                     shopPanel.transform.GetChild(i + 1).GetChild(0).GetComponent<TextMeshProUGUI>().text =
+                     shopPanel.transform.GetChild(i + 1).GetChild(0).GetComponent<Image>().sprite =
+                        effectManager.effectDictionary[(int)effectsInTheShop[i]][
+                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].image;
+                     shopPanel.transform.GetChild(i + 1).GetChild(1).GetComponent<TextMeshProUGUI>().text =
                         effectsInTheShop[i] + " - T" +
                         (EffectManager.instance.effectInventory[effectsInTheShop[i]] + 1);
-                     shopPanel.transform.GetChild(i + 1).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+                     shopPanel.transform.GetChild(i + 1).GetChild(2).GetComponent<TextMeshProUGUI>().text =
                         "Cost : " + effectManager.effectDictionary[(int)effectsInTheShop[i]][
                            EffectManager.instance.effectInventory[effectsInTheShop[i]]].cost;
-                     shopPanel.transform.GetChild(i + 1).GetChild(2).GetComponent<TextMeshProUGUI>().text =
+                     shopPanel.transform.GetChild(i + 1).GetChild(3).GetComponent<TextMeshProUGUI>().text =
                         effectManager.effectDictionary[(int)effectsInTheShop[i]][
                            EffectManager.instance.effectInventory[effectsInTheShop[i]]].description;
                   }
@@ -231,7 +231,7 @@ namespace Shop.UI
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
             for (var j = 0; j < 3; j++)
             {
-               shopPanel.transform.GetChild(buttonNumber+1).GetChild(j).GetComponent<TextMeshProUGUI>().text = "Closed.";
+               shopPanel.transform.GetChild(buttonNumber+1).GetChild(j+1).GetComponent<TextMeshProUGUI>().text = "Closed.";
             }
 
             if (currentNumberOfTakenObjects > maxNumberOfTakenObjects)
