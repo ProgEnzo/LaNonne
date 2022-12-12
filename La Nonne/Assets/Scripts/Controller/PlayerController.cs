@@ -164,6 +164,7 @@ namespace Controller
             RevealingDashStart();
             RevealingDash();
             RevealingDashFocus();
+            RevealingDashStop();
 
             currentAnimPrefabAnimator.SetFloat(SlowMoMoveSpeed, currentSlowMoPlayerMoveSpeedFactor);
             currentAnimPrefabAnimator.SetFloat(SlowMoAttackSpeed, currentSlowMoPlayerAttackSpeedFactor);
@@ -508,6 +509,20 @@ namespace Controller
                 currentRevealingDashFocusCooldown -= Time.deltaTime;
             }
             else
+            {
+                DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
+                DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
+                DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, 0.01f);
+                
+                isRevealingDashFocusOn = false;
+                isRevealingDashOn = false;
+                currentRevealingDashCooldown = soController.revealingDashCooldown;
+            }
+        }
+        
+        private void RevealingDashStop()
+        {
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && isRevealingDashFocusOn)
             {
                 DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
                 DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
