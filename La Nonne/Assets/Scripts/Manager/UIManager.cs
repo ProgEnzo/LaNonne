@@ -46,6 +46,7 @@ namespace Manager
         
             //BIG MAP
             inGameUI = GameObject.Find("InGameUI");
+            gameOverMenu = GameObject.Find("GameOverScreen");
             camBigMap = GameObject.Find("BigMapCamera").GetComponent<Camera>();
             bigMapRender = GameObject.Find("BigMapRender");
             scoreManager = ScoreManager.instance;
@@ -106,6 +107,12 @@ namespace Manager
                 pauseMenu.SetActive(true);
                 Time.timeScale = 0;
             }
+        }
+
+        public void GameOver()
+        {
+            DesactivateInGameUI();
+            gameOverMenu.SetActive(true);
         }
 
         public void ReloadLevel()

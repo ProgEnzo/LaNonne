@@ -60,6 +60,7 @@ namespace Controller
         private Image healthBar;
         private Image chrono;
         internal int currentEp;
+        private UIManager uiManager;
         
         [Header("Animations")]
         private AnimationManager animationManager;
@@ -166,7 +167,7 @@ namespace Controller
             SlowMoManager();
             RevealingDashStart();
             RevealingDashFocus();
-            LoadMenu();
+            
             currentAnimPrefabAnimator.SetFloat(SlowMoMoveSpeed, currentSlowMoPlayerMoveSpeedFactor);
             currentAnimPrefabAnimator.SetFloat(SlowMoAttackSpeed, currentSlowMoPlayerAttackSpeedFactor);
             chrono.fillAmount = 1 - currentSlowMoCooldown / soController.slowMoCooldown;
@@ -323,18 +324,10 @@ namespace Controller
             }
         }
 
-        private void LoadMenu()
-        {
-            if (currentHealth <= 0)
-            {
-                SceneManager.LoadScene("MainMenu");
-            }
-        }
-
         internal static void Die()
         {
             Debug.Log("<color=green>PLAYER</color> IS NOW DEAD");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            UIManager.instance.GameOver();
         }
         
         internal void HealPlayer(int heal)
