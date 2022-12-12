@@ -5,7 +5,6 @@ using Controller;
 using DG.Tweening;
 using Pathfinding;
 using Shop;
-using Tools;
 using UnityEngine;
 
 namespace AI

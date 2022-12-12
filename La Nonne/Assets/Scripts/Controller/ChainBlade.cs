@@ -57,9 +57,18 @@ namespace Controller
                 playerController.currentSlowMoPlayerMoveSpeedFactor = 0f;
                 Time.timeScale = 0.001f;
                 Time.fixedDeltaTime = 0.001f * Time.timeScale;
+                transform.GetChild(2).gameObject.SetActive(true);
+            }
+            if (Input.GetKey(inputManager.inquisitorialChainKey) && playerController.isSlowMoOn && currentTime <= 0)
+            {
+                var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+                newDirection.z = 0;
+                newDirection.Normalize();
+                transform.GetChild(2).rotation = Quaternion.LookRotation(Vector3.forward, newDirection);
             }
             if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && playerController.isSlowMoOn && currentTime <= 0)
             {
+                transform.GetChild(2).gameObject.SetActive(false);
                 playerController.currentSlowMoPlayerMoveSpeedFactor = 1f;
                 Time.timeScale = 1f;
                 Time.fixedDeltaTime = 0.02f;
