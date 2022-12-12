@@ -24,6 +24,7 @@ namespace Manager
         
         [Header("Map Inputs")]
         [SerializeField] internal KeyCode mapKey;
+        
         private void Awake()
         {
             if (instance != null)

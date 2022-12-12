@@ -16,11 +16,11 @@ namespace Manager
         private ScoreManager scoreManager;
 
         [Header("Map & MiniMap")] 
-        public Image mapPanel;
+        //public Image mapPanel;
         public GameObject inGameUI;
-        public GameObject bigMapRender;
-        public GameObject bigMapCanvas;
-        public Camera camBigMap;
+        //public GameObject bigMapRender;
+        //public GameObject bigMapCanvas;
+        //public Camera camBigMap;
     
         [Header("Menus")]
         public static GameObject pauseMenu;
@@ -47,29 +47,29 @@ namespace Manager
             //BIG MAP
             inGameUI = GameObject.Find("InGameUI");
             gameOverMenu = GameObject.Find("GameOverScreen");
-            camBigMap = GameObject.Find("BigMapCamera").GetComponent<Camera>();
-            bigMapRender = GameObject.Find("BigMapRender");
+            //camBigMap = GameObject.Find("BigMapCamera").GetComponent<Camera>();
+            //bigMapRender = GameObject.Find("BigMapRender");
             scoreManager = ScoreManager.instance;
         
             inputManager = InputManager.instance;
             epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
-            bigMapCanvas = GameObject.Find("BigMapCanvas");
-            mapPanel = bigMapCanvas.GetComponent<Image>();
+            //bigMapCanvas = GameObject.Find("BigMapCanvas");
+            //mapPanel = bigMapCanvas.GetComponent<Image>();
             pauseMenu = GameObject.Find("PauseMenu");
         
             epCount.text = "EP COUNT : " + 0;
         
             pauseMenu.SetActive(false);
             gameOverMenu.SetActive(false);
-            bigMapRender.SetActive(false);
+            //bigMapRender.SetActive(false);
             //scoreManager.scoreText.enabled = false;
 
         }
 
         private void Update()
         {
-            if (Input.GetKey(inputManager.mapKey))
+            /*if (Input.GetKey(inputManager.mapKey))
             {
                 bigMapCanvas.SetActive(true);
                 //scoreManager.scoreText.enabled = true;
@@ -91,16 +91,15 @@ namespace Manager
                 mapPanel.DOFade(0f, 0.3f);
                 bigMapCanvas.SetActive(false);
             }
-
             if (Input.GetKeyUp(inputManager.mapKey))
             {
                 inGameUI.SetActive(true);
-            }
+            }*/
         
             PauseMenuOn();
         }
 
-        public void PauseMenuOn()
+        private static void PauseMenuOn()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {

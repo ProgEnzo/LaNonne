@@ -1,39 +1,42 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using AI.So;
 using Core.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 
-public class ScoreManager : MonoSingleton<ScoreManager>
+namespace Manager
 {
-    internal new static ScoreManager instance;
-    public int score;
+    public class ScoreManager : MonoSingleton<ScoreManager>
+    {
+        internal new static ScoreManager instance;
+        private int score;
     
-    public TextMeshProUGUI scoreText;
-    private void Awake()
-    {
-        if (instance != null)
+        private TextMeshProUGUI scoreText;
+        
+        private void Awake()
         {
-            DestroyImmediate(gameObject);
+            if (instance != null)
+            {
+                DestroyImmediate(gameObject);
+            }
+            else
+            {
+                instance = this;
+            }
         }
-        else
+        
+        private void Start()
         {
-            instance = this;
+            scoreText = GameObject.Find("Score").GetComponent<TextMeshProUGUI>();
         }
-    }
 
-    private void Start()
-    {
-        scoreText.enabled = false;
-    }
+        private void Update()
+        {
+            scoreText.text = "Score : " + score;
+        }
 
-    public void AddScore(int _score)
-    {
-        score += _score;
-        scoreText.text = score.ToString();
-
-    }
+        public void AddScore(int addedScore)
+        {
+            score += addedScore;
+        }
     
+    }
 }

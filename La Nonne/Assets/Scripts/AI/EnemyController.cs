@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AI.So;
 using Controller;
 using DG.Tweening;
+using Manager;
 using Pathfinding;
 using Shop;
 using UnityEngine;
@@ -90,7 +91,7 @@ namespace AI
             {
                 EpDrop((int)(soEnemy.numberOfEp * currentEpDropMultiplier));
                 
-                //scoreManager.AddScore(soEnemy.scorePoint);
+                scoreManager.AddScore(soEnemy.scorePoint);
 
                 Destroy(gameObject); //Dies            
             }
