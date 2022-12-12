@@ -14,6 +14,7 @@ namespace AI
     {
         protected PlayerController playerController;
         [SerializeField] internal SO_Enemy soEnemy;
+        [SerializeField] internal GameObject effectVFXGameObject;
         public ScoreManager scoreManager;
         internal float currentHealth;
         internal float currentAiPathSpeed;
