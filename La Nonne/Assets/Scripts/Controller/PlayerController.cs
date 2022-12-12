@@ -452,6 +452,11 @@ namespace Controller
                 currentSlowMoPlayerAttackSpeedFactor = 1f;
                 Time.timeScale = 1;
                 Time.fixedDeltaTime = 0.02f;
+                
+                DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0.1f, revealingDashTotalDistance / (soController.revealingDashHitSpeed * Time.deltaTime));
+                DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, revealingDashTotalDistance / (soController.revealingDashHitSpeed * Time.deltaTime));
+                DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, revealingDashTotalDistance / (soController.revealingDashHitSpeed * Time.deltaTime));
+                DOTween.To(() => currentSlowMoPlayerAttackSpeedFactor, x => currentSlowMoPlayerAttackSpeedFactor = x, 1, revealingDashTotalDistance / (soController.revealingDashHitSpeed * Time.deltaTime));
             }
         }
 
@@ -464,14 +469,7 @@ namespace Controller
                 
                 //Dash
                 transform.position = Vector2.MoveTowards(position, revealingDashNewPosition, soController.revealingDashHitSpeed * Time.deltaTime);
-                
-                //Gestion du slow mo
-                Time.timeScale = Mathf.Lerp(Time.timeScale, 0.1f, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.timeScale);
-                Debug.Log(Time.timeScale);
-                Time.fixedDeltaTime = Time.timeScale * 0.02f;
-                currentSlowMoPlayerMoveSpeedFactor = Mathf.Lerp(currentSlowMoPlayerMoveSpeedFactor, 1, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.timeScale);
-                currentSlowMoPlayerAttackSpeedFactor = Mathf.Lerp(currentSlowMoPlayerAttackSpeedFactor, 1, revealingDashTotalDistance / Vector3.Distance(position, revealingDashNewPosition) * Time.timeScale);
-                
+
                 //Tant que l'ennemi n'est pas atteint, on ne passe pas à la suite
                 if (!(Vector3.Distance(transform.position, revealingDashNewPosition) < soController.revealingDashToleranceDistance)) return;
                 
