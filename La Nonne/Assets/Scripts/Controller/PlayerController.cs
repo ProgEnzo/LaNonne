@@ -508,7 +508,7 @@ namespace Controller
             if (!isRevealingDashFocusOn) return;
             if (currentRevealingDashFocusCooldown > 0)
             {
-                if (revealingDashAimedEnemy == null)
+                if (revealingDashAimedEnemy == default)
                 {
                     DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
                     DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
