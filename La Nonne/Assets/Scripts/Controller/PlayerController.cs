@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,10 @@ namespace Controller
         private float currentRevealingDashCooldown;
         internal float currentSlowMoPlayerMoveSpeedFactor;
         internal float currentSlowMoPlayerAttackSpeedFactor;
+        private Sequence revealingDashTimeSequence;
+        private Guid revealingDashTimeUid;
+        private Sequence revealingDashSpeedSequence;
+        private Guid revealingDashSpeedUid;
 
         [Header("UI elements")]
         private Image healthBar;
@@ -129,6 +134,7 @@ namespace Controller
             currentHealth = soController.maxHealth;
             isRevealingDashHitting = false;
             isRevealingDashOn = false;
+            isRevealingDashFocusOn = false;
             healthBar = GameObject.Find("HealthBar").transform.GetChild(0).GetComponent<Image>();
             healthBar.fillAmount = 1f;
             revealingDashCooldownBar = GameObject.Find("RevealingDashCooldown").GetComponent<Image>();
@@ -424,10 +430,8 @@ namespace Controller
         
         private void RevealingDashStart()
         {
-            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn)
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn && currentRevealingDashCooldown <= 0)
             {
-                isRevealingDashOn = true;
-                
                 var enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero,
                     new ContactFilter2D(), enemiesInArea);
@@ -441,13 +445,25 @@ namespace Controller
                 
                 foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
                 {
+                    isRevealingDashOn = true;
                     revealingDashAimedEnemy = enemy.collider.gameObject;
                     revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
                     isRevealingDashHitting = true;
                     revealingDashTotalDistance = Vector3.Distance(transform.position, revealingDashNewPosition);
                     
-                    DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0.1f, revealingDashTotalDistance / soController.revealingDashHitSpeed);
-                    DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.002f, revealingDashTotalDistance / soController.revealingDashHitSpeed);
+                    if (revealingDashTimeSequence != null)
+                    {
+                        DOTween.Kill(revealingDashTimeUid);
+                        revealingDashTimeSequence = null;
+                    }
+                    if (revealingDashTimeSequence == null)
+                    {
+                        revealingDashTimeSequence = DOTween.Sequence();
+                        revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 0.1f, revealingDashTotalDistance / soController.revealingDashHitSpeed))
+                            .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.002f, revealingDashTotalDistance / soController.revealingDashHitSpeed));
+                        revealingDashTimeUid = Guid.NewGuid();
+                        revealingDashTimeSequence.id = revealingDashTimeUid;
+                    }
                     return;
                 }
             }
@@ -465,6 +481,27 @@ namespace Controller
 
                 //Tant que l'ennemi n'est pas atteint, on ne passe pas à la suite
                 if (!(Vector3.Distance(transform.position, revealingDashNewPosition) < soController.revealingDashToleranceDistance)) return;
+
+                //Si l'ennemi meurt avant d'être atteint, on sort du revealing dash
+                if (revealingDashAimedEnemy == null)
+                {
+                    isRevealingDashHitting = false;
+                    isRevealingDashOn = false;
+                    if (revealingDashTimeSequence != null)
+                    {
+                        DOTween.Kill(revealingDashTimeUid);
+                        revealingDashTimeSequence = null;
+                    }
+                    if (revealingDashTimeSequence == null)
+                    {
+                        revealingDashTimeSequence = DOTween.Sequence();
+                        revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
+                            .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
+                        revealingDashTimeUid = Guid.NewGuid();
+                        revealingDashTimeSequence.id = revealingDashTimeUid;
+                    }
+                    return;
+                }
                 
                 //Gestion du stun
                 foreach (var enemy in revealingDashRunningStunCoroutines.Keys.Where(enemy => enemy == revealingDashAimedEnemy))
@@ -486,16 +523,38 @@ namespace Controller
 
                 if (revealingDashAimedEnemy != null)
                 {
+                    Debug.Log("H1");
                     //Gestion du slow mo
-                    DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 0.1f, 0.1f).SetEase(Ease.InQuad);
+                    if (revealingDashSpeedSequence != null)
+                    {
+                        DOTween.Kill(revealingDashSpeedUid);
+                        revealingDashSpeedSequence = null;
+                    }
+                    if (revealingDashSpeedSequence == null)
+                    {
+                        revealingDashSpeedSequence = DOTween.Sequence();
+                        revealingDashSpeedSequence.Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 0.1f, 0.01f).SetEase(Ease.InQuad));
+                        revealingDashSpeedUid = Guid.NewGuid();
+                        revealingDashSpeedSequence.id = revealingDashTimeUid;
+                    }
                     currentRevealingDashFocusCooldown = soController.revealingDashFocusDuration;
                     isRevealingDashFocusOn = true;
                 }
                 else
                 {
-                    DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
-                    DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
-                    DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, 0.01f);
+                    if (revealingDashTimeSequence != null)
+                    {
+                        DOTween.Kill(revealingDashTimeUid);
+                        revealingDashTimeSequence = null;
+                    }
+                    if (revealingDashTimeSequence == null)
+                    {
+                        revealingDashTimeSequence = DOTween.Sequence();
+                        revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
+                            .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
+                        revealingDashTimeUid = Guid.NewGuid();
+                        revealingDashTimeSequence.id = revealingDashTimeUid;
+                    }
                 
                     isRevealingDashOn = false;
                     currentRevealingDashCooldown = soController.revealingDashCooldown;
@@ -508,11 +567,35 @@ namespace Controller
             if (!isRevealingDashFocusOn) return;
             if (currentRevealingDashFocusCooldown > 0)
             {
+                Debug.Log("F1");
                 if (revealingDashAimedEnemy == default)
                 {
-                    DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
-                    DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
-                    DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, 0.01f);
+                    Debug.Log("F2");
+                    if (revealingDashTimeSequence != null)
+                    {
+                        DOTween.Kill(revealingDashTimeUid);
+                        revealingDashTimeSequence = null;
+                    }
+                    if (revealingDashTimeSequence == null)
+                    {
+                        revealingDashTimeSequence = DOTween.Sequence();
+                        revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
+                            .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
+                        revealingDashTimeUid = Guid.NewGuid();
+                        revealingDashTimeSequence.id = revealingDashTimeUid;
+                    }
+                    if (revealingDashSpeedSequence != null)
+                    {
+                        DOTween.Kill(revealingDashSpeedUid);
+                        revealingDashSpeedSequence = null;
+                    }
+                    if (revealingDashSpeedSequence == null)
+                    {
+                        revealingDashSpeedSequence = DOTween.Sequence();
+                        revealingDashSpeedSequence.Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1f, 0.1f));
+                        revealingDashSpeedUid = Guid.NewGuid();
+                        revealingDashSpeedSequence.id = revealingDashTimeUid;
+                    }
                 
                     isRevealingDashFocusOn = false;
                     isRevealingDashOn = false;
@@ -522,9 +605,32 @@ namespace Controller
             }
             else
             {
-                DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
-                DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
-                DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, 0.01f);
+                Debug.Log("F3");
+                if (revealingDashTimeSequence != null)
+                {
+                    DOTween.Kill(revealingDashTimeUid);
+                    revealingDashTimeSequence = null;
+                }
+                if (revealingDashTimeSequence == null)
+                {
+                    revealingDashTimeSequence = DOTween.Sequence();
+                    revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
+                        .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
+                    revealingDashTimeUid = Guid.NewGuid();
+                    revealingDashTimeSequence.id = revealingDashTimeUid;
+                }
+                if (revealingDashSpeedSequence != null)
+                {
+                    DOTween.Kill(revealingDashSpeedUid);
+                    revealingDashSpeedSequence = null;
+                }
+                if (revealingDashSpeedSequence == null)
+                {
+                    revealingDashSpeedSequence = DOTween.Sequence();
+                    revealingDashSpeedSequence.Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1f, 0.1f));
+                    revealingDashSpeedUid = Guid.NewGuid();
+                    revealingDashSpeedSequence.id = revealingDashTimeUid;
+                }
                 
                 isRevealingDashFocusOn = false;
                 isRevealingDashOn = false;
@@ -536,9 +642,31 @@ namespace Controller
         {
             if (Input.GetKeyDown(inputManager.revealingDashKey) && isRevealingDashFocusOn)
             {
-                DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1, 0.01f);
-                DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.01f);
-                DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1, 0.01f);
+                if (revealingDashTimeSequence != null)
+                {
+                    DOTween.Kill(revealingDashTimeUid);
+                    revealingDashTimeSequence = null;
+                }
+                if (revealingDashTimeSequence == null)
+                {
+                    revealingDashTimeSequence = DOTween.Sequence();
+                    revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
+                        .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
+                    revealingDashTimeUid = Guid.NewGuid();
+                    revealingDashTimeSequence.id = revealingDashTimeUid;
+                }
+                if (revealingDashSpeedSequence != null)
+                {
+                    DOTween.Kill(revealingDashSpeedUid);
+                    revealingDashSpeedSequence = null;
+                }
+                if (revealingDashSpeedSequence == null)
+                {
+                    revealingDashSpeedSequence = DOTween.Sequence();
+                    revealingDashSpeedSequence.Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1f, 0.1f));
+                    revealingDashSpeedUid = Guid.NewGuid();
+                    revealingDashSpeedSequence.id = revealingDashTimeUid;
+                }
                 
                 isRevealingDashFocusOn = false;
                 isRevealingDashOn = false;
@@ -550,7 +678,6 @@ namespace Controller
         {
             enemy.GetComponent<EnemyController>().isStunned = true;
             yield return new WaitForSeconds(soController.revealingDashStunDuration);
-            Debug.Log(enemy);
             if (!enemy) yield break;
             enemy.GetComponent<EnemyController>().isStunned = false;
         }
