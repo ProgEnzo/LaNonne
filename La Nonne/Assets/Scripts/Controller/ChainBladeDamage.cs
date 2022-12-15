@@ -1,6 +1,7 @@
 using System.Linq;
 using AI;
 using AI.Boss;
+using Manager;
 using Shop;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -13,10 +14,13 @@ namespace Controller
 
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         private EffectManager effectManager;
+        private ScoreManager scoreManager;
+
         
         private void Start()
         {
             effectManager = EffectManager.instance;
+            scoreManager = ScoreManager.instance;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -28,6 +32,8 @@ namespace Controller
             if (o.CompareTag("Enemy"))
             {
                 o.GetComponent<EnemyController>().TakeDamageFromPlayer(damage);
+                scoreManager.AddScore(5);
+                
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
                 ImplodeStacks(o, damage);
             }
@@ -36,6 +42,8 @@ namespace Controller
             if (o.CompareTag("Boss"))
             {
                 o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(damage);
+                scoreManager.AddScore(5);
+                
                 ImplodeStacks(o, damage);
             }
         }

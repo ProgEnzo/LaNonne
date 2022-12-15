@@ -38,6 +38,8 @@ namespace Shop.UI
       [SerializeField] private int maxNumberOfTakenObjects;
       private int currentNumberOfTakenObjects;
 
+      private ScoreManager scoreManager;
+
       private void Start()
       {
          StartCoroutine(BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp());
@@ -48,6 +50,7 @@ namespace Shop.UI
          timerInputPressed = 0f;
          effectManager = EffectManager.instance;
          uiManager = UIManager.instance;
+         scoreManager = ScoreManager.instance;
          hasShopBeenOpened = false;
          isShopOpened = false;
          canChooseEffect = false;
@@ -231,6 +234,10 @@ namespace Shop.UI
             PlayerController.instance.currentEp -=
                effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
                   EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]] - 1].cost;
+            
+            //ADD SCORE FOR BUYING ITEMS
+            scoreManager.AddScore(100);
+            
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
             for (var j = 0; j < 3; j++)
             {

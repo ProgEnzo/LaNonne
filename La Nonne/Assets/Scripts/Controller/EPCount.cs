@@ -1,3 +1,4 @@
+using Manager;
 using UnityEngine;
 
 namespace Controller
@@ -6,10 +7,12 @@ namespace Controller
     {
         [SerializeField] private int epValue;
         [SerializeField] private PlayerController playerController;
+        private ScoreManager scoreManager;
 
         void Start()
         {
             playerController = PlayerController.instance;
+            scoreManager = ScoreManager.instance;
         }
     
         private void OnTriggerEnter2D(Collider2D col)
@@ -17,7 +20,7 @@ namespace Controller
             if (col.gameObject.CompareTag("WallCollider"))
             {
                 playerController.AddEp(epValue);
-
+                scoreManager.AddScore(1);
                 Destroy(gameObject);
             }
         }
