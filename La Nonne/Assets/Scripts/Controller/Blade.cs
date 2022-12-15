@@ -31,12 +31,15 @@ namespace Controller
         private EffectManager effectManager;
         private AnimationManager animationManager;
         private InputManager inputManager;
+        private ScoreManager scoreManager;
+
 
         private void Start()
         {
             playerController = PlayerController.instance;
             effectManager = EffectManager.instance;
             animationManager = AnimationManager.instance;
+            scoreManager = ScoreManager.instance;
             inputManager = InputManager.instance;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
@@ -185,10 +188,16 @@ namespace Controller
                 if (hitState == soController.zealousBladeMaxHitState)
                 {
                     o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
+                    
+                    //ADD SCORE BIG HIT
+                    scoreManager.AddScore(3);
                 }
                 else
                 {
                     o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
+                    
+                    //ADD SCORE SMALL HIT
+                    scoreManager.AddScore(1);
                 }
                 PutStack(o);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);

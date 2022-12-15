@@ -36,7 +36,11 @@ namespace Manager
         public void AddScore(int addedScore)
         {
             score += addedScore;
+
+            if (score < 0)
+            {
+                score = 0;
+            }
         }
-    
     }
 }

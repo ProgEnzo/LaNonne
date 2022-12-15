@@ -19,6 +19,7 @@ namespace Controller
     {
         [Header("Instance")]
         internal new static PlayerController instance;
+        private ScoreManager scoreManager;
         
         [Header("Components")]
         internal Rigidbody2D mRigidbody;
@@ -130,6 +131,7 @@ namespace Controller
         {
             animationManager = AnimationManager.instance;
             inputManager = InputManager.instance;
+            scoreManager = ScoreManager.instance;
             playerScale = transform.localScale.x;
             currentHealth = soController.maxHealth;
             isRevealingDashHitting = false;
@@ -331,6 +333,9 @@ namespace Controller
             currentHealth -= damage;
             healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
             //Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
+            
+            //WITHDRAW SCORE HERE
+            scoreManager.AddScore(-10);
 
             if (currentHealth <= 0)
             {
