@@ -55,13 +55,11 @@ namespace Controller
                 case "Enemy":
                     var enemyStacks = enemy.GetComponent<EnemyController>().stacks;
                     
-                    if (enemyStacks.All(leveledEffect => leveledEffect.effect != EffectManager.Effect.None))
+                    for (var i = 0; i < enemyStacks.Length; i++)
                     {
-                        for (var i = 0; i < enemyStacks.Length; i++)
-                        {
-                            effectManager.SuperEffectSwitch(enemyStacks[i].effect, enemyStacks[i].level, enemy, damage, damageAndEffectMultiplier);
-                            enemy.GetComponent<EnemyController>().stacks[i].effect = EffectManager.Effect.None;
-                        }
+                        if (enemyStacks[i].effect == EffectManager.Effect.None) continue;
+                        effectManager.SuperEffectSwitch(enemyStacks[i].effect, enemyStacks[i].level, enemy, damage, damageAndEffectMultiplier);
+                        enemy.GetComponent<EnemyController>().stacks[i].effect = EffectManager.Effect.None;
                     }
                     
                     break;
@@ -69,13 +67,11 @@ namespace Controller
                 case "Boss":
                     var bossStacks = enemy.GetComponent<BossStateManager>().stacks;
                     
-                    if (bossStacks.All(leveledEffect => leveledEffect.effect != EffectManager.Effect.None))
+                    for (var i = 0; i < bossStacks.Length; i++)
                     {
-                        for (var i = 0; i < bossStacks.Length; i++)
-                        {
-                            effectManager.SuperEffectSwitch(bossStacks[i].effect, bossStacks[i].level, gameObject, damage, damageAndEffectMultiplier);
-                            enemy.GetComponent<EnemyController>().stacks[i].effect = EffectManager.Effect.None;
-                        }
+                        if (bossStacks[i].effect == EffectManager.Effect.None) continue;
+                        effectManager.SuperEffectSwitch(bossStacks[i].effect, bossStacks[i].level, gameObject, damage, damageAndEffectMultiplier);
+                        enemy.GetComponent<EnemyController>().stacks[i].effect = EffectManager.Effect.None;
                     }
                     
                     break;
