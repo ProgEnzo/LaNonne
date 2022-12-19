@@ -31,6 +31,7 @@ namespace AI
         internal readonly bool[] areStacksOn = new bool[3];
         private EffectManager effectManager;
         private Coroutine currentHitStopCoroutine;
+        private float lastVelocitySpeed;
 
         [SerializeField] private GameObject epDrop;
 
@@ -124,17 +125,18 @@ namespace AI
             if (currentHitStopCoroutine != null)
             {
                 StopCoroutine(currentHitStopCoroutine);
+                currentVelocitySpeed = lastVelocitySpeed;
             }
             currentHitStopCoroutine = StartCoroutine(HitStop(hitStopDuration));
         }
         
         private IEnumerator HitStop(float hitStopDuration)
         {
-            var velocitySpeed = currentVelocitySpeed;
+            lastVelocitySpeed = currentVelocitySpeed;
             aiPathComponent.canMove = false;
             currentVelocitySpeed = 0;
             yield return new WaitForSeconds(hitStopDuration);
-            currentVelocitySpeed = velocitySpeed;
+            currentVelocitySpeed = lastVelocitySpeed;
             aiPathComponent.canMove = true;
             currentHitStopCoroutine = null;
         }

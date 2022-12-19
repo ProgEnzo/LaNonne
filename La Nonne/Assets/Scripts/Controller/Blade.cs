@@ -207,6 +207,20 @@ namespace Controller
             if (o.CompareTag("Boss"))
             {
                 o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.zealousBladeDamage);
+                if (hitState == soController.zealousBladeMaxHitState)
+                {
+                    o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
+                    
+                    //ADD SCORE BIG HIT
+                    scoreManager.AddScore(3);
+                }
+                else
+                {
+                    o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
+                    
+                    //ADD SCORE SMALL HIT
+                    scoreManager.AddScore(1);
+                }
                 PutStack(o);
             }
         }

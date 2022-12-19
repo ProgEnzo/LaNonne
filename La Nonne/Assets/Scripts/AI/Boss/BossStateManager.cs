@@ -136,6 +136,10 @@ namespace AI.Boss
         [SerializeField, ShowOnly] internal float currentVelocitySpeed;
         [SerializeField, ShowOnly] internal float currentDamageMultiplier;
         //[SerializeField, ShowOnly] internal float currentEpDropMultiplier;
+        
+        [Header("----HitStopAndKnockBack----")]
+        private Coroutine currentHitStopCoroutine;
+        private float lastVelocitySpeed;
 
 
         private void Start()
@@ -272,6 +276,32 @@ namespace AI.Boss
         void Die()
         {
             Destroy(gameObject);
+        }
+
+        #endregion
+
+        #region HitStopAndKnockBack
+
+        internal void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
+        {
+            rb.AddForce((transform.position - player.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
+            if (currentHitStopCoroutine != null)
+            {
+                StopCoroutine(currentHitStopCoroutine);
+                currentVelocitySpeed = lastVelocitySpeed;
+            }
+            currentHitStopCoroutine = StartCoroutine(HitStop(hitStopDuration));
+        }
+        
+        private IEnumerator HitStop(float hitStopDuration)
+        {
+            lastVelocitySpeed = currentVelocitySpeed;
+            bossAI.canMove = false;
+            currentVelocitySpeed = 0;
+            yield return new WaitForSeconds(hitStopDuration);
+            currentVelocitySpeed = lastVelocitySpeed;
+            bossAI.canMove = true;
+            currentHitStopCoroutine = null;
         }
 
         #endregion
