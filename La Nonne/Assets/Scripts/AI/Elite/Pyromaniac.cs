@@ -58,7 +58,10 @@ namespace AI.Elite
             base.Update();
             
             //Pour Chill
-            rb.velocity = dashDirection * currentVelocitySpeed;
+            if (!isKnockedBack)
+            {
+                rb.velocity = dashDirection * currentVelocitySpeed;
+            }
             
             //Initialisation de variables locales pour l'optimisation
             var playerPosition = playerController.transform.position; //Position du joueur

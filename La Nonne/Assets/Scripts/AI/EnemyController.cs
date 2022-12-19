@@ -32,6 +32,7 @@ namespace AI
         private EffectManager effectManager;
         private Coroutine currentHitStopCoroutine;
         private float lastVelocitySpeed;
+        protected bool isKnockedBack;
 
         [SerializeField] private GameObject epDrop;
 
@@ -52,6 +53,7 @@ namespace AI
                 GetComponent<AIDestinationSetter>().target = playerController.transform;
             }
             isStunned = false;
+            isKnockedBack = false;
             
             for (var i = 0; i < stacks.Length; i++)
             {
@@ -65,6 +67,11 @@ namespace AI
         protected virtual void Update()
         {
             aiPathComponent.maxSpeed = currentAiPathSpeed;
+            
+            if (isKnockedBack && rb.velocity.magnitude < 0.01f)
+            {
+                isKnockedBack = false;
+            }
             
             PlayerSpriteRenderers.Clear();
             for (var i = 0; i < playerController.transform.childCount; i++)
@@ -121,6 +128,7 @@ namespace AI
         
         internal void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
         {
+            isKnockedBack = true;
             rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
             if (currentHitStopCoroutine != null)
             {
