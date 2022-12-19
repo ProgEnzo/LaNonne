@@ -9,6 +9,7 @@ namespace Controller
     {
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         private bool isHitting;
+        private bool isWarningOn;
         private LineRenderer chainLineRenderer;
         private LineRenderer bladeLineRenderer;
         private BoxCollider2D chainBoxCollider;
@@ -24,7 +25,7 @@ namespace Controller
         private float localStateMult;
         private float currentTime;
         private Image inquisitorialChainCooldownBar;
-        
+
         private AnimationManager animationManager;
         private InputManager inputManager;
 
@@ -42,6 +43,7 @@ namespace Controller
             transform.GetChild(0).gameObject.SetActive(false);
             transform.GetChild(1).gameObject.SetActive(false);
             isHitting = false;
+            isWarningOn = false;
             playerScale = playerController.transform.localScale.x;
             currentTime = 0;
             inquisitorialChainCooldownBar = GameObject.Find("InquisitorialChainCooldown").GetComponent<Image>();
@@ -52,6 +54,8 @@ namespace Controller
         private void Update()
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
+            var parentLocalScale = transform.parent.localScale;
+            var warningScale = transform.GetChild(2).localScale;
 
             if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0)
             {
@@ -59,19 +63,20 @@ namespace Controller
                 Time.timeScale = 0.001f;
                 Time.fixedDeltaTime = 0.001f * Time.timeScale;
                 transform.GetChild(2).gameObject.SetActive(true);
-                var parentLocalScale = transform.parent.localScale;
-                var warningScale = transform.GetChild(2).localScale;
                 transform.GetChild(2).localScale = new Vector3(warningScale.x * parentLocalScale.x, warningScale.y * parentLocalScale.y, warningScale.z * parentLocalScale.z);
+                isWarningOn = true;
             }
-            if (Input.GetKey(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0)
+            if (Input.GetKey(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn)
             {
                 var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
                 transform.GetChild(2).rotation = Quaternion.LookRotation(Vector3.forward, newDirection);
             }
-            if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0)
+            if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn)
             {
+                isWarningOn = false;
+                transform.GetChild(2).localScale = new Vector3(Mathf.Abs(warningScale.x), Mathf.Abs(warningScale.y), Mathf.Abs(warningScale.z));
                 transform.GetChild(2).gameObject.SetActive(false);
                 playerController.currentSlowMoPlayerMoveSpeedFactor = 1f;
                 Time.timeScale = 1f;

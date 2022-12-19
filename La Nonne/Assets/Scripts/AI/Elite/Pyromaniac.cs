@@ -103,24 +103,32 @@ namespace AI.Elite
             //Une fois que le projectile a explosé
             else
             {
-                if (position.x < projectilePosition.x + soPyromaniac.fireTrailTolerance && position.x > projectilePosition.x - soPyromaniac.fireTrailTolerance && position.y < projectilePosition.y + soPyromaniac.fireTrailTolerance && position.y > projectilePosition.y - soPyromaniac.fireTrailTolerance)
-                {
-                    canBoxCast = true;
-                }
-                
+                //Si le pyromane n'est dans l'état ni de dash ni d'impact
                 if (!isDashing && !isImpactOn)
                 {
+                    //Le projectile n'existe plus
                     isProjectileOn = false;
+                    
                     //Dash vers la zone de feu
                     currentCoroutine ??= StartCoroutine(DashToFireZone());
                 }
+                
+                //Si le pyromane passe le projectile
+                if (position.x < projectilePosition.x + soPyromaniac.fireTrailTolerance && position.x > projectilePosition.x - soPyromaniac.fireTrailTolerance && position.y < projectilePosition.y + soPyromaniac.fireTrailTolerance && position.y > projectilePosition.y - soPyromaniac.fireTrailTolerance)
+                {
+                    //La zone de feu est activée
+                    canBoxCast = true;
+                }
             }
             
+            //Si la zone de feu du pyromane est activée
             if (canBoxCast)
             {
+                //Les conditions ne sont pas bonnes, à corriger
                 if (!projectileScript.isExploded && !isProjectileOn && !isDashing && !isImpactOn)
                 {
                     currentFireTrailMaxLength -= Time.deltaTime * soPyromaniac.fireTrailDisappearanceSpeed;
+
                     if (currentFireTrailMaxLength <= soPyromaniac.fireTrailTolerance)
                     {
                         canBoxCast = false;
@@ -132,6 +140,7 @@ namespace AI.Elite
                     boxCastDestination = projectilePosition;
                     currentFireTrailMaxLength = Vector2.Distance(boxCastDestination, boxCastOrigin);
                 }
+                
                 var objectsInArea = new List<RaycastHit2D>();
                 Physics2D.BoxCast(boxCastOrigin, Vector2.one * transform1.localScale * 2, 0f, (boxCastDestination - boxCastOrigin).normalized, new ContactFilter2D(), objectsInArea, currentFireTrailMaxLength);
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
