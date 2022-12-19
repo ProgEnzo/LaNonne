@@ -120,12 +120,12 @@ namespace AI
         
         internal void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
         {
+            rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
             if (currentHitStopCoroutine != null)
             {
                 StopCoroutine(currentHitStopCoroutine);
             }
             currentHitStopCoroutine = StartCoroutine(HitStop(hitStopDuration));
-            rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
         }
         
         private IEnumerator HitStop(float hitStopDuration)
