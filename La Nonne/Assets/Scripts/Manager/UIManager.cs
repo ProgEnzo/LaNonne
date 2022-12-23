@@ -121,7 +121,7 @@ namespace Manager
 
         public void ReloadLevel()
         {
-            LoadingScreen.instance.ShowLoadingScreen(); //à tester
+            LoadingScreen.instance.ShowLoadingScreen();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     
