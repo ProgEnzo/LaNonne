@@ -114,7 +114,7 @@ namespace Controller
             mRigidbody = GetComponent<Rigidbody2D>();
             collider2d = GetComponent<CapsuleCollider2D>();
             
-            for (var i = 2; i < transform.childCount; i++)
+            for (var i = 3; i < transform.childCount; i++)
             {
                 animPrefabs.Add(transform.GetChild(i).gameObject);
             }
