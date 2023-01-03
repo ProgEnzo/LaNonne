@@ -454,7 +454,7 @@ namespace Controller
                 foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
                 {
                     isRevealingDashOn = true;
-                    
+                    camManager.ZoomDuringRevealingDash(1);
                     revealingDashAimedEnemy = enemy.collider.gameObject;
                     revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
                     isRevealingDashHitting = true;
@@ -496,6 +496,7 @@ namespace Controller
                 {
                     isRevealingDashHitting = false;
                     isRevealingDashOn = false;
+                    camManager.ZoomDuringRevealingDash(0);
                     if (revealingDashTimeSequence != null)
                     {
                         DOTween.Kill(revealingDashTimeUid);
@@ -566,6 +567,7 @@ namespace Controller
                     }
                 
                     isRevealingDashOn = false;
+                    camManager.ZoomDuringRevealingDash(0);
                     currentRevealingDashCooldown = soController.revealingDashCooldown;
                 }
             }
@@ -608,6 +610,7 @@ namespace Controller
                 
                     isRevealingDashFocusOn = false;
                     isRevealingDashOn = false;
+                    camManager.ZoomDuringRevealingDash(0);
                     currentRevealingDashCooldown = soController.revealingDashCooldown;
                 }
                 currentRevealingDashFocusCooldown -= Time.deltaTime;
@@ -643,6 +646,7 @@ namespace Controller
                 
                 isRevealingDashFocusOn = false;
                 isRevealingDashOn = false;
+                camManager.ZoomDuringRevealingDash(0);
                 currentRevealingDashCooldown = soController.revealingDashCooldown;
             }
         }

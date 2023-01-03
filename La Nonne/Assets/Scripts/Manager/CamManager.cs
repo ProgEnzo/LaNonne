@@ -14,6 +14,7 @@ namespace Camera
         private static readonly int BossCamState = Animator.StringToHash("bossCamState");
         private static readonly int PlayerCamState = Animator.StringToHash("playerCamState");
         private static readonly int PlayerDezoomCamState = Animator.StringToHash("playerDezoomCamState");
+        private static readonly int PlayerRevealingDashState = Animator.StringToHash("playerRevealingDashState");
 
         private void Awake()
         {
@@ -49,14 +50,28 @@ namespace Camera
             animator.SetInteger(PlayerDezoomCamState, state);
         }
         
-        internal void ZoomDuringDash(int state)
+        internal void ZoomDuringRevealingDash(int state)
         {
-            animator.SetInteger(PlayerCamState, state);
+            if (state == 1)
+            {
+                StartCoroutine(ZoomDuringRevealingDashCoroutine());
+            }
+            else
+            {
+                animator.SetInteger(PlayerRevealingDashState, state);
+            }
         }
 
         internal void ChangeBossCamState(int state)
         {
             animator.SetInteger(BossCamState, state);
+        }
+        
+        private IEnumerator ZoomDuringRevealingDashCoroutine()
+        {
+            animator.SetInteger(PlayerRevealingDashState, 1);
+            yield return new WaitForSeconds(0.3f);
+            animator.SetInteger(PlayerRevealingDashState, 2);
         }
     }
 }
