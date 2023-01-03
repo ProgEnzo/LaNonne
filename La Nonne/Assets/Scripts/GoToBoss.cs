@@ -7,7 +7,15 @@ using UnityEngine;
 public class GoToBoss : MonoBehaviour
 {
     private RoomContentGenerator roomContentGenerator;
+    public Rigidbody2D rb;
 
+    public float speedForBouboule = 5f;
+
+    public void OnEnable()
+    {
+        roomContentGenerator = GameObject.Find("RoomContentGenerator").GetComponent<RoomContentGenerator>();
+    }
+    
     private void Update()
     {
         VaLaBas();
@@ -15,10 +23,6 @@ public class GoToBoss : MonoBehaviour
 
     private void VaLaBas()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            //transform.DOMove(new Vector3(roomContentGenerator.mapBoss, roomContentGenerator.mapBoss,0))
-            transform.position = Vector2.MoveTowards(transform.position, roomContentGenerator.mapBoss, 4f);
-        }
+        rb.velocity = (roomContentGenerator.mapBoss - (Vector2) transform.position).normalized * speedForBouboule;
     }
 }
