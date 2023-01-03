@@ -143,7 +143,6 @@ namespace Shop.UI
             timerInputPressed = 0f;
             image.DOFillAmount(0,0.5f);
          }
-      
       }
 
       private void ShopObjectsSelector()
