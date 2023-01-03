@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using Controller;
 using Core.Scripts.Utils;
 using DG.Tweening;
@@ -54,7 +56,6 @@ namespace Manager
             scoreManager = ScoreManager.instance;
         
             inputManager = InputManager.instance;
-            playerController = PlayerController.instance;
             epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TMP_Text>();
 
             //bigMapCanvas = GameObject.Find("BigMapCanvas");
@@ -68,6 +69,7 @@ namespace Manager
             //bigMapRender.SetActive(false);
             //scoreManager.scoreText.enabled = false;
 
+            StartCoroutine(WaitForPlayer());
         }
 
         private void Update()
@@ -148,6 +150,13 @@ namespace Manager
         internal void ActivateInGameUI()
         {
             inGameUI.SetActive(true);
+        }
+
+        private IEnumerator WaitForPlayer()
+        {
+            bool Test() => PlayerController.instance == null;
+            yield return new WaitWhile(Test);
+            playerController = PlayerController.instance;
         }
     }
 }
