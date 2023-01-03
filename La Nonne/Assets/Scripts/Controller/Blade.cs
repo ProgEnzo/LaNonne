@@ -32,6 +32,7 @@ namespace Controller
         private AnimationManager animationManager;
         private InputManager inputManager;
         private ScoreManager scoreManager;
+        
 
 
         private void Start()

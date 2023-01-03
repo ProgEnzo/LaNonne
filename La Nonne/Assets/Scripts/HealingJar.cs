@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -11,20 +12,20 @@ public class HealingJar : MonoBehaviour
     private GameObject healDropObject;
     public int numberOfHealDrops;
 
-    private void OnTriggerStay2D(Collider2D other)
+    public List<GameObject> healDropList = new();
+    
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (col.gameObject.CompareTag("Blade"))
         {
-            if (other.gameObject.CompareTag("Player"))
+            for (int i = 0; i < numberOfHealDrops; i++)
             {
-                for (int i = 0; i < numberOfHealDrops; i++)
-                {
-                    healDropObject = Instantiate(healDrop, transform.position, Quaternion.identity);
-                    healDropObject.transform.DOMove(new Vector2(transform.position.x + Random.Range(-1f, 1f), transform.position.y + Random.Range(-1f, 1f)), 0.5f).SetEase(Ease.OutQuad);
-                }
+                healDropObject = Instantiate(healDrop, transform.position, Quaternion.identity);
+                    
+                healDropList.Add(healDropObject);
                 Destroy(gameObject);
+            }                
 
-            }
         }
     }
 }
