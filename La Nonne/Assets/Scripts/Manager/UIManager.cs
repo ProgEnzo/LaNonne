@@ -12,7 +12,7 @@ namespace Manager
     {
         internal new static UIManager instance;
     
-        [SerializeField] private TextMeshProUGUI epCount;
+        [SerializeField] private TMP_Text epCount;
         private InputManager inputManager;
         private ScoreManager scoreManager;
         private PlayerController playerController;
@@ -55,7 +55,7 @@ namespace Manager
         
             inputManager = InputManager.instance;
             playerController = PlayerController.instance;
-            epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TMP_Text>();
 
             //bigMapCanvas = GameObject.Find("BigMapCanvas");
             //mapPanel = bigMapCanvas.GetComponent<Image>();
@@ -101,7 +101,11 @@ namespace Manager
         
             PauseMenuOn();
             
+            if (playerController is null)
+                return;
+            
             epCount.text = "EP COUNT : " + playerController.currentEp;
+            
         }
 
         private static void PauseMenuOn()
