@@ -6,6 +6,7 @@ namespace AI.So
     public class SoTrashMobRange : SO_Enemy
     {
         [Header("Range Values")]
+        [SerializeField] public float maxProxRange;
         [SerializeField] public float shootingRange;
         [SerializeField] public float aggroRange;
         

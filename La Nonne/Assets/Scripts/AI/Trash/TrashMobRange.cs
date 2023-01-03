@@ -44,12 +44,17 @@ namespace AI.Trash
         {
             distanceToPlayer = Vector2.Distance(playerController.transform.position, transform.position); //Ca chope la distance entre le joueur et l'enemy
         
-            if (distanceToPlayer <= soTrashMobRange.shootingRange) //si le joueur est dans la SHOOTING RANGE du trashMob
+            if (distanceToPlayer <= soTrashMobRange.maxProxRange)
+            {
+                scriptAIPath.maxSpeed = 0;
+                
+                Shoot();
+            }
+            else if (distanceToPlayer <= soTrashMobRange.shootingRange) //si le joueur est dans la SHOOTING RANGE du trashMob
             {
                 scriptAIPath.maxSpeed = 1;
                 
                 Shoot();
-            
             }
             else if (distanceToPlayer <= soTrashMobRange.aggroRange) //si le joueur est dans l'AGGRO RANGE du trashMob
             {
