@@ -279,7 +279,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorNearWallsUpPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 25)
             {
                 GameObject item = Instantiate(floorNearWallsUpCusto[Random.Range(0, floorNearWallsUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y, 0), Quaternion.identity);
             }
@@ -290,7 +290,7 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorNearWallsDownPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 25)
             {
                 GameObject item = Instantiate(floorNearWallsDownCusto[Random.Range(0, floorNearWallsDownCusto.Count)], new Vector3(pos.x, pos.y + 1.5f, 0), Quaternion.identity);
             }
@@ -301,9 +301,9 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorNearWallsRightPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 25)
             {
-                GameObject item = Instantiate(floorNearWallsRightCusto[Random.Range(0, floorNearWallsRightCusto.Count)], new Vector3(pos.x - 1f, pos.y + 0.5f, 0), Quaternion.identity);
+                GameObject item = Instantiate(floorNearWallsRightCusto[Random.Range(0, floorNearWallsRightCusto.Count)], new Vector3(pos.x - 1.5f, pos.y + 0.5f, 0), Quaternion.identity);
             }
         }
     }
@@ -312,9 +312,9 @@ public class RoomContentGenerator : MonoBehaviour
     {
         foreach (var pos in floorNearWallsLeftPos)
         {
-            //if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 25)
             {
-                GameObject item = Instantiate(floorNearWallsLeftCusto[Random.Range(0, floorNearWallsLeftCusto.Count)], new Vector3(pos.x + 1f, pos.y, 0), Quaternion.identity);
+                GameObject item = Instantiate(floorNearWallsLeftCusto[Random.Range(0, floorNearWallsLeftCusto.Count)], new Vector3(pos.x + 1.4f, pos.y + 0.3f, 0), Quaternion.identity);
             }
         }
     }
@@ -516,13 +516,13 @@ public class RoomContentGenerator : MonoBehaviour
                     spawnedObjects.AddRange(enemyRoom[2].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
                 else if (distance < 5) 
                     spawnedObjects.AddRange(enemyRoom[3].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 7) 
+                else if (distance < 6) 
                     spawnedObjects.AddRange(enemyRoom[4].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 8) //TDI Tutorial
+                else if (distance < 7) //TDI Tutorial
                     spawnedObjects.AddRange(enemyRoom[5].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 10) 
+                else if (distance < 9) 
                     spawnedObjects.AddRange(enemyRoom[6].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance > 13) 
+                else if (distance > 11) 
                     spawnedObjects.AddRange(enemyRoom[7].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
             }
         }
@@ -537,7 +537,7 @@ public class RoomContentGenerator : MonoBehaviour
             
             foreach (var preBoss in dungeonData.roomsDictionary.Keys)
             {
-                if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 22)
+                if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 44)
                 {
                     preBossRoomPosition = preBoss;
                     

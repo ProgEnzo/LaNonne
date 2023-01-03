@@ -1,4 +1,4 @@
-using TMPro;
+using Manager;
 using UnityEngine;
 
 namespace Controller
@@ -6,13 +6,13 @@ namespace Controller
     public class EPCount : MonoBehaviour
     {
         [SerializeField] private int epValue;
-        [SerializeField] private TextMeshProUGUI epCount;
         [SerializeField] private PlayerController playerController;
+        private ScoreManager scoreManager;
 
         void Start()
         {
             playerController = PlayerController.instance;
-            epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            scoreManager = ScoreManager.instance;
         }
     
         private void OnTriggerEnter2D(Collider2D col)
@@ -20,8 +20,7 @@ namespace Controller
             if (col.gameObject.CompareTag("WallCollider"))
             {
                 playerController.AddEp(epValue);
-                epCount.text = "EP COUNT : " + playerController.currentEp;
-
+                scoreManager.AddScore(1);
                 Destroy(gameObject);
             }
         }

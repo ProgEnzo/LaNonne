@@ -169,14 +169,16 @@ public class TilemapVisualizer : MonoBehaviour
     
     public List<Vector2Int> GetFloorsNearWalls(int middleX, int middleY, PlacementType typeWanted)
     {
-        int count = 25;
+        int count = 12; //verif si ca fonctionne
         
         List<Vector2Int> tileReturn = new ();
 
-        for (int i = 0; i < count; i+=2)
+        for (int i = 0; i < count; i+=1) //bypass les couloirs (trouver une solution plus clean) verif avec la fonction GetRoomFloorWithourCorridor
         {
-            for (int j = 0; j < count; j+=2)
+            for (int j = 0; j < count; j+=1)
             {
+                //dungeonData.GetRoomFloorWithoutCorridors(Vector2Int);
+                
                 var cellX = middleX - count / 2 + i;
                 var cellY = middleY - count / 2 + j;
                 

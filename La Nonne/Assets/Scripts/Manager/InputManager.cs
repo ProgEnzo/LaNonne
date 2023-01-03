@@ -15,7 +15,7 @@ namespace Manager
         
         [Header("Dash Inputs")]
         [SerializeField] internal KeyCode dashKey;
-        [SerializeField] internal KeyCode slowMoKey;
+        //[SerializeField] internal KeyCode slowMoKey;
         
         [Header("Attack Inputs")]
         [SerializeField] internal KeyCode zealousBladeKey;

@@ -25,6 +25,7 @@ namespace AI.Elite
             circleGameObject = transform.GetChild(0).gameObject; //Initialisation de l'accès au cercle
             circleGameObject.SetActive(false); //On le désactive pour le moment
             explosionRadius = soPyromaniac.explosionRadiusIndicator / 2; //On divise par 2 car le cercle est trop grand
+            tolerance = soPyromaniac.explosionTolerance;
         }
 
         private void Update()

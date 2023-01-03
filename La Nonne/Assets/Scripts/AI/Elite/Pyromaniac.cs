@@ -31,22 +31,37 @@ namespace AI.Elite
         protected override void Start()
         {
             base.Start();
+            
+            //Initialoisation du scriptable object
             soPyromaniac = (SoPyromaniac) soEnemy;
+            
+            //Initialisation du déplacement
             scriptAIPath = GetComponent<AIPath>();
             scriptAIPathState = true;
-            isDashing = false;
-            isProjectileOn = false;
-            isImpactOn = false;
-            canBoxCast = false;
+            
+            //Initialisation des états du pyromane
+            isDashing = false; //Dash
+            isProjectileOn = false; //Existence du projectile
+            isImpactOn = false; //Impact
+            canBoxCast = false; //Zone de feu
+            
+            //Initialisation du cercle d'impact
             circleGameObject = transform.GetChild(1).gameObject; //Initialisation de l'accès au cercle
             circleGameObject.SetActive(false); //On le désactive pour le moment
+            
+            //Initialisation de la vitesse de dash
             currentVelocitySpeed = 0f;
         }
 
         protected override void Update()
         {
             base.Update();
-            rb.velocity = dashDirection * currentVelocitySpeed;
+            
+            //Pour Chill
+            if (!isKnockedBack)
+            {
+                rb.velocity = dashDirection * currentVelocitySpeed;
+            }
             
             //Initialisation de variables locales pour l'optimisation
             var playerPosition = playerController.transform.position; //Position du joueur
@@ -59,59 +74,64 @@ namespace AI.Elite
             //Tant que le projectile n'a pas explosé
             if (!projectileScript.isExploded)
             {
+                //Seulement si le projectile n'existe pas, et que le pyromane n'est dans l'état ni de dash ni d'impact
                 if (!isProjectileOn && !isDashing && !isImpactOn)
                 {
-                    //Si le joueur est dans le rayon de détection
+                    //Si le joueur est dans le rayon de détection, on active le projectile
                     if (Vector3.Distance(position, playerPosition) <= soPyromaniac.detectionRadius)
                     {
-                        if (isProjectileOn) return;
-                        isProjectileOn = true;
-                        scriptAIPath.maxSpeed = 0f;
-                        GetComponent<AIDestinationSetter>().enabled = false;
-                        scriptAIPathState = false;
-                        canBoxCast = false;
-                        //Sinon, le pyromane lance sa zone de feu
-                        var distanceToCross =
-                            Mathf.Min(Vector3.Distance(position, playerPosition),
-                                soPyromaniac.throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
-                        var newPositionVector =
-                            (playerPosition - position).normalized *
-                            distanceToCross; //On calcule le vecteur de déplacement du projectile
+                        //Initialisation des variables pour l'état de lancer
+                        isProjectileOn = true; //Le projectile existe
+                        GetComponent<AIDestinationSetter>().enabled = false; //Le pyromane ne se déplace plus vers le joueur
+                        scriptAIPath.maxSpeed = 0f; //Le pyromane ne se déplace plus avec A*
+                        scriptAIPathState = false; //Le pyromane ne se déplace plus avec A*
+                        canBoxCast = false; //La zone de feu du pyromane est désactivée
+                        
+                        //Lancement du projectile
+                        var distanceToCross = Mathf.Min(Vector3.Distance(position, playerPosition), soPyromaniac.throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
+                        var newPositionVector = (playerPosition - position).normalized * distanceToCross; //On calcule le vecteur de déplacement du projectile
                         var newPosition = position + newPositionVector; //On calcule la nouvelle position du projectile
-                        ThrowProjectile(newPosition,
-                            newPositionVector
-                                .normalized); //On lance le projectile à la nouvelle position, avec la nouvelle direction
+                        ThrowProjectile(newPosition, newPositionVector.normalized); //On lance le projectile à la nouvelle position, avec la nouvelle direction
                     }
+                    //Sinon, le pyromane se déplace vers le joueur avec A*
                     else
                     {
                         //Déplacement du pyromane
-                        GetComponent<AIDestinationSetter>().enabled = true;
-                        scriptAIPathState = true;
-                        scriptAIPath.maxSpeed = 3f;
+                        GetComponent<AIDestinationSetter>().enabled = true; //Le pyromane se déplace vers le joueur
+                        scriptAIPathState = true; //Le pyromane se déplace avec A*
+                        scriptAIPath.maxSpeed = 3f; //Le pyromane se déplace à la vitesse normale
                     }
                 }
             }
             //Une fois que le projectile a explosé
             else
             {
-                if (position.x < projectilePosition.x + soPyromaniac.fireTrailTolerance && position.x > projectilePosition.x - soPyromaniac.fireTrailTolerance && position.y < projectilePosition.y + soPyromaniac.fireTrailTolerance && position.y > projectilePosition.y - soPyromaniac.fireTrailTolerance)
-                {
-                    canBoxCast = true;
-                }
-                
+                //Si le pyromane n'est dans l'état ni de dash ni d'impact
                 if (!isDashing && !isImpactOn)
                 {
+                    //Le projectile n'existe plus
                     isProjectileOn = false;
+                    
                     //Dash vers la zone de feu
                     currentCoroutine ??= StartCoroutine(DashToFireZone());
                 }
+                
+                //Si le pyromane passe le projectile
+                if (position.x < projectilePosition.x + soPyromaniac.fireTrailTolerance && position.x > projectilePosition.x - soPyromaniac.fireTrailTolerance && position.y < projectilePosition.y + soPyromaniac.fireTrailTolerance && position.y > projectilePosition.y - soPyromaniac.fireTrailTolerance)
+                {
+                    //La zone de feu est activée
+                    canBoxCast = true;
+                }
             }
             
+            //Si la zone de feu du pyromane est activée
             if (canBoxCast)
             {
+                //Les conditions ne sont pas bonnes, à corriger
                 if (!projectileScript.isExploded && !isProjectileOn && !isDashing && !isImpactOn)
                 {
                     currentFireTrailMaxLength -= Time.deltaTime * soPyromaniac.fireTrailDisappearanceSpeed;
+
                     if (currentFireTrailMaxLength <= soPyromaniac.fireTrailTolerance)
                     {
                         canBoxCast = false;
@@ -123,6 +143,7 @@ namespace AI.Elite
                     boxCastDestination = projectilePosition;
                     currentFireTrailMaxLength = Vector2.Distance(boxCastDestination, boxCastOrigin);
                 }
+                
                 var objectsInArea = new List<RaycastHit2D>();
                 Physics2D.BoxCast(boxCastOrigin, Vector2.one * transform1.localScale * 2, 0f, (boxCastDestination - boxCastOrigin).normalized, new ContactFilter2D(), objectsInArea, currentFireTrailMaxLength);
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))

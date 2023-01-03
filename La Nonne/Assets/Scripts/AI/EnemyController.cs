@@ -14,6 +14,7 @@ namespace AI
     {
         protected PlayerController playerController;
         [SerializeField] internal SO_Enemy soEnemy;
+        [SerializeField] internal GameObject effectVFXGameObject;
         public ScoreManager scoreManager;
         internal float currentHealth;
         internal float currentAiPathSpeed;
@@ -30,6 +31,8 @@ namespace AI
         internal readonly bool[] areStacksOn = new bool[3];
         private EffectManager effectManager;
         private Coroutine currentHitStopCoroutine;
+        private float lastVelocitySpeed;
+        protected bool isKnockedBack;
 
         [SerializeField] private GameObject epDrop;
 
@@ -50,6 +53,7 @@ namespace AI
                 GetComponent<AIDestinationSetter>().target = playerController.transform;
             }
             isStunned = false;
+            isKnockedBack = false;
             
             for (var i = 0; i < stacks.Length; i++)
             {
@@ -63,6 +67,11 @@ namespace AI
         protected virtual void Update()
         {
             aiPathComponent.maxSpeed = currentAiPathSpeed;
+            
+            if (isKnockedBack && rb.velocity.magnitude < 0.01f)
+            {
+                isKnockedBack = false;
+            }
             
             PlayerSpriteRenderers.Clear();
             for (var i = 0; i < playerController.transform.childCount; i++)
@@ -119,21 +128,23 @@ namespace AI
         
         internal void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
         {
+            isKnockedBack = true;
+            rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
             if (currentHitStopCoroutine != null)
             {
                 StopCoroutine(currentHitStopCoroutine);
+                currentVelocitySpeed = lastVelocitySpeed;
             }
             currentHitStopCoroutine = StartCoroutine(HitStop(hitStopDuration));
-            rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
         }
         
         private IEnumerator HitStop(float hitStopDuration)
         {
-            var velocitySpeed = currentVelocitySpeed;
+            lastVelocitySpeed = currentVelocitySpeed;
             aiPathComponent.canMove = false;
             currentVelocitySpeed = 0;
             yield return new WaitForSeconds(hitStopDuration);
-            currentVelocitySpeed = velocitySpeed;
+            currentVelocitySpeed = lastVelocitySpeed;
             aiPathComponent.canMove = true;
             currentHitStopCoroutine = null;
         }

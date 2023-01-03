@@ -1,3 +1,4 @@
+using Controller;
 using Core.Scripts.Utils;
 using DG.Tweening;
 using TMPro;
@@ -14,6 +15,7 @@ namespace Manager
         [SerializeField] private TextMeshProUGUI epCount;
         private InputManager inputManager;
         private ScoreManager scoreManager;
+        private PlayerController playerController;
 
         [Header("Map & MiniMap")] 
         //public Image mapPanel;
@@ -52,6 +54,7 @@ namespace Manager
             scoreManager = ScoreManager.instance;
         
             inputManager = InputManager.instance;
+            playerController = PlayerController.instance;
             epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
             //bigMapCanvas = GameObject.Find("BigMapCanvas");
@@ -97,6 +100,8 @@ namespace Manager
             }*/
         
             PauseMenuOn();
+            
+            epCount.text = "EP COUNT : " + playerController.currentEp;
         }
 
         private static void PauseMenuOn()
@@ -116,6 +121,7 @@ namespace Manager
 
         public void ReloadLevel()
         {
+            LoadingScreen.instance.ShowLoadingScreen();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     

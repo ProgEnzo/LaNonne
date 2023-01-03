@@ -31,12 +31,15 @@ namespace Controller
         private EffectManager effectManager;
         private AnimationManager animationManager;
         private InputManager inputManager;
+        private ScoreManager scoreManager;
+
 
         private void Start()
         {
             playerController = PlayerController.instance;
             effectManager = EffectManager.instance;
             animationManager = AnimationManager.instance;
+            scoreManager = ScoreManager.instance;
             inputManager = InputManager.instance;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
@@ -52,14 +55,14 @@ namespace Controller
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
             
-            currentDuringComboCooldown -= Time.deltaTime;
-            currentNextComboCooldown -= Time.deltaTime;
+            currentDuringComboCooldown -= Time.unscaledDeltaTime;
+            currentNextComboCooldown -= Time.unscaledDeltaTime;
             if (currentDuringComboCooldown <= 0)
             {
                 hitState = 0;
             }
 
-            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !playerController.isSlowMoOn && !isHitting && currentNextComboCooldown <= 0)
+            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0 && !playerController.isRevealingDashHitting)
             {
                 ZealousBladeStart();
             }
@@ -138,7 +141,7 @@ namespace Controller
                 if (hitState % 2 == 1)
                 {
                     transform.rotation =
-                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor / Time.timeScale);
+                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor);
                     if (transform.rotation.eulerAngles.z < finalRotation1.eulerAngles.z + soController.zealousBladeToleranceAngle &&
                         transform.rotation.eulerAngles.z > finalRotation1.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {
@@ -156,7 +159,7 @@ namespace Controller
                 else
                 {
                     transform.rotation =
-                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor / Time.timeScale);
+                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor);
                     if (transform.rotation.eulerAngles.z < finalRotation2.eulerAngles.z + soController.zealousBladeToleranceAngle &&
                         transform.rotation.eulerAngles.z > finalRotation2.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {
@@ -185,10 +188,16 @@ namespace Controller
                 if (hitState == soController.zealousBladeMaxHitState)
                 {
                     o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
+                    
+                    //ADD SCORE BIG HIT
+                    scoreManager.AddScore(3);
                 }
                 else
                 {
                     o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
+                    
+                    //ADD SCORE SMALL HIT
+                    scoreManager.AddScore(1);
                 }
                 PutStack(o);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
@@ -198,6 +207,20 @@ namespace Controller
             if (o.CompareTag("Boss"))
             {
                 o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.zealousBladeDamage);
+                if (hitState == soController.zealousBladeMaxHitState)
+                {
+                    o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
+                    
+                    //ADD SCORE BIG HIT
+                    scoreManager.AddScore(3);
+                }
+                else
+                {
+                    o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
+                    
+                    //ADD SCORE SMALL HIT
+                    scoreManager.AddScore(1);
+                }
                 PutStack(o);
             }
         }

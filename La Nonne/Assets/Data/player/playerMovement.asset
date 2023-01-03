@@ -28,9 +28,9 @@ MonoBehaviour:
   zealousBladeMaxNextComboCooldown: 0.1
   zealousBladeMaxDetectionAngle: 270
   zealousBladeLittleHitStopDuration: 0.3
-  zealousBladeLittleKnockBackForce: 1
-  zealousBladeBigHitStopDuration: 0.6
-  zealousBladeBigKnockBackForce: 3
+  zealousBladeLittleKnockBackForce: 2
+  zealousBladeBigHitStopDuration: 1
+  zealousBladeBigKnockBackForce: 10
   inquisitorialChainDamage: 25
   inquisitorialChainChainHitLength: 2.5
   inquisitorialChainBladeHitLength: 1
@@ -40,11 +40,8 @@ MonoBehaviour:
   inquisitorialChainCooldownTime: 5
   revealingDashDamage: 20
   revealingDashStunDuration: 3
-  revealingDashToleranceDistance: 0.1
+  revealingDashToleranceDistance: 0.4
   revealingDashHitSpeed: 50
   revealingDashDetectionRadius: 5
-  revealingDashSlowTimeSpeed: 10
-  slowMoCooldown: 5
-  slowMoDuration: 0.8
-  slowMoSpeed: 10
-  slowMoPlayerSpeedFactor: 0.6
+  revealingDashFocusDuration: 0.8
+  revealingDashCooldown: 5

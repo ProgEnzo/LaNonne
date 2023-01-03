@@ -21,6 +21,7 @@ namespace AI.So
         [SerializeField] public float fireCooldown;
         
         [Header("Projectile Values")]
+        [SerializeField] public float explosionTolerance;
         [SerializeField] public float explosionRadiusIndicator;
         [SerializeField] public float knockBackPower;
     }
