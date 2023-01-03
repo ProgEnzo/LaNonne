@@ -16,7 +16,7 @@ namespace Controller
         private BoxCollider2D bladeBoxCollider;
         private Quaternion initialRotation;
         private Quaternion finalRotation;
-        private Camera camera1;
+        private UnityEngine.Camera camera1;
         private PlayerController playerController;
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int AttackState = Animator.StringToHash("attackState");
@@ -35,7 +35,7 @@ namespace Controller
             playerController = PlayerController.instance;
             animationManager = AnimationManager.instance;
             inputManager = InputManager.instance;
-            camera1 = Camera.main;
+            camera1 = UnityEngine.Camera.main;
             chainLineRenderer = transform.GetChild(0).GetComponent<LineRenderer>();
             bladeLineRenderer = transform.GetChild(1).GetComponent<LineRenderer>();
             chainBoxCollider = transform.GetChild(0).GetComponent<BoxCollider2D>();

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
+using Camera;
 using Core.Scripts.Utils;
 using DG.Tweening;
 using Manager;
@@ -20,6 +21,7 @@ namespace Controller
         [Header("Instance")]
         internal new static PlayerController instance;
         private ScoreManager scoreManager;
+        private CamManager camManager;
         
         [Header("Components")]
         internal Rigidbody2D mRigidbody;
@@ -132,6 +134,7 @@ namespace Controller
             animationManager = AnimationManager.instance;
             inputManager = InputManager.instance;
             scoreManager = ScoreManager.instance;
+            camManager = CamManager.instance;
             playerScale = transform.localScale.x;
             currentHealth = soController.maxHealth;
             isRevealingDashHitting = false;
@@ -451,6 +454,7 @@ namespace Controller
                 foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
                 {
                     isRevealingDashOn = true;
+                    camManager.ZoomDuringRevealingDash(1);
                     revealingDashAimedEnemy = enemy.collider.gameObject;
                     revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
                     isRevealingDashHitting = true;
@@ -492,6 +496,7 @@ namespace Controller
                 {
                     isRevealingDashHitting = false;
                     isRevealingDashOn = false;
+                    camManager.ZoomDuringRevealingDash(0);
                     if (revealingDashTimeSequence != null)
                     {
                         DOTween.Kill(revealingDashTimeUid);
@@ -562,6 +567,7 @@ namespace Controller
                     }
                 
                     isRevealingDashOn = false;
+                    camManager.ZoomDuringRevealingDash(0);
                     currentRevealingDashCooldown = soController.revealingDashCooldown;
                 }
             }
@@ -604,6 +610,7 @@ namespace Controller
                 
                     isRevealingDashFocusOn = false;
                     isRevealingDashOn = false;
+                    camManager.ZoomDuringRevealingDash(0);
                     currentRevealingDashCooldown = soController.revealingDashCooldown;
                 }
                 currentRevealingDashFocusCooldown -= Time.deltaTime;
@@ -639,6 +646,7 @@ namespace Controller
                 
                 isRevealingDashFocusOn = false;
                 isRevealingDashOn = false;
+                camManager.ZoomDuringRevealingDash(0);
                 currentRevealingDashCooldown = soController.revealingDashCooldown;
             }
         }
