@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI.Boss;
+using Camera;
 using Cinemachine;
 using Controller;
 using GenPro.Rooms;
@@ -12,6 +14,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 public class RoomContentGenerator : MonoBehaviour
 {
@@ -31,9 +34,6 @@ public class RoomContentGenerator : MonoBehaviour
 
         [Header("Transforms")]
         public Transform itemParent;
-        
-        [SerializeField, Space, Header("Camera")]
-        private CinemachineVirtualCamera cinemachineCamera;
 
         [SerializeField,Space, Header("Prefab Shop")]
         private GameObject prefabShop;
@@ -71,8 +71,7 @@ public class RoomContentGenerator : MonoBehaviour
     }
     
     Dictionary<Vector2Int, HashSet<Vector2Int>> copiedDico;
-    
-    
+
     public void GenerateRoomContent(DungeonData dungeonData)
     { 
         copiedDico = new Dictionary<Vector2Int, HashSet<Vector2Int>>(dungeonData.roomsDictionary);
@@ -320,15 +319,6 @@ public class RoomContentGenerator : MonoBehaviour
     }
     
     #endregion
-   
-    #region Cameras
-    private void FocusCameraOnThePlayer(Transform playerTransform) //ne fonctionne pas 
-    {
-        cinemachineCamera.LookAt = playerTransform;
-        cinemachineCamera.Follow = playerTransform;
-    }
-    
-    #endregion
 
     #region PlayerRoom
 
@@ -346,7 +336,7 @@ public class RoomContentGenerator : MonoBehaviour
     
             List<GameObject> placedPrefabs = playerRoom.ProcessRoom(playerSpawnPoint, dungeonData.roomsDictionary.Values.First(), dungeonData.GetRoomFloorWithoutCorridors(playerSpawnRoomPosition));
     
-            FocusCameraOnThePlayer(placedPrefabs[placedPrefabs.Count - 1].transform);
+            CamManager.instance.FocusCameraOnThePlayer(placedPrefabs[placedPrefabs.Count - 1].transform);
     
             spawnedObjects.AddRange(placedPrefabs);
     

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Camera;
 using Cinemachine;
 using Controller;
 using DG.Tweening;
@@ -41,7 +42,8 @@ namespace AI.Boss
         public float playerNormalSpeed;
         public float bossNormalSpeed;
 
-        [Header("Virtual Camera")] 
+        [Header("Virtual Camera")]
+        private CamManager camManager;
         public CinemachineVirtualCamera vCamPlayer;
         public CinemachineVirtualCamera vCamPlayerShake;
         public CinemachineVirtualCamera vCamBoss;
@@ -147,6 +149,7 @@ namespace AI.Boss
             hpBossBar = GameObject.FindGameObjectWithTag("Boss HealthBar").transform.GetChild(0).GetComponent<Image>();
             player = PlayerController.instance;
             effectManager = EffectManager.instance;
+            camManager = CamManager.instance;
             gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
             shockwaveGameObject = GameObject.Find("Shockwave");
         
@@ -216,7 +219,7 @@ namespace AI.Boss
             {
                 if (canShakeOnWallBump)
                 {
-                    StartCoroutine(ShakeCam());
+                    StartCoroutine(camManager.ShakeCam());
                     rb.velocity = Vector2.zero;
                     canShakeOnWallBump = false;
                 }
@@ -244,14 +247,6 @@ namespace AI.Boss
         {
             // var position = transform.position;
             // Gizmos.DrawWireSphere(position, aggroBoxingRange);
-        }
-
-        private IEnumerator ShakeCam()
-        {
-            //DO SHAKE CAMERA
-            vCamPlayer.Priority = 6;
-            yield return new WaitForSeconds(0.3f);
-            vCamPlayer.Priority = 10;
         }
 
         #region Health Boss
@@ -545,20 +540,19 @@ namespace AI.Boss
             //player.soController.moveSpeed = 0;
             yield return new WaitForSeconds(1f);
         
-            vCamPlayer.Priority = 1; //on laisse la priorité à la vCam du boss
-            vCamPlayerShake.Priority = 1; //on laisse la priorité à la vCam du boss
+            camManager.ChangeBossCamState(1); //on laisse la priorité à la vCam du boss
             takingDamage = false;
             yield return new WaitForSeconds(2f);
 
-            vCamBoss.Priority = 1;
-            vCamBossShake.Priority = 10; //Boss lâche un cri qui annonce la transition
+            
+            camManager.ChangeBossCamState(2); //Boss lâche un cri qui annonce la transition
             yield return new WaitForSeconds(2f); //temps du cri
         
-            vCamBossShake.Priority = 3;
-            vCamBoss.Priority = 5; //on redonne la priorité à la vCam du BOSS
+            
+            camManager.ChangeBossCamState(1); //on redonne la priorité à la vCam du BOSS
             yield return new WaitForSeconds(3f); //transition BOSS to player
-
-            vCamPlayer.Priority = 10;
+            
+            camManager.ChangeBossCamState(0);
             player.enabled = true;
             player.transform.GetChild(0).gameObject.SetActive(true);
             //player.soController.moveSpeed = 40f;
@@ -734,7 +728,7 @@ namespace AI.Boss
                 for (int i = 0; i < numberOfBoxingCircle; i++)
                 {
                     var circleBoxingObject = Instantiate(circleBoxing, circleBoxingWarningObjectList[i].transform.position, Quaternion.identity);
-                    StartCoroutine(ShakeCam()); //DO SHAKE CAMERA
+                    StartCoroutine(camManager.ShakeCam()); //DO SHAKE CAMERA
 
                     //ADD to the list 
                     circleBoxingObjectList.Add(circleBoxingObject);
