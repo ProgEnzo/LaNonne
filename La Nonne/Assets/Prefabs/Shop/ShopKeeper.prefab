@@ -430,7 +430,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopPanel: {fileID: 7374594419227398427}
-  whipModificationMenu: {fileID: 7374594419546855717}
   shopCanvas: {fileID: 1673445986217189897}
   image: {fileID: 1587969764645661724}
   epCountText: {fileID: 7235569693496466780}
@@ -1773,7 +1772,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &3018335619698778484
 MonoBehaviour:
@@ -2167,10 +2166,5 @@ RectTransform:
 --- !u!1 &7374594419227398427 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5182334781402109945, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
-  m_PrefabInstance: {fileID: 2430968032009340642}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7374594419546855717 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5182334782256996295, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
   m_PrefabInstance: {fileID: 2430968032009340642}
   m_PrefabAsset: {fileID: 0}
