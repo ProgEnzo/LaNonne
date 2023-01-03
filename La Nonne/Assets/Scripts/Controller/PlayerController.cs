@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
+using Camera;
 using Core.Scripts.Utils;
 using DG.Tweening;
 using Manager;
@@ -20,6 +21,7 @@ namespace Controller
         [Header("Instance")]
         internal new static PlayerController instance;
         private ScoreManager scoreManager;
+        private CamManager camManager;
         
         [Header("Components")]
         internal Rigidbody2D mRigidbody;
@@ -114,7 +116,7 @@ namespace Controller
             mRigidbody = GetComponent<Rigidbody2D>();
             collider2d = GetComponent<CapsuleCollider2D>();
             
-            for (var i = 2; i < transform.childCount; i++)
+            for (var i = 3; i < transform.childCount; i++)
             {
                 animPrefabs.Add(transform.GetChild(i).gameObject);
             }
@@ -132,6 +134,7 @@ namespace Controller
             animationManager = AnimationManager.instance;
             inputManager = InputManager.instance;
             scoreManager = ScoreManager.instance;
+            camManager = CamManager.instance;
             playerScale = transform.localScale.x;
             currentHealth = soController.maxHealth;
             isRevealingDashHitting = false;
@@ -451,6 +454,7 @@ namespace Controller
                 foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
                 {
                     isRevealingDashOn = true;
+                    
                     revealingDashAimedEnemy = enemy.collider.gameObject;
                     revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
                     isRevealingDashHitting = true;

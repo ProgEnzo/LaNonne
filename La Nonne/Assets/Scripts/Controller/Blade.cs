@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AI;
 using AI.Boss;
+using Camera;
 using Manager;
 using Shop;
 using UnityEngine;
@@ -32,6 +33,7 @@ namespace Controller
         private AnimationManager animationManager;
         private InputManager inputManager;
         private ScoreManager scoreManager;
+        private CamManager camManager;
 
 
         private void Start()
@@ -41,6 +43,7 @@ namespace Controller
             animationManager = AnimationManager.instance;
             scoreManager = ScoreManager.instance;
             inputManager = InputManager.instance;
+            camManager = CamManager.instance;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
             lineRenderer.enabled = false;
@@ -60,6 +63,7 @@ namespace Controller
             if (currentDuringComboCooldown <= 0)
             {
                 hitState = 0;
+                camManager.DezoomDuringCombo(hitState);
             }
 
             if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0 && !playerController.isRevealingDashHitting)
@@ -153,6 +157,7 @@ namespace Controller
                         {
                             currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
                             hitState = 0;
+                            camManager.DezoomDuringCombo(hitState);
                         }
                     }
                 }
@@ -171,6 +176,7 @@ namespace Controller
                         {
                             currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
                             hitState = 0;
+                            camManager.DezoomDuringCombo(hitState);
                         }
                     }
                 }
@@ -184,6 +190,7 @@ namespace Controller
             //DMG du player sur les enemy
             if (o.CompareTag("Enemy"))
             {
+                camManager.DezoomDuringCombo(hitState);
                 o.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.zealousBladeDamage);
                 if (hitState == soController.zealousBladeMaxHitState)
                 {
@@ -206,6 +213,7 @@ namespace Controller
             //DMG du player sur le BOSS
             if (o.CompareTag("Boss"))
             {
+                camManager.DezoomDuringCombo(hitState);
                 o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.zealousBladeDamage);
                 if (hitState == soController.zealousBladeMaxHitState)
                 {
