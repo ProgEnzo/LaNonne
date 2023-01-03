@@ -33,6 +33,7 @@ namespace Controller
         private InputManager inputManager;
         private ScoreManager scoreManager;
         private CamManager camManager;
+        private UIManager uiManager;
 
 
         private void Start()
@@ -43,6 +44,7 @@ namespace Controller
             scoreManager = ScoreManager.instance;
             inputManager = InputManager.instance;
             camManager = CamManager.instance;
+            uiManager = UIManager.instance;
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
             lineRenderer.enabled = false;
@@ -65,7 +67,7 @@ namespace Controller
                 camManager.DezoomDuringCombo(hitState);
             }
 
-            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0 && !playerController.isRevealingDashHitting)
+            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0 && !playerController.isRevealingDashHitting && !uiManager.isGamePaused)
             {
                 ZealousBladeStart();
             }

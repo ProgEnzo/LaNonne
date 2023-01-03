@@ -16,7 +16,7 @@ namespace Controller
         private BoxCollider2D bladeBoxCollider;
         private Quaternion initialRotation;
         private Quaternion finalRotation;
-        private UnityEngine.Camera camera1;
+        private Camera camera1;
         private PlayerController playerController;
         private static readonly int DirectionState = Animator.StringToHash("directionState");
         private static readonly int AttackState = Animator.StringToHash("attackState");
@@ -28,6 +28,7 @@ namespace Controller
 
         private AnimationManager animationManager;
         private InputManager inputManager;
+        private UIManager uiManager;
 
         // Start is called before the first frame update
         private void Start()
@@ -35,7 +36,8 @@ namespace Controller
             playerController = PlayerController.instance;
             animationManager = AnimationManager.instance;
             inputManager = InputManager.instance;
-            camera1 = UnityEngine.Camera.main;
+            uiManager = UIManager.instance;
+            camera1 = Camera.main;
             chainLineRenderer = transform.GetChild(0).GetComponent<LineRenderer>();
             bladeLineRenderer = transform.GetChild(1).GetComponent<LineRenderer>();
             chainBoxCollider = transform.GetChild(0).GetComponent<BoxCollider2D>();
@@ -57,7 +59,7 @@ namespace Controller
             var parentLocalScale = transform.parent.localScale;
             var warningScale = transform.GetChild(2).localScale;
 
-            if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0)
+            if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0 && !uiManager.isGamePaused)
             {
                 playerController.currentSlowMoPlayerMoveSpeedFactor = 0f;
                 Time.timeScale = 0.001f;
@@ -66,14 +68,14 @@ namespace Controller
                 transform.GetChild(2).localScale = new Vector3(warningScale.x * parentLocalScale.x, warningScale.y * parentLocalScale.y, warningScale.z * parentLocalScale.z);
                 isWarningOn = true;
             }
-            if (Input.GetKey(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn)
+            if (Input.GetKey(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused)
             {
                 var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
                 transform.GetChild(2).rotation = Quaternion.LookRotation(Vector3.forward, newDirection);
             }
-            if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn)
+            if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused)
             {
                 isWarningOn = false;
                 transform.GetChild(2).localScale = new Vector3(Mathf.Abs(warningScale.x), Mathf.Abs(warningScale.y), Mathf.Abs(warningScale.z));
@@ -82,6 +84,18 @@ namespace Controller
                 Time.timeScale = 1f;
                 Time.fixedDeltaTime = 0.02f;
                 InquisitorialChainStart();
+            }
+            
+            if (uiManager.isGamePaused && isWarningOn)
+            {
+                transform.GetChild(2).gameObject.SetActive(false);
+                transform.GetChild(0).gameObject.SetActive(false);
+                transform.GetChild(1).gameObject.SetActive(false);
+                isHitting = false;
+                isWarningOn = false;
+                playerController.currentSlowMoPlayerMoveSpeedFactor = 1f;
+                Time.timeScale = 1f;
+                Time.fixedDeltaTime = 0.02f;
             }
 
             chainLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));

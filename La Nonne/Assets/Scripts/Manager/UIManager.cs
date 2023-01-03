@@ -31,6 +31,9 @@ namespace Manager
         //public GameObject settingsMenu;
         public GameObject gameOverMenu;
         //public GameObject winMenu;
+
+        private static bool _isGamePausedStatic;
+        internal bool isGamePaused;
         
         private void Awake()
         {
@@ -46,6 +49,7 @@ namespace Manager
 
         private void Start()
         {
+            _isGamePausedStatic = false;
             //Reference
         
             //BIG MAP
@@ -101,7 +105,8 @@ namespace Manager
                 inGameUI.SetActive(true);
             }*/
         
-            PauseMenuOn();
+            PauseMenuInput();
+            isGamePaused = _isGamePausedStatic;
             
             if (playerController is null)
                 return;
@@ -110,14 +115,30 @@ namespace Manager
             
         }
 
-        private static void PauseMenuOn()
+        #region PauseMenu
+
+        private void PauseMenuInput()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                pauseMenu.SetActive(true);
-                Time.timeScale = 0;
+                _isGamePausedStatic = !_isGamePausedStatic;
+                PauseMenu(_isGamePausedStatic);
             }
         }
+
+        private static void PauseMenu(bool isGamePaused)
+        {
+            pauseMenu.SetActive(isGamePaused);
+            Time.timeScale = isGamePaused ? 0 : 1;
+        }
+    
+        public static void Resume()
+        {
+            _isGamePausedStatic = false;
+            PauseMenu(_isGamePausedStatic);
+        }
+        
+        #endregion
 
         public void GameOver()
         {
@@ -134,12 +155,6 @@ namespace Manager
         public void BackToMenu()
         {
             SceneManager.LoadScene(0);
-        }
-    
-        public static void Resume()
-        {
-            pauseMenu.SetActive(false);
-            Time.timeScale = 1;
         }
 
         internal void DesactivateInGameUI()

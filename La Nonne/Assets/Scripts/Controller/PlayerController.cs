@@ -134,6 +134,7 @@ namespace Controller
             inputManager = InputManager.instance;
             scoreManager = ScoreManager.instance;
             camManager = CamManager.instance;
+            uiManager = UIManager.instance;
             playerScale = transform.localScale.x;
             currentHealth = soController.maxHealth;
             isRevealingDashHitting = false;
@@ -156,7 +157,7 @@ namespace Controller
 
         public void Update()
         {
-            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn)
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.isGamePaused)
             {
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
@@ -214,7 +215,7 @@ namespace Controller
 
             direction = (Vector2.zero, Vector2.zero);
 
-            if (Input.GetKey(inputManager.leftMoveKey)) // for input
+            if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.isGamePaused) // for input
             {
                 isMoving = true; // for animation
                 isMovingProfile = true; // for movement
@@ -228,7 +229,7 @@ namespace Controller
                 direction.horizontal = Vector2.left;
             }
 
-            if (Input.GetKey(inputManager.rightMoveKey)) // for input
+            if (Input.GetKey(inputManager.rightMoveKey) && !uiManager.isGamePaused) // for input
             {
                 isMoving = true; // for animation
                 isMovingProfile = true; // for movement
@@ -242,7 +243,7 @@ namespace Controller
                 direction.horizontal = direction.horizontal == Vector2.left ? Vector2.zero : Vector2.right;
             }
 
-            if (Input.GetKey(inputManager.upMoveKey)) // for input
+            if (Input.GetKey(inputManager.upMoveKey) && !uiManager.isGamePaused) // for input
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement
@@ -258,7 +259,7 @@ namespace Controller
                 direction.vertical = Vector2.up;
             }
 
-            if (Input.GetKey(inputManager.downMoveKey)) // for input
+            if (Input.GetKey(inputManager.downMoveKey) && !uiManager.isGamePaused) // for input
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement
@@ -438,7 +439,7 @@ namespace Controller
         
         private void RevealingDashStart()
         {
-            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn && currentRevealingDashCooldown <= 0)
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn && currentRevealingDashCooldown <= 0 && !uiManager.isGamePaused)
             {
                 var enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero,
