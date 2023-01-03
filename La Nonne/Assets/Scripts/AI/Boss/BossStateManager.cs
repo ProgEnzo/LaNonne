@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Camera;
 using Cinemachine;
 using Controller;
 using DG.Tweening;
+using Manager;
 using Pathfinding;
 using Shop;
 using Tools;

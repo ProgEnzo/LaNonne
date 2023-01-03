@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
-using Camera;
 using Core.Scripts.Utils;
 using DG.Tweening;
 using Manager;
@@ -147,6 +146,7 @@ namespace Controller
             currentEp = 0;
             currentSlowMoPlayerMoveSpeedFactor = 1f;
             currentSlowMoPlayerAttackSpeedFactor = 1f;
+            camManager.FocusCameraOnThePlayer(transform);
         }
 
         private void OnDestroy()

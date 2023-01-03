@@ -4,7 +4,7 @@ using Cinemachine;
 using Core.Scripts.Utils;
 using UnityEngine;
 
-namespace Camera
+namespace Manager
 {
     public class CamManager : MonoSingleton<CamManager>
     {
@@ -32,7 +32,6 @@ namespace Camera
         {
             foreach (var cam in vCams)
             {
-                //cam.LookAt = playerTransform;
                 cam.Follow = playerTransform;
             }
         }

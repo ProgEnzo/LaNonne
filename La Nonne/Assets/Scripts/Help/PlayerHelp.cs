@@ -1,49 +1,54 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class PlayerHelp : MonoBehaviour
+namespace Help
 {
-    public Transform launchPos;
-    public GameObject epHelp;
+    public class PlayerHelp : MonoBehaviour
+    {
+        public GameObject epHelp;
 
-    private RoomContentGenerator roomContentGenerator;
-    private Rigidbody2D rb;
+        private RoomContentGenerator roomContentGenerator;
+        private Rigidbody2D rb;
 
-    public float speedForBouboule = 3f;
-    public float timeToDestroyBouboule = 2f;
+        public float speedForBouboule = 3f;
+        public float timeToDestroyBouboule = 2f;
     
-    public float coolDownBeforeNextBouboule = 4f;
-    public float currentTimeBeforeNextBouboule;
+        public float coolDownBeforeNextBouboule = 4f;
+        public float currentTimeBeforeNextBouboule;
 
-    public void OnEnable()
-    {
-        roomContentGenerator = GameObject.Find("RoomContentGenerator").GetComponent<RoomContentGenerator>();
-        currentTimeBeforeNextBouboule = 0f;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E) && currentTimeBeforeNextBouboule <= 0f)
+        public void OnEnable()
         {
-            rb = Instantiate(epHelp, launchPos.position, transform.rotation).GetComponent<Rigidbody2D>();
-            rb.velocity = (roomContentGenerator.mapBoss - (Vector2)transform.position).normalized * speedForBouboule;
-            StartCoroutine(DetruitLaBouboule());
-            currentTimeBeforeNextBouboule = coolDownBeforeNextBouboule;
+            if (GameObject.Find("RoomContentGenerator") != null)
+            {
+                roomContentGenerator = GameObject.Find("RoomContentGenerator").GetComponent<RoomContentGenerator>();
+            }
+            currentTimeBeforeNextBouboule = 0f;
         }
-        currentTimeBeforeNextBouboule -= Time.deltaTime;
-    }
 
-    private IEnumerator DetruitLaBouboule()
-    {
-        yield return new WaitForSeconds(timeToDestroyBouboule);
-        Destroy(rb.gameObject);
-    }
-    
-    private IEnumerator CoolDown()
-    {
-        yield return new WaitForSeconds(coolDownBeforeNextBouboule);
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.A) && currentTimeBeforeNextBouboule <= 0f)
+            {
+                rb = Instantiate(epHelp, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
+                if (roomContentGenerator != null)
+                {
+                    rb.velocity = (roomContentGenerator.mapBoss - (Vector2)transform.position).normalized * speedForBouboule;
+                }
+                else
+                {
+                    rb.velocity = Random.insideUnitCircle.normalized * speedForBouboule;
+                }
+                StartCoroutine(DetruitLaBouboule());
+                currentTimeBeforeNextBouboule = coolDownBeforeNextBouboule;
+            }
+            currentTimeBeforeNextBouboule -= Time.deltaTime;
+        }
+
+        private IEnumerator DetruitLaBouboule()
+        {
+            yield return new WaitForSeconds(timeToDestroyBouboule);
+            Destroy(rb.gameObject);
+        }
     }
 }

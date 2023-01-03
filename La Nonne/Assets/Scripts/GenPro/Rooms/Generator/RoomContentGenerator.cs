@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI.Boss;
-using Camera;
 using Cinemachine;
 using Controller;
 using GenPro.Rooms;
+using Manager;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -335,9 +335,7 @@ public class RoomContentGenerator : MonoBehaviour
             playerSpawnRoomPosition = dungeonData.roomsDictionary.Keys.First();
     
             List<GameObject> placedPrefabs = playerRoom.ProcessRoom(playerSpawnPoint, dungeonData.roomsDictionary.Values.First(), dungeonData.GetRoomFloorWithoutCorridors(playerSpawnRoomPosition));
-    
-            CamManager.instance.FocusCameraOnThePlayer(placedPrefabs[placedPrefabs.Count - 1].transform);
-    
+
             spawnedObjects.AddRange(placedPrefabs);
     
             dungeonData.roomsDictionary.Remove(playerSpawnPoint);
