@@ -5,6 +5,7 @@ using Controller;
 using DG.Tweening;
 using Manager;
 using TMPro;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -34,6 +35,10 @@ namespace Shop.UI
       private int currentNumberOfTakenObjects;
 
       private ScoreManager scoreManager;
+      
+      [SerializeField] private TextMeshProUGUI dialogueText;
+      [SerializeField] private DialoguesSO dialoguesSo;
+      [SerializeField] private float timeByCharacter;
 
       private void Start()
       {
@@ -107,9 +112,15 @@ namespace Shop.UI
                if (!hasShopBeenOpened)
                {
                   hasShopBeenOpened = true;
+                  PlayerController.instance.visitedShopCount += 1;
                   currentNumberOfTakenObjects = 0;
                   ShopObjectsSelector();
+               
+                  //Mise en place du dialogue
+                  ChooseDialogue();
                }
+               
+               //Mise en place des objets dans le shop
                for (var i = 0; i < effectsInTheShop.Length; i++)
                {
                   if (effectsInTheShop[i] != EffectManager.Effect.None)
@@ -142,6 +153,29 @@ namespace Shop.UI
          {
             timerInputPressed = 0f;
             image.DOFillAmount(0,0.5f);
+         }
+      }
+
+      private void ChooseDialogue()
+      {
+         var chosenList = PlayerController.instance.visitedShopCount switch
+         {
+            <= 2 => dialoguesSo.texts1,
+            <= 4 => dialoguesSo.texts2,
+            _ => dialoguesSo.texts3
+         };
+
+         StartCoroutine(WriteDialogue(chosenList[Random.Range(0, chosenList.Count)]));
+      }
+      
+      private IEnumerator WriteDialogue(string text)
+      {
+         dialogueText.text = "";
+         
+         foreach (var character in text)
+         {
+            dialogueText.text += character;
+            yield return new WaitForSecondsRealtime(timeByCharacter);
          }
       }
 

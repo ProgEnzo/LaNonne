@@ -79,6 +79,9 @@ namespace Controller
         internal Animator currentAnimPrefabAnimator;
         private (int parameterToChange, int value) animParametersToChange;
         private bool isMovingProfile;
+
+        [Header("Shop")]
+        internal int visitedShopCount;
         
         [SerializeField, Space, Header("PostProcessing")] //mettre ces variables dans le scripts du player
         private Volume volume;
@@ -148,6 +151,7 @@ namespace Controller
             currentSlowMoPlayerMoveSpeedFactor = 1f;
             currentSlowMoPlayerAttackSpeedFactor = 1f;
             camManager.FocusCameraOnThePlayer(transform);
+            visitedShopCount = 0;
         }
 
         private void OnDestroy()
