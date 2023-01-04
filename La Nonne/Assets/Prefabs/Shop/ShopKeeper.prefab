@@ -436,6 +436,9 @@ MonoBehaviour:
   timeToAccess: 0.5
   numberOfOfferedObjects: 3
   maxNumberOfTakenObjects: 2
+  dialogueText: {fileID: 3096433105055561718}
+  dialoguesSo: {fileID: 11400000, guid: 11db0e156637bd94f90a777f555d21a8, type: 2}
+  timeByCharacter: 0.1
 --- !u!1 &6051705388484918692
 GameObject:
   m_ObjectHideFlags: 0
@@ -2147,6 +2150,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
+--- !u!114 &3096433105055561718 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 811832156235493652, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
+  m_PrefabInstance: {fileID: 2430968032009340642}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7235569693496466780 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5032034568221170622, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
