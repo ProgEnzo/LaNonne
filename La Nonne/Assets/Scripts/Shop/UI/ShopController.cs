@@ -36,8 +36,8 @@ namespace Shop.UI
 
       private ScoreManager scoreManager;
       
+      private DialoguesManager dialoguesManager;
       [SerializeField] private TextMeshProUGUI dialogueText;
-      [SerializeField] private DialoguesSO dialoguesSo;
       [SerializeField] private float timeByCharacter;
 
       private void Start()
@@ -51,6 +51,7 @@ namespace Shop.UI
          effectManager = EffectManager.instance;
          uiManager = UIManager.instance;
          scoreManager = ScoreManager.instance;
+         dialoguesManager = DialoguesManager.instance;
          hasShopBeenOpened = false;
          isShopOpened = false;
       }
@@ -160,12 +161,16 @@ namespace Shop.UI
       {
          var chosenList = PlayerController.instance.visitedShopCount switch
          {
-            <= 2 => dialoguesSo.texts1,
-            <= 4 => dialoguesSo.texts2,
-            _ => dialoguesSo.texts3
+            <= 2 => dialoguesManager.currentTexts1,
+            <= 4 => dialoguesManager.currentTexts2,
+            _ => dialoguesManager.currentTexts3
          };
+         
+         var chosenDialogue = chosenList[Random.Range(0, chosenList.Count)];
 
-         StartCoroutine(WriteDialogue(chosenList[Random.Range(0, chosenList.Count)]));
+         StartCoroutine(WriteDialogue(chosenDialogue));
+         
+         chosenList.Remove(chosenDialogue);
       }
       
       private IEnumerator WriteDialogue(string text)
