@@ -241,7 +241,7 @@ namespace Shop.UI
                   EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]] - 1].cost;
             
             //ADD SCORE FOR BUYING ITEMS
-            scoreManager.AddScore(100);
+            scoreManager.AddBoughtItemScore(100);
             
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
             for (var j = 0; j < 3; j++)

@@ -9,7 +9,7 @@ namespace Controller
         [SerializeField] private PlayerController playerController;
         private ScoreManager scoreManager;
 
-        void Start()
+        private void Start()
         {
             playerController = PlayerController.instance;
             scoreManager = ScoreManager.instance;
@@ -20,11 +20,9 @@ namespace Controller
             if (col.gameObject.CompareTag("WallCollider"))
             {
                 playerController.AddEp(epValue);
-                scoreManager.AddScore(1);
+                scoreManager.AddEpScore(1);
                 Destroy(gameObject);
             }
         }
-    
-    
     }
 }

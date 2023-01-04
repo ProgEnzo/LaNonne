@@ -117,7 +117,7 @@ namespace Manager
 
         #region PauseMenu
 
-        private void PauseMenuInput()
+        private static void PauseMenuInput()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {

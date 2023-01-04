@@ -100,7 +100,7 @@ namespace AI
             {
                 EpDrop((int)(soEnemy.numberOfEp * currentEpDropMultiplier));
                 
-                scoreManager.AddScore(soEnemy.scorePoint);
+                scoreManager.AddKilledEnemyScore(soEnemy.scorePoint);
 
                 Destroy(gameObject); //Dies            
             }
