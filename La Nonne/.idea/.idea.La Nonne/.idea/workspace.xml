@@ -6,11 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="627b33af-daf3-4df2-a9a1-c8a3e8fe18aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.La Nonne/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.La Nonne/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Animations/Caméra/Cam.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Caméra/Cam.controller" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/player/playerMovement.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/player/playerMovement.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Ennemies/TrashMobClose.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Ennemies/TrashMobClose.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu/Volume Profile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu/Volume Profile.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller/PlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller/PlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/CamManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/CamManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,17 +66,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Discover.Launch.Via.Unity": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="$PROJECT_DIR$/../../../Builds/Build 1\La Nonne.exe" />
@@ -112,10 +112,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="21344">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="21344" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -198,6 +198,7 @@
       <workItem from="1671835599344" duration="3611000" />
       <workItem from="1672676801990" duration="3458000" />
       <workItem from="1672738951366" duration="20493000" />
+      <workItem from="1672826405380" duration="1190000" />
     </task>
     <servers />
   </component>
@@ -227,14 +228,7 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/Camera/CamManager.cs</url>
           <line>21</line>
-          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\Camera\CamManager.cs" initialLine="21" containingFunctionPresentation="method 'Awake'">
-            <startOffsets>
-              <option value="483" />
-            </startOffsets>
-            <endOffsets>
-              <option value="484" />
-            </endOffsets>
-          </properties>
+          <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\Camera\CamManager.cs" initialLine="21" containingFunctionPresentation="method 'Awake'" />
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
@@ -242,10 +236,10 @@
           <line>61</line>
           <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\Manager\CamManager.cs" initialLine="61" containingFunctionPresentation="method 'ZoomDuringRevealingDash'">
             <startOffsets>
-              <option value="2011" />
+              <option value="1964" />
             </startOffsets>
             <endOffsets>
-              <option value="2012" />
+              <option value="1965" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="9" />
@@ -255,10 +249,10 @@
           <line>62</line>
           <properties documentPath="C:\Users\e.ferreiradealmeida\Desktop\LaNonne\LaNonne\La Nonne\Assets\Scripts\Manager\CamManager.cs" initialLine="62" containingFunctionPresentation="method 'ZoomDuringRevealingDash'">
             <startOffsets>
-              <option value="2021" />
+              <option value="1974" />
             </startOffsets>
             <endOffsets>
-              <option value="2022" />
+              <option value="1975" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="10" />
