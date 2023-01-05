@@ -67,6 +67,7 @@ namespace AI.Elite
         {
             if (!(currentHealth <= 50)) yield break;
             transform.DOScale(new Vector3(3, 0, 3), 0.1f);
+            scoreManager.AddKilledEnemyScore(soTdi.scorePoint);
             yield return new WaitForSeconds(0.1f);
             Destroy(gameObject);
             var position = transform.position;

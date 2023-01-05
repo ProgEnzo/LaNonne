@@ -198,14 +198,28 @@ namespace Controller
                     o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
                     
                     //ADD SCORE BIG HIT
-                    scoreManager.AddScore(3);
+                    if (playerController.isRevealingDashFocusOn)
+                    {
+                        scoreManager.AddRevealingDashBladeHitScore(6);
+                    }
+                    else
+                    {
+                        scoreManager.AddBladeHitScore(3);
+                    }
                 }
                 else
                 {
                     o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
                     
                     //ADD SCORE SMALL HIT
-                    scoreManager.AddScore(1);
+                    if (playerController.isRevealingDashFocusOn)
+                    {
+                        scoreManager.AddRevealingDashBladeHitScore(2);
+                    }
+                    else
+                    {
+                        scoreManager.AddBladeHitScore(1);
+                    }
                 }
                 PutStack(o);
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
@@ -221,14 +235,28 @@ namespace Controller
                     o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
                     
                     //ADD SCORE BIG HIT
-                    scoreManager.AddScore(3);
+                    if (playerController.isRevealingDashFocusOn)
+                    {
+                        scoreManager.AddBladeHitScore(6);
+                    }
+                    else
+                    {
+                        scoreManager.AddBladeHitScore(3);
+                    }
                 }
                 else
                 {
                     o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
                     
                     //ADD SCORE SMALL HIT
-                    scoreManager.AddScore(1);
+                    if (playerController.isRevealingDashFocusOn)
+                    {
+                        scoreManager.AddBladeHitScore(2);
+                    }
+                    else
+                    {
+                        scoreManager.AddBladeHitScore(1);
+                    }
                 }
                 PutStack(o);
             }

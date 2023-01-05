@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Core.Scripts.Utils;
 using Shop;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Manager

@@ -1,4 +1,3 @@
-using System.Linq;
 using AI;
 using AI.Boss;
 using Manager;
@@ -32,7 +31,7 @@ namespace Controller
             if (o.CompareTag("Enemy"))
             {
                 o.GetComponent<EnemyController>().TakeDamageFromPlayer(damage);
-                scoreManager.AddScore(5);
+                scoreManager.AddChainBladeHitScore(5);
                 
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
                 ImplodeStacks(o, damage);
@@ -42,7 +41,7 @@ namespace Controller
             if (o.CompareTag("Boss"))
             {
                 o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(damage);
-                scoreManager.AddScore(5);
+                scoreManager.AddChainBladeHitScore(5);
                 
                 ImplodeStacks(o, damage);
             }

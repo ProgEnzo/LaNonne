@@ -49,7 +49,7 @@ namespace Controller
         private readonly Dictionary<GameObject, Coroutine> revealingDashRunningStunCoroutines = new();
         private float revealingDashTotalDistance;
         internal bool isRevealingDashOn;
-        private bool isRevealingDashFocusOn;
+        internal bool isRevealingDashFocusOn;
         private float currentRevealingDashFocusCooldown;
         private float currentRevealingDashCooldown;
         internal float currentSlowMoPlayerMoveSpeedFactor;
@@ -343,7 +343,7 @@ namespace Controller
             //Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
             
             //WITHDRAW SCORE HERE
-            scoreManager.AddScore(-10);
+            scoreManager.AddTakenHitScore(-10);
 
             if (currentHealth <= 0)
             {
@@ -354,6 +354,7 @@ namespace Controller
         internal static void Die()
         {
             Debug.Log("<color=green>PLAYER</color> IS NOW DEAD");
+            ScoreManager.instance.SetTimeScore();
             UIManager.instance.GameOver();
         }
         
@@ -528,17 +529,13 @@ namespace Controller
                 revealingDashRunningStunCoroutines.Add(revealingDashAimedEnemy, StartCoroutine(StunEnemy(revealingDashAimedEnemy)));
                 
                 //Dégâts
-                if (revealingDashAimedEnemy.CompareTag("Enemy"))
-                {
-                    revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.revealingDashDamage);
-                }
+                revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.revealingDashDamage);
                 
                 //Fin du dash
                 isRevealingDashHitting = false;
 
                 if (revealingDashAimedEnemy != null)
                 {
-                    Debug.Log("H1");
                     //Gestion du slow mo
                     if (revealingDashSpeedSequence != null)
                     {
@@ -583,10 +580,8 @@ namespace Controller
             if (!isRevealingDashFocusOn) return;
             if (currentRevealingDashFocusCooldown > 0)
             {
-                Debug.Log("F1");
                 if (revealingDashAimedEnemy == default)
                 {
-                    Debug.Log("F2");
                     if (revealingDashTimeSequence != null)
                     {
                         DOTween.Kill(revealingDashTimeUid);
@@ -622,7 +617,6 @@ namespace Controller
             }
             else
             {
-                Debug.Log("F3");
                 if (revealingDashTimeSequence != null)
                 {
                     DOTween.Kill(revealingDashTimeUid);
