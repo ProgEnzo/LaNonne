@@ -13,7 +13,7 @@ namespace AI.Elite
     public class Pyromaniac : EnemyController
     {
         private SoPyromaniac soPyromaniac;
-        private GameObject circleGameObject;
+        [SerializeField] private GameObject circleGameObject;
         private Vector2 dashDirection;
         private float currentFireTrailMaxLength;
         private Vector3 boxCastOrigin;
@@ -27,6 +27,7 @@ namespace AI.Elite
         private bool isProjectileOn;
         private bool isImpactOn;
         private bool canBoxCast;
+        [SerializeField] private PyromaniacProjectile projectile;
 
         protected override void Start()
         {
@@ -44,11 +45,7 @@ namespace AI.Elite
             isProjectileOn = false; //Existence du projectile
             isImpactOn = false; //Impact
             canBoxCast = false; //Zone de feu
-            
-            //Initialisation du cercle d'impact
-            circleGameObject = transform.GetChild(1).gameObject; //Initialisation de l'accès au cercle
-            circleGameObject.SetActive(false); //On le désactive pour le moment
-            
+
             //Initialisation de la vitesse de dash
             currentVelocitySpeed = 0f;
         }
@@ -67,12 +64,10 @@ namespace AI.Elite
             var playerPosition = playerController.transform.position; //Position du joueur
             var transform1 = transform;
             var position = transform1.position; //Position du pyromane
-            var projectile = transform1.GetChild(0).gameObject;
-            var projectileScript = projectile.GetComponent<PyromaniacProjectile>();
             var projectilePosition = projectile.transform.position; //Position du projectile
             
             //Tant que le projectile n'a pas explosé
-            if (!projectileScript.isExploded)
+            if (!projectile.isExploded)
             {
                 //Seulement si le projectile n'existe pas, et que le pyromane n'est dans l'état ni de dash ni d'impact
                 if (!isProjectileOn && !isDashing && !isImpactOn)
@@ -128,7 +123,7 @@ namespace AI.Elite
             if (canBoxCast)
             {
                 //Les conditions ne sont pas bonnes, à corriger
-                if (!projectileScript.isExploded && !isProjectileOn && !isDashing && !isImpactOn)
+                if (!projectile.isExploded && !isProjectileOn && !isDashing && !isImpactOn)
                 {
                     currentFireTrailMaxLength -= Time.deltaTime * soPyromaniac.fireTrailDisappearanceSpeed;
 
@@ -157,9 +152,8 @@ namespace AI.Elite
         private void ThrowProjectile(Vector3 destination, Vector3 direction)
         {
             var transform1 = transform;
-            var projectile = transform1.GetChild(0).gameObject;
             projectile.transform.position = transform1.position;
-            projectile.SetActive(true);
+            projectile.gameObject.SetActive(true);
             projectile.GetComponent<Rigidbody2D>().velocity = direction * soPyromaniac.projectileSpeed;
             projectile.GetComponent<PyromaniacProjectile>().destination = destination;
         }
@@ -169,7 +163,6 @@ namespace AI.Elite
             yield return new WaitForSeconds(0.5f);
             var transform1 = transform;
             dashInitialPosition = transform1.position; //Position du pyromane
-            var projectile = transform1.GetChild(0).gameObject;
             isDashing = true;
             dashDirection = (projectile.transform.position - dashInitialPosition).normalized;
             currentVelocitySpeed = soEnemy.velocityBasicSpeed;
@@ -209,11 +202,10 @@ namespace AI.Elite
             circleGameObject.SetActive(false); //On désactive le cercle
             isImpactOn = false;
             var transform1 = transform;
-            var projectile = transform1.GetChild(0).gameObject;
             projectile.transform.position = transform1.position;
             projectile.GetComponent<PyromaniacProjectile>().isExploded = false;
             projectile.GetComponent<PyromaniacProjectile>().currentCoroutine = null;
-            projectile.SetActive(false);
+            projectile.gameObject.SetActive(false);
             
             currentCoroutine = null;
         }

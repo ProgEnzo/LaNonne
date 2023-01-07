@@ -7,6 +7,7 @@ using Cinemachine;
 using Controller;
 using GenPro.Rooms;
 using Manager;
+using Pathfinding;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -14,6 +15,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
+using Progress = Pathfinding.Progress;
 using Random = UnityEngine.Random;
 
 public class RoomContentGenerator : MonoBehaviour
@@ -65,11 +67,32 @@ public class RoomContentGenerator : MonoBehaviour
     private IEnumerator Scan()
     {
         yield return null;
-        AstarPath.active.Scan();
-        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(DoScan(0));
+        yield return new WaitForSeconds(1);
         LoadingScreen.instance.HideLoadingScreen();
     }
-    
+
+    private IEnumerator DoScan(int size)
+    {
+        var graph = size == 1000 ? AstarPath.active.graphs[1]: AstarPath.active.graphs[0];
+        foreach (Progress progress in AstarPath.active.ScanAsync(graph)) 
+        {
+            yield return null;
+        }
+
+        var graph2 = AstarPath.active.graphs[2];
+        foreach (Progress progress in AstarPath.active.ScanAsync(graph2)) 
+        {
+            yield return null;
+        }
+        
+        if (size < 1000)
+        { 
+            yield return null;
+           StartCoroutine(DoScan(1000));
+        }
+    }
+
     Dictionary<Vector2Int, HashSet<Vector2Int>> copiedDico;
 
     public void GenerateRoomContent(DungeonData dungeonData)
@@ -94,25 +117,45 @@ public class RoomContentGenerator : MonoBehaviour
 
         #region teamWork avec le bro A* fonctionne bien
 
-        int maxPosX = 0; //j'aime ca, J'aime Yalentin
-        int minPosX = 0;
-        int maxPosY = 0;
-        int minPosY = 0;
+        int maxPosX = int.MinValue; //j'aime ca, J'aime Yalentin, ok
+        int minPosX = int.MinValue;
+        int maxPosY = int.MinValue;
+        int minPosY = int.MinValue;
 
-        foreach (var roomData in dungeonData.roomsDictionary.Keys)
+        var allRooms = dungeonData.roomsDictionary.Keys.ToList();
+        allRooms.Add(bossRoom.roomCenter);
+
+        foreach (var shops in shopRoomPos)
         {
-            maxPosX = Mathf.Max(maxPosX, roomData.x);
-            minPosX = Mathf.Min(minPosX, roomData.x);
-            maxPosY = Mathf.Max(maxPosY, roomData.y);
-            minPosY = Mathf.Min(minPosY, roomData.y);
+            allRooms.Add(shops);
+        }
+        
+        foreach (var roomData in allRooms)
+        {
+            maxPosX = maxPosX == int.MinValue ? roomData.x : Mathf.Max(maxPosX, roomData.x);
+            minPosX = minPosX == int.MinValue ? roomData.x : Mathf.Min(minPosX, roomData.x);
+            maxPosY = maxPosY == int.MinValue ? roomData.y: Mathf.Max(maxPosY, roomData.y);
+            minPosY = minPosY == int.MinValue ? roomData.y : Mathf.Min(minPosY, roomData.y);
         }
         
         int gridPosX = (minPosX + maxPosX) / 2;
         int gridPosY = (minPosY + maxPosY) / 2;
-        
-        Pathfinding.GridGraph gg = AstarPath.active.data.gridGraph;
-        gg.center = new Vector3(gridPosX, gridPosY, 0);
 
+        if (AstarPath.active.data.graphs[0] is GridGraph gPlayer)
+        {
+            gPlayer.center = new Vector3(playerSpawnRoomPosition.x, playerSpawnRoomPosition.y, 0);
+        }
+        
+        if (AstarPath.active.data.graphs[2] is GridGraph gPlayer2)
+        {
+            gPlayer2.center = new Vector3(playerSpawnRoomPosition.x, playerSpawnRoomPosition.y, 0);
+        }
+
+        if (AstarPath.active.data.graphs[1] is GridGraph g)
+        {
+            g.center = new Vector3(gridPosX, gridPosY, 0);
+            g.SetDimensions((int)((maxPosX - minPosX) / 0.45f) +40, (int)((maxPosY - minPosY) / 0.45f)+40, 0.45f);
+        }
         #endregion
 
         foreach (var roomPos in copiedDico.Keys)  //pas besoin de ca si je le fais par salle

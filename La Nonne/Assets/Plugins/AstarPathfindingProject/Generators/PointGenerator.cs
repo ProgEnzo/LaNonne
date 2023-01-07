@@ -452,7 +452,10 @@ namespace Pathfinding {
 				}
 			}
 		}
-
+		private bool IsDistance(Vector2 origin, Vector2 destination, float distance)
+		{
+			return (Vector2.Distance(destination, origin) < distance);
+		}
 		/// <summary>
 		/// Returns if the connection between a and b is valid.
 		/// Checks for obstructions using raycasts (if enabled) and checks for height differences.\n

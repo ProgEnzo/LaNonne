@@ -9,7 +9,7 @@ public class WakeUpPyromaniac : MonoBehaviour
     public Pyromaniac pyromaniac;
     void Start()
     {
-        pyromaniac = transform.parent.GetComponent<Pyromaniac>();
+        pyromaniac = transform.parent.parent.GetComponent<Pyromaniac>();
     }
 
     private void OnTriggerEnter2D(Collider2D col)

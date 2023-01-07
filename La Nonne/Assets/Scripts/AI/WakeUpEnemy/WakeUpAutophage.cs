@@ -9,7 +9,7 @@ public class WakeUpAutophage : MonoBehaviour
     public Autophagic autophage;
     void Start()
     {
-        autophage = transform.parent.GetComponent<Autophagic>();
+        autophage = transform.parent.parent.GetComponent<Autophagic>();
     }
 
     private void OnTriggerEnter2D(Collider2D col)

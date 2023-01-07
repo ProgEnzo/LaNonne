@@ -8,7 +8,7 @@ public class WakeUpTrashMobClose : MonoBehaviour
     public TrashMobClose trashMobClose;
     void Start()
     {
-        trashMobClose = transform.parent.GetComponent<TrashMobClose>();
+        trashMobClose = transform.parent.parent.GetComponent<TrashMobClose>();
     }
 
     private void OnTriggerEnter2D(Collider2D col)

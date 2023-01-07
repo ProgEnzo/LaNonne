@@ -1685,16 +1685,6 @@ public class AstarPath : VersionedMonoBehaviour {
 
 		yield return new Progress(0.05F, "Pre processing graphs");
 
-		// Yes, this constraint is trivial to circumvent
-		// the code is the same because it is annoying
-		// to have to have separate code for the free
-		// and the pro version that does essentially the same thing.
-		// I would appreciate if you purchased the pro version of the A* Pathfinding Project
-		// if you need async scanning.
-		if (Time.frameCount != startFrame) {
-			throw new System.Exception("Async scanning can only be done in the pro version of the A* Pathfinding Project");
-		}
-
 		if (OnPreScan != null) {
 			OnPreScan(this);
 		}

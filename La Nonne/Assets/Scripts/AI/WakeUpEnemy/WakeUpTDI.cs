@@ -8,7 +8,7 @@ public class WakeUpTDI : MonoBehaviour
     public TDI tdi;
     void Start()
     {
-        tdi = transform.parent.GetComponent<TDI>();
+        tdi = transform.parent.parent.GetComponent<TDI>();
     }
 
     private void OnTriggerEnter2D(Collider2D col)

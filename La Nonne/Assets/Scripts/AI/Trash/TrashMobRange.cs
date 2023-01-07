@@ -17,7 +17,7 @@ namespace AI.Trash
         private AIPath scriptAIPath;
         [SerializeField] private GameObject bulletPrefab;
         private SoTrashMobRange soTrashMobRange;
-        private Animator animator;
+        [SerializeField] private Animator animator;
         private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
 
         protected override void Start()
@@ -25,7 +25,6 @@ namespace AI.Trash
             base.Start();
             soTrashMobRange = (SoTrashMobRange) soEnemy;
             scriptAIPath = GetComponent<AIPath>();
-            animator = transform.GetChild(3).GetComponent<Animator>();
         }
         
         protected override void Update()

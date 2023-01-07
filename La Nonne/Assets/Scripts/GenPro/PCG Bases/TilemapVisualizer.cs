@@ -53,6 +53,11 @@ public class TilemapVisualizer : MonoBehaviour
         wallTilemap.ClearAllTiles();
     }
 
+    private void OnDestroy()
+    {
+        Clear();
+    }
+
     /// <summary>
     /// remove all tiles of a map
     /// </summary>

@@ -251,6 +251,11 @@ namespace Pathfinding {
 			return points;
 		}
 
+		private bool IsDistance(Vector2 origin, Vector2 destination, float distance)
+		{
+			return (Vector2.Distance(destination, origin) < distance);
+		}
+
 		/// <summary>
 		/// Check if a straight path between v1 and v2 is valid.
 		/// If both n1 and n2 are supplied it is assumed that the line goes from the center of n1 to the center of n2 and a more optimized graph linecast may be done.
@@ -259,7 +264,7 @@ namespace Pathfinding {
 			if (useRaycasting) {
 				// Use raycasting to check if a straight path between v1 and v2 is valid
 				if (use2DPhysics) {
-					if (thickRaycast && thickRaycastRadius > 0 && Physics2D.CircleCast(v1 + raycastOffset, thickRaycastRadius, v2 - v1, (v2 - v1).magnitude, mask)) {
+					if (thickRaycast && thickRaycastRadius > 0 && IsDistance(v1, v2, thickRaycastRadius)) {
 						return false;
 					}
 

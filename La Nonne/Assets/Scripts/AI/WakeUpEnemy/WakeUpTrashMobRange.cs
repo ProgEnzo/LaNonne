@@ -8,7 +8,7 @@ public class WakeUpTrashMobRange : MonoBehaviour
     public TrashMobRange trashMobRange;
     void Start()
     {
-        trashMobRange = transform.parent.GetComponent<TrashMobRange>();
+        trashMobRange = transform.parent.parent.GetComponent<TrashMobRange>();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
