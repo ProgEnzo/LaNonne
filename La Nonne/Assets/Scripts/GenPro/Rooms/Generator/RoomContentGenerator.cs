@@ -541,19 +541,19 @@ public class RoomContentGenerator : MonoBehaviour
 
                 if (distance <= 1) // Game Tutorial
                     spawnedObjects.AddRange(enemyRoom[0].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 2) 
+                else if (distance <= 2) 
                     spawnedObjects.AddRange(enemyRoom[1].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 4)  //Pyro Tutorial
+                else if (distance <= 4)  //Pyro Tutorial
                     spawnedObjects.AddRange(enemyRoom[2].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 5) 
+                else if (distance <= 5) 
                     spawnedObjects.AddRange(enemyRoom[3].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 6) 
+                else if (distance <= 6) 
                     spawnedObjects.AddRange(enemyRoom[4].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 7) //TDI Tutorial
+                else if (distance <= 7) //TDI Tutorial
                     spawnedObjects.AddRange(enemyRoom[5].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance < 9) 
+                else if (distance <= 9) 
                     spawnedObjects.AddRange(enemyRoom[6].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance > 11) 
+                else if (distance > 9) 
                     spawnedObjects.AddRange(enemyRoom[7].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
             }
         }
