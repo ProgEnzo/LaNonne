@@ -551,10 +551,10 @@ public class RoomContentGenerator : MonoBehaviour
                     spawnedObjects.AddRange(enemyRoom[4].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
                 else if (distance <= 7) //TDI Tutorial
                     spawnedObjects.AddRange(enemyRoom[5].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance <= 9) 
+                else if (distance > 7) 
                     spawnedObjects.AddRange(enemyRoom[6].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance > 9) 
-                    spawnedObjects.AddRange(enemyRoom[7].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
+                // else if (distance > 9) 
+                //     spawnedObjects.AddRange(enemyRoom[7].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
             }
         }
         
