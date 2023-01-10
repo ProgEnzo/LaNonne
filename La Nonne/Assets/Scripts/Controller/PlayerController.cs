@@ -51,7 +51,7 @@ namespace Controller
         internal bool isRevealingDashOn;
         internal bool isRevealingDashFocusOn;
         private float currentRevealingDashFocusCooldown;
-        private float currentRevealingDashCooldown;
+        internal float currentRevealingDashCooldown;
         internal float currentSlowMoPlayerMoveSpeedFactor;
         internal float currentSlowMoPlayerAttackSpeedFactor;
         private Sequence revealingDashTimeSequence;
@@ -161,7 +161,7 @@ namespace Controller
 
         public void Update()
         {
-            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.isGamePaused)
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
@@ -219,7 +219,7 @@ namespace Controller
 
             direction = (Vector2.zero, Vector2.zero);
 
-            if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.isGamePaused) // for input
+            if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened) // for input
             {
                 isMoving = true; // for animation
                 isMovingProfile = true; // for movement
@@ -233,7 +233,7 @@ namespace Controller
                 direction.horizontal = Vector2.left;
             }
 
-            if (Input.GetKey(inputManager.rightMoveKey) && !uiManager.isGamePaused) // for input
+            if (Input.GetKey(inputManager.rightMoveKey) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened) // for input
             {
                 isMoving = true; // for animation
                 isMovingProfile = true; // for movement
@@ -247,7 +247,7 @@ namespace Controller
                 direction.horizontal = direction.horizontal == Vector2.left ? Vector2.zero : Vector2.right;
             }
 
-            if (Input.GetKey(inputManager.upMoveKey) && !uiManager.isGamePaused) // for input
+            if (Input.GetKey(inputManager.upMoveKey) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened) // for input
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement
@@ -263,7 +263,7 @@ namespace Controller
                 direction.vertical = Vector2.up;
             }
 
-            if (Input.GetKey(inputManager.downMoveKey) && !uiManager.isGamePaused) // for input
+            if (Input.GetKey(inputManager.downMoveKey) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened) // for input
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement
@@ -444,7 +444,7 @@ namespace Controller
         
         private void RevealingDashStart()
         {
-            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn && currentRevealingDashCooldown <= 0 && !uiManager.isGamePaused)
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn && currentRevealingDashCooldown <= 0 && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
                 var enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero,
@@ -453,8 +453,8 @@ namespace Controller
                 enemiesInArea.Sort((x, y) =>
                 {
                     var position = transform.position;
-                    return (Vector3.Distance(position, x.transform.position)
-                        .CompareTo(Vector3.Distance(position, y.transform.position)));
+                    return Vector3.Distance(position, x.transform.position)
+                        .CompareTo(Vector3.Distance(position, y.transform.position));
                 });
                 
                 foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
@@ -503,19 +503,7 @@ namespace Controller
                     isRevealingDashHitting = false;
                     isRevealingDashOn = false;
                     camManager.ZoomDuringRevealingDash(0);
-                    if (revealingDashTimeSequence != null)
-                    {
-                        DOTween.Kill(revealingDashTimeUid);
-                        revealingDashTimeSequence = null;
-                    }
-                    if (revealingDashTimeSequence == null)
-                    {
-                        revealingDashTimeSequence = DOTween.Sequence();
-                        revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
-                            .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
-                        revealingDashTimeUid = Guid.NewGuid();
-                        revealingDashTimeSequence.id = revealingDashTimeUid;
-                    }
+                    RevealingDashTimeSequenceTo1();
                     return;
                 }
                 
@@ -554,19 +542,7 @@ namespace Controller
                 }
                 else
                 {
-                    if (revealingDashTimeSequence != null)
-                    {
-                        DOTween.Kill(revealingDashTimeUid);
-                        revealingDashTimeSequence = null;
-                    }
-                    if (revealingDashTimeSequence == null)
-                    {
-                        revealingDashTimeSequence = DOTween.Sequence();
-                        revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
-                            .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
-                        revealingDashTimeUid = Guid.NewGuid();
-                        revealingDashTimeSequence.id = revealingDashTimeUid;
-                    }
+                    RevealingDashSpeedSequenceTo1();
                 
                     isRevealingDashOn = false;
                     camManager.ZoomDuringRevealingDash(0);
@@ -582,31 +558,8 @@ namespace Controller
             {
                 if (revealingDashAimedEnemy == default)
                 {
-                    if (revealingDashTimeSequence != null)
-                    {
-                        DOTween.Kill(revealingDashTimeUid);
-                        revealingDashTimeSequence = null;
-                    }
-                    if (revealingDashTimeSequence == null)
-                    {
-                        revealingDashTimeSequence = DOTween.Sequence();
-                        revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
-                            .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
-                        revealingDashTimeUid = Guid.NewGuid();
-                        revealingDashTimeSequence.id = revealingDashTimeUid;
-                    }
-                    if (revealingDashSpeedSequence != null)
-                    {
-                        DOTween.Kill(revealingDashSpeedUid);
-                        revealingDashSpeedSequence = null;
-                    }
-                    if (revealingDashSpeedSequence == null)
-                    {
-                        revealingDashSpeedSequence = DOTween.Sequence();
-                        revealingDashSpeedSequence.Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1f, 0.1f));
-                        revealingDashSpeedUid = Guid.NewGuid();
-                        revealingDashSpeedSequence.id = revealingDashTimeUid;
-                    }
+                    RevealingDashTimeSequenceTo1();
+                    RevealingDashSpeedSequenceTo1();
                 
                     isRevealingDashFocusOn = false;
                     isRevealingDashOn = false;
@@ -617,31 +570,9 @@ namespace Controller
             }
             else
             {
-                if (revealingDashTimeSequence != null)
-                {
-                    DOTween.Kill(revealingDashTimeUid);
-                    revealingDashTimeSequence = null;
-                }
-                if (revealingDashTimeSequence == null)
-                {
-                    revealingDashTimeSequence = DOTween.Sequence();
-                    revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
-                        .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
-                    revealingDashTimeUid = Guid.NewGuid();
-                    revealingDashTimeSequence.id = revealingDashTimeUid;
-                }
-                if (revealingDashSpeedSequence != null)
-                {
-                    DOTween.Kill(revealingDashSpeedUid);
-                    revealingDashSpeedSequence = null;
-                }
-                if (revealingDashSpeedSequence == null)
-                {
-                    revealingDashSpeedSequence = DOTween.Sequence();
-                    revealingDashSpeedSequence.Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1f, 0.1f));
-                    revealingDashSpeedUid = Guid.NewGuid();
-                    revealingDashSpeedSequence.id = revealingDashTimeUid;
-                }
+                
+                RevealingDashTimeSequenceTo1();
+                RevealingDashSpeedSequenceTo1();
                 
                 isRevealingDashFocusOn = false;
                 isRevealingDashOn = false;
@@ -654,35 +585,46 @@ namespace Controller
         {
             if (Input.GetKeyDown(inputManager.revealingDashKey) && isRevealingDashFocusOn)
             {
-                if (revealingDashTimeSequence != null)
-                {
-                    DOTween.Kill(revealingDashTimeUid);
-                    revealingDashTimeSequence = null;
-                }
-                if (revealingDashTimeSequence == null)
-                {
-                    revealingDashTimeSequence = DOTween.Sequence();
-                    revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
-                        .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
-                    revealingDashTimeUid = Guid.NewGuid();
-                    revealingDashTimeSequence.id = revealingDashTimeUid;
-                }
-                if (revealingDashSpeedSequence != null)
-                {
-                    DOTween.Kill(revealingDashSpeedUid);
-                    revealingDashSpeedSequence = null;
-                }
-                if (revealingDashSpeedSequence == null)
-                {
-                    revealingDashSpeedSequence = DOTween.Sequence();
-                    revealingDashSpeedSequence.Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1f, 0.1f));
-                    revealingDashSpeedUid = Guid.NewGuid();
-                    revealingDashSpeedSequence.id = revealingDashTimeUid;
-                }
+                RevealingDashTimeSequenceTo1();
+                RevealingDashSpeedSequenceTo1();
                 
                 isRevealingDashFocusOn = false;
                 isRevealingDashOn = false;
+                camManager.ZoomDuringRevealingDash(0);
                 currentRevealingDashCooldown = soController.revealingDashCooldown;
+            }
+        }
+
+        internal void RevealingDashTimeSequenceTo1()
+        {
+            if (revealingDashTimeSequence != null)
+            {
+                DOTween.Kill(revealingDashTimeUid);
+                revealingDashTimeSequence = null;
+            }
+            if (revealingDashTimeSequence == null)
+            {
+                revealingDashTimeSequence = DOTween.Sequence();
+                revealingDashTimeSequence.Append(DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.1f))
+                    .Append(DOTween.To(() => Time.fixedDeltaTime, x => Time.fixedDeltaTime = x, 0.02f, 0.1f));
+                revealingDashTimeUid = Guid.NewGuid();
+                revealingDashTimeSequence.id = revealingDashTimeUid;
+            }
+        }
+
+        internal void RevealingDashSpeedSequenceTo1()
+        {
+            if (revealingDashSpeedSequence != null)
+            {
+                DOTween.Kill(revealingDashSpeedUid);
+                revealingDashSpeedSequence = null;
+            }
+            if (revealingDashSpeedSequence == null)
+            {
+                revealingDashSpeedSequence = DOTween.Sequence();
+                revealingDashSpeedSequence.Append(DOTween.To(() => currentSlowMoPlayerMoveSpeedFactor, x => currentSlowMoPlayerMoveSpeedFactor = x, 1f, 0.1f));
+                revealingDashSpeedUid = Guid.NewGuid();
+                revealingDashSpeedSequence.id = revealingDashTimeUid;
             }
         }
 

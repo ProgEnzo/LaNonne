@@ -59,7 +59,7 @@ namespace Controller
             var parentLocalScale = transform.parent.localScale;
             var warningScale = transform.GetChild(2).localScale;
 
-            if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0 && !uiManager.isGamePaused)
+            if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0 && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
                 playerController.currentSlowMoPlayerMoveSpeedFactor = 0f;
                 Time.timeScale = 0.001f;
@@ -68,14 +68,14 @@ namespace Controller
                 transform.GetChild(2).localScale = new Vector3(warningScale.x * parentLocalScale.x, warningScale.y * parentLocalScale.y, warningScale.z * parentLocalScale.z);
                 isWarningOn = true;
             }
-            if (Input.GetKey(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused)
+            if (Input.GetKey(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
                 var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
                 transform.GetChild(2).rotation = Quaternion.LookRotation(Vector3.forward, newDirection);
             }
-            if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused)
+            if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
                 isWarningOn = false;
                 transform.GetChild(2).localScale = new Vector3(Mathf.Abs(warningScale.x), Mathf.Abs(warningScale.y), Mathf.Abs(warningScale.z));
@@ -94,8 +94,6 @@ namespace Controller
                 isHitting = false;
                 isWarningOn = false;
                 playerController.currentSlowMoPlayerMoveSpeedFactor = 1f;
-                Time.timeScale = 1f;
-                Time.fixedDeltaTime = 0.02f;
             }
 
             chainLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));
