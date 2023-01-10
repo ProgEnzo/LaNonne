@@ -52,26 +52,12 @@ namespace Manager
         
         internal void ZoomDuringRevealingDash(int state)
         {
-            if (state == 1)
-            {
-                StartCoroutine(ZoomDuringRevealingDashCoroutine());
-            }
-            else
-            {
-                animator.SetInteger(PlayerRevealingDashState, state);
-            }
+            animator.SetInteger(PlayerRevealingDashState, state);
         }
 
         internal void ChangeBossCamState(int state)
         {
             animator.SetInteger(BossCamState, state);
-        }
-        
-        private IEnumerator ZoomDuringRevealingDashCoroutine()
-        {
-            animator.SetInteger(PlayerRevealingDashState, 1);
-            yield return new WaitForSeconds(0.3f);
-            animator.SetInteger(PlayerRevealingDashState, 2);
         }
 
         internal void DestroyingHealthJarState(int state)

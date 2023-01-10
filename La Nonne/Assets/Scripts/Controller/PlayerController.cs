@@ -507,6 +507,7 @@ namespace Controller
                     return;
                 }
                 
+                camManager.ZoomDuringRevealingDash(2);
                 //Gestion du stun
                 foreach (var enemy in revealingDashRunningStunCoroutines.Keys.Where(enemy => enemy == revealingDashAimedEnemy))
                 {
