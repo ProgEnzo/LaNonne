@@ -81,7 +81,7 @@ namespace Shop.UI
 
       private void OpenWhipModificationMenu()
       {
-         if (Input.GetKey(KeyCode.E))
+         if (Input.GetKey(KeyCode.E) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
          {
             timerInputPressed += Time.deltaTime;
             image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);

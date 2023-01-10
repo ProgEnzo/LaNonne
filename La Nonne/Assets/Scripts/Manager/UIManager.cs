@@ -134,6 +134,18 @@ namespace Manager
         {
             pauseMenu.SetActive(isGamePaused);
             Time.timeScale = isGamePaused ? 0 : 1;
+            Time.fixedDeltaTime = 0.02f;
+            if (PlayerController.instance.isRevealingDashOn)
+            {
+                PlayerController.instance.RevealingDashTimeSequenceTo1();
+                PlayerController.instance.RevealingDashSpeedSequenceTo1();
+                
+                PlayerController.instance.isRevealingDashHitting = false;
+                PlayerController.instance.isRevealingDashFocusOn = false;
+                PlayerController.instance.isRevealingDashOn = false;
+                CamManager.instance.ZoomDuringRevealingDash(0);
+                PlayerController.instance.currentRevealingDashCooldown = PlayerController.instance.soController.revealingDashCooldown;
+            }
         }
     
         public static void Resume()
