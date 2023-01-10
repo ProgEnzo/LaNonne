@@ -105,6 +105,7 @@ namespace Shop.UI
             if (timerInputPressed > timeToAccess - 0.05f && !isShopOpened)
             {
                isShopOpened = true;
+               uiManager.isShopOpened = true;
                
                uiManager.DesactivateInGameUI();
                
@@ -214,6 +215,7 @@ namespace Shop.UI
       public void CloseShop()
       {
          isShopOpened = false;
+         uiManager.isShopOpened = false;
          shopPanel.SetActive(false);
          
          uiManager.ActivateInGameUI();

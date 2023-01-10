@@ -25,12 +25,6 @@ namespace AI
         
         private void StackSwitch(int i)
         {
-            // FROM
-           // squareSpriteRenderers[i].enabled = (entityController is BossStateManager boss ? boss.stacks[i].effect : ((EnemyController)entityController).stacks[i].effect) != EffectManager.Effect.None;
-
-           
-           // INTO
-           
             bool isActive = false;
             
             if (entityController is BossStateManager boss && boss.stacks[i].effect != EffectManager.Effect.None)
@@ -43,8 +37,6 @@ namespace AI
             }
 
             squareSpriteRenderers[i].enabled = isActive;
-            
-            //
             
             if (squareSpriteRenderers[i].enabled)
             {
