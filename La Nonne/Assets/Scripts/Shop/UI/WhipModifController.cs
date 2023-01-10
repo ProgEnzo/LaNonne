@@ -89,6 +89,7 @@ namespace Shop.UI
             if (timerInputPressed > timeToAccess - 0.05f && !isWhipModifOpened)
             {
                isWhipModifOpened = true;
+               uiManager.isWhipMenuOpened = true;
                
                uiManager.DesactivateInGameUI();
                
@@ -115,12 +116,12 @@ namespace Shop.UI
             timerInputPressed = 0f;
             image.DOFillAmount(0,0.5f);
          }
-      
       }
 
       public void CloseWhipModificationMenu()
       {
          isWhipModifOpened = false;
+         uiManager.isWhipMenuOpened = false;
          whipModificationMenu.SetActive(false);
          
          isEffectEmplacementSelected = false;
