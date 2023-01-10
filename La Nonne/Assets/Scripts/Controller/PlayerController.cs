@@ -340,6 +340,7 @@ namespace Controller
         {
             currentHealth -= damage;
             healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
+            camManager.PlayerHasBeenHitByEnnemy();
             //Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
             
             //WITHDRAW SCORE HERE
