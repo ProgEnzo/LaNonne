@@ -34,7 +34,9 @@ namespace Manager
 
         private static bool _isGamePausedStatic;
         internal bool isGamePaused;
-        
+        internal bool isShopOpened;
+        internal bool isWhipMenuOpened;
+
         private void Awake()
         {
             if (instance != null)
@@ -50,6 +52,8 @@ namespace Manager
         private void Start()
         {
             _isGamePausedStatic = false;
+            isShopOpened = false;
+            isWhipMenuOpened = false;
             //Reference
         
             //BIG MAP
@@ -111,15 +115,15 @@ namespace Manager
             if (playerController is null)
                 return;
             
-            epCount.text = "EP COUNT : " + playerController.currentEp;
+            epCount.text = playerController.currentEp.ToString();
             
         }
 
         #region PauseMenu
 
-        private static void PauseMenuInput()
+        private void PauseMenuInput()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && !isShopOpened && !isWhipMenuOpened)
             {
                 _isGamePausedStatic = !_isGamePausedStatic;
                 PauseMenu(_isGamePausedStatic);

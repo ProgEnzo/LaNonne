@@ -15,6 +15,7 @@ namespace Manager
         private static readonly int PlayerCamState = Animator.StringToHash("playerCamState");
         private static readonly int PlayerDezoomCamState = Animator.StringToHash("playerDezoomCamState");
         private static readonly int PlayerRevealingDashState = Animator.StringToHash("playerRevealingDashState");
+        private static readonly int BocalDestroy = Animator.StringToHash("bocalDestroy");
 
         private void Awake()
         {
@@ -71,6 +72,25 @@ namespace Manager
             animator.SetInteger(PlayerRevealingDashState, 1);
             yield return new WaitForSeconds(0.3f);
             animator.SetInteger(PlayerRevealingDashState, 2);
+        }
+
+        internal void DestroyingHealthJarState(int state)
+        {
+            if (state == 1)
+            {
+                StartCoroutine(DestroyHealthJar());
+            }
+            else
+            {
+                animator.SetInteger(BocalDestroy, state);
+            }
+        }
+
+        private IEnumerator DestroyHealthJar()
+        {
+            animator.SetInteger(BocalDestroy, 1);
+            yield return new WaitForSeconds(0.2f);
+            animator.SetInteger(BocalDestroy, 0);
         }
     }
 }
