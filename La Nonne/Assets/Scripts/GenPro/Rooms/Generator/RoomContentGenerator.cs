@@ -540,19 +540,19 @@ public class RoomContentGenerator : MonoBehaviour
                 var distanceBeforeCalc = DijkstraAlgorithm.distanceDictionary[roomData.Key];
                 var distance = distanceBeforeCalc / 22;
 
-                if (distance <= 1) // Game Tutorial
+                if (distance <= 1) // Game Tutorial // 1
                     spawnedObjects.AddRange(enemyRoom[0].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance <= 2) 
+                else if (distance <= 2) // 2
                     spawnedObjects.AddRange(enemyRoom[1].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance <= 4)  //Pyro Tutorial
+                else if (distance <= 4)  //Pyro Tutorial // 3-4
                     spawnedObjects.AddRange(enemyRoom[2].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance <= 5) 
+                else if (distance <= 5) // 5
                     spawnedObjects.AddRange(enemyRoom[3].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance <= 6) 
+                else if (distance <= 8) // 6-7-8
                     spawnedObjects.AddRange(enemyRoom[4].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance <= 7) //TDI Tutorial
+                else if (distance <= 9) //TDI Tutorial // 9
                     spawnedObjects.AddRange(enemyRoom[5].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance > 7) 
+                else if (distance > 9) // 10+
                     spawnedObjects.AddRange(enemyRoom[6].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
                 // else if (distance > 9) 
                 //     spawnedObjects.AddRange(enemyRoom[7].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
