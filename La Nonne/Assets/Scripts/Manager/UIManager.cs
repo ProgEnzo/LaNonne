@@ -116,7 +116,6 @@ namespace Manager
                 return;
             
             epCount.text = playerController.currentEp.ToString();
-            
         }
 
         #region PauseMenu

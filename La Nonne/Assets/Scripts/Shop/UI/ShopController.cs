@@ -5,7 +5,6 @@ using Controller;
 using DG.Tweening;
 using Manager;
 using TMPro;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -92,6 +91,11 @@ namespace Shop.UI
             OpenShop();
          }
          
+         if (Input.GetKeyDown(KeyCode.Escape) && isShopOpened)
+         {
+            CloseShop();
+         }
+         
          epCountText.text = "EP : " + PlayerController.instance.currentEp;
       }
 
@@ -157,6 +161,12 @@ namespace Shop.UI
             image.DOFillAmount(0,0.5f);
          }
       }
+      
+      private IEnumerator DisableIsShopOpenedCoroutine()
+      {
+         yield return new WaitForSecondsRealtime(0.01f);
+         uiManager.isShopOpened = false;
+      }
 
       private void ChooseDialogue()
       {
@@ -215,7 +225,7 @@ namespace Shop.UI
       public void CloseShop()
       {
          isShopOpened = false;
-         uiManager.isShopOpened = false;
+         StartCoroutine(DisableIsShopOpenedCoroutine());
          shopPanel.SetActive(false);
          
          uiManager.ActivateInGameUI();
