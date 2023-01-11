@@ -165,7 +165,13 @@ namespace Shop.UI
       private IEnumerator DisableIsShopOpenedCoroutine()
       {
          yield return new WaitForSecondsRealtime(0.01f);
+         
          uiManager.isShopOpened = false;
+
+         if (currentNumberOfTakenObjects > 0)
+         {
+            Destroy(gameObject);
+         }
       }
 
       private void ChooseDialogue()
@@ -231,11 +237,6 @@ namespace Shop.UI
          uiManager.ActivateInGameUI();
 
          image.fillAmount = 0f;
-
-         if (currentNumberOfTakenObjects > 0)
-         {
-            Destroy(gameObject);
-         }
 
          Time.timeScale = 1;
       }

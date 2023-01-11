@@ -15,9 +15,9 @@ namespace AI.Elite
         [Header("Components")]
         [SerializeField] public GameObject bully;
         [SerializeField] public GameObject caretaker;
-        [SerializeField] private CircleCollider2D circle;
-        [SerializeField] private GameObject circleSprite;
+        [SerializeField] private GameObject circle;
         [SerializeField] private GameObject circleSpriteWarning;
+        [SerializeField] private GameObject greenCircleWarning;
         [SerializeField] private ParticleSystem particleHeal;
         [SerializeField] private ParticleSystem particleHeal2;
         internal SoTdi soTdi;
@@ -30,6 +30,10 @@ namespace AI.Elite
             
             particleHeal.Stop();
             particleHeal2.Stop();
+            
+            greenCircleWarning.SetActive(false);
+            circle.SetActive(false);
+
 
         }
 
@@ -93,11 +97,16 @@ namespace AI.Elite
         private IEnumerator BlinkCircle()
         {
             circleSpriteWarning.SetActive(true);
+            greenCircleWarning.SetActive(true);
+
+            circleSpriteWarning.transform.DOScale(new Vector3(0.55f, 0.55f, 0.55f), 0.5f);
             yield return new WaitForSeconds(0.8f);
 
+            greenCircleWarning.SetActive(false);
+            circleSpriteWarning.transform.DOScale(new Vector3(0f, 0f, 0f), 0f);
+
             circleSpriteWarning.SetActive(false);
-            circle.enabled = true;
-            circleSprite.SetActive(true);
+            circle.SetActive(true);
 
             particleHeal.Play();
             particleHeal2.Play();
@@ -105,8 +114,8 @@ namespace AI.Elite
             currentHealth += soTdi.healAmount;
             yield return new WaitForSeconds(soTdi.timeBetweenCircleSpawn);
             
-            circle.enabled = false;
-            circleSprite.SetActive(false);
+            circle.SetActive(false);
+
             
             particleHeal.Stop();
             particleHeal2.Stop();

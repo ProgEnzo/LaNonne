@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 944351666021396677}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.035194397, y: 0.108379364, z: 0.0016763776}
-  m_LocalScale: {x: 0.144375, y: 0.144375, z: 0.144375}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3796684804932102533}
@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 1, g: 0, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4927,9 +4927,9 @@ MonoBehaviour:
   epDrop: {fileID: 5299797763731125753, guid: b319eb7fdaf9e0f41b2adcacbe08d82e, type: 3}
   bully: {fileID: 5813854497670849624, guid: a0948d9d068470444ae080e8385eee73, type: 3}
   caretaker: {fileID: 6272501254927288805, guid: 095c4a11c967334409514fd419e7921e, type: 3}
-  circle: {fileID: 7161788274896244599}
-  circleSprite: {fileID: 2031974246127490173}
+  circle: {fileID: 2031974246127490173}
   circleSpriteWarning: {fileID: 4310263427940614413}
+  greenCircleWarning: {fileID: 2925849785639337874}
   particleHeal: {fileID: 7903439917440274269}
   particleHeal2: {fileID: 2511417337176343173}
 --- !u!114 &1280591066966374508
@@ -5075,7 +5075,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2031974246127490172}
-  - component: {fileID: 2031974246127490175}
   - component: {fileID: 7161788274896244599}
   - component: {fileID: 2553587198993684947}
   m_Layer: 0
@@ -5100,58 +5099,6 @@ Transform:
   m_Father: {fileID: 3796684804932102533}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2031974246127490175
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2031974246127490173}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 8d03575cf3c1d404aa99f64f2eba34e1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 10, y: 10}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!58 &7161788274896244599
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5192,7 +5139,7 @@ GameObject:
   - component: {fileID: 8927076091296241218}
   - component: {fileID: 3844057599412796627}
   m_Layer: 0
-  m_Name: HealZone
+  m_Name: greenCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5421,8 +5368,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4934663976406486007}
   - component: {fileID: 7335783123259047999}
-  - component: {fileID: 6077675304274389938}
-  - component: {fileID: 704855952203036543}
   m_Layer: 0
   m_Name: CircleWarning
   m_TagString: Untagged
@@ -5439,7 +5384,7 @@ Transform:
   m_GameObject: {fileID: 4310263427940614413}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.035194397, y: 0.108379364, z: 0.0016763776}
-  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3796684804932102533}
@@ -5487,7 +5432,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 8d03575cf3c1d404aa99f64f2eba34e1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.41960785}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.19607843}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5497,35 +5442,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &6077675304274389938
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4310263427940614413}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 3.5
---- !u!114 &704855952203036543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4310263427940614413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77c0e96ad3d0697448f66fdef0a53cf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healer: {fileID: 1280591066966374489}
 --- !u!1 &4773392711044817591
 GameObject:
   m_ObjectHideFlags: 0
