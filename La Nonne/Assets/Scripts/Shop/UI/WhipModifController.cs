@@ -77,6 +77,11 @@ namespace Shop.UI
          {
             OpenWhipModificationMenu();
          }
+         
+         if (Input.GetKeyDown(KeyCode.Escape) && isWhipModifOpened)
+         {
+            CloseWhipModificationMenu();
+         }
       }
 
       private void OpenWhipModificationMenu()
@@ -117,11 +122,17 @@ namespace Shop.UI
             image.DOFillAmount(0,0.5f);
          }
       }
+      
+      private IEnumerator DisableIsWhipMenuOpenedCoroutine()
+      {
+         yield return new WaitForSecondsRealtime(0.01f);
+         uiManager.isWhipMenuOpened = false;
+      }
 
       public void CloseWhipModificationMenu()
       {
          isWhipModifOpened = false;
-         uiManager.isWhipMenuOpened = false;
+         StartCoroutine(DisableIsWhipMenuOpenedCoroutine());
          whipModificationMenu.SetActive(false);
          
          isEffectEmplacementSelected = false;

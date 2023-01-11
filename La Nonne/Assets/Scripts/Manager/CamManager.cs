@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Cinemachine;
 using Core.Scripts.Utils;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Manager
         private static readonly int PlayerDezoomCamState = Animator.StringToHash("playerDezoomCamState");
         private static readonly int PlayerRevealingDashState = Animator.StringToHash("playerRevealingDashState");
         private static readonly int BocalDestroy = Animator.StringToHash("bocalDestroy");
+        private static readonly int PlayerHasBeenHit = Animator.StringToHash("playerHasBeenHit");
 
         private void Awake()
         {
@@ -72,11 +74,23 @@ namespace Manager
             }
         }
 
+        internal void PlayerHasBeenHitByEnnemy()
+        {
+            StartCoroutine(playerHasBeenHitCd());
+        }
+
         private IEnumerator DestroyHealthJar()
         {
             animator.SetInteger(BocalDestroy, 1);
             yield return new WaitForSeconds(0.2f);
             animator.SetInteger(BocalDestroy, 0);
+        }
+
+        private IEnumerator playerHasBeenHitCd()
+        {
+            animator.SetInteger(PlayerHasBeenHit, 1);
+            yield return new WaitForSeconds(0.1f);
+            animator.SetInteger(PlayerHasBeenHit, 0);
         }
     }
 }
