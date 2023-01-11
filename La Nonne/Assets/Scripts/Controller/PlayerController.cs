@@ -355,7 +355,6 @@ namespace Controller
         internal static void Die()
         {
             Debug.Log("<color=green>PLAYER</color> IS NOW DEAD");
-            ScoreManager.instance.SetTimeScore();
             UIManager.instance.GameOver();
         }
         

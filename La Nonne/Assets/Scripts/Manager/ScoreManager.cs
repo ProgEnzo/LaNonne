@@ -16,7 +16,6 @@ namespace Manager
         private int takenHitScore;
         private int boughtItemScore;
         private int epScore;
-        private int timeScore;
 
         private TextMeshProUGUI scoreText;
         
@@ -44,7 +43,6 @@ namespace Manager
             takenHitScore = 0;
             boughtItemScore = 0;
             epScore = 0;
-            timeScore = 0;
         }
 
         private void Update()
@@ -103,17 +101,10 @@ namespace Manager
             
             UpdateScore();
         }
-        
-        internal void SetTimeScore()
-        {
-            timeScore = (int) -Time.time;
-            
-            UpdateScore();
-        }
 
         private void UpdateScore()
         {
-            score = killedEnemyScore + bladeHitScore + chainBladeHitScore + revealingDashBladeHitScore + takenHitScore + boughtItemScore + epScore + timeScore;
+            score = killedEnemyScore + bladeHitScore + chainBladeHitScore + revealingDashBladeHitScore + takenHitScore + boughtItemScore + epScore;
 
             if (score < 0)
             {
