@@ -29,6 +29,7 @@ namespace Controller
         private AnimationManager animationManager;
         private InputManager inputManager;
         private UIManager uiManager;
+        private CamManager camManager;
 
         // Start is called before the first frame update
         private void Start()
@@ -67,6 +68,7 @@ namespace Controller
                 transform.GetChild(2).gameObject.SetActive(true);
                 transform.GetChild(2).localScale = new Vector3(warningScale.x * parentLocalScale.x, warningScale.y * parentLocalScale.y, warningScale.z * parentLocalScale.z);
                 isWarningOn = true;
+                //CamManager.instance.ChainBladeCamState(1);
             }
             if (Input.GetKey(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
@@ -84,6 +86,7 @@ namespace Controller
                 Time.timeScale = 1f;
                 Time.fixedDeltaTime = 0.02f;
                 InquisitorialChainStart();
+                //CamManager.instance.ChainBladeCamState(2);
             }
             
             if (uiManager.isGamePaused && isWarningOn)
@@ -145,6 +148,7 @@ namespace Controller
             playerController.transform.GetChild(0).localScale = new Vector3(1, 1 * localStateMult, 1);
             animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, DirectionState, attackDirectionState);
             animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 4);
+            CamManager.instance.ChainBladeCamDezoomState(1);
             initialRotation = newRotation * Quaternion.Euler(0, 0, soController.inquisitorialChainHitAngle / 2);
             finalRotation = newRotation * Quaternion.Euler(0, 0, -soController.inquisitorialChainHitAngle / 2);
             transform.rotation = initialRotation;
@@ -166,6 +170,7 @@ namespace Controller
                     transform.GetChild(0).gameObject.SetActive(false);
                     transform.GetChild(1).gameObject.SetActive(false);
                     animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 0);
+                    CamManager.instance.ChainBladeCamShakeState();
                 }
             }
         }
