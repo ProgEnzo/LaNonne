@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Cinemachine;
+using Controller;
 using Core.Scripts.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Manager
 {
@@ -18,6 +20,10 @@ namespace Manager
         private static readonly int PlayerRevealingDashState = Animator.StringToHash("playerRevealingDashState");
         private static readonly int BocalDestroy = Animator.StringToHash("bocalDestroy");
         private static readonly int PlayerHasBeenHit = Animator.StringToHash("playerHasBeenHit");
+        private static readonly int PlayerDashState = Animator.StringToHash("playerDashState");
+        
+        [Header("Scriptable Object")]
+        [SerializeField][FormerlySerializedAs("SO_Controller")] internal SO_Controller soController;
 
         private void Awake()
         {
@@ -91,6 +97,18 @@ namespace Manager
             animator.SetInteger(PlayerHasBeenHit, 1);
             yield return new WaitForSeconds(0.1f);
             animator.SetInteger(PlayerHasBeenHit, 0);
+        }
+        
+        internal void PlayerDashStateChange()
+        {
+            StartCoroutine(PlayerIsDashingCamEffect());
+        }
+
+        private IEnumerator PlayerIsDashingCamEffect()
+        {
+            animator.SetInteger(PlayerDashState, 1);
+            yield return new WaitForSeconds(0.35f);
+            animator.SetInteger(PlayerDashState, 0);
         }
     }
 }

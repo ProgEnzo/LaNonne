@@ -165,6 +165,7 @@ namespace Controller
             {
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
+                camManager.PlayerDashStateChange();
             }
             
             if (timerDash < -0.5f)
