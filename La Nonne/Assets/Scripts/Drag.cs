@@ -1,25 +1,20 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Drag : MonoBehaviour
+public class Drag : MonoBehaviour, IDragHandler
 {
-    private Camera camera;
-    [SerializeField] private static List<GameObject> gems;
-
-    private void Start()
+    private RectTransform rectTransform;
+    private Canvas canvas;
+    
+    private void Awake()
     {
-        camera = Camera.main;
-        camera.ScreenToWorldPoint(Input.mousePosition);
-    }
-
-    private static void ClickOnEffect(int effect)
-    {
-        Instantiate(gems[effect]);
+        rectTransform = GetComponent<RectTransform>();
+        canvas = GetComponentInParent<Canvas>();
     }
     
-    private static void ClickOnEmplacement(int emplacement)
+    public void OnDrag(PointerEventData eventData)
     {
-        Destroy(gems[emplacement]);
+        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 }
