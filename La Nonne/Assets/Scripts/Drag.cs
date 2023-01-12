@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Drag : MonoBehaviour, IDragHandler
+public class Drag : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     private RectTransform rectTransform;
     private Canvas canvas;
@@ -16,5 +15,13 @@ public class Drag : MonoBehaviour, IDragHandler
     public void OnDrag(PointerEventData eventData)
     {
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+    }
+    
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (!Drop.isPointerOnSlot)
+        {
+            Destroy(gameObject);
+        }
     }
 }
