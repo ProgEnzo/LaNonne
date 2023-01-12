@@ -1,25 +1,46 @@
 using System;
-using System.Collections.Generic;
+using Shop;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Drag : MonoBehaviour
+public class Drag : MonoBehaviour, IDragHandler, IEndDragHandler
 {
-    private Camera camera;
-    [SerializeField] private static List<GameObject> gems;
-
-    private void Start()
+    private RectTransform rectTransform;
+    private Canvas canvas;
+    private bool isSlotted;
+    private int slotIndex;
+    
+    private void Awake()
     {
-        camera = Camera.main;
-        camera.ScreenToWorldPoint(Input.mousePosition);
+        rectTransform = GetComponent<RectTransform>();
+        canvas = GetComponentInParent<Canvas>();
+        isSlotted = false;
     }
 
-    private static void ClickOnEffect(int effect)
+    private void Update()
     {
-        Instantiate(gems[effect]);
+        if (Input.GetMouseButtonDown(1) && isSlotted)
+        {
+            EffectManager.instance.appliedEffects[slotIndex] = EffectManager.Effect.None;
+            Destroy(gameObject);
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
     
-    private static void ClickOnEmplacement(int emplacement)
+    public void OnEndDrag(PointerEventData eventData)
     {
-        Destroy(gems[emplacement]);
+        if (!Drop.isPointerOnSlot)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            isSlotted = true;
+            slotIndex = Drop.slotIndex;
+        }
     }
 }

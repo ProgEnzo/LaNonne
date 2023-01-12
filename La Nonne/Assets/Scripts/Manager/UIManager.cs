@@ -28,7 +28,7 @@ namespace Manager
     
         [Header("Menus")]
         public static GameObject pauseMenu;
-        //public GameObject settingsMenu;
+        public static GameObject settingsMenu;
         public GameObject gameOverMenu;
         //public GameObject winMenu;
 
@@ -69,11 +69,13 @@ namespace Manager
             //bigMapCanvas = GameObject.Find("BigMapCanvas");
             //mapPanel = bigMapCanvas.GetComponent<Image>();
             pauseMenu = GameObject.Find("PauseMenu");
+            settingsMenu = GameObject.Find("OptionsMenu");
         
             epCount.text = "EP COUNT : " + 0;
         
             pauseMenu.SetActive(false);
             gameOverMenu.SetActive(false);
+            settingsMenu.SetActive(false);
             //bigMapRender.SetActive(false);
             //scoreManager.scoreText.enabled = false;
 
@@ -187,6 +189,11 @@ namespace Manager
             bool Test() => PlayerController.instance == null;
             yield return new WaitWhile(Test);
             playerController = PlayerController.instance;
+        }
+        
+        public static void OptionsMenu()
+        {
+            settingsMenu.SetActive(true);
         }
     }
 }

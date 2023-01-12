@@ -24,6 +24,9 @@ namespace Manager
         
         [Header("Scriptable Object")]
         [SerializeField][FormerlySerializedAs("SO_Controller")] internal SO_Controller soController;
+        
+        private static readonly int ChainBladeState = Animator.StringToHash("ChainBladeState");
+        private static readonly int BladeState = Animator.StringToHash("chainBladeState");
 
         private void Awake()
         {
@@ -109,6 +112,23 @@ namespace Manager
             animator.SetInteger(PlayerDashState, 1);
             yield return new WaitForSeconds(0.35f);
             animator.SetInteger(PlayerDashState, 0);
+        }
+
+        internal void ChainBladeCamDezoomState(int state)
+        {
+            animator.SetInteger(BladeState, state);
+        }
+
+        internal void ChainBladeCamShakeState()
+        {
+            StartCoroutine(ChainBladeCd());
+        }
+
+        private IEnumerator ChainBladeCd()
+        {
+            animator.SetInteger(BladeState, 2);
+            yield return new WaitForSeconds(0.3f);
+            animator.SetInteger(BladeState, 0);
         }
     }
 }
