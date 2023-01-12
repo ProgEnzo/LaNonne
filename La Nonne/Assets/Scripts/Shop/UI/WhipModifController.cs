@@ -102,14 +102,14 @@ namespace Shop.UI
                
                for (var i = 0; i < EffectManager.instance.effectInventory.Count; i++)
                {
-                  whipModificationMenu.transform.GetChild(1).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = (EffectManager.Effect)i + "\n\n" + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
+                  whipModificationMenu.transform.GetChild(1).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ((EffectManager.Effect)i).ToString(); // + "\n\n" + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
                }
 
                for (var i = 0; i < EffectManager.instance.appliedEffects.Length; i++)
                {
                   if (EffectManager.instance.appliedEffects[i] != EffectManager.Effect.None)
                   {
-                     whipModificationMenu.transform.GetChild(i+2).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[i] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[i]];
+                     whipModificationMenu.transform.GetChild(i+3).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[i] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[i]];
                   }
                }
             }
@@ -153,7 +153,7 @@ namespace Shop.UI
       public static void AttachEffect(int slotIndex)
       {
          EffectManager.instance.appliedEffects[slotIndex] = _selectedEffect;
-         //whipModificationMenu.transform.GetChild(selectedEffectEmplacement+2).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[selectedEffectEmplacement] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[selectedEffectEmplacement]];
+         //whipModificationMenu.transform.GetChild(selectedEffectEmplacement+3).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[selectedEffectEmplacement] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[selectedEffectEmplacement]];
       }
    }
 }
