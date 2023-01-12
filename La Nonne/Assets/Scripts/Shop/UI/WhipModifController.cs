@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Manager;
@@ -23,9 +24,9 @@ namespace Shop.UI
       private UIManager uiManager;
       private EffectManager effectManager;
       private bool isWhipModifOpened;
-      private bool canChooseEffect;
-      private int selectedEffectEmplacement;
-      private bool isEffectEmplacementSelected;
+      private static EffectManager.Effect _selectedEffect;
+      
+      [SerializeField] private List<GameObject> gems;
 
       private void Start()
       {
@@ -38,8 +39,6 @@ namespace Shop.UI
          effectManager = EffectManager.instance;
          uiManager = UIManager.instance;
          isWhipModifOpened = false;
-         canChooseEffect = false;
-         isEffectEmplacementSelected = false;
       }
 
       private IEnumerator BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp()
@@ -135,8 +134,6 @@ namespace Shop.UI
          StartCoroutine(DisableIsWhipMenuOpenedCoroutine());
          whipModificationMenu.SetActive(false);
          
-         isEffectEmplacementSelected = false;
-         
          uiManager.ActivateInGameUI();
 
          image.fillAmount = 0f;
@@ -144,21 +141,19 @@ namespace Shop.UI
          Time.timeScale = 1;
       }
       
-      public void SelectEffectEmplacement(int buttonNumber)
-      {
-         selectedEffectEmplacement = buttonNumber;
-         isEffectEmplacementSelected = true;
-         canChooseEffect = true;
-      }
-      
       public void SelectEffect(int buttonNumber)
       {
-         if (isEffectEmplacementSelected && EffectManager.instance.effectInventory[(EffectManager.Effect)buttonNumber] > 0 && canChooseEffect && !effectManager.appliedEffects.Contains((EffectManager.Effect)buttonNumber))
+         if (EffectManager.instance.effectInventory[(EffectManager.Effect)buttonNumber] > 0 && !effectManager.appliedEffects.Contains((EffectManager.Effect)buttonNumber))
          {
-            EffectManager.instance.appliedEffects[selectedEffectEmplacement] = (EffectManager.Effect)buttonNumber;
-            whipModificationMenu.transform.GetChild(selectedEffectEmplacement+2).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[selectedEffectEmplacement] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[selectedEffectEmplacement]];
-            canChooseEffect = false;
+            Instantiate(gems[buttonNumber], whipModificationMenu.transform.GetChild(1).GetChild(buttonNumber));
+            _selectedEffect = (EffectManager.Effect)buttonNumber;
          }
+      }
+
+      public static void AttachEffect(int slotIndex)
+      {
+         EffectManager.instance.appliedEffects[slotIndex] = _selectedEffect;
+         //whipModificationMenu.transform.GetChild(selectedEffectEmplacement+2).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[selectedEffectEmplacement] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[selectedEffectEmplacement]];
       }
    }
 }
