@@ -14895,6 +14895,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3862036121514157629, guid: f2cc9ecd7d772eb42985e0fb15c8154c, type: 3}
   m_PrefabInstance: {fileID: 868478522}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &649226391 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 117487752, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+  m_PrefabInstance: {fileID: 1680744655}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &649226394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 649226391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449ef5ebbe24720439ec31d15f7b6f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FocusTracksTarget: 0
+  m_FocusTracking: 0
+  m_FocusTarget: {fileID: 0}
+  m_FocusOffset: 0
+  m_Profile: {fileID: 11400000, guid: 1059e897f54d32f4084dd3e8f63df09c, type: 2}
 --- !u!4 &653317986 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3862036121514157629, guid: 26e13642d7b960e49b868d92a2cca520, type: 3}
@@ -15226,6 +15248,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &964334313 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1009613946, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+  m_PrefabInstance: {fileID: 1680744655}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &964334316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964334313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449ef5ebbe24720439ec31d15f7b6f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FocusTracksTarget: 0
+  m_FocusTracking: 0
+  m_FocusTarget: {fileID: 0}
+  m_FocusOffset: 0
+  m_Profile: {fileID: 11400000, guid: f7fb391fcbb39f0418a9415cb815ba8a, type: 2}
 --- !u!1 &1171006219
 GameObject:
   m_ObjectHideFlags: 0
@@ -36487,6 +36531,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1545729244, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1892912162, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 4.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1961006519, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_FocusTracking
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2124689815, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 3.25
+      objectReference: {fileID: 0}
     - target: {fileID: 3786407124578739001, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_Name
       value: GameManager

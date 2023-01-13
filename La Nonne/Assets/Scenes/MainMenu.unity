@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 8230618}
   - component: {fileID: 8230617}
   - component: {fileID: 8230616}
+  - component: {fileID: 8230619}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -218,6 +219,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 702841844}
+        m_TargetAssemblyTypeName: UiAnimManager, Assembly-CSharp
+        m_MethodName: OpenMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8230617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,6 +269,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8230614}
   m_CullTransparentMesh: 1
+--- !u!114 &8230619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8230614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a36a6874350ce408ae169d8aacb159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animScaleMultiplier: 1.25
 --- !u!1 &30498148
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,9 +627,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 183021755}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: BackFromSettings
+      - m_Target: {fileID: 702841844}
+        m_TargetAssemblyTypeName: UiAnimManager, Assembly-CSharp
+        m_MethodName: CloseMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1474,7 +1500,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 24.999996, y: -0.5}
+  m_AnchoredPosition: {x: 25, y: -0.5}
   m_SizeDelta: {x: -50, y: -3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &346093148
@@ -2092,6 +2118,8 @@ GameObject:
   - component: {fileID: 702841841}
   - component: {fileID: 702841840}
   - component: {fileID: 702841842}
+  - component: {fileID: 702841843}
+  - component: {fileID: 702841844}
   m_Layer: 5
   m_Name: OptionsMenu
   m_TagString: Untagged
@@ -2179,6 +2207,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: 0df7272459f49844dacff71dc7513221, type: 2}
   resolutionDropdown: {fileID: 1722060241}
+--- !u!95 &702841843
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702841838}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3de6aa7d00078d241a7a88ea46a35ed8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &702841844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702841838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277514f6edd90e94da4bb3ac15556cfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 702841843}
+  optionMenu: {fileID: 702841838}
 --- !u!1 &712689113
 GameObject:
   m_ObjectHideFlags: 0
