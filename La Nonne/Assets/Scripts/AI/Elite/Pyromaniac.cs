@@ -29,6 +29,7 @@ namespace AI.Elite
         private bool canBoxCast;
         [SerializeField] private PyromaniacProjectile projectile;
         private CapsuleCollider2D capsuleCollider2D;
+        private LineRenderer lineRenderer;
 
         protected override void Start()
         {
@@ -39,6 +40,7 @@ namespace AI.Elite
             
             //Initialisation des components
             capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+            lineRenderer = GetComponent<LineRenderer>();
             
             //Initialisation du déplacement
             scriptAIPath = GetComponent<AIPath>();
@@ -52,6 +54,10 @@ namespace AI.Elite
 
             //Initialisation de la vitesse de dash
             currentVelocitySpeed = 0f;
+            
+            //Initialisation du line renderer
+            lineRenderer.enabled = false;
+            lineRenderer.widthMultiplier = transform.localScale.x * 2;
         }
 
         protected override void Update()
@@ -120,6 +126,7 @@ namespace AI.Elite
                 {
                     //La zone de feu est activée
                     canBoxCast = true;
+                    lineRenderer.enabled = true;
                 }
             }
             
@@ -134,6 +141,7 @@ namespace AI.Elite
                     if (currentFireTrailMaxLength <= soPyromaniac.fireTrailTolerance)
                     {
                         canBoxCast = false;
+                        lineRenderer.enabled = false;
                     }
                 }
                 else
@@ -150,6 +158,8 @@ namespace AI.Elite
                     currentHittingCoroutine ??= StartCoroutine(FireDamage());
                 }
                 BoxCastDebug.DrawBoxCast2D(boxCastOrigin, Vector2.one * transform1.localScale * 2, 0f, (boxCastDestination - boxCastOrigin).normalized, currentFireTrailMaxLength, Color.magenta);
+                lineRenderer.SetPosition(0, boxCastOrigin);
+                lineRenderer.SetPosition(1, (boxCastDestination - boxCastOrigin).normalized * currentFireTrailMaxLength);
             }
         }
 
