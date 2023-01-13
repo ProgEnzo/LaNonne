@@ -34,7 +34,7 @@ namespace Controller
         private ScoreManager scoreManager;
         private CamManager camManager;
         private UIManager uiManager;
-
+        private AudioManager audioManager;
 
         private void Start()
         {
@@ -45,6 +45,8 @@ namespace Controller
             inputManager = InputManager.instance;
             camManager = CamManager.instance;
             uiManager = UIManager.instance;
+            audioManager = AudioManager.instance;
+            
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
             lineRenderer.enabled = false;
@@ -53,6 +55,7 @@ namespace Controller
             currentDuringComboCooldown = 0;
             currentNextComboCooldown = 0;
             hitState = 0;
+
         }
 
         private void Update()
@@ -187,6 +190,8 @@ namespace Controller
         private void OnTriggerEnter2D(Collider2D other)
         {
             var o = other.gameObject;
+            
+            audioManager.PlaySound("BladeHit");
             
             //DMG du player sur les enemy
             if (o.CompareTag("Enemy"))
