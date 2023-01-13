@@ -14,8 +14,6 @@ namespace Controller
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         private EffectManager effectManager;
         private ScoreManager scoreManager;
-
-
         
         private void Start()
         {
@@ -28,7 +26,7 @@ namespace Controller
             var o = other.gameObject;
             var damage = (int)(soController.inquisitorialChainDamage * damageAndEffectMultiplier);
             
-            //DMG du player sur le TrashMobClose
+            //DMG du player on Enemy
             if (o.CompareTag("Enemy"))
             {
                 o.GetComponent<EnemyController>().TakeDamageFromPlayer(damage);

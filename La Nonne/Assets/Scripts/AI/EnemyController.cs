@@ -35,6 +35,10 @@ namespace AI
         protected bool isKnockedBack;
 
         [SerializeField] private GameObject epDrop;
+        
+        [Header("SoundEffect")] 
+        public AudioSource hitAudioSource;
+        public AudioClip[] hitRandomSound;
 
         protected virtual void Start()
         {
@@ -90,6 +94,7 @@ namespace AI
         #region HealthEnemy
         public virtual void TakeDamageFromPlayer(int damage)
         {
+            //hitAudioSource.PlayOneShot(hitRandomSound[Random.Range(0, hitRandomSound.Length)]);
             currentHealth -= damage * currentDamageMultiplier;
             EnemyDeath();
         }

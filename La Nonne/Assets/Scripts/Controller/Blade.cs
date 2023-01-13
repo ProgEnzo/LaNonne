@@ -37,8 +37,8 @@ namespace Controller
 
         [Header("SoundEffect")] 
         public AudioSource bladeAudioSource;
-        public AudioClip[] bladeSound;
-        public AudioClip[] bladeHitSound;
+        public AudioClip[] bladeNoHitSound;
+        public AudioClip[] bladeHitRandomSound;
         private void Start()
         {
             playerController = PlayerController.instance;
@@ -75,7 +75,7 @@ namespace Controller
             if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0 && !playerController.isRevealingDashHitting && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
                 //blade no hit
-                bladeAudioSource.PlayOneShot(bladeSound[1]);
+                bladeAudioSource.PlayOneShot(bladeNoHitSound[0]);
 
                 ZealousBladeStart();
             }
@@ -200,7 +200,7 @@ namespace Controller
             if (o.CompareTag("Enemy"))
             {
                 //blade hit
-                bladeAudioSource.PlayOneShot(bladeSound[0]);
+                bladeAudioSource.PlayOneShot(bladeHitRandomSound[Random.Range(0, bladeHitRandomSound.Length)]);
                 
                 camManager.DezoomDuringCombo(hitState);
                 o.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.zealousBladeDamage);
@@ -240,7 +240,7 @@ namespace Controller
             //DMG du player sur le BOSS
             if (o.CompareTag("Boss"))
             {
-                bladeAudioSource.PlayOneShot(bladeHitSound[0]);
+                bladeAudioSource.PlayOneShot(bladeHitRandomSound[Random.Range(0, bladeHitRandomSound.Length)]);
 
                 camManager.DezoomDuringCombo(hitState);
                 o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.zealousBladeDamage);

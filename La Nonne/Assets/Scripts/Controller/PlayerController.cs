@@ -222,6 +222,7 @@ namespace Controller
 
             if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened) // for input
             {
+                
                 isMoving = true; // for animation
                 isMovingProfile = true; // for movement
                 transform.localScale = new Vector3(-playerScale, localScale.y, localScale.z); // for animation
