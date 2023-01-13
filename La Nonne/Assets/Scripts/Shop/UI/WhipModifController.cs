@@ -145,7 +145,6 @@ namespace Shop.UI
       {
          if (EffectManager.instance.effectInventory[(EffectManager.Effect)buttonNumber] > 0 && !effectManager.appliedEffects.Contains((EffectManager.Effect)buttonNumber))
          {
-            Instantiate(gems[buttonNumber], whipModificationMenu.transform.GetChild(1).GetChild(buttonNumber));
             _selectedEffect = (EffectManager.Effect)buttonNumber;
          }
       }
