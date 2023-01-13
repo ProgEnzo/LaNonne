@@ -73,6 +73,7 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             else if (isSlotted)
             {
                 EffectManager.instance.appliedEffects[slotIndex] = EffectManager.Effect.None;
+                var exSlotIndex = slotIndex;
                 slotIndex = Drop.slotIndex;
                 if (EffectManager.instance.appliedEffects[slotIndex] != EffectManager.Effect.None)
                 {
@@ -80,6 +81,10 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                     rectTransform.anchoredPosition = initialAnchoredPosition;
                     rectTransform.localPosition = initialLocalPosition;
                     isSlotted = false;
+                }
+                else if (slotIndex == exSlotIndex)
+                {
+                    rectTransform.anchoredPosition = Vector2.zero;
                 }
             }
             else

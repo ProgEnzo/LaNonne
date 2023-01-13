@@ -11,7 +11,7 @@ namespace AI
         
         private void Start()
         {
-            entityController = transform.parent.CompareTag("Boss") ? transform.parent.GetComponent<BossStateManager>() : transform.parent.GetComponent<EnemyController>();
+            entityController = transform.parent.parent.CompareTag("Boss") ? transform.parent.parent.GetComponent<BossStateManager>() : transform.parent.parent.GetComponent<EnemyController>();
             squareSpriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         }
 
