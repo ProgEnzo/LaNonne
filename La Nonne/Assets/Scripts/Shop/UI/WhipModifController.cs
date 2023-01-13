@@ -141,12 +141,9 @@ namespace Shop.UI
          Time.timeScale = 1;
       }
       
-      public void SelectEffect(int buttonNumber)
+      public static void SelectEffect(int buttonNumber)
       {
-         if (EffectManager.instance.effectInventory[(EffectManager.Effect)buttonNumber] > 0 && !effectManager.appliedEffects.Contains((EffectManager.Effect)buttonNumber))
-         {
-            _selectedEffect = (EffectManager.Effect)buttonNumber;
-         }
+         _selectedEffect = (EffectManager.Effect)buttonNumber;
       }
 
       public static void AttachEffect(int slotIndex)
