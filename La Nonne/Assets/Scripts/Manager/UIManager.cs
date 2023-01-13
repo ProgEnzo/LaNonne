@@ -18,7 +18,7 @@ namespace Manager
         private InputManager inputManager;
         private ScoreManager scoreManager;
         private PlayerController playerController;
-
+        
         [Header("Map & MiniMap")] 
         //public Image mapPanel;
         public GameObject inGameUI;
@@ -73,7 +73,7 @@ namespace Manager
         
             epCount.text = "EP COUNT : " + 0;
         
-            pauseMenu.SetActive(false);
+            //pauseMenu.SetActive(false);
             gameOverMenu.SetActive(false);
             settingsMenu.SetActive(false);
             //bigMapRender.SetActive(false);
@@ -133,7 +133,16 @@ namespace Manager
 
         private static void PauseMenu(bool isGamePaused)
         {
-            pauseMenu.SetActive(isGamePaused);
+            //pauseMenu.SetActive(isGamePaused);
+            if (!isGamePaused)
+            {
+                UIAnimPause.instance.CloseMenu();
+            }
+            else
+            {
+                UIAnimPause.instance.OpenMenu();
+            }
+            
             Time.timeScale = isGamePaused ? 0 : 1;
             Time.fixedDeltaTime = 0.02f;
             if (PlayerController.instance.isRevealingDashOn)
