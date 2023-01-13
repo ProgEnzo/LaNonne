@@ -28,6 +28,7 @@ namespace AI.Elite
         private bool isImpactOn;
         private bool canBoxCast;
         [SerializeField] private PyromaniacProjectile projectile;
+        private CapsuleCollider2D capsuleCollider2D;
 
         protected override void Start()
         {
@@ -35,6 +36,9 @@ namespace AI.Elite
             
             //Initialoisation du scriptable object
             soPyromaniac = (SoPyromaniac) soEnemy;
+            
+            //Initialisation des components
+            capsuleCollider2D = GetComponent<CapsuleCollider2D>();
             
             //Initialisation du déplacement
             scriptAIPath = GetComponent<AIPath>();
@@ -164,6 +168,7 @@ namespace AI.Elite
             var transform1 = transform;
             dashInitialPosition = transform1.position; //Position du pyromane
             isDashing = true;
+            capsuleCollider2D.enabled = false;
             dashDirection = (projectile.transform.position - dashInitialPosition).normalized;
             currentVelocitySpeed = soEnemy.velocityBasicSpeed;
         }
@@ -244,6 +249,7 @@ namespace AI.Elite
             {
                 currentVelocitySpeed = 0f;
                 isDashing = false;
+                capsuleCollider2D.enabled = true;
                 isImpactOn = true;
                 
                 //Cercle d'explosion
