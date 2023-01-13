@@ -32,6 +32,9 @@ namespace Shop.UI
       private bool hasShopBeenOpened;
       [SerializeField] private int maxNumberOfTakenObjects;
       private int currentNumberOfTakenObjects;
+      
+      public UiAnimShop uiAnimShop;
+      [SerializeField] private AnimationClip shopAnimClip;
 
       private ScoreManager scoreManager;
       
@@ -114,6 +117,7 @@ namespace Shop.UI
                uiManager.DesactivateInGameUI();
                
                shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
+               uiAnimShop.OpenMenu();
                Time.timeScale = 0;
                if (!hasShopBeenOpened)
                {
@@ -232,7 +236,8 @@ namespace Shop.UI
       {
          isShopOpened = false;
          StartCoroutine(DisableIsShopOpenedCoroutine());
-         shopPanel.SetActive(false);
+         uiAnimShop.CloseMenu();
+         StartCoroutine(DisableShopPanelCoroutine());
          
          uiManager.ActivateInGameUI();
 
@@ -240,7 +245,13 @@ namespace Shop.UI
 
          Time.timeScale = 1;
       }
-      
+
+      private IEnumerator DisableShopPanelCoroutine()
+      {
+         yield return new WaitForSeconds(shopAnimClip.length);
+         shopPanel.SetActive(false);
+      }
+
       public void BuyEffect(int buttonNumber)
       {
          if (effectsInTheShop[buttonNumber] != EffectManager.Effect.None && PlayerController.instance.currentEp >=

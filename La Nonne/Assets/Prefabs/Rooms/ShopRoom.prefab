@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b3ababfb6fac947887781573349996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomCenter: {x: 0, y: 0}
   shopKeeper: {fileID: 4378271069584297667, guid: 228a5840c7aba484580377d593d0ad83, type: 3}
   itemData: []
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
@@ -61,9 +62,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopPanel: {fileID: 0}
-  whipModificationMenu: {fileID: 0}
   shopCanvas: {fileID: 0}
   image: {fileID: 0}
+  epCountText: {fileID: 0}
   timeToAccess: 0
   numberOfOfferedObjects: 0
   maxNumberOfTakenObjects: 0
+  dialogueText: {fileID: 0}
+  timeByCharacter: 0

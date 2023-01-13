@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core.Scripts.Utils;
 using DG.Tweening;
 using UnityEngine;
 
-public class UiAnimShop : MonoSingleton<UIAnimPause>
+public class UiAnimShop : MonoBehaviour
 {
     public Animator anim;
     private bool menuOpen = false;
