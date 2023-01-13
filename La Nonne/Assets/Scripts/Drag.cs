@@ -2,8 +2,9 @@ using Shop;
 using Shop.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     private RectTransform rectTransform;
     private Canvas canvas;
@@ -28,15 +29,6 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1) && isSlotted)
-        {
-            EffectManager.instance.appliedEffects[slotIndex] = EffectManager.Effect.None;
-            rectTransform.anchoredPosition = initialAnchoredPosition;
-            rectTransform.localPosition = initialLocalPosition;
-            transform.SetParent(initialParent);
-            isSlotted = false;
-        }
-
         if (!isSlotted)
         {
             slotIndex = Drop.slotIndex;
@@ -49,6 +41,7 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         {
             isDragging = true;
             isAnyDragging = true;
+            GetComponent<Image>().raycastTarget = false;
             WhipModifController.SelectEffect(buttonNumber);
         }
     }
@@ -72,19 +65,43 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             else if (!Drop.isPointerOnSlot && isSlotted)
             {
                 EffectManager.instance.appliedEffects[slotIndex] = EffectManager.Effect.None;
+                transform.SetParent(initialParent);
                 rectTransform.anchoredPosition = initialAnchoredPosition;
                 rectTransform.localPosition = initialLocalPosition;
-                transform.SetParent(initialParent);
                 isSlotted = false;
+            }
+            else if (isSlotted)
+            {
+                EffectManager.instance.appliedEffects[slotIndex] = EffectManager.Effect.None;
+                slotIndex = Drop.slotIndex;
+                if (EffectManager.instance.appliedEffects[slotIndex] != EffectManager.Effect.None)
+                {
+                    transform.SetParent(initialParent);
+                    rectTransform.anchoredPosition = initialAnchoredPosition;
+                    rectTransform.localPosition = initialLocalPosition;
+                    isSlotted = false;
+                }
             }
             else
             {
-                slotIndex = Drop.slotIndex;
                 isSlotted = true;
             }
             
+            GetComponent<Image>().raycastTarget = true;
             isDragging = false;
             isAnyDragging = false;
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right && isSlotted)
+        {
+            EffectManager.instance.appliedEffects[slotIndex] = EffectManager.Effect.None;
+            transform.SetParent(initialParent);
+            rectTransform.anchoredPosition = initialAnchoredPosition;
+            rectTransform.localPosition = initialLocalPosition;
+            isSlotted = false;
         }
     }
 }
