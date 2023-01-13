@@ -15,6 +15,7 @@ namespace Controller
         private EffectManager effectManager;
         private ScoreManager scoreManager;
 
+
         
         private void Start()
         {

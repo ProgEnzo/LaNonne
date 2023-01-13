@@ -38,6 +38,7 @@ namespace Controller
             animationManager = AnimationManager.instance;
             inputManager = InputManager.instance;
             uiManager = UIManager.instance;
+            
             camera1 = Camera.main;
             chainLineRenderer = transform.GetChild(0).GetComponent<LineRenderer>();
             bladeLineRenderer = transform.GetChild(1).GetComponent<LineRenderer>();
