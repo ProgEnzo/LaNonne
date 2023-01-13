@@ -34,12 +34,7 @@ namespace Controller
         private ScoreManager scoreManager;
         private CamManager camManager;
         private UIManager uiManager;
-
-        [Header("Sound")] 
-        [SerializeField] private AudioSource playerAudioSource;
-        [SerializeField] private AudioClip hitBlade;
-        [SerializeField] private AudioClip noHitBlade;
-
+        private AudioManager audioManager;
 
         private void Start()
         {
@@ -50,6 +45,8 @@ namespace Controller
             inputManager = InputManager.instance;
             camManager = CamManager.instance;
             uiManager = UIManager.instance;
+            audioManager = AudioManager.instance;
+            
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
             lineRenderer.enabled = false;
@@ -59,7 +56,6 @@ namespace Controller
             currentNextComboCooldown = 0;
             hitState = 0;
 
-            playerAudioSource = GetComponent<AudioSource>();
         }
 
         private void Update()
@@ -195,7 +191,7 @@ namespace Controller
         {
             var o = other.gameObject;
             
-            playerAudioSource.PlayOneShot(noHitBlade);
+            audioManager.PlaySound("BladeHit");
             
             //DMG du player sur les enemy
             if (o.CompareTag("Enemy"))

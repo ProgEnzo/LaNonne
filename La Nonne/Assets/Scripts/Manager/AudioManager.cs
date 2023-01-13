@@ -1,35 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
-using Core.Scripts.Utils;
+using System;
+using UnityEngine.Audio;
 using UnityEngine;
 
-public class AudioManager : MonoSingleton<AudioManager>
+public class AudioManager : MonoBehaviour
 {
-    internal new static AudioManager instance;
+    public Sound[] sounds;
 
-    public AudioSource playerAudioSource;
-    public AudioSource enemyAudioSource;
-    public AudioSource UIAudioSource;
-    public AudioSource shopAudioSource;
-    public AudioSource musicAudioSource;
-    public AudioSource bossAudioSource;
-    public AudioSource othersAudioSource;
-
+    public static AudioManager instance;
     private void Awake()
     {
-        if (instance != null)
-        {
-            DestroyImmediate(gameObject);
-        }
-        else
+        if (instance == null)
         {
             instance = this;
         }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
+        foreach (Sound s in sounds)
+        { 
+            s.source = gameObject.GetComponent<AudioSource>();
+            s.source.clip = s.clip;
+            
+            s.source.volume = s.volume;
+            s.source.pitch = s.pitch;
+            s.source.loop = s.loop;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlaySound(string name)
     {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+
+        if (s == null)
+        {
+            Debug.LogWarning("Sound:" + name + "not found!");
+           return; 
+        }
         
+        s.source.PlayOneShot(s.clip);
     }
 }
