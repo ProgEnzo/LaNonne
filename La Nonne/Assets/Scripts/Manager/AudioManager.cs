@@ -21,12 +21,13 @@ public class AudioManager : MonoBehaviour
         
         foreach (Sound s in sounds)
         { 
-            s.source = gameObject.GetComponent<AudioSource>();
+            s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
             
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+            s.source.playOnAwake = s.playOnAwake;
         }
     }
 
@@ -35,11 +36,11 @@ public class AudioManager : MonoBehaviour
         Sound s = Array.Find(sounds, sound => sound.name == name);
 
         if (s == null)
-        {
+        { 
             Debug.LogWarning("Sound:" + name + "not found!");
            return; 
         }
         
-        s.source.PlayOneShot(s.clip);
+        s.source.PlayOneShot(s.clip, s.volume);
     }
 }

@@ -14,12 +14,15 @@ namespace Controller
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         private EffectManager effectManager;
         private ScoreManager scoreManager;
+        private AudioManager audioManager;
+
 
         
         private void Start()
         {
             effectManager = EffectManager.instance;
             scoreManager = ScoreManager.instance;
+            audioManager = AudioManager.instance;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -30,6 +33,8 @@ namespace Controller
             //DMG du player sur le TrashMobClose
             if (o.CompareTag("Enemy"))
             {
+                audioManager.PlaySound("WhipchainHit");
+
                 o.GetComponent<EnemyController>().TakeDamageFromPlayer(damage);
                 scoreManager.AddChainBladeHitScore(5);
                 

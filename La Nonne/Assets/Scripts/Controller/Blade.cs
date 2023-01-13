@@ -90,6 +90,8 @@ namespace Controller
 
         private void ZealousBladeStart()
         {
+            audioManager.PlaySound("BladeNoHit");
+
             hitState += 1;
             currentDuringComboCooldown = soController.zealousBladeMaxDuringComboCooldown;
             
@@ -191,13 +193,14 @@ namespace Controller
         {
             var o = other.gameObject;
             
-            audioManager.PlaySound("BladeHit");
-            
             //DMG du player sur les enemy
             if (o.CompareTag("Enemy"))
             {
                 camManager.DezoomDuringCombo(hitState);
                 o.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.zealousBladeDamage);
+                
+                audioManager.PlaySound("BladeHit");
+
                 if (hitState == soController.zealousBladeMaxHitState)
                 {
                     o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
