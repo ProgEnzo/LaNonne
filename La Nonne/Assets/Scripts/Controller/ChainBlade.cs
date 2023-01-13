@@ -30,7 +30,6 @@ namespace Controller
         private InputManager inputManager;
         private UIManager uiManager;
         private CamManager camManager;
-        private AudioManager audioManager;
 
         // Start is called before the first frame update
         private void Start()
@@ -39,7 +38,6 @@ namespace Controller
             animationManager = AnimationManager.instance;
             inputManager = InputManager.instance;
             uiManager = UIManager.instance;
-            audioManager = AudioManager.instance;
             
             camera1 = Camera.main;
             chainLineRenderer = transform.GetChild(0).GetComponent<LineRenderer>();
@@ -82,8 +80,6 @@ namespace Controller
             }
             if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
-                audioManager.PlaySound("WhipchainNoHit");
-                
                 isWarningOn = false;
                 transform.GetChild(2).localScale = new Vector3(Mathf.Abs(warningScale.x), Mathf.Abs(warningScale.y), Mathf.Abs(warningScale.z));
                 transform.GetChild(2).gameObject.SetActive(false);

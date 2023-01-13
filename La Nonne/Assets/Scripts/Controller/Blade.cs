@@ -34,8 +34,11 @@ namespace Controller
         private ScoreManager scoreManager;
         private CamManager camManager;
         private UIManager uiManager;
-        private AudioManager audioManager;
 
+        [Header("SoundEffect")] 
+        public AudioSource bladeAudioSource;
+        public AudioClip[] bladeSound;
+        public AudioClip[] bladeHitSound;
         private void Start()
         {
             playerController = PlayerController.instance;
@@ -45,7 +48,6 @@ namespace Controller
             inputManager = InputManager.instance;
             camManager = CamManager.instance;
             uiManager = UIManager.instance;
-            audioManager = AudioManager.instance;
             
             lineRenderer = GetComponent<LineRenderer>();
             boxCollider = GetComponent<BoxCollider2D>();
@@ -72,6 +74,9 @@ namespace Controller
 
             if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0 && !playerController.isRevealingDashHitting && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
+                //blade no hit
+                bladeAudioSource.PlayOneShot(bladeSound[1]);
+
                 ZealousBladeStart();
             }
             
@@ -90,8 +95,6 @@ namespace Controller
 
         private void ZealousBladeStart()
         {
-            audioManager.PlaySound("BladeNoHit");
-
             hitState += 1;
             currentDuringComboCooldown = soController.zealousBladeMaxDuringComboCooldown;
             
@@ -196,11 +199,12 @@ namespace Controller
             //DMG du player sur les enemy
             if (o.CompareTag("Enemy"))
             {
+                //blade hit
+                bladeAudioSource.PlayOneShot(bladeSound[0]);
+                
                 camManager.DezoomDuringCombo(hitState);
                 o.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.zealousBladeDamage);
                 
-                audioManager.PlaySound("BladeHit");
-
                 if (hitState == soController.zealousBladeMaxHitState)
                 {
                     o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
@@ -236,6 +240,8 @@ namespace Controller
             //DMG du player sur le BOSS
             if (o.CompareTag("Boss"))
             {
+                bladeAudioSource.PlayOneShot(bladeHitSound[0]);
+
                 camManager.DezoomDuringCombo(hitState);
                 o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.zealousBladeDamage);
                 if (hitState == soController.zealousBladeMaxHitState)

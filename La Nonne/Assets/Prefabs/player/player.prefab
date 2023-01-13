@@ -305,6 +305,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
+  bladeAudioSource: {fileID: 5104407718839404324}
+  bladeHitSound:
+  - {fileID: 8300000, guid: 47a877a98f4579b41a2a24f377045d34, type: 3}
+  - {fileID: 8300000, guid: d3a3b45c2ef340946a4bea4a1af131ac, type: 3}
+  - {fileID: 8300000, guid: 0ddfb4568a5a6ab4eb139037d6900f00, type: 3}
+  - {fileID: 8300000, guid: 68f2d6c6fe287de42be7077c587113d0, type: 3}
 --- !u!61 &4579524371399318225
 BoxCollider2D:
   m_ObjectHideFlags: 0
