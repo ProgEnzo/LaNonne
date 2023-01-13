@@ -1,3 +1,5 @@
+using System.Collections;
+using Shop;
 using Shop.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,10 +11,9 @@ public class Drop : MonoBehaviour, IDropHandler
     
     public void OnDrop(PointerEventData eventData)
     {
-        if (eventData.pointerDrag != null)
+        if (eventData.pointerDrag != null && EffectManager.instance.appliedEffects[slotIndex] == EffectManager.Effect.None && Drag.isAnyDragging)
         {
-            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
-            WhipModifController.AttachEffect(slotIndex);
+            StartCoroutine(DroppedCoroutine(eventData.pointerDrag));
         }
     }
     
@@ -25,5 +26,14 @@ public class Drop : MonoBehaviour, IDropHandler
     public static void PointerOffSlot()
     {
         isPointerOnSlot = false;
+    }
+    
+    private IEnumerator DroppedCoroutine(GameObject pointerDrag)
+    {
+        yield return new WaitWhile(() => Drag.isAnyDragging);
+        pointerDrag.transform.SetParent(transform);
+        pointerDrag.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        pointerDrag.GetComponent<RectTransform>().localPosition = Vector2.zero;
+        WhipModifController.AttachEffect(slotIndex);
     }
 }
