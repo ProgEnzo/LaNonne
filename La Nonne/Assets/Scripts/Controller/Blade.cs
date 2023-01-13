@@ -35,6 +35,11 @@ namespace Controller
         private CamManager camManager;
         private UIManager uiManager;
 
+        [Header("Sound")] 
+        [SerializeField] private AudioSource playerAudioSource;
+        [SerializeField] private AudioClip hitBlade;
+        [SerializeField] private AudioClip noHitBlade;
+
 
         private void Start()
         {
@@ -53,6 +58,8 @@ namespace Controller
             currentDuringComboCooldown = 0;
             currentNextComboCooldown = 0;
             hitState = 0;
+
+            playerAudioSource = GetComponent<AudioSource>();
         }
 
         private void Update()
@@ -187,6 +194,8 @@ namespace Controller
         private void OnTriggerEnter2D(Collider2D other)
         {
             var o = other.gameObject;
+            
+            playerAudioSource.PlayOneShot(noHitBlade);
             
             //DMG du player sur les enemy
             if (o.CompareTag("Enemy"))
