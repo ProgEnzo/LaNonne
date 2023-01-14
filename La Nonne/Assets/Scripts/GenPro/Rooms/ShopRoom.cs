@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class ShopRoom : RoomGenerator
 {
-    public GameObject shopKeeper;
-    
     public List<ItemPlacementData> itemData;
 
     [SerializeField]
@@ -21,11 +19,6 @@ public class ShopRoom : RoomGenerator
             prefabPlacer.PlaceAllItems(itemData, itemPlacementHelper);
 
         Vector2Int shopKeeperSpawnPoint = roomCenter;
-
-        GameObject playerObject 
-            = prefabPlacer.CreateObject(shopKeeper, shopKeeperSpawnPoint + new Vector2(0.5f, 0.5f));
- 
-        placedObjects.Add(playerObject);
 
         return placedObjects;
     }
