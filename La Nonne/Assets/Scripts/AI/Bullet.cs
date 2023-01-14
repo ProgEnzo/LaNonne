@@ -21,8 +21,7 @@ namespace AI
             {
                 player.TakeDamage(soTrashMobRange.bulletDamage);
                 Destroy(gameObject);
-                Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, FOR THIS AMOUNT OF DMG : " + soTrashMobRange.bulletDamage);
-            
+                // Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, FOR THIS AMOUNT OF DMG : " + soTrashMobRange.bulletDamage);
             }
         }
 

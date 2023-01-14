@@ -84,6 +84,7 @@ namespace AI.Elite
         public override void TakeDamageFromPlayer(int damage)
         {
             currentHealth -= damage;
+            StartCoroutine(EnemyIsHit());
             EnemyDeath();
             stunBarCurrentDamages += damage;
             if (stunBarCurrentDamages < soAutophagic.stunBarMaxDamages) return;

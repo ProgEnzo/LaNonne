@@ -21,7 +21,6 @@ namespace AI.Elite
                 if (col.gameObject.CompareTag("Player"))
                 {
                     col.GetComponent<PlayerController>().TakeDamage(healer is CareTaker taker ? taker.soCaretaker.circleDamage : ((TDI)healer).soTdi.circleDamage); //Player takes damage
-                    StartCoroutine(EnemyController.PlayerIsHit());
                 }
             }
         }
