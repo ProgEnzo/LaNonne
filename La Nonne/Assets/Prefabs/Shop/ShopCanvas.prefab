@@ -1588,6 +1588,7 @@ GameObject:
   - component: {fileID: 5182334781402109940}
   - component: {fileID: 5182334781402109947}
   - component: {fileID: 2276658236292201504}
+  - component: {fileID: 6170267102226362980}
   m_Layer: 5
   m_Name: ShopPanel (backGround)
   m_TagString: ShopPanel
@@ -1697,7 +1698,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 7361b6bbc71f84e4e9f80d91f282269e, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -1705,6 +1706,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6170267102226362980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5182334781402109945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d0f9a905eefbd54a88c9530dbc1f051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 2276658236292201504}
+  shopMenu: {fileID: 5182334781402109945}
 --- !u!1 &5182334781515108874
 GameObject:
   m_ObjectHideFlags: 0
@@ -2343,7 +2358,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontSize: 30
-  m_fontSizeBase: 36
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
