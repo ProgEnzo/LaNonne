@@ -41,6 +41,11 @@ namespace Shop.UI
       private DialoguesManager dialoguesManager;
       [SerializeField] private TextMeshProUGUI dialogueText;
       [SerializeField] private float timeByCharacter;
+      
+      [Header("SoundEffect")]
+      public AudioSource shopAudioSource;
+      public AudioClip shopBuyItemAudioClip;
+      public AudioClip shopItemNotAffordableAudioClip;
 
       private void Start()
       {
@@ -268,6 +273,9 @@ namespace Shop.UI
             //ADD SCORE FOR BUYING ITEMS
             scoreManager.AddBoughtItemScore(100);
             
+            //SOUND AFFORDABLE
+            shopAudioSource.PlayOneShot(shopBuyItemAudioClip);
+            
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
             for (var j = 0; j < 3; j++)
             {
@@ -279,6 +287,14 @@ namespace Shop.UI
                CloseShop();
                PlayerController.Die();
             }
+         }
+         else if (PlayerController.instance.currentEp <
+                  effectManager.effectDictionary[(int)effectsInTheShop[buttonNumber]][
+                     EffectManager.instance.effectInventory[effectsInTheShop[buttonNumber]]].cost)
+         {
+            //SOUND NOT AFFORDABLE
+            shopAudioSource.PlayOneShot(shopItemNotAffordableAudioClip);
+
          }
       }
    }
