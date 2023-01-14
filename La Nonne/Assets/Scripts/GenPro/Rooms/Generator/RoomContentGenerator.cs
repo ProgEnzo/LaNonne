@@ -241,24 +241,24 @@ public class RoomContentGenerator : MonoBehaviour
     #region HasMap
     private bool hasLeftMap(Vector2Int from)
     {
-        return tilemapVisualizer.hasCorridor(from.x - 11, from.y);
+        return tilemapVisualizer.hasCorridor(from.x - 9, from.y);
     }
     
     private bool hasRightMap(Vector2Int from)
     {
-        return tilemapVisualizer.hasCorridor(from.x + 11, from.y);
+        return tilemapVisualizer.hasCorridor(from.x + 9, from.y);
     }
 
     private bool hasTopMap(Vector2Int from)
     {
   
-        return tilemapVisualizer.hasCorridor(from.x, from.y+11);
+        return tilemapVisualizer.hasCorridor(from.x, from.y+9);
     }
     
     private bool hasBottomMap(Vector2Int from)
     {
 
-        return tilemapVisualizer.hasCorridor(from.x, from.y-11);
+        return tilemapVisualizer.hasCorridor(from.x, from.y-9);
     }
     #endregion
 
@@ -445,7 +445,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == 44)
+            if (DijkstraAlgorithm.distanceDictionary [shop] == 36)
             {
                 shopRoomPosition = shop;
                 
@@ -465,7 +465,7 @@ public class RoomContentGenerator : MonoBehaviour
         Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
         foreach (var shop in dungeonData.roomsDictionary.Keys) 
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 44) //22 étant la longueur des couloirs ou "corridors Length" dans l'IDE
+            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 36) //18 étant la longueur des couloirs ou "corridors Length" dans l'IDE
             {
                 shopRoomPosition2 = shop;
                 
@@ -491,7 +491,7 @@ public class RoomContentGenerator : MonoBehaviour
             {
                 int distance = GetDistanceWithNearestShop(shop);
 
-                if (distance <= 22)
+                if (distance <= 18)
                 {
                     var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
                     tempDico.Remove(shopRoomPositionInter);
@@ -499,7 +499,7 @@ public class RoomContentGenerator : MonoBehaviour
                     break;
                 }
 
-                int mapDistance = (distance - 22) / 22;
+                int mapDistance = (distance - 18) / 18;
                 
                 float ratio = multiplierPerDistance.Count > mapDistance ? multiplierPerDistance[mapDistance] : multiplierPerDistance[^1];
 
@@ -511,7 +511,7 @@ public class RoomContentGenerator : MonoBehaviour
                     break;
                 }
                 
-                if (GetDistanceWithNearestShop(shop) > 22)
+                if (GetDistanceWithNearestShop(shop) > 18)
                 {
                     var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
                     spawnedObjects.AddRange(shopRoom.ProcessRoom(shopRoomPositionInter, dungeonData.roomsDictionary[shopRoomPositionInter], dungeonData.GetRoomFloorWithoutCorridors(shopRoomPositionInter)));
@@ -538,7 +538,7 @@ public class RoomContentGenerator : MonoBehaviour
             foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary) //roomData n'est pas bon
             {
                 var distanceBeforeCalc = DijkstraAlgorithm.distanceDictionary[roomData.Key];
-                var distance = distanceBeforeCalc / 22;
+                var distance = distanceBeforeCalc / 18;
 
                 if (distance <= 1) // Game Tutorial // 1
                     spawnedObjects.AddRange(enemyRoom[0].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
@@ -569,7 +569,7 @@ public class RoomContentGenerator : MonoBehaviour
             
             foreach (var preBoss in dungeonData.roomsDictionary.Keys)
             {
-                if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 44)
+                if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 36)
                 {
                     preBossRoomPosition = preBoss;
                     
