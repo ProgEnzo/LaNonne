@@ -418,10 +418,10 @@ MonoBehaviour:
   timeToAccess: 0.5
   numberOfOfferedObjects: 3
   maxNumberOfTakenObjects: 2
-  uiAnimShop: {fileID: 6170267102226362980}
+  uiAnimShop: {fileID: 8367047880321823878}
   shopAnimClip: {fileID: 7400000, guid: 5bbe1a5e1b4414545bc1ce75fadd38af, type: 2}
   dialogueText: {fileID: 3096433105055561718}
-  timeByCharacter: 0.1
+  timeByCharacter: 0.02
 --- !u!1 &6051705388484918692
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,10 +746,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7660146877581081323}
     m_Modifications:
-    - target: {fileID: 2276658236292201504, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
-      propertyPath: m_UpdateMode
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5182334780209611293, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -867,11 +863,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!95 &4477941497325861570 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 2276658236292201504, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
-  m_PrefabInstance: {fileID: 2430968032009340642}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7235569693496466780 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5032034568221170622, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
@@ -893,11 +884,10 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5182334781402109945, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
   m_PrefabInstance: {fileID: 2430968032009340642}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6170267102226362980
+--- !u!114 &8367047880321823878 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 6170267102226362980, guid: c2aae3cc1428c024f80744b4ce023e4b, type: 3}
+  m_PrefabInstance: {fileID: 2430968032009340642}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7374594419227398427}
   m_Enabled: 1
@@ -905,5 +895,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d0f9a905eefbd54a88c9530dbc1f051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 4477941497325861570}
-  shopMenu: {fileID: 7374594419227398427}

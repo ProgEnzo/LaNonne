@@ -182,9 +182,10 @@ namespace Shop.UI
       {
          var chosenList = PlayerController.instance.visitedShopCount switch
          {
-            <= 2 => dialoguesManager.currentTexts1,
-            <= 4 => dialoguesManager.currentTexts2,
-            _ => dialoguesManager.currentTexts3
+            <= 1 => dialoguesManager.currentTexts1,
+            <= 2 => dialoguesManager.currentTexts2,
+            <= 3 => dialoguesManager.currentTexts3,
+            _ => dialoguesManager.currentTexts4
          };
          
          var chosenDialogue = chosenList[Random.Range(0, chosenList.Count)];

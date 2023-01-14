@@ -7,8 +7,9 @@ namespace Shop
     public class DialoguesSO : ScriptableObject
     {
         [Header("Text")]
-        [SerializeField] internal List<string> texts1;
-        [SerializeField] internal List<string> texts2;
-        [SerializeField] internal List<string> texts3;
+        [SerializeField] [TextArea] internal List<string> texts1;
+        [SerializeField] [TextArea] internal List<string> texts2;
+        [SerializeField] [TextArea] internal List<string> texts3;
+        [SerializeField] [TextArea] internal List<string> texts4;
     }
 }

@@ -14,6 +14,7 @@ namespace Manager
         internal List<string> currentTexts1 = new();
         internal List<string> currentTexts2 = new();
         internal List<string> currentTexts3 = new();
+        internal List<string> currentTexts4 = new();
 
         private void Awake()
         {
@@ -32,6 +33,7 @@ namespace Manager
             currentTexts1 = new List<string>(dialoguesSo.texts1);
             currentTexts2 = new List<string>(dialoguesSo.texts2);
             currentTexts3 = new List<string>(dialoguesSo.texts3);
+            currentTexts4 = new List<string>(dialoguesSo.texts4);
         }
     }
 }
