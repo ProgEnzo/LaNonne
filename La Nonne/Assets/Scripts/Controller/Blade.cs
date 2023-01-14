@@ -38,7 +38,6 @@ namespace Controller
         [Header("SoundEffect")] 
         public AudioSource bladeAudioSource;
         public AudioClip[] bladeNoHitSound;
-        public AudioClip[] bladeHitRandomSound;
         private void Start()
         {
             playerController = PlayerController.instance;
@@ -199,9 +198,6 @@ namespace Controller
             //DMG du player sur les enemy
             if (o.CompareTag("Enemy"))
             {
-                //blade hit
-                bladeAudioSource.PlayOneShot(bladeHitRandomSound[Random.Range(0, bladeHitRandomSound.Length)]);
-                
                 camManager.DezoomDuringCombo(hitState);
                 o.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.zealousBladeDamage);
                 
@@ -240,8 +236,6 @@ namespace Controller
             //DMG du player sur le BOSS
             if (o.CompareTag("Boss"))
             {
-                bladeAudioSource.PlayOneShot(bladeHitRandomSound[Random.Range(0, bladeHitRandomSound.Length)]);
-
                 camManager.DezoomDuringCombo(hitState);
                 o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.zealousBladeDamage);
                 if (hitState == soController.zealousBladeMaxHitState)

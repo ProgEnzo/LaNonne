@@ -90,7 +90,7 @@ namespace AI
         #region HealthEnemy
         public virtual void TakeDamageFromPlayer(int damage)
         {
-            //hitAudioSource.PlayOneShot(hitRandomSound[Random.Range(0, hitRandomSound.Length)]);
+            hitAudioSource.PlayOneShot(hitRandomSound[Random.Range(0, hitRandomSound.Length)]);
             currentHealth -= damage * currentDamageMultiplier;
             EnemyDeath();
             
