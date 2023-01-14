@@ -18,7 +18,6 @@ namespace AI.Trash
             //Si le TrashMobClose touche le player
             if (col.gameObject.CompareTag("Player") && !isStunned)
             {
-                StartCoroutine(PlayerIsHit());
                 playerController.TakeDamage(soEnemy.bodyDamage); //Player takes damage
 
                 var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)

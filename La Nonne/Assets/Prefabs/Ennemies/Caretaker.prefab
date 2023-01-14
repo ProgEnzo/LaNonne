@@ -5270,6 +5270,9 @@ MonoBehaviour:
   effectVFXGameObject: {fileID: 2521099293912939185}
   scoreManager: {fileID: 0}
   epDrop: {fileID: 5299797763731125753, guid: b319eb7fdaf9e0f41b2adcacbe08d82e, type: 3}
+  enemyPuppet: {fileID: 9054555756711314310}
+  hitAudioSource: {fileID: 0}
+  hitRandomSound: []
   circle: {fileID: 6820275759136518904}
   circleSprite: {fileID: 6272501255602388926}
   circleSpriteWarning: {fileID: 2277710323370763716}
@@ -10519,6 +10522,11 @@ PrefabInstance:
 --- !u!4 &7881342950426565605 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2348557596571794971, guid: 0de3f4536368c814fa7dde7d7d214add, type: 3}
+  m_PrefabInstance: {fileID: 5618213154174576126}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9054555756711314310 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3485743660308342392, guid: 0de3f4536368c814fa7dde7d7d214add, type: 3}
   m_PrefabInstance: {fileID: 5618213154174576126}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6640210495446988311

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AI.So;
 using Controller;
 using DG.Tweening;
@@ -25,7 +26,6 @@ namespace AI
         internal bool isStunned;
         private AIPath aiPathComponent;
         protected Rigidbody2D rb;
-        private static readonly List<SpriteRenderer> PlayerSpriteRenderers = new();
         internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
         internal readonly float[] stackTimers = new float[3];
         internal readonly bool[] areStacksOn = new bool[3];
@@ -35,8 +35,10 @@ namespace AI
         protected bool isKnockedBack;
 
         [SerializeField] private GameObject epDrop;
+        private List<SpriteRenderer> enemySpriteRenderers = new();
+        [SerializeField] private GameObject enemyPuppet;
         
-        [Header("SoundEffect")] 
+        [Header("SoundEffect")]
         public AudioSource hitAudioSource;
         public AudioClip[] hitRandomSound;
 
@@ -66,6 +68,8 @@ namespace AI
                 stackTimers[i] = 0;
                 areStacksOn[i] = false;
             }
+            
+            enemySpriteRenderers = enemyPuppet.GetComponentsInChildren<SpriteRenderer>(true).ToList();
         }
         
         protected virtual void Update()
@@ -75,15 +79,6 @@ namespace AI
             if (isKnockedBack && rb.velocity.magnitude < 0.01f)
             {
                 isKnockedBack = false;
-            }
-            
-            PlayerSpriteRenderers.Clear();
-            for (var i = 0; i < playerController.transform.childCount; i++)
-            {
-                if (playerController.transform.GetChild(i).TryGetComponent(out SpriteRenderer spriteRenderer))
-                {
-                    PlayerSpriteRenderers.Add(spriteRenderer);
-                }
             }
 
             HealCeiling();
@@ -96,6 +91,7 @@ namespace AI
         {
             //hitAudioSource.PlayOneShot(hitRandomSound[Random.Range(0, hitRandomSound.Length)]);
             currentHealth -= damage * currentDamageMultiplier;
+            StartCoroutine(EnemyIsHit());
             EnemyDeath();
         }
 
@@ -182,14 +178,14 @@ namespace AI
             }
         }
 
-        protected internal static IEnumerator PlayerIsHit()
+        protected IEnumerator EnemyIsHit()
         {
-            foreach (var spriteRenderer in PlayerSpriteRenderers)
+            foreach (var spriteRenderer in enemySpriteRenderers)
             {
                 spriteRenderer.color = Color.red;
             }
-            yield return new WaitForSeconds(0.1f);
-            foreach (var spriteRenderer in PlayerSpriteRenderers)
+            yield return new WaitForSeconds(0.2f);
+            foreach (var spriteRenderer in enemySpriteRenderers)
             {
                 spriteRenderer.color = Color.white;
             }

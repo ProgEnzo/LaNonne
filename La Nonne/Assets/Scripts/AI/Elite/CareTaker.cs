@@ -131,7 +131,6 @@ namespace AI.Elite
             //Si le bully touche le player
             if (col.gameObject.CompareTag("Player"))
             {
-                StartCoroutine(PlayerIsHit());
                 playerController.TakeDamage(soCaretaker.bodyDamage); //Player takes damage
 
                 var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)

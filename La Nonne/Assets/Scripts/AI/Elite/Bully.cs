@@ -25,7 +25,6 @@ namespace AI.Elite
                 animator.SetBool(IsAttacking, true);
                 StartCoroutine(AnimationAttackFalse());
                 
-                StartCoroutine(PlayerIsHit());
                 playerController.TakeDamage(soBully.bodyDamage); //Player takes damage
 
                 var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)

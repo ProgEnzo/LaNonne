@@ -64,7 +64,6 @@ namespace AI.Elite
                 {
                     foreach (var playerGameObject in objectsInArea.Select(hit => hit.collider.gameObject).Where(playerGameObject => playerGameObject.CompareTag("Player")))
                     {
-                        StartCoroutine(EnemyController.PlayerIsHit());
                         playerRef.TakeDamage(soPyromaniac.bodyDamage); //Le joueur prend des dégâts
 
                         var direction = (playerGameObject.transform.position - transform.position).normalized;
@@ -97,7 +96,6 @@ namespace AI.Elite
             {
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
                 {
-                    StartCoroutine(EnemyController.PlayerIsHit());
                     playerRef.TakeDamage(soPyromaniac.bodyDamage); //Le joueur prend des dégâts
                 }
             }

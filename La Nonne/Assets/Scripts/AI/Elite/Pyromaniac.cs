@@ -186,7 +186,6 @@ namespace AI.Elite
         
         private IEnumerator FireDamage()
         {
-            StartCoroutine(PlayerIsHit());
             playerController.TakeDamage(soEnemy.bodyDamage);
             yield return new WaitForSeconds(1f);
             currentHittingCoroutine = null;
@@ -206,7 +205,6 @@ namespace AI.Elite
             {
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
                 {
-                    StartCoroutine(PlayerIsHit());
                     playerController.TakeDamage(soEnemy.bodyDamage); //Le joueur prend des dégâts
                 }
             }
@@ -281,7 +279,6 @@ namespace AI.Elite
             
             if (other.gameObject.CompareTag("Player"))
             {
-                StartCoroutine(PlayerIsHit());
                 other.gameObject.GetComponent<PlayerController>().TakeDamage(soEnemy.bodyDamage);
             }
         }

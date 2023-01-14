@@ -41,6 +41,7 @@ namespace Controller
         
         [Header("Health")]
         private int currentHealth;
+        private List<SpriteRenderer> playerSpriteRenderers = new();
 
         [Header("Revealing Dash")]
         internal bool isRevealingDashHitting;
@@ -129,6 +130,8 @@ namespace Controller
             {
                 prefab.SetActive(false);
             }
+
+            playerSpriteRenderers = GetComponentsInChildren<SpriteRenderer>(true).ToList();
         }
 
         private void Start()
@@ -342,6 +345,7 @@ namespace Controller
         {
             currentHealth -= damage;
             healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
+            StartCoroutine(PlayerIsHit());
             camManager.PlayerHasBeenHitByEnnemy();
             //Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
             
@@ -372,6 +376,19 @@ namespace Controller
             if (currentHealth > soController.maxHealth)
             {
                 currentHealth = soController.maxHealth;
+            }
+        }
+
+        private IEnumerator PlayerIsHit()
+        {
+            foreach (var spriteRenderer in playerSpriteRenderers)
+            {
+                spriteRenderer.color = Color.red;
+            }
+            yield return new WaitForSeconds(0.2f);
+            foreach (var spriteRenderer in playerSpriteRenderers)
+            {
+                spriteRenderer.color = Color.white;
             }
         }
         
