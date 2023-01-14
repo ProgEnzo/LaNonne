@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.Rendering.PostProcessing;
+using Random = UnityEngine.Random;
 
 namespace Controller
 {
@@ -90,6 +91,10 @@ namespace Controller
         private float minCA = 5f;
         private float maxCA = 15f; //Lerp the value between those 2 en fonction de la distance player/boss, donc dans un update
 
+        [Header("SoundEffect")]
+        public AudioSource playerAudioSource;
+        public AudioClip[] dashAudioClip;
+
 
         // public Vector2 bossPos;
         // public Vector2 currentPos;
@@ -166,6 +171,9 @@ namespace Controller
         {
             if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
+                //Dash sound
+                playerAudioSource.PlayOneShot(dashAudioClip[Random.Range(0, dashAudioClip.Length)]);
+                
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
                 camManager.PlayerDashStateChange();
