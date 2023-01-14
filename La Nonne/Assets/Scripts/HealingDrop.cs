@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using DG.Tweening;
+using Manager;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -39,6 +40,7 @@ public class HealingDrop : MonoBehaviour
         {
             playerController.HealPlayer(20);
             Destroy(gameObject);
+            CamManager.instance.PlayerIsHealing();
             isMagnet = false;
         }
     }
