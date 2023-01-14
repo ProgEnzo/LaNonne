@@ -95,6 +95,9 @@ namespace Controller
         public AudioSource playerAudioSource;
         public AudioClip[] dashAudioClip;
 
+        public AudioSource epAudioSource;
+        public AudioClip epAudioClip;
+
 
         // public Vector2 bossPos;
         // public Vector2 currentPos;
@@ -212,6 +215,9 @@ namespace Controller
         
         public void AddEp(int epGain)
         {
+            //ep sound
+            epAudioSource.PlayOneShot(epAudioClip);
+
             currentEp += epGain;
         }
     

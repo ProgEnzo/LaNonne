@@ -8,7 +8,6 @@ namespace Controller
         [SerializeField] private int epValue;
         [SerializeField] private PlayerController playerController;
         private ScoreManager scoreManager;
-
         private void Start()
         {
             playerController = PlayerController.instance;
