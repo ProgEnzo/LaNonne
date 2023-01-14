@@ -27,6 +27,7 @@ namespace Manager
         
         private static readonly int ChainBladeState = Animator.StringToHash("ChainBladeState");
         private static readonly int BladeState = Animator.StringToHash("chainBladeState");
+        private static readonly int IsHealing = Animator.StringToHash("playerIsHealing");
 
         private void Awake()
         {
@@ -81,6 +82,18 @@ namespace Manager
             {
                 animator.SetInteger(BocalDestroy, state);
             }
+        }
+
+        internal void PlayerIsHealing()
+        {
+            StartCoroutine(PlayerIsHealingCoroutine());
+        }
+        
+        private IEnumerator PlayerIsHealingCoroutine()
+        {
+            animator.SetInteger(IsHealing, 1);
+            yield return new WaitForSeconds(0.2f);
+            animator.SetInteger(IsHealing, 0);
         }
 
         internal void PlayerHasBeenHitByEnnemy()
