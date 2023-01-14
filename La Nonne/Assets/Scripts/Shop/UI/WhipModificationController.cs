@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using Manager;
 using TMPro;
@@ -9,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Shop.UI
 {
-   public class WhipModifController : MonoBehaviour
+   public class WhipModificationController : MonoBehaviour
    {
       [Header("References")]
       [SerializeField] private GameObject whipModificationMenu;
@@ -22,13 +21,12 @@ namespace Shop.UI
       private bool isInTrigger;
 
       private UIManager uiManager;
-      private EffectManager effectManager;
-      private bool isWhipModifOpened;
+      private bool isWhipModificationMenuOpened;
       private static EffectManager.Effect _selectedEffect;
       public UiAnimWhipModifMenu uiAnimWhipModifMenu;
       [SerializeField] private AnimationClip whipModifMenuAnimClip;
       
-      [SerializeField] private List<GameObject> gems;
+      private readonly List<List<TextMeshProUGUI>> effectVariableTextComponents = new();
 
       private void Start()
       {
@@ -38,9 +36,24 @@ namespace Shop.UI
          //image.DORectTransformMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutFlash); Merci Mathieu je vais voir ca ce soir !!
 
          timerInputPressed = 0f;
-         effectManager = EffectManager.instance;
          uiManager = UIManager.instance;
-         isWhipModifOpened = false;
+         isWhipModificationMenuOpened = false;
+
+         for (var i = 1; i < 4; i++)
+         {
+            effectVariableTextComponents.Add(new List<TextMeshProUGUI>());
+            for (var j = 0; j < EffectManager.instance.effectInventory.Count; j++)
+            {
+               effectVariableTextComponents[i-1].Add(whipModificationMenu.transform.GetChild(1).GetChild(j).GetChild(i).GetComponent<TextMeshProUGUI>());
+            }
+         }
+
+         //Texte des effets
+         for (var i = 0; i < EffectManager.instance.effectInventory.Count; i++)
+         {
+            whipModificationMenu.transform.GetChild(1).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ((EffectManager.Effect)i).ToString();
+         }
+         ChangeEffectTexts();
       }
 
       private IEnumerator BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp()
@@ -79,7 +92,7 @@ namespace Shop.UI
             OpenWhipModificationMenu();
          }
          
-         if (Input.GetKeyDown(KeyCode.Escape) && isWhipModifOpened)
+         if (Input.GetKeyDown(KeyCode.Escape) && isWhipModificationMenuOpened)
          {
             CloseWhipModificationMenu();
          }
@@ -92,9 +105,9 @@ namespace Shop.UI
             timerInputPressed += Time.deltaTime;
             image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
 
-            if (timerInputPressed > timeToAccess - 0.05f && !isWhipModifOpened)
+            if (timerInputPressed > timeToAccess - 0.05f && !isWhipModificationMenuOpened)
             {
-               isWhipModifOpened = true;
+               isWhipModificationMenuOpened = true;
                uiManager.isWhipMenuOpened = true;
                
                uiManager.DesactivateInGameUI();
@@ -102,11 +115,6 @@ namespace Shop.UI
                whipModificationMenu.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
                uiAnimWhipModifMenu.OpenMenu();
                Time.timeScale = 0;
-               
-               for (var i = 0; i < EffectManager.instance.effectInventory.Count; i++)
-               {
-                  whipModificationMenu.transform.GetChild(1).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ((EffectManager.Effect)i).ToString(); // + "\n\n" + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
-               }
 
                for (var i = 0; i < EffectManager.instance.appliedEffects.Length; i++)
                {
@@ -115,6 +123,7 @@ namespace Shop.UI
                      whipModificationMenu.transform.GetChild(i+3).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[i] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[i]];
                   }
                }
+               ChangeEffectTexts();
             }
          }
 
@@ -133,7 +142,7 @@ namespace Shop.UI
 
       public void CloseWhipModificationMenu()
       {
-         isWhipModifOpened = false;
+         isWhipModificationMenuOpened = false;
          StartCoroutine(DisableIsWhipMenuOpenedCoroutine());
          uiAnimWhipModifMenu.CloseMenu();
          StartCoroutine(DisableWhipMenuOpenedCoroutine());
@@ -155,11 +164,30 @@ namespace Shop.UI
          EffectManager.instance.appliedEffects[slotIndex] = _selectedEffect;
          //whipModificationMenu.transform.GetChild(selectedEffectEmplacement+3).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[selectedEffectEmplacement] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[selectedEffectEmplacement]];
       }
-      
+
       private IEnumerator DisableWhipMenuOpenedCoroutine()
       {
          yield return new WaitForSecondsRealtime(whipModifMenuAnimClip.length);
          uiManager.isWhipMenuOpened = false;
+      }
+
+      private void ChangeEffectTexts()
+      {
+         for (var i = 0; i < EffectManager.instance.effectInventory.Count; i++)
+         {
+            if (EffectManager.instance.effectInventory[(EffectManager.Effect)i] == 0)
+            {
+               effectVariableTextComponents[0][i].text = "";
+               effectVariableTextComponents[1][i].text = "Not acquired.";
+               effectVariableTextComponents[2][i].text = "";
+            }
+            else
+            {
+               effectVariableTextComponents[0][i].text = EffectManager.instance.effectDictionary[i][EffectManager.instance.effectInventory[(EffectManager.Effect)i]-1].superEffectDescription;
+               effectVariableTextComponents[1][i].text = "Level : " + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
+               effectVariableTextComponents[2][i].text = "Probability : " + EffectManager.instance.effectDictionary[i][EffectManager.instance.effectInventory[(EffectManager.Effect)i]-1].chanceToBeApplied + "%";
+            }
+         }
       }
    }
 }

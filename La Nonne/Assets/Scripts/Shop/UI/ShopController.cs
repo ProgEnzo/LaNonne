@@ -146,7 +146,7 @@ namespace Shop.UI
                            EffectManager.instance.effectInventory[effectsInTheShop[i]]].cost;
                      shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text =
                         effectManager.effectDictionary[(int)effectsInTheShop[i]][
-                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].description;
+                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].effectDescription;
                   }
                   else
                   {

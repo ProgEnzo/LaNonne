@@ -42,7 +42,7 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
             isDragging = true;
             isAnyDragging = true;
             GetComponent<Image>().raycastTarget = false;
-            WhipModifController.SelectEffect(buttonNumber);
+            WhipModificationController.SelectEffect(buttonNumber);
         }
     }
 

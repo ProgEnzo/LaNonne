@@ -34,6 +34,6 @@ public class Drop : MonoBehaviour, IDropHandler
         pointerDrag.transform.SetParent(transform);
         pointerDrag.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         pointerDrag.GetComponent<RectTransform>().localPosition = Vector2.zero;
-        WhipModifController.AttachEffect(slotIndex);
+        WhipModificationController.AttachEffect(slotIndex);
     }
 }
