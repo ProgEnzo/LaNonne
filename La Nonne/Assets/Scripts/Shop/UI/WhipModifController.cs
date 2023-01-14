@@ -15,7 +15,7 @@ namespace Shop.UI
       [SerializeField] private GameObject whipModificationMenu;
       public GameObject shopCanvas;
       public Image image;
-   
+
       [SerializeField] private float timeToAccess;
 
       private float timerInputPressed;
@@ -25,6 +25,8 @@ namespace Shop.UI
       private EffectManager effectManager;
       private bool isWhipModifOpened;
       private static EffectManager.Effect _selectedEffect;
+      public UiAnimWhipModifMenu uiAnimWhipModifMenu;
+      [SerializeField] private AnimationClip whipModifMenuAnimClip;
       
       [SerializeField] private List<GameObject> gems;
 
@@ -98,6 +100,7 @@ namespace Shop.UI
                uiManager.DesactivateInGameUI();
                
                whipModificationMenu.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
+               uiAnimWhipModifMenu.OpenMenu();
                Time.timeScale = 0;
                
                for (var i = 0; i < EffectManager.instance.effectInventory.Count; i++)
@@ -132,7 +135,8 @@ namespace Shop.UI
       {
          isWhipModifOpened = false;
          StartCoroutine(DisableIsWhipMenuOpenedCoroutine());
-         whipModificationMenu.SetActive(false);
+         uiAnimWhipModifMenu.CloseMenu();
+         StartCoroutine(DisableWhipMenuOpenedCoroutine());
          
          uiManager.ActivateInGameUI();
 
@@ -150,6 +154,12 @@ namespace Shop.UI
       {
          EffectManager.instance.appliedEffects[slotIndex] = _selectedEffect;
          //whipModificationMenu.transform.GetChild(selectedEffectEmplacement+3).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[selectedEffectEmplacement] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[selectedEffectEmplacement]];
+      }
+      
+      private IEnumerator DisableWhipMenuOpenedCoroutine()
+      {
+         yield return new WaitForSecondsRealtime(whipModifMenuAnimClip.length);
+         uiManager.isWhipMenuOpened = false;
       }
    }
 }

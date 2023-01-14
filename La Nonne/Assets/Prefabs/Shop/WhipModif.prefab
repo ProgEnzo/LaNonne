@@ -415,6 +415,8 @@ MonoBehaviour:
   shopCanvas: {fileID: 1985089852169162252}
   image: {fileID: 1926600453068554265}
   timeToAccess: 0.5
+  uiAnimWhipModifMenu: {fileID: 9092215985483530443}
+  whipModifMenuAnimClip: {fileID: 7400000, guid: cbead7341a8a21f42b9e72876d323123, type: 2}
   gems:
   - {fileID: 2184264097796312453, guid: d98dba957a7d1f5469db18731cc729d3, type: 3}
 --- !u!1 &6867649739143516577
@@ -1185,7 +1187,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 2c2ab8701b05f994c8793ce2cabdfba4, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -1205,6 +1207,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c7786af094cc0f4082750857595ea47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 9033528711453790850}
+  whipModifMenu: {fileID: 7701965138238829856}
 --- !u!224 &7701965138238829863 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6126189820985876804, guid: 8d11dc172cf123a44ba270c2a2f60239, type: 3}
