@@ -132,8 +132,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageAndEffectMultiplier: 0.5
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
-  whipchainAudioSource: {fileID: 0}
-  whipchainRandomSound: []
 --- !u!61 &8777334782906009103
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -310,15 +308,6 @@ MonoBehaviour:
   bladeAudioSource: {fileID: 5104407718839404324}
   bladeNoHitSound:
   - {fileID: 8300000, guid: 8a165ed522854da449c78ec54c1a30e0, type: 3}
-  bladeHitRandomSound:
-  - {fileID: 8300000, guid: eae1038e37be79c4599c8e41d66a2aee, type: 3}
-  - {fileID: 8300000, guid: e585ce79ce6c44b40b1f4e595873ac79, type: 3}
-  - {fileID: 8300000, guid: a6c4a6308fec7404d9138b99ffb1a475, type: 3}
-  - {fileID: 8300000, guid: 37bc405ea2a891b40b493f239cbed898, type: 3}
-  - {fileID: 8300000, guid: a9fc112b35e5fd045ba0d9031daf7f8c, type: 3}
-  - {fileID: 8300000, guid: 39d3f97e3aa6e7145a0fa9cc44b7cc45, type: 3}
-  - {fileID: 8300000, guid: c732791a2ef53cd42a4ae67201c21f0b, type: 3}
-  - {fileID: 8300000, guid: 56ec1bcf451872c43a7e485973345ec1, type: 3}
 --- !u!61 &4579524371399318225
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -623,16 +612,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageAndEffectMultiplier: 1
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
-  whipchainAudioSource: {fileID: 8555741374584997113}
-  whipchainRandomSound:
-  - {fileID: 8300000, guid: eae1038e37be79c4599c8e41d66a2aee, type: 3}
-  - {fileID: 8300000, guid: e585ce79ce6c44b40b1f4e595873ac79, type: 3}
-  - {fileID: 8300000, guid: a6c4a6308fec7404d9138b99ffb1a475, type: 3}
-  - {fileID: 8300000, guid: 37bc405ea2a891b40b493f239cbed898, type: 3}
-  - {fileID: 8300000, guid: a9fc112b35e5fd045ba0d9031daf7f8c, type: 3}
-  - {fileID: 8300000, guid: 39d3f97e3aa6e7145a0fa9cc44b7cc45, type: 3}
-  - {fileID: 8300000, guid: c732791a2ef53cd42a4ae67201c21f0b, type: 3}
-  - {fileID: 8300000, guid: 56ec1bcf451872c43a7e485973345ec1, type: 3}
 --- !u!61 &5586780846923645881
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -904,17 +883,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
   whipchainAudioSource: {fileID: 1626340955724197861}
-  whipchainSound:
-  - {fileID: 8300000, guid: 68f2d6c6fe287de42be7077c587113d0, type: 3}
-  whipchainRandomSound:
-  - {fileID: 8300000, guid: eae1038e37be79c4599c8e41d66a2aee, type: 3}
-  - {fileID: 8300000, guid: e585ce79ce6c44b40b1f4e595873ac79, type: 3}
-  - {fileID: 8300000, guid: a6c4a6308fec7404d9138b99ffb1a475, type: 3}
-  - {fileID: 8300000, guid: 37bc405ea2a891b40b493f239cbed898, type: 3}
-  - {fileID: 8300000, guid: a9fc112b35e5fd045ba0d9031daf7f8c, type: 3}
-  - {fileID: 8300000, guid: 39d3f97e3aa6e7145a0fa9cc44b7cc45, type: 3}
-  - {fileID: 8300000, guid: c732791a2ef53cd42a4ae67201c21f0b, type: 3}
-  - {fileID: 8300000, guid: 56ec1bcf451872c43a7e485973345ec1, type: 3}
+  whipchainSound: {fileID: 8300000, guid: ced9d627e9dce664a9e171b77f0b9837, type: 3}
 --- !u!82 &1626340955724197861
 AudioSource:
   m_ObjectHideFlags: 0

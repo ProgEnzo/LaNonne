@@ -30,6 +30,10 @@ namespace Controller
         private InputManager inputManager;
         private UIManager uiManager;
         private CamManager camManager;
+        
+        [Header("SoundEffect")] 
+        public AudioSource whipchainAudioSource;
+        public AudioClip whipchainSound;
 
 
         // Start is called before the first frame update
@@ -81,6 +85,8 @@ namespace Controller
             }
             if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
             {
+                whipchainAudioSource.PlayOneShot(whipchainSound);
+                
                 isWarningOn = false;
                 transform.GetChild(2).localScale = new Vector3(Mathf.Abs(warningScale.x), Mathf.Abs(warningScale.y), Mathf.Abs(warningScale.z));
                 transform.GetChild(2).gameObject.SetActive(false);
