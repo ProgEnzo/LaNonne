@@ -1,4 +1,6 @@
 using System.Collections;
+using Controller;
+using Manager;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +12,7 @@ namespace Help
 
         private RoomContentGenerator roomContentGenerator;
         private Rigidbody2D rb;
+        private UIManager uiManager;
 
         public float speedForBouboule = 3f;
         public float timeToDestroyBouboule = 2f;
@@ -19,6 +22,8 @@ namespace Help
 
         public void OnEnable()
         {
+            uiManager = UIManager.instance;
+            
             if (GameObject.Find("RoomContentGenerator") != null)
             {
                 roomContentGenerator = GameObject.Find("RoomContentGenerator").GetComponent<RoomContentGenerator>();
@@ -28,7 +33,7 @@ namespace Help
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A) && currentTimeBeforeNextBouboule <= 0f)
+            if (Input.GetKeyDown(KeyCode.A) && currentTimeBeforeNextBouboule <= 0f && !uiManager.IsAnyMenuOpened()) // && PlayerController.instance.
             {
                 rb = Instantiate(epHelp, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
                 if (roomContentGenerator != null)

@@ -172,7 +172,8 @@ namespace Controller
 
         public void Update()
         {
-            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
+            //Dash
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.IsAnyMenuOpened())
             {
                 //Dash sound
                 playerAudioSource.PlayOneShot(dashAudioClip[Random.Range(0, dashAudioClip.Length)]);
@@ -191,15 +192,17 @@ namespace Controller
                 timerDash -= Time.deltaTime;
             }
             
-            // SlowMoManager();
+            //Revealing Dash
             RevealingDashStart();
             RevealingDash();
             RevealingDashFocus();
             RevealingDashStop();
 
+            //Mise en commun slow mo speed
             currentAnimPrefabAnimator.SetFloat(SlowMoMoveSpeed, currentSlowMoPlayerMoveSpeedFactor);
             currentAnimPrefabAnimator.SetFloat(SlowMoAttackSpeed, currentSlowMoPlayerAttackSpeedFactor);
             
+            //Cooldown Revealing Dash
             if (currentRevealingDashCooldown > 0)
             {
                 currentRevealingDashCooldown -= Time.deltaTime;
@@ -209,6 +212,7 @@ namespace Controller
         
         public void FixedUpdate()
         {
+            //Movement
             mRigidbody.drag = soController.dragDeceleration * soController.dragMultiplier;
             ManageMove();
         }
@@ -225,19 +229,19 @@ namespace Controller
         
         private void ManageMove()
         {
-            var speed = timerDash <= 0 ? soController.moveSpeed : soController.dashSpeed; // for movement
-            var movingState = timerDash <= 0 ? 2 : 3; // for animation
+            var speed = timerDash <= 0 ? soController.moveSpeed : soController.dashSpeed;
+            var movingState = timerDash <= 0 ? 2 : 3;
 
             var nbInputs = (Input.GetKey(inputManager.upMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.leftMoveKey) ? 1 : 0) +
-                           (Input.GetKey(inputManager.downMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.rightMoveKey) ? 1 : 0); // for movement
+                           (Input.GetKey(inputManager.downMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.rightMoveKey) ? 1 : 0);
             
-            if (nbInputs > 1) speed *= 0.75f; // for movement
+            if (nbInputs > 1) speed *= 0.75f;
             
-            var localScale = transform.localScale; // for animation
+            var localScale = transform.localScale;
 
             direction = (Vector2.zero, Vector2.zero);
 
-            if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened) // for input
+            if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.IsAnyMenuOpened())
             {
                 
                 isMoving = true; // for animation
@@ -252,7 +256,7 @@ namespace Controller
                 direction.horizontal = Vector2.left;
             }
 
-            if (Input.GetKey(inputManager.rightMoveKey) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened) // for input
+            if (Input.GetKey(inputManager.rightMoveKey) && !uiManager.IsAnyMenuOpened())
             {
                 isMoving = true; // for animation
                 isMovingProfile = true; // for movement
@@ -266,7 +270,7 @@ namespace Controller
                 direction.horizontal = direction.horizontal == Vector2.left ? Vector2.zero : Vector2.right;
             }
 
-            if (Input.GetKey(inputManager.upMoveKey) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened) // for input
+            if (Input.GetKey(inputManager.upMoveKey) && !uiManager.IsAnyMenuOpened())
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement
@@ -282,7 +286,7 @@ namespace Controller
                 direction.vertical = Vector2.up;
             }
 
-            if (Input.GetKey(inputManager.downMoveKey) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened) // for input
+            if (Input.GetKey(inputManager.downMoveKey) && !uiManager.IsAnyMenuOpened())
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement
@@ -298,9 +302,10 @@ namespace Controller
                 direction.vertical = direction.vertical == Vector2.up ? Vector2.zero : Vector2.down;
             }
 
+            //Gestion de l'animation
             if (!isRevealingDashHitting)
             {
-                if (currentAnimPrefabAnimator.GetInteger(AttackState) == 0) // all for animation
+                if (currentAnimPrefabAnimator.GetInteger(AttackState) == 0)
                 {
                     if (isMoving)
                     {
@@ -346,6 +351,8 @@ namespace Controller
                     }
                 }
             }
+            
+            //Réinitialisation des variables
             isMoving = false; // for animation
             isMovingProfile = false; // for movement
             animParametersToChange = (0, 0); // for animation
@@ -477,7 +484,7 @@ namespace Controller
         
         private void RevealingDashStart()
         {
-            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn && currentRevealingDashCooldown <= 0 && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn && currentRevealingDashCooldown <= 0 && !uiManager.IsAnyMenuOpened())
             {
                 var enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero,

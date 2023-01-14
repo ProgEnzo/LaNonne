@@ -66,7 +66,7 @@ namespace Controller
             var parentLocalScale = transform.parent.localScale;
             var warningScale = transform.GetChild(2).localScale;
 
-            if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0 && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
+            if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0 && !uiManager.IsAnyMenuOpened())
             {
                 playerController.currentSlowMoPlayerMoveSpeedFactor = 0f;
                 Time.timeScale = 0.001f;
@@ -76,14 +76,14 @@ namespace Controller
                 isWarningOn = true;
                 //CamManager.instance.ChainBladeCamState(1);
             }
-            if (Input.GetKey(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
+            if (Input.GetKey(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.IsAnyMenuOpened())
             {
                 var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
                 transform.GetChild(2).rotation = Quaternion.LookRotation(Vector3.forward, newDirection);
             }
-            if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
+            if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.IsAnyMenuOpened())
             {
                 whipchainAudioSource.PlayOneShot(whipchainSound);
                 

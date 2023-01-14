@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
 using Controller;
 using Core.Scripts.Utils;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Image = UnityEngine.UI.Image;
 
 namespace Manager
 {
@@ -16,26 +13,21 @@ namespace Manager
     
         [SerializeField] private TMP_Text epCount;
         private InputManager inputManager;
-        private ScoreManager scoreManager;
         private PlayerController playerController;
         
         [Header("Map & MiniMap")] 
-        //public Image mapPanel;
         public GameObject inGameUI;
-        //public GameObject bigMapRender;
-        //public GameObject bigMapCanvas;
-        //public Camera camBigMap;
     
         [Header("Menus")]
         public static GameObject pauseMenu;
         public static GameObject settingsMenu;
         public GameObject gameOverMenu;
-        //public GameObject winMenu;
 
         private static bool _isGamePausedStatic;
         internal bool isGamePaused;
         internal bool isShopOpened;
         internal bool isWhipMenuOpened;
+        internal bool isGameOver;
 
         private void Awake()
         {
@@ -54,62 +46,26 @@ namespace Manager
             _isGamePausedStatic = false;
             isShopOpened = false;
             isWhipMenuOpened = false;
-            //Reference
-        
-            //BIG MAP
+            
             inGameUI = GameObject.Find("InGameUI");
             gameOverMenu = GameObject.Find("GameOverScreen");
-            //camBigMap = GameObject.Find("BigMapCamera").GetComponent<Camera>();
-            //bigMapRender = GameObject.Find("BigMapRender");
-            scoreManager = ScoreManager.instance;
         
             inputManager = InputManager.instance;
             epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TMP_Text>();
 
-            //bigMapCanvas = GameObject.Find("BigMapCanvas");
-            //mapPanel = bigMapCanvas.GetComponent<Image>();
             pauseMenu = GameObject.Find("PauseMenu");
             settingsMenu = GameObject.Find("OptionsMenu");
         
             epCount.text = "EP COUNT : " + 0;
         
-            //pauseMenu.SetActive(false);
             gameOverMenu.SetActive(false);
             settingsMenu.SetActive(false);
-            //bigMapRender.SetActive(false);
-            //scoreManager.scoreText.enabled = false;
 
             StartCoroutine(WaitForPlayer());
         }
 
         private void Update()
         {
-            /*if (Input.GetKey(inputManager.mapKey))
-            {
-                bigMapCanvas.SetActive(true);
-                //scoreManager.scoreText.enabled = true;
-                camBigMap.enabled = true;
-                bigMapRender.SetActive(true);
-                camBigMap.orthographicSize = 300;
-            
-                inGameUI.SetActive(false);
-                mapPanel.DOFade(0.7f, 0.3f);
-            
-            }
-            else
-            {
-                //scoreManager.scoreText.enabled = false;
-                camBigMap.enabled = false;
-                bigMapRender.SetActive(false);
-                camBigMap.orthographicSize = 0;
-                
-                mapPanel.DOFade(0f, 0.3f);
-                bigMapCanvas.SetActive(false);
-            }
-            if (Input.GetKeyUp(inputManager.mapKey))
-            {
-                inGameUI.SetActive(true);
-            }*/
         
             PauseMenuInput();
             isGamePaused = _isGamePausedStatic;
@@ -124,7 +80,7 @@ namespace Manager
 
         private void PauseMenuInput()
         {
-            if (Input.GetKeyDown(KeyCode.Escape) && !isShopOpened && !isWhipMenuOpened)
+            if (Input.GetKeyDown(KeyCode.Escape) && !isShopOpened && !isWhipMenuOpened && !isGameOver)
             {
                 _isGamePausedStatic = !_isGamePausedStatic;
                 PauseMenu(_isGamePausedStatic);
@@ -170,6 +126,7 @@ namespace Manager
         {
             DesactivateInGameUI();
             gameOverMenu.SetActive(true);
+            isGameOver = true;
         }
 
         public void ReloadLevel()
@@ -203,6 +160,11 @@ namespace Manager
         public static void OptionsMenu()
         {
             settingsMenu.SetActive(true);
+        }
+        
+        internal bool IsAnyMenuOpened()
+        {
+            return isGamePaused || isGameOver || isShopOpened || isWhipMenuOpened;
         }
     }
 }
