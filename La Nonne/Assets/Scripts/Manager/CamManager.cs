@@ -104,7 +104,7 @@ namespace Manager
         private IEnumerator DestroyHealthJar()
         {
             animator.SetInteger(BocalDestroy, 1);
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(0.2f);
             animator.SetInteger(BocalDestroy, 0);
         }
 
