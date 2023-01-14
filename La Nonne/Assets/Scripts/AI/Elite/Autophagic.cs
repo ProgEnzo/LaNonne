@@ -83,9 +83,18 @@ namespace AI.Elite
         
         public override void TakeDamageFromPlayer(int damage)
         {
+            //Damages
             currentHealth -= damage;
-            StartCoroutine(EnemyIsHit());
             EnemyDeath();
+            
+            //Blink Hit
+            if (currentIsHitCoroutine != null)
+            {
+                StopCoroutine(currentIsHitCoroutine);
+            }
+            currentIsHitCoroutine = StartCoroutine(EnemyIsHit());
+            
+            //Stun Bar
             stunBarCurrentDamages += damage;
             if (stunBarCurrentDamages < soAutophagic.stunBarMaxDamages) return;
             stunBarCurrentDamages = 0;

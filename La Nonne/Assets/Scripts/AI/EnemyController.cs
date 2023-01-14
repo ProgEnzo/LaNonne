@@ -37,7 +37,8 @@ namespace AI
         [SerializeField] private GameObject epDrop;
         private List<SpriteRenderer> enemySpriteRenderers = new();
         [SerializeField] private GameObject enemyPuppet;
-        
+        protected Coroutine currentIsHitCoroutine;
+
         [Header("SoundEffect")]
         public AudioSource hitAudioSource;
         public AudioClip[] hitRandomSound;
@@ -91,8 +92,13 @@ namespace AI
         {
             //hitAudioSource.PlayOneShot(hitRandomSound[Random.Range(0, hitRandomSound.Length)]);
             currentHealth -= damage * currentDamageMultiplier;
-            StartCoroutine(EnemyIsHit());
             EnemyDeath();
+            
+            if (currentIsHitCoroutine != null)
+            {
+                StopCoroutine(currentIsHitCoroutine);
+            }
+            currentIsHitCoroutine = StartCoroutine(EnemyIsHit());
         }
 
         protected void EnemyDeath()
