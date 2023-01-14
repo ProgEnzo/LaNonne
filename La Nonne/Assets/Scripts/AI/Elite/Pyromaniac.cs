@@ -57,7 +57,7 @@ namespace AI.Elite
             
             //Initialisation du line renderer
             lineRenderer.enabled = false;
-            lineRenderer.widthMultiplier = transform.localScale.x * 2;
+            lineRenderer.widthMultiplier = transform.localScale.x;
         }
 
         protected override void Update()
@@ -91,6 +91,7 @@ namespace AI.Elite
                         scriptAIPath.maxSpeed = 0f; //Le pyromane ne se déplace plus avec A*
                         scriptAIPathState = false; //Le pyromane ne se déplace plus avec A*
                         canBoxCast = false; //La zone de feu du pyromane est désactivée
+                        lineRenderer.enabled = false; //Le line renderer est désactivé
                         
                         //Lancement du projectile
                         var distanceToCross = Mathf.Min(Vector3.Distance(position, playerPosition), soPyromaniac.throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
@@ -152,13 +153,13 @@ namespace AI.Elite
                 }
                 
                 var objectsInArea = new List<RaycastHit2D>();
-                Physics2D.BoxCast(boxCastOrigin, Vector2.one * transform1.localScale * 2, 0f, (boxCastDestination - boxCastOrigin).normalized, new ContactFilter2D(), objectsInArea, currentFireTrailMaxLength);
+                Physics2D.CircleCast(boxCastOrigin, transform1.localScale.x * 0.5f, (boxCastDestination - boxCastOrigin).normalized, new ContactFilter2D(), objectsInArea, currentFireTrailMaxLength);
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
                 {
                     currentHittingCoroutine ??= StartCoroutine(FireDamage());
                 }
-                BoxCastDebug.DrawBoxCast2D(boxCastOrigin, Vector2.one * transform1.localScale * 2, 0f, (boxCastDestination - boxCastOrigin).normalized, currentFireTrailMaxLength, Color.magenta);
-                lineRenderer.SetPosition(0, boxCastOrigin);
+                //BoxCastDebug.DrawBoxCast2D(boxCastOrigin, Vector2.one * transform1.localScale * 2, 0f, (boxCastDestination - boxCastOrigin).normalized, currentFireTrailMaxLength, Color.magenta);
+                lineRenderer.SetPosition(0, Vector2.zero);
                 lineRenderer.SetPosition(1, (boxCastDestination - boxCastOrigin).normalized * currentFireTrailMaxLength);
             }
         }
@@ -242,6 +243,7 @@ namespace AI.Elite
                 isDashing = false;
                 isImpactOn = false;
                 canBoxCast = false;
+                lineRenderer.enabled = false;
             }
         }
 
@@ -251,6 +253,11 @@ namespace AI.Elite
             var position = transform.position;
             Gizmos.DrawWireSphere(position, soPyromaniac.detectionRadius);
             Gizmos.DrawWireSphere(position, soPyromaniac.throwRadius);
+            if (canBoxCast)
+            {
+                Gizmos.DrawWireSphere(boxCastOrigin, transform.localScale.x * 0.5f);
+                Gizmos.DrawWireSphere(boxCastOrigin + (boxCastDestination - boxCastOrigin).normalized * currentFireTrailMaxLength, transform.localScale.x * 0.5f);
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D other)
