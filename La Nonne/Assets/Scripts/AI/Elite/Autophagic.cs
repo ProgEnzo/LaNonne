@@ -1,4 +1,3 @@
-using System.Collections;
 using AI.So;
 using Pathfinding;
 using UnityEngine;
@@ -12,14 +11,12 @@ namespace AI.Elite
         private bool isActivated;
         private readonly int[] positionMultiplierArray = {-1, 1};
         private AIPath aiPath;
-        private int stunBarCurrentDamages;
         private SoAutophagic soAutophagic;
 
         private void Awake()
         {
             soAutophagic = (SoAutophagic) soEnemy;
             aiPath = GetComponent<AIPath>();
-            stunBarCurrentDamages = 0;
         }
 
         protected override void Update()
@@ -79,33 +76,6 @@ namespace AI.Elite
         {
             currentHealth -= (int)(soAutophagic.maxHealth * soAutophagic.autoDamagePart);
             EnemyDeath();
-        }
-        
-        public override void TakeDamageFromPlayer(int damage)
-        {
-            //Damages
-            currentHealth -= damage;
-            EnemyDeath();
-            
-            //Blink Hit
-            if (currentIsHitCoroutine != null)
-            {
-                StopCoroutine(currentIsHitCoroutine);
-            }
-            currentIsHitCoroutine = StartCoroutine(EnemyIsHit());
-            
-            //Stun Bar
-            stunBarCurrentDamages += damage;
-            if (stunBarCurrentDamages < soAutophagic.stunBarMaxDamages) return;
-            stunBarCurrentDamages = 0;
-            StartCoroutine(FullStunBar());
-        }
-        
-        private IEnumerator FullStunBar()
-        {
-            isStunned = true;
-            yield return new WaitForSeconds(soAutophagic.stunBarDuration);
-            isStunned = false;
         }
     }
 }
