@@ -18,6 +18,13 @@ namespace AI.Elite
         internal Coroutine currentCoroutine;
         
         [SerializeField] private SoPyromaniac soPyromaniac;
+        
+        [Header("SoundEffect")]
+        public AudioSource pyroAudioSource;
+        public AudioClip[] pyroProjectileExplosionAudioClip;
+        private Coroutine soundExplosionProjectile;
+
+
 
         private void OnEnable()
         {
@@ -46,6 +53,9 @@ namespace AI.Elite
             {
                 var playerRef = PlayerController.instance;
                 isExploded = true;
+                
+                //SOUND PROJECTILE EXPLOSION
+                pyroAudioSource.PlayOneShot(pyroProjectileExplosionAudioClip[Random.Range(0, pyroProjectileExplosionAudioClip.Length)]);
                 
                 //Arrêt de la vitesse
                 GetComponent<Rigidbody2D>().velocity = Vector2.zero;

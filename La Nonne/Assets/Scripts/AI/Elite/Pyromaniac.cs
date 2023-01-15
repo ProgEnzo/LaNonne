@@ -31,6 +31,14 @@ namespace AI.Elite
         private CapsuleCollider2D capsuleCollider2D;
         private LineRenderer lineRenderer;
 
+        [Header("SoundEffect")]
+        public AudioSource pyroAudioSource;
+        public AudioClip pyroImpactAudioClip;
+        public AudioClip pyroLaunchProjectileAudioClip;
+        public AudioClip[] pyroFireTrailAudioClip;
+        private Coroutine soundLaunchProjectile;
+        private Coroutine soundFireTrail;
+        
         protected override void Start()
         {
             base.Start();
@@ -93,7 +101,13 @@ namespace AI.Elite
                         canBoxCast = false; //La zone de feu du pyromane est désactivée
                         lineRenderer.enabled = false; //Le line renderer est désactivé
                         
+                        //Stop sound trail
+                        pyroAudioSource.Stop();
+                        
                         //Lancement du projectile
+                        //sound lancement projectile
+                        pyroAudioSource.PlayOneShot(pyroLaunchProjectileAudioClip);
+                        
                         var distanceToCross = Mathf.Min(Vector3.Distance(position, playerPosition), soPyromaniac.throwRadius); //On calcule la distance à parcourir par le projectile. On prend la distance entre le joueur et le pyromane, et on la limite à la distance maximale de lancer du projectile.
                         var newPositionVector = (playerPosition - position).normalized * distanceToCross; //On calcule le vecteur de déplacement du projectile
                         var newPosition = position + newPositionVector; //On calcule la nouvelle position du projectile
@@ -128,6 +142,11 @@ namespace AI.Elite
                     //La zone de feu est activée
                     canBoxCast = true;
                     lineRenderer.enabled = true;
+                    
+                    //Play sound trail
+                    pyroAudioSource.clip = pyroFireTrailAudioClip[Random.Range(0, pyroFireTrailAudioClip.Length)];
+                    pyroAudioSource.Play();
+
                 }
             }
             
@@ -143,6 +162,9 @@ namespace AI.Elite
                     {
                         canBoxCast = false;
                         lineRenderer.enabled = false;
+                        
+                        //Stop sound trail
+                        pyroAudioSource.Stop();
                     }
                 }
                 else
@@ -242,6 +264,9 @@ namespace AI.Elite
                 isImpactOn = false;
                 canBoxCast = false;
                 lineRenderer.enabled = false;
+                
+                //Stop sound trail
+                pyroAudioSource.Stop();
             }
         }
 
@@ -268,6 +293,7 @@ namespace AI.Elite
                 isImpactOn = true;
                 
                 //Cercle d'explosion
+                pyroAudioSource.PlayOneShot(pyroImpactAudioClip);
                 circleGameObject.SetActive(true); //On active le cercle
                 circleGameObject.transform.localScale = Vector3.one * (soPyromaniac.explosionRadius * 8); //On le met à la bonne taille
                 var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
