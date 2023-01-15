@@ -3,6 +3,7 @@ using AI.So;
 using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace AI.Elite
 {
@@ -21,6 +22,7 @@ namespace AI.Elite
         [SerializeField] private ParticleSystem particleHeal;
         [SerializeField] private ParticleSystem particleHeal2;
         internal SoTdi soTdi;
+        private bool hasSplit;
         
         protected override void Start()
         {
@@ -33,8 +35,6 @@ namespace AI.Elite
             
             greenCircleWarning.SetActive(false);
             circle.SetActive(false);
-
-
         }
 
         protected override void Update()
@@ -62,13 +62,21 @@ namespace AI.Elite
         #region HealthEnemy
         public override void TakeDamageFromPlayer(int damage)
         {
+            hitAudioSource.PlayOneShot(hitRandomSound[Random.Range(0, hitRandomSound.Length)]);
             currentHealth -= damage;
             StartCoroutine(Split());
+            
+            if (currentIsHitCoroutine != null)
+            {
+                StopCoroutine(currentIsHitCoroutine);
+            }
+            currentIsHitCoroutine = StartCoroutine(EnemyIsHit());
         }
         
         private IEnumerator Split()
         {
-            if (!(currentHealth <= 50)) yield break;
+            if (!(currentHealth <= 50) && !hasSplit) yield break;
+            hasSplit = true;
             transform.DOScale(new Vector3(3, 0, 3), 0.1f);
             scoreManager.AddKilledEnemyScore(soTdi.scorePoint);
             yield return new WaitForSeconds(0.1f);

@@ -1,4 +1,3 @@
-using System.Collections;
 using AI.So;
 using Pathfinding;
 using UnityEngine;
@@ -12,16 +11,22 @@ namespace AI.Elite
         private bool isActivated;
         private readonly int[] positionMultiplierArray = {-1, 1};
         private AIPath aiPath;
-        private int stunBarCurrentDamages;
         private SoAutophagic soAutophagic;
+        
+        [Header("SoundEffect")]
+        public AudioSource autophageAudioSource;
+        public AudioClip autophageMovementAudioClip;
 
         private void Awake()
         {
             soAutophagic = (SoAutophagic) soEnemy;
             aiPath = GetComponent<AIPath>();
-            stunBarCurrentDamages = 0;
+            
+            //SOUND MOVEMENT
+            autophageAudioSource.clip = autophageMovementAudioClip;
+            autophageAudioSource.Play();
         }
-
+        
         protected override void Update()
         {
             base.Update();
@@ -56,6 +61,7 @@ namespace AI.Elite
             var rotationLook = Quaternion.LookRotation(Vector3.forward, newDirection);
             bool isNewDirectionOk;
             Vector2 destination;
+
             do
             {
                 destination = new Vector2(
@@ -79,33 +85,6 @@ namespace AI.Elite
         {
             currentHealth -= (int)(soAutophagic.maxHealth * soAutophagic.autoDamagePart);
             EnemyDeath();
-        }
-        
-        public override void TakeDamageFromPlayer(int damage)
-        {
-            //Damages
-            currentHealth -= damage;
-            EnemyDeath();
-            
-            //Blink Hit
-            if (currentIsHitCoroutine != null)
-            {
-                StopCoroutine(currentIsHitCoroutine);
-            }
-            currentIsHitCoroutine = StartCoroutine(EnemyIsHit());
-            
-            //Stun Bar
-            stunBarCurrentDamages += damage;
-            if (stunBarCurrentDamages < soAutophagic.stunBarMaxDamages) return;
-            stunBarCurrentDamages = 0;
-            StartCoroutine(FullStunBar());
-        }
-        
-        private IEnumerator FullStunBar()
-        {
-            isStunned = true;
-            yield return new WaitForSeconds(soAutophagic.stunBarDuration);
-            isStunned = false;
         }
     }
 }

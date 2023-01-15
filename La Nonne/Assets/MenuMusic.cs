@@ -11,6 +11,7 @@ public class MenuMusic : MonoBehaviour
 
     private void Start()
     {
-        musicAudioSource.PlayOneShot(musicMenuAudioClip);
+        musicAudioSource.clip = musicMenuAudioClip;
+        musicAudioSource.Play();
     }
 }

@@ -40,8 +40,8 @@ namespace AI
         protected Coroutine currentIsHitCoroutine;
 
         [Header("SoundEffect")]
-        public AudioSource hitAudioSource;
-        public AudioClip[] hitRandomSound;
+        [SerializeField] protected AudioSource hitAudioSource;
+        [SerializeField] protected AudioClip[] hitRandomSound;
 
         protected virtual void Start()
         {
