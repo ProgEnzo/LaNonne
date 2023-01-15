@@ -203,7 +203,10 @@ namespace Controller
                 
                 if (hitState == soController.zealousBladeMaxHitState)
                 {
-                    o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
+                    if (!playerController.isRevealingDashOn)
+                    {
+                        o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
+                    }
                     
                     //ADD SCORE BIG HIT
                     if (playerController.isRevealingDashFocusOn)
@@ -217,7 +220,10 @@ namespace Controller
                 }
                 else
                 {
-                    o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
+                    if (!playerController.isRevealingDashOn)
+                    {
+                        o.GetComponent<EnemyController>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
+                    }
                     
                     //ADD SCORE SMALL HIT
                     if (playerController.isRevealingDashFocusOn)
@@ -240,7 +246,10 @@ namespace Controller
                 o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.zealousBladeDamage);
                 if (hitState == soController.zealousBladeMaxHitState)
                 {
-                    o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
+                    if (!playerController.isRevealingDashOn)
+                    {
+                        o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeBigHitStopDuration, soController.zealousBladeBigKnockBackForce);
+                    }
                     
                     //ADD SCORE BIG HIT
                     if (playerController.isRevealingDashFocusOn)
@@ -254,7 +263,10 @@ namespace Controller
                 }
                 else
                 {
-                    o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
+                    if (!playerController.isRevealingDashOn)
+                    {
+                        o.GetComponent<BossStateManager>().HitStopAndKnockBack(soController.zealousBladeLittleHitStopDuration, soController.zealousBladeLittleKnockBackForce);
+                    }
                     
                     //ADD SCORE SMALL HIT
                     if (playerController.isRevealingDashFocusOn)
