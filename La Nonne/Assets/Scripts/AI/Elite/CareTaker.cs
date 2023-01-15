@@ -129,7 +129,7 @@ namespace AI.Elite
         private void OnCollisionEnter2D(Collision2D col) 
         {
             //Si le bully touche le player
-            if (col.gameObject.CompareTag("Player"))
+            if (col.gameObject.CompareTag("Player") && !isStunned && !playerController.isRevealingDashOn)
             {
                 playerController.TakeDamage(soCaretaker.bodyDamage); //Player takes damage
 
