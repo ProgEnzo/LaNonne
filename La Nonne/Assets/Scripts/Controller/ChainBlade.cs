@@ -9,7 +9,7 @@ namespace Controller
     {
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         private bool isHitting;
-        private bool isWarningOn;
+        internal bool isWarningOn;
         private LineRenderer chainLineRenderer;
         private LineRenderer bladeLineRenderer;
         private BoxCollider2D chainBoxCollider;

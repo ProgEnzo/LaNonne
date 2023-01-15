@@ -14,6 +14,7 @@ namespace Manager
         [SerializeField] private TMP_Text epCount;
         private InputManager inputManager;
         private PlayerController playerController;
+        private ChainBlade chainBlade;
         
         [Header("Map & MiniMap")] 
         public GameObject inGameUI;

@@ -71,7 +71,7 @@ namespace Controller
                 camManager.DezoomDuringCombo(hitState);
             }
 
-            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0 && !playerController.isRevealingDashHitting && !uiManager.IsAnyMenuOpened())
+            if (Input.GetKeyDown(inputManager.zealousBladeKey) && !isHitting && currentNextComboCooldown <= 0 && !playerController.isRevealingDashHitting && !uiManager.IsAnyMenuOpened() && !playerController.chainBlade.isWarningOn)
             {
                 //blade no hit
                 bladeAudioSource.PlayOneShot(bladeNoHitSound[0]);

@@ -109,7 +109,7 @@ namespace Shop.UI
 
       private void OpenShop()
       {
-         if (Input.GetKey(KeyCode.E) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
+         if (Input.GetKey(KeyCode.E) && !uiManager.IsAnyMenuOpened() && !PlayerController.instance.isRevealingDashOn && !PlayerController.instance.chainBlade.isWarningOn)
          {
             timerInputPressed += Time.deltaTime;
             image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
