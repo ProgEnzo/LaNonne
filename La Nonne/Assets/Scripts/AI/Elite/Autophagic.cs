@@ -1,6 +1,7 @@
 using AI.So;
 using Pathfinding;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace AI.Elite
@@ -8,10 +9,13 @@ namespace AI.Elite
     public class Autophagic : EnemyController
     {
         private float currentTimer;
+        private float currentTotalTimer;
+        private float totalTime;
         private bool isActivated;
         private readonly int[] positionMultiplierArray = {-1, 1};
         private AIPath aiPath;
         private SoAutophagic soAutophagic;
+        [SerializeField] private Image epSprite;
         
         [Header("SoundEffect")]
         public AudioSource autophageAudioSource;
@@ -25,6 +29,8 @@ namespace AI.Elite
             //SOUND MOVEMENT
             autophageAudioSource.clip = autophageMovementAudioClip;
             autophageAudioSource.Play();
+            
+            totalTime = soAutophagic.maxTimer / soAutophagic.autoDamagePart;
         }
         
         protected override void Update()
@@ -50,6 +56,9 @@ namespace AI.Elite
                     currentTimer = soAutophagic.maxTimer;
                 }
                 currentTimer -= Time.deltaTime;
+                
+                currentTotalTimer += Time.deltaTime;
+                epSprite.fillAmount = (totalTime - currentTotalTimer) / totalTime;
             }
         }
 
