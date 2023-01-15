@@ -282,5 +282,25 @@ namespace AI.Elite
                 other.gameObject.GetComponent<PlayerController>().TakeDamage(soEnemy.bodyDamage);
             }
         }
+
+        private void OnCollisionStay2D(Collision2D other)
+        {
+            if (isDashing)
+            {
+                currentVelocitySpeed = 0f;
+                isDashing = false;
+                capsuleCollider2D.enabled = true;
+                isImpactOn = true;
+                
+                //Cercle d'explosion
+                circleGameObject.SetActive(true); //On active le cercle
+                circleGameObject.transform.localScale = Vector3.one * (soPyromaniac.explosionRadius * 8); //On le met à la bonne taille
+                var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
+                var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
+                circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle
+
+                StartCoroutine(BlinkFire());
+            }
+        }
     }
 }
