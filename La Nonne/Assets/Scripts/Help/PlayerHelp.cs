@@ -13,6 +13,7 @@ namespace Help
         private RoomContentGenerator roomContentGenerator;
         private Rigidbody2D rb;
         private UIManager uiManager;
+        private PlayerController playerController;
 
         public float speedForBouboule = 3f;
         public float timeToDestroyBouboule = 2f;
@@ -23,6 +24,7 @@ namespace Help
         public void OnEnable()
         {
             uiManager = UIManager.instance;
+            playerController = PlayerController.instance;
             
             if (GameObject.Find("RoomContentGenerator") != null)
             {
@@ -33,7 +35,7 @@ namespace Help
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A) && currentTimeBeforeNextBouboule <= 0f && !uiManager.IsAnyMenuOpened()) // && PlayerController.instance.
+            if (Input.GetKeyDown(KeyCode.A) && currentTimeBeforeNextBouboule <= 0f && !uiManager.IsAnyMenuOpened() && !playerController.isRevealingDashOn && !playerController.chainBlade.isWarningOn)
             {
                 rb = Instantiate(epHelp, transform.position, transform.rotation).GetComponent<Rigidbody2D>();
                 if (roomContentGenerator != null)

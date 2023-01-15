@@ -27,6 +27,7 @@ namespace Controller
         internal Rigidbody2D mRigidbody;
         private CapsuleCollider2D collider2d;
         private CapsuleCollider2D childrenCollider2d;
+        internal ChainBlade chainBlade;
     
         [Header("Scriptable Object")]
         [SerializeField][FormerlySerializedAs("SO_Controller")] internal SO_Controller soController;
@@ -173,7 +174,7 @@ namespace Controller
         public void Update()
         {
             //Dash
-            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.IsAnyMenuOpened())
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
             {
                 //Dash sound
                 playerAudioSource.PlayOneShot(dashAudioClip[Random.Range(0, dashAudioClip.Length)]);
@@ -241,7 +242,7 @@ namespace Controller
 
             direction = (Vector2.zero, Vector2.zero);
 
-            if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.IsAnyMenuOpened())
+            if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
             {
                 
                 isMoving = true; // for animation
@@ -256,7 +257,7 @@ namespace Controller
                 direction.horizontal = Vector2.left;
             }
 
-            if (Input.GetKey(inputManager.rightMoveKey) && !uiManager.IsAnyMenuOpened())
+            if (Input.GetKey(inputManager.rightMoveKey) && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
             {
                 isMoving = true; // for animation
                 isMovingProfile = true; // for movement
@@ -270,7 +271,7 @@ namespace Controller
                 direction.horizontal = direction.horizontal == Vector2.left ? Vector2.zero : Vector2.right;
             }
 
-            if (Input.GetKey(inputManager.upMoveKey) && !uiManager.IsAnyMenuOpened())
+            if (Input.GetKey(inputManager.upMoveKey) && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement
@@ -286,7 +287,7 @@ namespace Controller
                 direction.vertical = Vector2.up;
             }
 
-            if (Input.GetKey(inputManager.downMoveKey) && !uiManager.IsAnyMenuOpened())
+            if (Input.GetKey(inputManager.downMoveKey) && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement
@@ -484,7 +485,7 @@ namespace Controller
         
         private void RevealingDashStart()
         {
-            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn && currentRevealingDashCooldown <= 0 && !uiManager.IsAnyMenuOpened())
+            if (Input.GetKeyDown(inputManager.revealingDashKey) && !isRevealingDashOn && currentRevealingDashCooldown <= 0 && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
             {
                 var enemiesInArea = new List<RaycastHit2D>();
                 Physics2D.CircleCast(transform.position, soController.revealingDashDetectionRadius, Vector2.zero,
