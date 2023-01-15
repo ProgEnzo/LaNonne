@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
 using DG.Tweening;
 using Manager;
 using TMPro;
@@ -100,7 +101,7 @@ namespace Shop.UI
 
       private void OpenWhipModificationMenu()
       {
-         if (Input.GetKey(KeyCode.E) && !uiManager.isGamePaused && !uiManager.isShopOpened && !uiManager.isWhipMenuOpened)
+         if (Input.GetKey(KeyCode.E) && !uiManager.IsAnyMenuOpened() && !PlayerController.instance.isRevealingDashOn && !PlayerController.instance.chainBlade.isWarningOn)
          {
             timerInputPressed += Time.deltaTime;
             image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
