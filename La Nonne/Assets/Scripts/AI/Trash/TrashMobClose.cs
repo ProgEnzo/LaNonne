@@ -16,7 +16,7 @@ namespace AI.Trash
         private void OnCollisionEnter2D(Collision2D col) 
         {
             //Si le TrashMobClose touche le player
-            if (col.gameObject.CompareTag("Player") && !isStunned)
+            if (col.gameObject.CompareTag("Player") && !isStunned && !playerController.isRevealingDashOn)
             {
                 playerController.TakeDamage(soEnemy.bodyDamage); //Player takes damage
 

@@ -150,6 +150,9 @@ namespace Controller
             scoreManager = ScoreManager.instance;
             camManager = CamManager.instance;
             uiManager = UIManager.instance;
+            
+            chainBlade = GetComponentInChildren<ChainBlade>();
+            
             playerScale = transform.localScale.x;
             currentHealth = soController.maxHealth;
             isRevealingDashHitting = false;
