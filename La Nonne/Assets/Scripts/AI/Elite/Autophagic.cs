@@ -14,14 +14,21 @@ namespace AI.Elite
         private AIPath aiPath;
         private int stunBarCurrentDamages;
         private SoAutophagic soAutophagic;
+        
+        [Header("SoundEffect")]
+        public AudioSource autophageAudioSource;
+        public AudioClip autophageMovementAudioClip;
 
         private void Awake()
         {
             soAutophagic = (SoAutophagic) soEnemy;
             aiPath = GetComponent<AIPath>();
             stunBarCurrentDamages = 0;
+            
+            //SOUND MOVEMENT
+            autophageAudioSource.clip = autophageMovementAudioClip;
+            autophageAudioSource.Play();
         }
-
         protected override void Update()
         {
             base.Update();
@@ -56,6 +63,7 @@ namespace AI.Elite
             var rotationLook = Quaternion.LookRotation(Vector3.forward, newDirection);
             bool isNewDirectionOk;
             Vector2 destination;
+
             do
             {
                 destination = new Vector2(
