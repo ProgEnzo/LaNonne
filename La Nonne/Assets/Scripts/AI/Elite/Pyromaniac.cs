@@ -302,8 +302,8 @@ namespace AI.Elite
 
                 StartCoroutine(BlinkFire());
             }
-            
-            if (other.gameObject.CompareTag("Player"))
+
+            if (other.gameObject.CompareTag("Player") && !playerController.isRevealingDashOn && !isStunned)
             {
                 other.gameObject.GetComponent<PlayerController>().TakeDamage(soEnemy.bodyDamage);
             }

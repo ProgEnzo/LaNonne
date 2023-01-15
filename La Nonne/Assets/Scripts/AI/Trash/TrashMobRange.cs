@@ -95,21 +95,6 @@ namespace AI.Trash
             animator.SetBool(IsAttacking, false);
         }
 
-        private void OnCollisionEnter2D(Collision2D col) 
-        {
-            //Si le TrashMobRange touche le player
-            if (col.gameObject.CompareTag("Player") && !isStunned)
-            {
-                playerController.TakeDamage(soEnemy.bodyDamage); //Player takes damage
-
-                var colCollider = col.collider; //the incoming collider2D (celle du player en l'occurence)
-                Vector2 direction = (colCollider.transform.position - transform.position).normalized;
-                var knockBack = direction * soTrashMobRange.knockBackBody;
-            
-                playerController.mRigidbody.AddForce(knockBack, ForceMode2D.Impulse);
-            }
-        }
-
         private void OnDrawGizmos()
         {
             if (Application.isPlaying) return;
