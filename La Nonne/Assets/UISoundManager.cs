@@ -8,6 +8,7 @@ public class UISoundManager : MonoBehaviour
     public AudioSource buttonAudioSource;
     public AudioClip buttonClickAudioClip;
     public AudioClip buttonHoverAudioClip;
+    public AudioClip buttonBackClickAudioClip;
 
     public void SoundOnClick()
     {
@@ -17,5 +18,10 @@ public class UISoundManager : MonoBehaviour
     public void SoundOnHover()
     {
         buttonAudioSource.PlayOneShot(buttonHoverAudioClip);
+    }
+
+    public void SoundOnBackClick()
+    {
+        buttonAudioSource.PlayOneShot(buttonBackClickAudioClip);
     }
 }
