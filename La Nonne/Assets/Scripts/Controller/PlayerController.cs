@@ -40,12 +40,14 @@ namespace Controller
         
         [Header("Dash")]
         internal float timerDash;
-        
+        private bool isDashOn;
+        [SerializeField] private List<GameObject> ghostPrefabs;
+
         [Header("Health")]
         private int currentHealth;
         [SerializeField] private List<GameObject> playerPuppets;
-        private List<SpriteRenderer> playerSpriteRenderers = new();
-        protected Coroutine currentSpriteCoroutine;
+        private readonly List<SpriteRenderer> playerSpriteRenderers = new();
+        private Coroutine currentSpriteCoroutine;
 
         [Header("Revealing Dash")]
         internal bool isRevealingDashHitting;
@@ -187,11 +189,17 @@ namespace Controller
                 //Dash sound
                 playerAudioSource.PlayOneShot(dashAudioClip[Random.Range(0, dashAudioClip.Length)]);
                 
+                isDashOn = true;
+                StartCoroutine(GhostEffect());
                 collider2d.enabled = false;
                 timerDash = soController.durationDash;
                 camManager.PlayerDashStateChange();
             }
-            
+
+            if (timerDash < 0f)
+            {
+                isDashOn = false;
+            }
             if (timerDash < -0.5f)
             {
                 collider2d.enabled = true;
@@ -718,6 +726,22 @@ namespace Controller
         
         #endregion
 
+        #region GhostEffect
+
+        private IEnumerator GhostEffect()
+        {
+            if (!isDashOn) yield break;
+            var ghost = Instantiate(ghostPrefabs[currentAnimPrefabAnimator.GetInteger(DirectionState)], transform.position, Quaternion.identity);
+            var localScale = ghost.transform.localScale;
+            ghost.transform.localScale = new Vector3(localScale.x * MathF.Sign(transform.localScale.x), localScale.y, localScale.z);
+            Destroy(ghost, soController.ghostDuration);
+            ghost.GetComponent<SpriteRenderer>().DOFade(0f, soController.ghostDuration);
+            yield return new WaitForSeconds(soController.ghostCooldown);
+            StartCoroutine(GhostEffect());
+        }
+
+        #endregion
+        
         /*private void OnTriggerEnter2D(Collider2D col)
         {
             if (col.CompareTag("ModifiedRoomEntry"))

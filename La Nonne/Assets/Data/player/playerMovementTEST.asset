@@ -17,6 +17,8 @@ MonoBehaviour:
   durationDash: 0.09
   dragDeceleration: 6
   dragMultiplier: 1.6
+  ghostDuration: 0.5
+  ghostCooldown: 0.1
   maxHealth: 1000
   zealousBladeDamage: 15
   zealousBladeHitLength: 1
@@ -39,8 +41,9 @@ MonoBehaviour:
   inquisitorialChainToleranceAngle: 0.5
   inquisitorialChainCooldownTime: 5
   revealingDashDamage: 20
-  revealingDashTimer: 5
   revealingDashStunDuration: 3
   revealingDashToleranceDistance: 0.1
   revealingDashHitSpeed: 500
   revealingDashDetectionRadius: 5
+  revealingDashFocusDuration: 0
+  revealingDashCooldown: 0

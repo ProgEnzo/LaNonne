@@ -13,6 +13,10 @@ namespace Controller
         [SerializeField] public float durationDash;
         [SerializeField] public float dragDeceleration;
         [SerializeField] public float dragMultiplier;
+        
+        [Header("Ghost")]
+        [SerializeField] public float ghostDuration;
+        [SerializeField] public float ghostCooldown;
     
         [Header("Health")]
         [SerializeField] public int maxHealth;
