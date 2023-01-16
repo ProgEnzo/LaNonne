@@ -210,10 +210,10 @@ namespace Controller
             }
             
             //Revealing Dash
+            RevealingDashStop();
             RevealingDashStart();
             RevealingDash();
             RevealingDashFocus();
-            RevealingDashStop();
 
             //Mise en commun slow mo speed
             currentAnimPrefabAnimator.SetFloat(SlowMoMoveSpeed, currentSlowMoPlayerMoveSpeedFactor);
