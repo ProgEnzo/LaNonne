@@ -10,19 +10,20 @@ public class animButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     public float animScaleMultiplier;
     private Vector3 defaultScale;
-
+    private RectTransform _rectTransform;
     private void Start()
     {
-        defaultScale = transform.localScale;
+        _rectTransform = GetComponent<RectTransform>();
+        defaultScale = _rectTransform.localScale;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        transform.DOScale(defaultScale*animScaleMultiplier, 0.2f);
+        _rectTransform.DOScale(defaultScale*animScaleMultiplier, 0.2f);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        transform.DOScale(defaultScale, 0.2f);
+        _rectTransform.DOScale(defaultScale, 0.2f);
     }
 }

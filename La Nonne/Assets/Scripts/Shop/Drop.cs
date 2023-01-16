@@ -9,10 +9,17 @@ public class Drop : MonoBehaviour, IDropHandler
     internal static bool isPointerOnSlot;
     internal static int slotIndex;
     
+    [Header("SoundEffect")] 
+    public AudioSource whipAudioSource;
+    public AudioClip whipClipSound;
+    
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag != null && EffectManager.instance.appliedEffects[slotIndex] == EffectManager.Effect.None && Drag.isAnyDragging)
         {
+            //SOUND ON DROP sur le whipchain
+            whipAudioSource.PlayOneShot(whipClipSound);
+            
             StartCoroutine(DroppedCoroutine(eventData.pointerDrag));
         }
     }

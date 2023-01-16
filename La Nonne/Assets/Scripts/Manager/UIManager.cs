@@ -133,12 +133,14 @@ namespace Manager
 
         public void ReloadLevel()
         {
+            Time.timeScale = 1;
             LoadingScreen.instance.ShowLoadingScreen();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     
         public void BackToMenu()
         {
+            Time.timeScale = 1; 
             SceneManager.LoadScene(0);
         }
 
