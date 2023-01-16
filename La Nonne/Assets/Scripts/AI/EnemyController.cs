@@ -101,7 +101,7 @@ namespace AI
             currentIsHitCoroutine = StartCoroutine(EnemyIsHit());
         }
 
-        protected void EnemyDeath()
+        protected virtual void EnemyDeath()
         {
             if (currentHealth <= 0)
             {

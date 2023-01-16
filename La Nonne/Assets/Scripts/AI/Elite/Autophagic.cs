@@ -16,7 +16,7 @@ namespace AI.Elite
         private AIPath aiPath;
         private SoAutophagic soAutophagic;
         [SerializeField] private Image epSprite;
-        
+
         [Header("SoundEffect")]
         public AudioSource autophageAudioSource;
         public AudioClip autophageMovementAudioClip;
@@ -31,6 +31,7 @@ namespace AI.Elite
             autophageAudioSource.Play();
             
             totalTime = soAutophagic.maxTimer / soAutophagic.autoDamagePart;
+            currentTimer = soAutophagic.maxTimer;
         }
         
         protected override void Update()
@@ -94,6 +95,19 @@ namespace AI.Elite
         {
             currentHealth -= (int)(soAutophagic.maxHealth * soAutophagic.autoDamagePart);
             EnemyDeath();
+        }
+        
+        protected override void EnemyDeath()
+        {
+            if (currentHealth <= 0)
+            {
+                EpDrop((int)(soEnemy.numberOfEp * currentEpDropMultiplier * (totalTime - currentTotalTimer) / totalTime));
+                Debug.Log((totalTime - currentTotalTimer) / totalTime);
+                
+                scoreManager.AddKilledEnemyScore(soEnemy.scorePoint);
+
+                Destroy(gameObject); //Dies
+            }
         }
     }
 }
