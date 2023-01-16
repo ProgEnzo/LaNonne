@@ -34,7 +34,7 @@ public class HealingJar : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Blade"))
+        if (col.gameObject.CompareTag("Blade") || col.gameObject.CompareTag("ChainBladeHit"))
         {
             CamManager.instance.DestroyingHealthJarState(1);
             
