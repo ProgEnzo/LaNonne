@@ -128,6 +128,7 @@ namespace Manager
             DesactivateInGameUI();
             gameOverMenu.SetActive(true);
             isGameOver = true;
+            Time.timeScale = 0;
         }
 
         public void ReloadLevel()
