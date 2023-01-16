@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Controller;
 using DG.Tweening;
 using Manager;
@@ -28,6 +29,8 @@ namespace Shop.UI
       [SerializeField] private AnimationClip whipModifMenuAnimClip;
       
       private readonly List<List<TextMeshProUGUI>> effectVariableTextComponents = new();
+
+      [SerializeField] private List<GameObject> gems;
 
       private void Start()
       {
@@ -116,14 +119,8 @@ namespace Shop.UI
                uiAnimWhipModifMenu.OpenMenu();
                Time.timeScale = 0;
 
-               for (var i = 0; i < EffectManager.instance.appliedEffects.Length; i++)
-               {
-                  if (EffectManager.instance.appliedEffects[i] != EffectManager.Effect.None)
-                  {
-                     whipModificationMenu.transform.GetChild(i+3).GetChild(0).GetComponent<TextMeshProUGUI>().text = EffectManager.instance.appliedEffects[i] + "\n\n" + EffectManager.instance.effectInventory[EffectManager.instance.appliedEffects[i]];
-                  }
-               }
                ChangeEffectTexts();
+               PlaceGems();
             }
          }
 
@@ -186,6 +183,30 @@ namespace Shop.UI
                effectVariableTextComponents[0][i].text = EffectManager.instance.effectDictionary[i][EffectManager.instance.effectInventory[(EffectManager.Effect)i]-1].superEffectDescription;
                effectVariableTextComponents[1][i].text = "Level : " + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
                effectVariableTextComponents[2][i].text = "Probability : " + EffectManager.instance.effectDictionary[i][EffectManager.instance.effectInventory[(EffectManager.Effect)i]-1].chanceToBeApplied + "%";
+            }
+         }
+      }
+      
+      private void PlaceGems()
+      {
+         foreach (var gem in gems)
+         {
+            var dragScript = gem.GetComponent<Drag>();
+            gem.transform.SetParent(dragScript.initialParent);
+            dragScript.rectTransform.localPosition = dragScript.initialLocalPosition;
+            dragScript.isSlotted = false;
+         }
+         
+         for (var i = 0; i < EffectManager.instance.appliedEffects.Length; i++)
+         {
+            if (EffectManager.instance.appliedEffects[i] != EffectManager.Effect.None)
+            {
+               var gem = gems[(int)EffectManager.instance.appliedEffects[i]];
+               var dragScript = gem.GetComponent<Drag>();
+               gem.transform.SetParent(whipModificationMenu.transform.GetChild(i + 3));
+               dragScript.rectTransform.localPosition = Vector3.zero;
+               dragScript.isSlotted = true;
+               dragScript.slotIndex = i;
             }
          }
       }

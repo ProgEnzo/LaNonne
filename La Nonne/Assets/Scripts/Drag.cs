@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 public class Drag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
-    private RectTransform rectTransform;
+    internal RectTransform rectTransform;
     private Canvas canvas;
-    private bool isSlotted;
-    private int slotIndex;
+    internal bool isSlotted;
+    internal int slotIndex;
     private Vector2 initialAnchoredPosition;
-    private Vector2 initialLocalPosition;
-    private Transform initialParent;
+    internal Vector2 initialLocalPosition;
+    internal Transform initialParent;
     private Transform previousParent;
     [SerializeField] private int buttonNumber;
     private bool isDragging;
