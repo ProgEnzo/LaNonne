@@ -75,7 +75,7 @@ namespace AI.Elite
         
         private IEnumerator Split()
         {
-            if (!(currentHealth <= 50) && !hasSplit) yield break;
+            if (!(currentHealth <= 50) || hasSplit) yield break;
             hasSplit = true;
             transform.DOScale(new Vector3(3, 0, 3), 0.1f);
             scoreManager.AddKilledEnemyScore(soTdi.scorePoint);

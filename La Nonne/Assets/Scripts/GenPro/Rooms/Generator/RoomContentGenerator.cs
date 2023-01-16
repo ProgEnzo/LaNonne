@@ -1,27 +1,17 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using AI.Boss;
-using Cinemachine;
-using Controller;
-using GenPro.Rooms;
-using Manager;
 using Pathfinding;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.Serialization;
-using UnityEngine.Tilemaps;
 using Progress = Pathfinding.Progress;
 using Random = UnityEngine.Random;
 
-public class RoomContentGenerator : MonoBehaviour
+namespace GenPro.Rooms.Generator
 {
+    public class RoomContentGenerator : MonoBehaviour
+    {
 
-    #region Variables
+        #region Variables
     
         [SerializeField, Space, Header ("RoomsTypes")]
         private RoomGenerator playerRoom, bossRoom, shopRoom, preBossRoom; //généraliser lvl0
@@ -29,7 +19,7 @@ public class RoomContentGenerator : MonoBehaviour
         [SerializeField, Space, Header ("Tilemap")] 
         private TilemapVisualizer tilemapVisualizer;
         
-        List<GameObject> spawnedObjects = new List<GameObject>();
+        List<GameObject> spawnedObjects = new();
         
         [SerializeField, Space, Header ("Dijkstra")]
         private GraphTest graphTest;
@@ -64,308 +54,310 @@ public class RoomContentGenerator : MonoBehaviour
 
         #endregion
         
-    private IEnumerator Scan()
-    {
-        yield return null;
-        StartCoroutine(DoScan(0));
-        yield return new WaitForSeconds(1);
-        LoadingScreen.instance.HideLoadingScreen();
-    }
-
-    private IEnumerator DoScan(int size)
-    {
-        var graph = size == 1000 ? AstarPath.active.graphs[1]: AstarPath.active.graphs[0];
-        foreach (Progress progress in AstarPath.active.ScanAsync(graph)) 
+        private IEnumerator Scan()
         {
             yield return null;
+            StartCoroutine(DoScan(0));
+            yield return new WaitForSeconds(1);
+            LoadingScreen.instance.HideLoadingScreen();
         }
 
-        var graph2 = AstarPath.active.graphs[2];
-        foreach (Progress progress in AstarPath.active.ScanAsync(graph2)) 
+        private IEnumerator DoScan(int size)
         {
-            yield return null;
-        }
+            var graph = size == 1000 ? AstarPath.active.graphs[1]: AstarPath.active.graphs[0];
+            foreach (Progress unused in AstarPath.active.ScanAsync(graph)) 
+            {
+                yield return null;
+            }
+
+            var graph2 = AstarPath.active.graphs[2];
+            foreach (Progress unused in AstarPath.active.ScanAsync(graph2)) 
+            {
+                yield return null;
+            }
         
-        if (size < 1000)
+            if (size < 1000)
+            { 
+                yield return null;
+                StartCoroutine(DoScan(1000));
+            }
+        }
+
+        Dictionary<Vector2Int, HashSet<Vector2Int>> copiedDico;
+
+        public void GenerateRoomContent(DungeonData dungeonData)
         { 
-            yield return null;
-           StartCoroutine(DoScan(1000));
-        }
-    }
-
-    Dictionary<Vector2Int, HashSet<Vector2Int>> copiedDico;
-
-    public void GenerateRoomContent(DungeonData dungeonData)
-    { 
-        copiedDico = new Dictionary<Vector2Int, HashSet<Vector2Int>>(dungeonData.roomsDictionary);
+            copiedDico = new Dictionary<Vector2Int, HashSet<Vector2Int>>(dungeonData.roomsDictionary);
         
-        foreach (GameObject item in spawnedObjects)
-        {
-            DestroyImmediate(item);
-        }
-        spawnedObjects.Clear();
+            foreach (GameObject item in spawnedObjects)
+            {
+                DestroyImmediate(item);
+            }
+            spawnedObjects.Clear();
 
-        SelectPlayerSpawnPoint(dungeonData);
-        SelectBossSpawnPoints(dungeonData);
-        SelectShopSpawnPoints(dungeonData);
-        PreBossRoomPosition(dungeonData);
-        SelectEnemySpawnPoints(dungeonData);
+            SelectPlayerSpawnPoint(dungeonData);
+            SelectBossSpawnPoints(dungeonData);
+            SelectShopSpawnPoints(dungeonData);
+            PreBossRoomPosition(dungeonData);
+            SelectEnemySpawnPoints(dungeonData);
 
-        ModifyHubRoom();
-        ModifyBossRoom();
-        ModifyShopsRoom();
+            ModifyHubRoom();
+            ModifyBossRoom();
+            ModifyShopsRoom();
 
-        #region teamWork avec le bro A* fonctionne bien
+            #region teamWork avec le bro A* fonctionne bien
 
-        int maxPosX = int.MinValue; //j'aime ca, J'aime Yalentin, ok
-        int minPosX = int.MinValue;
-        int maxPosY = int.MinValue;
-        int minPosY = int.MinValue;
+            int maxPosX = int.MinValue; //j'aime ca, J'aime Yalentin, ok
+            int minPosX = int.MinValue;
+            int maxPosY = int.MinValue;
+            int minPosY = int.MinValue;
 
-        var allRooms = dungeonData.roomsDictionary.Keys.ToList();
-        allRooms.Add(bossRoom.roomCenter);
+            var allRooms = dungeonData.roomsDictionary.Keys.ToList();
+            allRooms.Add(bossRoom.roomCenter);
 
-        foreach (var shops in shopRoomPos)
-        {
-            allRooms.Add(shops);
-        }
+            foreach (var shops in shopRoomPos)
+            {
+                allRooms.Add(shops);
+            }
         
-        foreach (var roomData in allRooms)
-        {
-            maxPosX = maxPosX == int.MinValue ? roomData.x : Mathf.Max(maxPosX, roomData.x);
-            minPosX = minPosX == int.MinValue ? roomData.x : Mathf.Min(minPosX, roomData.x);
-            maxPosY = maxPosY == int.MinValue ? roomData.y: Mathf.Max(maxPosY, roomData.y);
-            minPosY = minPosY == int.MinValue ? roomData.y : Mathf.Min(minPosY, roomData.y);
-        }
+            foreach (var roomData in allRooms)
+            {
+                maxPosX = maxPosX == int.MinValue ? roomData.x : Mathf.Max(maxPosX, roomData.x);
+                minPosX = minPosX == int.MinValue ? roomData.x : Mathf.Min(minPosX, roomData.x);
+                maxPosY = maxPosY == int.MinValue ? roomData.y: Mathf.Max(maxPosY, roomData.y);
+                minPosY = minPosY == int.MinValue ? roomData.y : Mathf.Min(minPosY, roomData.y);
+            }
         
-        int gridPosX = (minPosX + maxPosX) / 2;
-        int gridPosY = (minPosY + maxPosY) / 2;
+            int gridPosX = (minPosX + maxPosX) / 2;
+            int gridPosY = (minPosY + maxPosY) / 2;
 
-        if (AstarPath.active.data.graphs[0] is GridGraph gPlayer)
-        {
-            gPlayer.center = new Vector3(playerSpawnRoomPosition.x, playerSpawnRoomPosition.y, 0);
-        }
+            if (AstarPath.active.data.graphs[0] is GridGraph gPlayer)
+            {
+                gPlayer.center = new Vector3(playerSpawnRoomPosition.x, playerSpawnRoomPosition.y, 0);
+            }
         
-        if (AstarPath.active.data.graphs[2] is GridGraph gPlayer2)
-        {
-            gPlayer2.center = new Vector3(playerSpawnRoomPosition.x, playerSpawnRoomPosition.y, 0);
+            if (AstarPath.active.data.graphs[2] is GridGraph gPlayer2)
+            {
+                gPlayer2.center = new Vector3(playerSpawnRoomPosition.x, playerSpawnRoomPosition.y, 0);
+            }
+
+            if (AstarPath.active.data.graphs[1] is GridGraph g)
+            {
+                g.center = new Vector3(gridPosX, gridPosY, 0);
+                g.SetDimensions((int)((maxPosX - minPosX) / 0.45f) +40, (int)((maxPosY - minPosY) / 0.45f)+40, 0.45f);
+            }
+            #endregion
+
+            foreach (var roomPos in copiedDico.Keys)  //pas besoin de ca si je le fais par salle
+            {
+                PopulateWallUp(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallUp)); //maybe les appeler que dans mes salle pour que ca n'apparaisse que sur les murs de certaines salles
+                PopulateWallDown(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallDown));
+                PopulateWallRight(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallRight));
+                PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
+            
+                PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y)); //appeler ca dans la fonction qui fait aparaitre (playerRoom, etc....) les salles fait que l'on peux moduler pour chaque salle les objets qui apparaisse sur le sol
+
+                PopulateFloorNearWallUp(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallUp));
+                PopulateFloorNearWallRight(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallRight));
+                PopulateFloorNearWallDown(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallDown));
+                PopulateFloorNearWallLeft(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallLeft));
+            }
+        
+            StartCoroutine(Scan());
+
+            foreach (GameObject item in spawnedObjects)
+            {
+                if(item != null)
+                    item.transform.SetParent(itemParent, false);
+            }
         }
 
-        if (AstarPath.active.data.graphs[1] is GridGraph g)
+        #region ModifyRooms
+        private void ModifyBossRoom()
         {
-            g.center = new Vector3(gridPosX, gridPosY, 0);
-            g.SetDimensions((int)((maxPosX - minPosX) / 0.45f) +40, (int)((maxPosY - minPosY) / 0.45f)+40, 0.45f);
+            tilemapVisualizer.SwipeMap(bossRoom.roomCenter.x, bossRoom.roomCenter.y);
+            InstantiateBossRoom(bossRoom.roomCenter.x, bossRoom.roomCenter.y);
+        
+        }
+    
+        private void ModifyHubRoom()
+        {
+            tilemapVisualizer.SwipeMap(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
+            InstantiateHubRoom(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
+        }
+    
+        private void ModifyShopsRoom()
+        {
+            foreach (var shops in shopRoomPos)
+            {
+                tilemapVisualizer.SwipeMap(shops.x, shops.y);
+                InstantiateShop(shops.x, shops.y);
+            }
+        }
+    
+        #endregion
+    
+        #region InstantiateRooms
+        private void InstantiateBossRoom(int x, int y)
+        {
+            var go = Instantiate(prefabBoss);
+            Vector2Int pos = new Vector2Int(x, y);
+            go.transform.position = new Vector3(x, y);
+            var detector = go.GetComponent<DoorDetector>();
+            detector.ManageDoors(HasTopMap(pos),HasBottomMap(pos), HasRightMap(pos),HasLeftMap(pos));
+        
+        }
+    
+        private void InstantiateHubRoom(int x, int y)
+        {
+            var go = Instantiate(prefabHub);
+            Vector2Int pos = new Vector2Int(x, y);
+            go.transform.position = new Vector3(x, y);
+            var detector = go.GetComponent<DoorDetector>();
+            detector.ManageDoors(HasTopMap(pos),HasBottomMap(pos), HasRightMap(pos),HasLeftMap(pos));
+        
+        }
+    
+        private void InstantiateShop(int x, int y)
+        {
+            var go = Instantiate(prefabShop);
+            Vector2Int pos = new Vector2Int(x, y);
+            go.transform.position = new Vector3(x, y);
+            var detector = go.GetComponent<DoorDetector>();
+            detector.ManageDoors(HasTopMap(pos),HasBottomMap(pos), HasRightMap(pos),HasLeftMap(pos));
+        }
+        #endregion
+    
+        #region HasMap
+        private bool HasLeftMap(Vector2Int from)
+        {
+            return tilemapVisualizer.hasCorridor(from.x - 9, from.y);
+        }
+    
+        private bool HasRightMap(Vector2Int from)
+        {
+            return tilemapVisualizer.hasCorridor(from.x + 9, from.y);
+        }
+
+        private bool HasTopMap(Vector2Int from)
+        {
+  
+            return tilemapVisualizer.hasCorridor(from.x, from.y+9);
+        }
+    
+        private bool HasBottomMap(Vector2Int from)
+        {
+
+            return tilemapVisualizer.hasCorridor(from.x, from.y-9);
         }
         #endregion
 
-        foreach (var roomPos in copiedDico.Keys)  //pas besoin de ca si je le fais par salle
+        #region PopulateMap
+
+        private void PopulateWallUp (List<Vector2Int> wallUpPos)
         {
-            PopulateWallUp(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallUp)); //maybe les appeler que dans mes salle pour que ca n'apparaisse que sur les murs de certaines salles
-            PopulateWallDown(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.WallDown));
-            PopulateWallRight(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallRight));
-            PopulateWallLeft(tilemapVisualizer.GetWalls(roomPos.x, roomPos.y, PlacementType.wallLeft));
-            
-            PopulateFloor(tilemapVisualizer.GetFloors(roomPos.x, roomPos.y)); //appeler ca dans la fonction qui fait aparaitre (playerRoom, etc....) les salles fait que l'on peux moduler pour chaque salle les objets qui apparaisse sur le sol
-
-            PopulateFloorNearWallUp(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallUp));
-            PopulateFloorNearWallRight(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallRight));
-            PopulateFloorNearWallDown(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallDown));
-            PopulateFloorNearWallLeft(tilemapVisualizer.GetFloorsNearWalls(roomPos.x, roomPos.y, PlacementType.nearWallLeft));
-        }
-        
-        StartCoroutine(Scan());
-
-        foreach (GameObject item in spawnedObjects)
-        {
-            if(item != null)
-                item.transform.SetParent(itemParent, false);
-        }
-    }
-
-    #region ModifyRooms
-    private void ModifyBossRoom()
-    {
-        tilemapVisualizer.SwipeMap(bossRoom.roomCenter.x, bossRoom.roomCenter.y);
-        InstantiateBossRoom(bossRoom.roomCenter.x, bossRoom.roomCenter.y);
-        
-    }
-    
-    private void ModifyHubRoom()
-    {
-        tilemapVisualizer.SwipeMap(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
-        InstantiateHubRoom(playerRoom.roomCenter.x, playerRoom.roomCenter.y);
-    }
-    
-    private void ModifyShopsRoom()
-    {
-        foreach (var shops in shopRoomPos)
-        {
-            tilemapVisualizer.SwipeMap(shops.x, shops.y);
-            InstantiateShop(shops.x, shops.y);
-        }
-    }
-    
-    #endregion
-    
-    #region InstantiateRooms
-    private void InstantiateBossRoom(int x, int y)
-    {
-        var go = Instantiate(prefabBoss);
-        Vector2Int pos = new Vector2Int(x, y);
-        go.transform.position = new Vector3(x, y);
-        var detector = go.GetComponent<DoorDetector>();
-        detector.ManageDoors(hasTopMap(pos),hasBottomMap(pos), hasRightMap(pos),hasLeftMap(pos));
-        
-    }
-    
-    private void InstantiateHubRoom(int x, int y)
-    {
-        var go = Instantiate(prefabHub);
-        Vector2Int pos = new Vector2Int(x, y);
-        go.transform.position = new Vector3(x, y);
-        var detector = go.GetComponent<DoorDetector>();
-        detector.ManageDoors(hasTopMap(pos),hasBottomMap(pos), hasRightMap(pos),hasLeftMap(pos));
-        
-    }
-    
-    private void InstantiateShop(int x, int y)
-    {
-        var go = Instantiate(prefabShop);
-        Vector2Int pos = new Vector2Int(x, y);
-        go.transform.position = new Vector3(x, y);
-        var detector = go.GetComponent<DoorDetector>();
-        detector.ManageDoors(hasTopMap(pos),hasBottomMap(pos), hasRightMap(pos),hasLeftMap(pos));
-    }
-    #endregion
-    
-    #region HasMap
-    private bool hasLeftMap(Vector2Int from)
-    {
-        return tilemapVisualizer.hasCorridor(from.x - 9, from.y);
-    }
-    
-    private bool hasRightMap(Vector2Int from)
-    {
-        return tilemapVisualizer.hasCorridor(from.x + 9, from.y);
-    }
-
-    private bool hasTopMap(Vector2Int from)
-    {
-  
-        return tilemapVisualizer.hasCorridor(from.x, from.y+9);
-    }
-    
-    private bool hasBottomMap(Vector2Int from)
-    {
-
-        return tilemapVisualizer.hasCorridor(from.x, from.y-9);
-    }
-    #endregion
-
-    #region PopulateMap
-    public void PopulateWallUp (List<Vector2Int> wallUpPos)
-    {
-        foreach (var pos in wallUpPos)
-        {
-            if (Random.Range(0, 100) < 33)
+            foreach (var pos in wallUpPos)
             {
-                GameObject item = Instantiate(wallUpCusto[Random.Range(0, wallUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+                if (Random.Range(0, 100) < 33)
+                {
+                    Instantiate(wallUpCusto[Random.Range(0, wallUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+                }
             }
         }
-    }
-    
-    public void PopulateWallDown (List<Vector2Int> wallDownPos)
-    {
-        foreach (var pos in wallDownPos)
-        {
-            if (Random.Range(0, 100) < 0)
-            {
-                GameObject item = Instantiate(wallDownCusto[Random.Range(0, wallDownCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
-            }
-        }
-    }
-    
-    public void PopulateWallRight (List<Vector2Int> wallRightPos)
-    {
-        foreach (var pos in wallRightPos)
-        {
-            if (Random.Range(0, 100) < 0)
-            {
-                GameObject item = Instantiate(wallRightCusto[Random.Range(0, wallRightCusto.Count)], new Vector3(pos.x, pos.y + 0.5f, 0), Quaternion.identity);
-            }
-        }
-    }
-    
-    public void PopulateWallLeft (List<Vector2Int> wallLeftPos)
-    {
-        foreach (var pos in wallLeftPos)
-        {
-            if (Random.Range(0, 100) < 0)
-            {
-                GameObject item = Instantiate(wallLeftCusto[Random.Range(0, wallLeftCusto.Count)], new Vector3(pos.x +1f, pos.y + 0.5f, 0), Quaternion.identity);
-            }
-        }
-    }
-    public void PopulateFloor (List<Vector2Int> floorPos)
-    {
-        foreach (var pos in floorPos)
-        {
-            if (Random.Range(0, 100) < 100)
-            {
-                GameObject item = Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
-            }
-        }
-    }
 
-    public void PopulateFloorNearWallUp(List<Vector2Int> floorNearWallsUpPos)
-    {
-        foreach (var pos in floorNearWallsUpPos)
+        private void PopulateWallDown (List<Vector2Int> wallDownPos)
         {
-            if (Random.Range(0, 100) < 25)
+            foreach (var pos in wallDownPos)
             {
-                GameObject item = Instantiate(floorNearWallsUpCusto[Random.Range(0, floorNearWallsUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y, 0), Quaternion.identity);
+                if (Random.Range(0, 100) < 0)
+                {
+                    Instantiate(wallDownCusto[Random.Range(0, wallDownCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+                }
             }
         }
-    }
-    
-    public void PopulateFloorNearWallDown(List<Vector2Int> floorNearWallsDownPos)
-    {
-        foreach (var pos in floorNearWallsDownPos)
-        {
-            if (Random.Range(0, 100) < 25)
-            {
-                GameObject item = Instantiate(floorNearWallsDownCusto[Random.Range(0, floorNearWallsDownCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 1.5f, 0), Quaternion.identity);
-            }
-        }
-    }
-    
-    public void PopulateFloorNearWallRight(List<Vector2Int> floorNearWallsRightPos)
-    {
-        foreach (var pos in floorNearWallsRightPos)
-        {
-            if (Random.Range(0, 100) < 25)
-            {
-                GameObject item = Instantiate(floorNearWallsRightCusto[Random.Range(0, floorNearWallsRightCusto.Count)], new Vector3(pos.x - 1.5f, pos.y + 0.5f, 0), Quaternion.identity);
-            }
-        }
-    }
-    
-    public void PopulateFloorNearWallLeft(List<Vector2Int> floorNearWallsLeftPos)
-    {
-        foreach (var pos in floorNearWallsLeftPos)
-        {
-            if (Random.Range(0, 100) < 25)
-            {
-                GameObject item = Instantiate(floorNearWallsLeftCusto[Random.Range(0, floorNearWallsLeftCusto.Count)], new Vector3(pos.x + 1.4f, pos.y + 0.3f, 0), Quaternion.identity);
-            }
-        }
-    }
-    
-    #endregion
 
-    #region PlayerRoom
+        private void PopulateWallRight (List<Vector2Int> wallRightPos)
+        {
+            foreach (var pos in wallRightPos)
+            {
+                if (Random.Range(0, 100) < 0)
+                {
+                    Instantiate(wallRightCusto[Random.Range(0, wallRightCusto.Count)], new Vector3(pos.x, pos.y + 0.5f, 0), Quaternion.identity);
+                }
+            }
+        }
 
-    private Vector2Int playerSpawnRoomPosition;
+        private void PopulateWallLeft (List<Vector2Int> wallLeftPos)
+        {
+            foreach (var pos in wallLeftPos)
+            {
+                if (Random.Range(0, 100) < 0)
+                {
+                    Instantiate(wallLeftCusto[Random.Range(0, wallLeftCusto.Count)], new Vector3(pos.x +1f, pos.y + 0.5f, 0), Quaternion.identity);
+                }
+            }
+        }
+
+        private void PopulateFloor (List<Vector2Int> floorPos)
+        {
+            foreach (var pos in floorPos)
+            {
+                if (Random.Range(0, 100) < 100)
+                {
+                    Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+                }
+            }
+        }
+
+        private void PopulateFloorNearWallUp(List<Vector2Int> floorNearWallsUpPos)
+        {
+            foreach (var pos in floorNearWallsUpPos)
+            {
+                if (Random.Range(0, 100) < 25)
+                {
+                    Instantiate(floorNearWallsUpCusto[Random.Range(0, floorNearWallsUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y, 0), Quaternion.identity);
+                }
+            }
+        }
+
+        private void PopulateFloorNearWallDown(List<Vector2Int> floorNearWallsDownPos)
+        {
+            foreach (var pos in floorNearWallsDownPos)
+            {
+                if (Random.Range(0, 100) < 25)
+                {
+                    Instantiate(floorNearWallsDownCusto[Random.Range(0, floorNearWallsDownCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 1.5f, 0), Quaternion.identity);
+                }
+            }
+        }
+
+        private void PopulateFloorNearWallRight(List<Vector2Int> floorNearWallsRightPos)
+        {
+            foreach (var pos in floorNearWallsRightPos)
+            {
+                if (Random.Range(0, 100) < 25)
+                {
+                    Instantiate(floorNearWallsRightCusto[Random.Range(0, floorNearWallsRightCusto.Count)], new Vector3(pos.x - 1.5f, pos.y + 0.5f, 0), Quaternion.identity);
+                }
+            }
+        }
+
+        private void PopulateFloorNearWallLeft(List<Vector2Int> floorNearWallsLeftPos)
+        {
+            foreach (var pos in floorNearWallsLeftPos)
+            {
+                if (Random.Range(0, 100) < 25)
+                {
+                    Instantiate(floorNearWallsLeftCusto[Random.Range(0, floorNearWallsLeftCusto.Count)], new Vector3(pos.x + 1.4f, pos.y + 0.3f, 0), Quaternion.identity);
+                }
+            }
+        }
+    
+        #endregion
+
+        #region PlayerRoom
+
+        private Vector2Int playerSpawnRoomPosition;
         private void SelectPlayerSpawnPoint(DungeonData dungeonData)
         {
             //int randomRoomIndex = UnityEngine.Random.Range(0, dungeonData.roomsDictionary.Count);
@@ -384,10 +376,10 @@ public class RoomContentGenerator : MonoBehaviour
             dungeonData.roomsDictionary.Remove(playerSpawnPoint);
         }
 
-    #endregion
+        #endregion
     
-    #region BossRoom
-    private Vector2Int GetMapFromTilePosition(Vector2Int tilePosition, DungeonData dungeonData) //prend la position des "map" soit des salles en fonction des tiles qui les composent
+        #region BossRoom
+        private Vector2Int GetMapFromTilePosition(Vector2Int tilePosition, DungeonData dungeonData) //prend la position des "map" soit des salles en fonction des tiles qui les composent
         {
             Vector2Int nearthestRoom = playerSpawnRoomPosition;
             foreach (var salle in dungeonData.roomsDictionary.Keys)
@@ -408,7 +400,7 @@ public class RoomContentGenerator : MonoBehaviour
             foreach (var room in DijkstraAlgorithm.distanceDictionary.Keys) //vérification de toutes les pos à l'intérieur
             {
                 if (DijkstraAlgorithm.distanceDictionary[room] >
-                    DijkstraAlgorithm.distanceDictionary[currentFurthestRoom]);
+                    DijkstraAlgorithm.distanceDictionary[currentFurthestRoom])
                 {
                     currentFurthestRoom = room;
                 }
@@ -420,120 +412,118 @@ public class RoomContentGenerator : MonoBehaviour
             dungeonData.roomsDictionary.Remove(mapBoss);
         }
 
-    #endregion
+        #endregion
     
-    #region ShopRoom
+        #region ShopRoom
     
-    int GetDistanceWithNearestShop (Vector2Int currentPos) //Prend la distance entre les shop afin de définir le shop le plus proche 
-    {
-        int distance = 99999;
+        int GetDistanceWithNearestShop (Vector2Int currentPos) //Prend la distance entre les shop afin de définir le shop le plus proche 
+        {
+            int distance = 99999;
                 
-        foreach (var shopRoom in shopRoomPos)
-        {
-            if (Vector2Int.Distance(currentPos, shopRoom) < distance) 
-            { 
-                distance = (int)Vector2Int.Distance(currentPos, shopRoom);
-            }
-        }
-        return distance;
-    }
-
-    public Vector2Int firstShopPosition;
-    public Vector2Int lastShopPosition;
-    private void SelectShopSpawnPoints(DungeonData dungeonData)
-    {
-        Vector2Int shopRoomPosition = playerSpawnRoomPosition;
-        foreach (var shop in dungeonData.roomsDictionary.Keys) 
-        {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == 36)
+            foreach (var shopRoomCenter in shopRoomPos)
             {
-                shopRoomPosition = shop;
-                
-                var firstShop = GetMapFromTilePosition(shopRoomPosition, dungeonData);
-                firstShopPosition = firstShop;
-
-                spawnedObjects.AddRange(shopRoom.ProcessRoom(firstShopPosition, dungeonData.roomsDictionary[firstShopPosition], dungeonData.GetRoomFloorWithoutCorridors(firstShopPosition)));
-                
-                dungeonData.roomsDictionary.Remove(firstShopPosition); 
-                shopRoomPos.Add(firstShopPosition);
-
-                
-                break;
+                if (Vector2Int.Distance(currentPos, shopRoomCenter) < distance) 
+                { 
+                    distance = (int)Vector2Int.Distance(currentPos, shopRoomCenter);
+                }
             }
+            return distance;
         }
-        
-        Vector2Int shopRoomPosition2 = playerSpawnRoomPosition;
-        foreach (var shop in dungeonData.roomsDictionary.Keys) 
+
+        public Vector2Int firstShopPosition;
+        public Vector2Int lastShopPosition;
+        private void SelectShopSpawnPoints(DungeonData dungeonData)
         {
-            if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 36) //18 étant la longueur des couloirs ou "corridors Length" dans l'IDE
+            foreach (var shop in dungeonData.roomsDictionary.Keys) 
             {
-                shopRoomPosition2 = shop;
+                if (DijkstraAlgorithm.distanceDictionary [shop] == 36)
+                {
+                    var shopRoomPosition = shop;
                 
-                var secondShop = GetMapFromTilePosition(shopRoomPosition2, dungeonData);
-                lastShopPosition = secondShop;
+                    var firstShop = GetMapFromTilePosition(shopRoomPosition, dungeonData);
+                    firstShopPosition = firstShop;
 
-                spawnedObjects.AddRange(shopRoom.ProcessRoom(lastShopPosition, dungeonData.roomsDictionary[lastShopPosition], dungeonData.GetRoomFloorWithoutCorridors(lastShopPosition)));
-                dungeonData.roomsDictionary.Remove(lastShopPosition); 
-                shopRoomPos.Add(lastShopPosition);
+                    spawnedObjects.AddRange(shopRoom.ProcessRoom(firstShopPosition, dungeonData.roomsDictionary[firstShopPosition], dungeonData.GetRoomFloorWithoutCorridors(firstShopPosition)));
                 
-                break;
+                    dungeonData.roomsDictionary.Remove(firstShopPosition); 
+                    shopRoomPos.Add(firstShopPosition);
+
+                
+                    break;
+                }
             }
-        }
+
+            foreach (var shop in dungeonData.roomsDictionary.Keys) 
+            {
+                if (DijkstraAlgorithm.distanceDictionary [shop] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 36) //18 étant la longueur des couloirs ou "corridors Length" dans l'IDE
+                {
+                    var shopRoomPosition2 = shop;
+                
+                    var secondShop = GetMapFromTilePosition(shopRoomPosition2, dungeonData);
+                    lastShopPosition = secondShop;
+
+                    spawnedObjects.AddRange(shopRoom.ProcessRoom(lastShopPosition, dungeonData.roomsDictionary[lastShopPosition], dungeonData.GetRoomFloorWithoutCorridors(lastShopPosition)));
+                    dungeonData.roomsDictionary.Remove(lastShopPosition); 
+                    shopRoomPos.Add(lastShopPosition);
+                
+                    break;
+                }
+            }
         
-        var tempDico = new Dictionary<Vector2Int, HashSet<Vector2Int>>(dungeonData.roomsDictionary); //pour faire un dico temporaire pour modif sans tout casser // permet de faire spawn les ennemis 
+            var tempDico = new Dictionary<Vector2Int, HashSet<Vector2Int>>(dungeonData.roomsDictionary); //pour faire un dico temporaire pour modif sans tout casser // permet de faire spawn les ennemis 
         
-        bool hasShop = false;
-        do
-        {
-            hasShop = false;
+            bool hasShop;
+            do
+            {
+                hasShop = false;
             
-            foreach (var shop in tempDico.Keys)
-            {
-                int distance = GetDistanceWithNearestShop(shop);
-
-                if (distance <= 18)
+                foreach (var shop in tempDico.Keys)
                 {
-                    var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
-                    tempDico.Remove(shopRoomPositionInter);
-                    hasShop = true;
-                    break;
-                }
+                    int distance = GetDistanceWithNearestShop(shop);
 
-                int mapDistance = (distance - 18) / 18;
+                    if (distance <= 18)
+                    {
+                        var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
+                        tempDico.Remove(shopRoomPositionInter);
+                        hasShop = true;
+                        break;
+                    }
+
+                    int mapDistance = (distance - 18) / 18;
                 
-                float ratio = multiplierPerDistance.Count > mapDistance ? multiplierPerDistance[mapDistance] : multiplierPerDistance[^1];
+                    float ratio = multiplierPerDistance.Count > mapDistance ? multiplierPerDistance[mapDistance] : multiplierPerDistance[^1];
 
-                if (Random.Range(0, 100) > ratio)
-                {
-                    var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
-                    tempDico.Remove(shopRoomPositionInter);
-                    hasShop = true;
-                    break;
-                }
+                    if (Random.Range(0, 100) > ratio)
+                    {
+                        var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
+                        tempDico.Remove(shopRoomPositionInter);
+                        hasShop = true;
+                        break;
+                    }
                 
-                if (GetDistanceWithNearestShop(shop) > 18)
-                {
-                    var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
-                    spawnedObjects.AddRange(shopRoom.ProcessRoom(shopRoomPositionInter, dungeonData.roomsDictionary[shopRoomPositionInter], dungeonData.GetRoomFloorWithoutCorridors(shopRoomPositionInter)));
+                    if (GetDistanceWithNearestShop(shop) > 18)
+                    {
+                        var shopRoomPositionInter = GetMapFromTilePosition(shop, dungeonData);
+                        spawnedObjects.AddRange(shopRoom.ProcessRoom(shopRoomPositionInter, dungeonData.roomsDictionary[shopRoomPositionInter], dungeonData.GetRoomFloorWithoutCorridors(shopRoomPositionInter)));
                             
-                    tempDico.Remove(shopRoomPositionInter); //remove dans le temporaire quand c'est une fake room
-                    dungeonData.roomsDictionary.Remove(shopRoomPositionInter); //remove dans le dico partagé quand c est une true room
-                    shopRoomPos.Add(shopRoomPositionInter);
+                        tempDico.Remove(shopRoomPositionInter); //remove dans le temporaire quand c'est une fake room
+                        dungeonData.roomsDictionary.Remove(shopRoomPositionInter); //remove dans le dico partagé quand c est une true room
+                        shopRoomPos.Add(shopRoomPositionInter);
 
-                    hasShop = true;
-                    break;
-                }
+                        hasShop = true;
+                        break;
+                    }
             
-            }
-        } while (hasShop);
-    }
+                }
+            } while (hasShop);
+        }
 
-    #endregion
+        #endregion
     
-    #region DefaultRoom 
+        #region DefaultRoom 
      
-     [SerializeField] private List<EnemyRoom> enemyRoom;
-         private void SelectEnemySpawnPoints(DungeonData dungeonData) //Ca fonctionne mais le fait que ce soit la distance à vol d'oiseau du hub est domageable ! Faire un A* serait trop compliqué et pas worth en fonction de la charge de taff demandée.
+        [SerializeField] private List<EnemyRoom> enemyRoom;
+        private void SelectEnemySpawnPoints(DungeonData dungeonData) //Ca fonctionne mais le fait que ce soit la distance à vol d'oiseau du hub est domageable ! Faire un A* serait trop compliqué et pas worth en fonction de la charge de taff demandée.
         {
             foreach (KeyValuePair<Vector2Int,HashSet<Vector2Int>> roomData in dungeonData.roomsDictionary) //roomData n'est pas bon
             {
@@ -552,7 +542,7 @@ public class RoomContentGenerator : MonoBehaviour
                     spawnedObjects.AddRange(enemyRoom[4].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
                 else if (distance <= 9) //TDI Tutorial // 9
                     spawnedObjects.AddRange(enemyRoom[5].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
-                else if (distance > 9) // 10+
+                else // 10+
                     spawnedObjects.AddRange(enemyRoom[6].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
                 // else if (distance > 9) 
                 //     spawnedObjects.AddRange(enemyRoom[7].ProcessRoom(roomData.Key, roomData.Value, dungeonData.GetRoomFloorWithoutCorridors(roomData.Key)));
@@ -561,17 +551,15 @@ public class RoomContentGenerator : MonoBehaviour
         
         #endregion
         
-    #region PreBossRoom
+        #region PreBossRoom
         
         private void PreBossRoomPosition(DungeonData dungeonData)
         {
-            Vector2Int preBossRoomPosition = playerSpawnRoomPosition;
-            
             foreach (var preBoss in dungeonData.roomsDictionary.Keys)
             {
                 if (DijkstraAlgorithm.distanceDictionary[preBoss] == DijkstraAlgorithm.distanceDictionary[mapBoss] - 36)
                 {
-                    preBossRoomPosition = preBoss;
+                    var preBossRoomPosition = preBoss;
                     
                     var preBossPos = GetMapFromTilePosition(preBossRoomPosition, dungeonData);
 
@@ -584,4 +572,5 @@ public class RoomContentGenerator : MonoBehaviour
         }
         
         #endregion
+    }
 }

@@ -1,3 +1,4 @@
+using System;
 using Manager;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -120,9 +121,9 @@ namespace Controller
             
             InquisitorialChain();
             
-            chainBoxCollider.size = new Vector2(0.1f/parentLocalScaleX, soController.inquisitorialChainChainHitLength/parentLocalScaleX);
+            chainBoxCollider.size = new Vector2(0.1f/MathF.Abs(parentLocalScaleX), soController.inquisitorialChainChainHitLength/MathF.Abs(parentLocalScaleX));
             chainBoxCollider.offset = new Vector2(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX/2);
-            bladeBoxCollider.size = new Vector2(0.11f/parentLocalScaleX, soController.inquisitorialChainBladeHitLength/parentLocalScaleX);
+            bladeBoxCollider.size = new Vector2(0.11f/MathF.Abs(parentLocalScaleX), soController.inquisitorialChainBladeHitLength/MathF.Abs(parentLocalScaleX));
             bladeBoxCollider.offset = new Vector2(0, (soController.inquisitorialChainChainHitLength-soController.inquisitorialChainBladeHitLength/2)/parentLocalScaleX);
         }
 
