@@ -184,7 +184,7 @@ namespace Controller
         public void Update()
         {
             //Dash
-            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
+            if (Input.GetKeyDown(inputManager.dashKey) && timerDash < -0.5f && !isRevealingDashOn && !uiManager.IsAnyMenuOpened())
             {
                 //Dash sound
                 playerAudioSource.PlayOneShot(dashAudioClip[Random.Range(0, dashAudioClip.Length)]);
@@ -258,7 +258,7 @@ namespace Controller
 
             direction = (Vector2.zero, Vector2.zero);
 
-            if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
+            if (Input.GetKey(inputManager.leftMoveKey) && !uiManager.IsAnyMenuOpened())
             {
                 
                 isMoving = true; // for animation
@@ -273,7 +273,7 @@ namespace Controller
                 direction.horizontal = Vector2.left;
             }
 
-            if (Input.GetKey(inputManager.rightMoveKey) && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
+            if (Input.GetKey(inputManager.rightMoveKey) && !uiManager.IsAnyMenuOpened())
             {
                 isMoving = true; // for animation
                 isMovingProfile = true; // for movement
@@ -287,7 +287,7 @@ namespace Controller
                 direction.horizontal = direction.horizontal == Vector2.left ? Vector2.zero : Vector2.right;
             }
 
-            if (Input.GetKey(inputManager.upMoveKey) && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
+            if (Input.GetKey(inputManager.upMoveKey) && !uiManager.IsAnyMenuOpened())
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement
@@ -303,7 +303,7 @@ namespace Controller
                 direction.vertical = Vector2.up;
             }
 
-            if (Input.GetKey(inputManager.downMoveKey) && !uiManager.IsAnyMenuOpened() && !chainBlade.isWarningOn)
+            if (Input.GetKey(inputManager.downMoveKey) && !uiManager.IsAnyMenuOpened())
             {
                 isMoving = true; // for animation
                 if (!isMovingProfile) // for movement

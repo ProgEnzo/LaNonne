@@ -1,5 +1,6 @@
 using Core.Scripts.Utils;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Manager
 {
@@ -15,16 +16,18 @@ namespace Manager
         
         [Header("Dash Inputs")]
         [SerializeField] internal KeyCode dashKey;
-        //[SerializeField] internal KeyCode slowMoKey;
         
         [Header("Attack Inputs")]
         [SerializeField] internal KeyCode zealousBladeKey;
         [SerializeField] internal KeyCode inquisitorialChainKey;
         [SerializeField] internal KeyCode revealingDashKey;
         
-        [Header("Map Inputs")]
-        [SerializeField] internal KeyCode mapKey;
-        
+        [Header("Other Inputs")]
+        [SerializeField] internal KeyCode pauseKey;
+        [SerializeField] internal KeyCode quitKey;
+        [SerializeField] internal KeyCode interactKey;
+        [FormerlySerializedAs("goToBossKey")] [SerializeField] internal KeyCode helpKey;
+
         private void Awake()
         {
             if (instance != null)

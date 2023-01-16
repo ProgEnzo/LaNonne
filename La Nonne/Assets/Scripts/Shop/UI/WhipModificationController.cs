@@ -95,7 +95,7 @@ namespace Shop.UI
             OpenWhipModificationMenu();
          }
          
-         if (Input.GetKeyDown(KeyCode.Escape) && isWhipModificationMenuOpened)
+         if (Input.GetKeyDown(InputManager.instance.quitKey) && isWhipModificationMenuOpened)
          {
             CloseWhipModificationMenu();
          }
@@ -103,7 +103,7 @@ namespace Shop.UI
 
       private void OpenWhipModificationMenu()
       {
-         if (Input.GetKey(KeyCode.E) && !uiManager.IsAnyMenuOpened() && !PlayerController.instance.isRevealingDashOn && !PlayerController.instance.chainBlade.isWarningOn)
+         if (Input.GetKey(InputManager.instance.interactKey) && !uiManager.IsAnyMenuOpened() && !PlayerController.instance.isRevealingDashOn && !PlayerController.instance.chainBlade.isWarningOn)
          {
             timerInputPressed += Time.deltaTime;
             image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
@@ -124,7 +124,7 @@ namespace Shop.UI
             }
          }
 
-         if (Input.GetKeyUp(KeyCode.E))
+         if (Input.GetKeyUp(InputManager.instance.interactKey))
          {
             timerInputPressed = 0f;
             image.DOFillAmount(0,0.5f);

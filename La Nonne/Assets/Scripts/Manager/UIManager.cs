@@ -18,9 +18,7 @@ namespace Manager
         
         [Header("Map & MiniMap")] 
         public GameObject inGameUI;
-    
-        [Header("Menus")]
-        public static GameObject pauseMenu;
+
         public static GameObject settingsMenu;
         public GameObject gameOverMenu;
 
@@ -54,7 +52,7 @@ namespace Manager
             inputManager = InputManager.instance;
             epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TMP_Text>();
 
-            pauseMenu = GameObject.Find("PauseMenu");
+            GameObject.Find("PauseMenu");
             settingsMenu = GameObject.Find("OptionsMenu");
         
             epCount.text = "EP COUNT : " + 0;
@@ -67,7 +65,6 @@ namespace Manager
 
         private void Update()
         {
-        
             PauseMenuInput();
             isGamePaused = _isGamePausedStatic;
             
@@ -81,7 +78,7 @@ namespace Manager
 
         private void PauseMenuInput()
         {
-            if (Input.GetKeyDown(KeyCode.Escape) && !isShopOpened && !isWhipMenuOpened && !isGameOver)
+            if (Input.GetKeyDown(inputManager.pauseKey) && !isShopOpened && !isWhipMenuOpened && !isGameOver)
             {
                 _isGamePausedStatic = !_isGamePausedStatic;
                 PauseMenu(_isGamePausedStatic);

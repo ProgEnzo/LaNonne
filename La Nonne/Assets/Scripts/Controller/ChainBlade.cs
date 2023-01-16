@@ -26,6 +26,9 @@ namespace Controller
         private float localStateMult;
         private float currentTime;
         private Image inquisitorialChainCooldownBar;
+        private GameObject chainGameObject;
+        private GameObject bladeGameObject;
+        private GameObject warningGameObject;
 
         private AnimationManager animationManager;
         private InputManager inputManager;
@@ -46,12 +49,15 @@ namespace Controller
             uiManager = UIManager.instance;
             
             camera1 = Camera.main;
-            chainLineRenderer = transform.GetChild(0).GetComponent<LineRenderer>();
-            bladeLineRenderer = transform.GetChild(1).GetComponent<LineRenderer>();
-            chainBoxCollider = transform.GetChild(0).GetComponent<BoxCollider2D>();
-            bladeBoxCollider = transform.GetChild(1).GetComponent<BoxCollider2D>();
-            transform.GetChild(0).gameObject.SetActive(false);
-            transform.GetChild(1).gameObject.SetActive(false);
+            chainGameObject = transform.GetChild(0).gameObject;
+            bladeGameObject = transform.GetChild(1).gameObject;
+            warningGameObject = transform.GetChild(2).gameObject;
+            chainLineRenderer = chainGameObject.GetComponent<LineRenderer>();
+            bladeLineRenderer = bladeGameObject.GetComponent<LineRenderer>();
+            chainBoxCollider = chainGameObject.GetComponent<BoxCollider2D>();
+            bladeBoxCollider = bladeGameObject.GetComponent<BoxCollider2D>();
+            chainGameObject.SetActive(false);
+            bladeGameObject.SetActive(false);
             isHitting = false;
             isWarningOn = false;
             playerScale = playerController.transform.localScale.x;
@@ -65,15 +71,15 @@ namespace Controller
         {
             var parentLocalScaleX = transform.parent.parent.localScale.x;
             var parentLocalScale = transform.parent.localScale;
-            var warningScale = transform.GetChild(2).localScale;
+            var warningScale = warningGameObject.transform.localScale;
 
             if (Input.GetKeyDown(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && currentTime <= 0 && !uiManager.IsAnyMenuOpened())
             {
-                playerController.currentSlowMoPlayerMoveSpeedFactor = 0f;
-                Time.timeScale = 0.001f;
-                Time.fixedDeltaTime = 0.001f * Time.timeScale;
-                transform.GetChild(2).gameObject.SetActive(true);
-                transform.GetChild(2).localScale = new Vector3(warningScale.x * parentLocalScale.x, warningScale.y * parentLocalScale.y, warningScale.z * parentLocalScale.z);
+                playerController.currentSlowMoPlayerMoveSpeedFactor = 0.15f;
+                Time.timeScale = 0.15f;
+                Time.fixedDeltaTime = 0.02f * Time.timeScale;
+                warningGameObject.SetActive(true);
+                warningGameObject.transform.localScale = new Vector3(warningScale.x * parentLocalScale.x, warningScale.y * parentLocalScale.y, warningScale.z * parentLocalScale.z);
                 isWarningOn = true;
                 //CamManager.instance.ChainBladeCamState(1);
             }
@@ -82,15 +88,16 @@ namespace Controller
                 var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
                 newDirection.z = 0;
                 newDirection.Normalize();
-                transform.GetChild(2).rotation = Quaternion.LookRotation(Vector3.forward, newDirection);
+                warningGameObject.transform.rotation = Quaternion.LookRotation(Vector3.forward, newDirection);
+                warningGameObject.transform.localScale = new Vector3(Mathf.Abs(warningScale.x) * parentLocalScale.x, Mathf.Abs(warningScale.y) * parentLocalScale.y, Mathf.Abs(warningScale.z) * parentLocalScale.z);
             }
             if (Input.GetKeyUp(inputManager.inquisitorialChainKey) && !playerController.isRevealingDashOn && isWarningOn && !uiManager.IsAnyMenuOpened())
             {
                 whipchainAudioSource.PlayOneShot(whipchainSound);
                 
                 isWarningOn = false;
-                transform.GetChild(2).localScale = new Vector3(Mathf.Abs(warningScale.x), Mathf.Abs(warningScale.y), Mathf.Abs(warningScale.z));
-                transform.GetChild(2).gameObject.SetActive(false);
+                warningGameObject.transform.localScale = new Vector3(Mathf.Abs(warningScale.x), Mathf.Abs(warningScale.y), Mathf.Abs(warningScale.z));
+                warningGameObject.SetActive(false);
                 playerController.currentSlowMoPlayerMoveSpeedFactor = 1f;
                 Time.timeScale = 1f;
                 Time.fixedDeltaTime = 0.02f;
@@ -100,12 +107,24 @@ namespace Controller
             
             if (uiManager.isGamePaused && isWarningOn)
             {
-                transform.GetChild(2).gameObject.SetActive(false);
-                transform.GetChild(0).gameObject.SetActive(false);
-                transform.GetChild(1).gameObject.SetActive(false);
+                warningGameObject.SetActive(false);
+                chainGameObject.SetActive(false);
+                bladeGameObject.SetActive(false);
                 isHitting = false;
                 isWarningOn = false;
                 playerController.currentSlowMoPlayerMoveSpeedFactor = 1f;
+            }
+            
+            if (Input.GetKeyDown(inputManager.dashKey) && isWarningOn)
+            {
+                warningGameObject.SetActive(false);
+                chainGameObject.SetActive(false);
+                bladeGameObject.SetActive(false);
+                isHitting = false;
+                isWarningOn = false;
+                playerController.currentSlowMoPlayerMoveSpeedFactor = 1f;
+                Time.timeScale = 1f;
+                Time.fixedDeltaTime = 0.02f;
             }
 
             chainLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));
@@ -161,8 +180,8 @@ namespace Controller
             initialRotation = newRotation * Quaternion.Euler(0, 0, soController.inquisitorialChainHitAngle / 2);
             finalRotation = newRotation * Quaternion.Euler(0, 0, -soController.inquisitorialChainHitAngle / 2);
             transform.rotation = initialRotation;
-            transform.GetChild(0).gameObject.SetActive(true);
-            transform.GetChild(1).gameObject.SetActive(true);
+            chainGameObject.SetActive(true);
+            bladeGameObject.SetActive(true);
             isHitting = true;
         }
 
@@ -176,8 +195,8 @@ namespace Controller
                     transform.rotation.eulerAngles.z > finalRotation.eulerAngles.z - soController.inquisitorialChainToleranceAngle)
                 {
                     isHitting = false;
-                    transform.GetChild(0).gameObject.SetActive(false);
-                    transform.GetChild(1).gameObject.SetActive(false);
+                    chainGameObject.SetActive(false);
+                    bladeGameObject.SetActive(false);
                     animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 0);
                     CamManager.instance.ChainBladeCamShakeState();
                 }

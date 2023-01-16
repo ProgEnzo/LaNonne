@@ -20,6 +20,7 @@ namespace AI.Elite
         private Vector3 dashInitialPosition;
         private Coroutine currentCoroutine;
         private Coroutine currentHittingCoroutine;
+        private AIDestinationSetter aiDestinationSetter;
         private AIPath scriptAIPath;
         private bool scriptAIPathState;
         private bool isDashing;
@@ -51,6 +52,7 @@ namespace AI.Elite
             lineRenderer = GetComponent<LineRenderer>();
             
             //Initialisation du déplacement
+            aiDestinationSetter = GetComponent<AIDestinationSetter>();
             scriptAIPath = GetComponent<AIPath>();
             scriptAIPathState = true;
             
@@ -96,7 +98,7 @@ namespace AI.Elite
                     {
                         //Initialisation des variables pour l'état de lancer
                         isProjectileOn = true; //Le projectile existe
-                        GetComponent<AIDestinationSetter>().enabled = false; //Le pyromane ne se déplace plus vers le joueur
+                        aiDestinationSetter.enabled = false; //Le pyromane ne se déplace plus vers le joueur
                         scriptAIPath.maxSpeed = 0f; //Le pyromane ne se déplace plus avec A*
                         scriptAIPathState = false; //Le pyromane ne se déplace plus avec A*
                         canBoxCast = false; //La zone de feu du pyromane est désactivée
@@ -118,7 +120,7 @@ namespace AI.Elite
                     else
                     {
                         //Déplacement du pyromane
-                        GetComponent<AIDestinationSetter>().enabled = true; //Le pyromane se déplace vers le joueur
+                        aiDestinationSetter.enabled = true; //Le pyromane se déplace vers le joueur
                         scriptAIPathState = true; //Le pyromane se déplace avec A*
                         scriptAIPath.maxSpeed = 3f; //Le pyromane se déplace à la vitesse normale
                     }
@@ -193,7 +195,7 @@ namespace AI.Elite
             projectile.transform.position = transform1.position;
             projectile.gameObject.SetActive(true);
             projectile.GetComponent<Rigidbody2D>().velocity = direction * soPyromaniac.projectileSpeed;
-            projectile.GetComponent<PyromaniacProjectile>().destination = destination;
+            projectile.destination = destination;
         }
         
         private IEnumerator DashToFireZone()
@@ -241,8 +243,8 @@ namespace AI.Elite
             isImpactOn = false;
             var transform1 = transform;
             projectile.transform.position = transform1.position;
-            projectile.GetComponent<PyromaniacProjectile>().isExploded = false;
-            projectile.GetComponent<PyromaniacProjectile>().currentCoroutine = null;
+            projectile.isExploded = false;
+            projectile.currentCoroutine = null;
             projectile.gameObject.SetActive(false);
             
             currentCoroutine = null;
@@ -267,6 +269,17 @@ namespace AI.Elite
                 isImpactOn = false;
                 canBoxCast = false;
                 lineRenderer.enabled = false;
+                circleGameObject.SetActive(false); //On désactive le cercle
+                var transform1 = transform;
+                projectile.transform.position = transform1.position;
+                projectile.isExploded = false;
+                projectile.currentCoroutine = null;
+                projectile.gameObject.SetActive(false);
+                if (currentCoroutine != null)
+                {
+                    StopCoroutine(currentCoroutine);
+                    currentCoroutine = null;
+                }
                 
                 //Stop sound trail
                 pyroAudioSource.Stop();
