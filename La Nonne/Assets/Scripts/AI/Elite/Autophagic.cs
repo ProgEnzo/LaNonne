@@ -102,7 +102,6 @@ namespace AI.Elite
             if (currentHealth <= 0)
             {
                 EpDrop((int)(soEnemy.numberOfEp * currentEpDropMultiplier * (totalTime - currentTotalTimer) / totalTime));
-                Debug.Log((totalTime - currentTotalTimer) / totalTime);
                 
                 scoreManager.AddKilledEnemyScore(soEnemy.scorePoint);
 
