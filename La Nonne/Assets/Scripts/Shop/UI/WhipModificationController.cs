@@ -189,12 +189,21 @@ namespace Shop.UI
       
       private void PlaceGems()
       {
-         foreach (var gem in gems)
+         for (var i = 0; i < EffectManager.instance.effectInventory.Count; i++)
          {
-            var dragScript = gem.GetComponent<Drag>();
-            gem.transform.SetParent(dragScript.initialParent);
-            dragScript.rectTransform.localPosition = dragScript.initialLocalPosition;
-            dragScript.isSlotted = false;
+            var gem = gems[i];
+            if (EffectManager.instance.effectInventory[(EffectManager.Effect)i] == 0)
+            {
+               gem.SetActive(false);
+            }
+            else
+            {
+               gem.SetActive(true);
+               var dragScript = gem.GetComponent<Drag>();
+               gem.transform.SetParent(dragScript.initialParent);
+               dragScript.rectTransform.localPosition = dragScript.initialLocalPosition;
+               dragScript.isSlotted = false;
+            }
          }
          
          for (var i = 0; i < EffectManager.instance.appliedEffects.Length; i++)
