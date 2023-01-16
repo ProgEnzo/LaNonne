@@ -18,6 +18,10 @@ namespace Shop
         [SerializeField] private int buttonNumber;
         private bool isDragging;
         internal static bool isAnyDragging;
+        
+        [Header("SoundEffect")] 
+        public AudioSource whipAudioSource;
+        public AudioClip whipClipSound;
     
         private void Awake()
         {
@@ -41,6 +45,10 @@ namespace Shop
         {
             if (EffectManager.instance.effectInventory[(EffectManager.Effect)buttonNumber] > 0) // && !EffectManager.instance.appliedEffects.Contains((EffectManager.Effect)buttonNumber)
             {
+                //SOUND Play()
+                whipAudioSource.clip = whipClipSound;
+                whipAudioSource.Play();
+                
                 isDragging = true;
                 isAnyDragging = true;
                 previousParent = transform.parent;
@@ -62,6 +70,12 @@ namespace Shop
         {
             if (isDragging)
             {
+                //A CHAQUE FOIS QUON LACHE LA GEMME
+                //SOUND DragSound.Stop() + PlayOneShot pour le drop
+                whipAudioSource.Stop();
+
+
+                
                 if ((!Drop.isPointerOnSlot || EffectManager.instance.appliedEffects[slotIndex] != EffectManager.Effect.None) && !isSlotted)
                 {
                     transform.SetParent(previousParent);
