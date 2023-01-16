@@ -44,6 +44,7 @@ namespace Controller
         [Header("Health")]
         private int currentHealth;
         private List<SpriteRenderer> playerSpriteRenderers = new();
+        protected Coroutine currentSpriteCoroutine;
 
         [Header("Revealing Dash")]
         internal bool isRevealingDashHitting;
@@ -370,7 +371,13 @@ namespace Controller
         {
             currentHealth -= damage;
             healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
-            StartCoroutine(PlayerIsHit());
+            
+            if (currentSpriteCoroutine != null)
+            {
+                StopCoroutine(currentSpriteCoroutine);
+            }
+            currentSpriteCoroutine = StartCoroutine(PlayerIsHit());
+            
             camManager.PlayerHasBeenHitByEnnemy();
             //Debug.Log("<color=green>PLAYER</color> HAS BEEN HIT, HEALTH REMAINING : " + soController.currentHealth);
             
@@ -393,6 +400,13 @@ namespace Controller
         {
             currentHealth += heal;
             healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
+            
+            if (currentSpriteCoroutine != null)
+            {
+                StopCoroutine(currentSpriteCoroutine);
+            }
+            currentSpriteCoroutine = StartCoroutine(PlayerIsHeal());
+            
             HealCeiling();
         }
 
@@ -410,11 +424,28 @@ namespace Controller
             {
                 spriteRenderer.color = Color.red;
             }
+            healthBar.color = Color.red;
             yield return new WaitForSeconds(0.2f);
             foreach (var spriteRenderer in playerSpriteRenderers)
             {
                 spriteRenderer.color = Color.white;
             }
+            healthBar.color = Color.white;
+        }
+
+        private IEnumerator PlayerIsHeal()
+        {
+            foreach (var spriteRenderer in playerSpriteRenderers)
+            {
+                spriteRenderer.color = Color.green;
+            }
+            healthBar.color = Color.green;
+            yield return new WaitForSeconds(0.2f);
+            foreach (var spriteRenderer in playerSpriteRenderers)
+            {
+                spriteRenderer.color = Color.white;
+            }
+            healthBar.color = Color.white;
         }
         
         #endregion
