@@ -1,5 +1,6 @@
 using System.Collections;
 using Controller;
+using GenPro.Rooms.Generator;
 using Manager;
 using UnityEngine;
 using Random = UnityEngine.Random;
