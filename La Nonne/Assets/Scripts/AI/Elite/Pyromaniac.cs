@@ -289,7 +289,10 @@ namespace AI.Elite
         private void OnCollisionEnter2D(Collision2D other)
         {
             Impact(isDashing);
+            
+            pyroAudioSource.PlayOneShot(pyroImpactAudioClip);
 
+            
             if (other.gameObject.CompareTag("Player") && !playerController.isRevealingDashOn && !isStunned)
             {
                 other.gameObject.GetComponent<PlayerController>().TakeDamage(soEnemy.bodyDamage);
