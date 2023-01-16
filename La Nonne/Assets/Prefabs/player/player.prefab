@@ -1356,6 +1356,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
+  playerPuppets:
+  - {fileID: 6373755552937467985}
+  - {fileID: 159868969887667681}
+  - {fileID: 2230644646767091768}
+  - {fileID: 2503643539393687862}
+  - {fileID: 801698167889050683}
+  - {fileID: 7094544789665752317}
+  - {fileID: 6496909670973825487}
+  - {fileID: 3887284229582273772}
   volume: {fileID: 0}
   playerAudioSource: {fileID: 3221706276323021389}
   dashAudioClip:
@@ -1993,6 +2002,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2099702480130079349, guid: eb379d0cc0cedbd499a38439d1933d50, type: 3}
   m_PrefabInstance: {fileID: 1377937589554528814}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2230644646767091768 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1003103782061711894, guid: eb379d0cc0cedbd499a38439d1933d50, type: 3}
+  m_PrefabInstance: {fileID: 1377937589554528814}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1851136007969017588
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2290,6 +2304,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e8cffda1fc445fb418a65776d3404a9a, type: 3}
+--- !u!1 &801698167889050683 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1337773977723351759, guid: e8cffda1fc445fb418a65776d3404a9a, type: 3}
+  m_PrefabInstance: {fileID: 1851136007969017588}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2010907710871102552 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 169064810392939180, guid: e8cffda1fc445fb418a65776d3404a9a, type: 3}
@@ -2880,6 +2899,11 @@ PrefabInstance:
 --- !u!4 &5241126958473525298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9103835113811528892, guid: 6b12bb28b655e7349bd83829cb84dc22, type: 3}
+  m_PrefabInstance: {fileID: 3957372139635438734}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6373755552937467985 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7971169140112987359, guid: 6b12bb28b655e7349bd83829cb84dc22, type: 3}
   m_PrefabInstance: {fileID: 3957372139635438734}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7513666067840637876

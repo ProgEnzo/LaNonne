@@ -43,6 +43,7 @@ namespace Controller
         
         [Header("Health")]
         private int currentHealth;
+        [SerializeField] private List<GameObject> playerPuppets;
         private List<SpriteRenderer> playerSpriteRenderers = new();
         protected Coroutine currentSpriteCoroutine;
 
@@ -141,7 +142,10 @@ namespace Controller
                 prefab.SetActive(false);
             }
 
-            playerSpriteRenderers = GetComponentsInChildren<SpriteRenderer>(true).ToList();
+            foreach (var playerPuppet in playerPuppets)
+            {
+                playerSpriteRenderers.AddRange(playerPuppet.GetComponentsInChildren<SpriteRenderer>(true).ToList());
+            }
         }
 
         private void Start()
