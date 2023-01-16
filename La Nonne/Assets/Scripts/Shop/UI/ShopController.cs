@@ -204,6 +204,8 @@ namespace Shop.UI
       {
          dialogueText.text = "";
          
+         yield return new WaitForSecondsRealtime(shopAnimClip.length);
+         
          foreach (var character in text)
          {
             dialogueText.text += character;
