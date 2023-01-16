@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using GenPro.Rooms.Generator;
 using UnityEngine;
 
 public class GoToBoss : MonoBehaviour

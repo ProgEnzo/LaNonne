@@ -4,7 +4,6 @@ using System.Linq;
 using AI.So;
 using Controller;
 using Pathfinding;
-using Tools;
 using UnityEngine;
 // ReSharper disable CommentTypo
 
@@ -24,6 +23,7 @@ namespace AI.Elite
         private AIPath scriptAIPath;
         private bool scriptAIPathState;
         private bool isDashing;
+        private bool delayedIsDashing;
         private bool isProjectileOn;
         private bool isImpactOn;
         private bool canBoxCast;
@@ -56,6 +56,7 @@ namespace AI.Elite
             
             //Initialisation des états du pyromane
             isDashing = false; //Dash
+            delayedIsDashing = false; //Dash
             isProjectileOn = false; //Existence du projectile
             isImpactOn = false; //Impact
             canBoxCast = false; //Zone de feu
@@ -201,6 +202,7 @@ namespace AI.Elite
             var transform1 = transform;
             dashInitialPosition = transform1.position; //Position du pyromane
             isDashing = true;
+            StartCoroutine(DelayedIsDashing());
             capsuleCollider2D.enabled = false;
             dashDirection = (projectile.transform.position - dashInitialPosition).normalized;
             currentVelocitySpeed = soEnemy.velocityBasicSpeed;
@@ -261,6 +263,7 @@ namespace AI.Elite
             {
                 currentVelocitySpeed = 0f;
                 isDashing = false;
+                delayedIsDashing = false;
                 isImpactOn = false;
                 canBoxCast = false;
                 lineRenderer.enabled = false;
@@ -285,36 +288,29 @@ namespace AI.Elite
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (isDashing)
-            {
-                currentVelocitySpeed = 0f;
-                isDashing = false;
-                capsuleCollider2D.enabled = true;
-                isImpactOn = true;
-                
-                //Cercle d'explosion
-                pyroAudioSource.PlayOneShot(pyroImpactAudioClip);
-                circleGameObject.SetActive(true); //On active le cercle
-                circleGameObject.transform.localScale = Vector3.one * (soPyromaniac.explosionRadius * 8); //On le met à la bonne taille
-                var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
-                var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
-                circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle
+            Impact(isDashing);
+            
+            pyroAudioSource.PlayOneShot(pyroImpactAudioClip);
 
-                StartCoroutine(BlinkFire());
-            }
-
+            
             if (other.gameObject.CompareTag("Player") && !playerController.isRevealingDashOn && !isStunned)
             {
                 other.gameObject.GetComponent<PlayerController>().TakeDamage(soEnemy.bodyDamage);
             }
         }
 
-        private void OnCollisionStay2D(Collision2D other)
+        private void OnCollisionStay2D()
         {
-            if (isDashing)
+            Impact(delayedIsDashing);
+        }
+
+        private void Impact(bool isDash)
+        {
+            if (isDash && !isImpactOn)
             {
                 currentVelocitySpeed = 0f;
                 isDashing = false;
+                delayedIsDashing = false;
                 capsuleCollider2D.enabled = true;
                 isImpactOn = true;
                 
@@ -327,6 +323,12 @@ namespace AI.Elite
 
                 StartCoroutine(BlinkFire());
             }
+        }
+        
+        private IEnumerator DelayedIsDashing()
+        {
+            yield return new WaitForSeconds(0.1f);
+            delayedIsDashing = true;
         }
     }
 }
