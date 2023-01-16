@@ -1,3 +1,5 @@
+using System.Collections;
+using DG.Tweening;
 using Shop.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -22,6 +24,8 @@ namespace Shop
         [Header("SoundEffect")] 
         public AudioSource whipAudioSource;
         public AudioClip whipClipSound;
+        public AudioClip whipItemHoldSound;
+        public AudioClip whipItemReleaseSound;
     
         private void Awake()
         {
@@ -46,7 +50,8 @@ namespace Shop
             if (EffectManager.instance.effectInventory[(EffectManager.Effect)buttonNumber] > 0) // && !EffectManager.instance.appliedEffects.Contains((EffectManager.Effect)buttonNumber)
             {
                 //SOUND Play()
-                whipAudioSource.clip = whipClipSound;
+                whipAudioSource.PlayOneShot(whipClipSound);
+                whipAudioSource.clip = whipItemHoldSound;
                 whipAudioSource.Play();
                 
                 isDragging = true;
@@ -73,9 +78,10 @@ namespace Shop
                 //A CHAQUE FOIS QUON LACHE LA GEMME
                 //SOUND DragSound.Stop() + PlayOneShot pour le drop
                 whipAudioSource.Stop();
+                StartCoroutine(WaitForSound());
 
 
-                
+
                 if ((!Drop.isPointerOnSlot || EffectManager.instance.appliedEffects[slotIndex] != EffectManager.Effect.None) && !isSlotted)
                 {
                     transform.SetParent(previousParent);
@@ -128,6 +134,15 @@ namespace Shop
                 rectTransform.localPosition = initialLocalPosition;
                 isSlotted = false;
             }
+        }
+
+        private IEnumerator WaitForSound()
+        {
+            whipAudioSource.PlayOneShot(whipItemReleaseSound);
+            yield return new WaitForSeconds(whipItemReleaseSound.length);
+                
+            whipAudioSource.Stop();
+
         }
     }
 }
