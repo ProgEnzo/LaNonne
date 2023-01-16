@@ -155,10 +155,10 @@ namespace Shop.UI
                   }
                   else
                   {
-                     for (var j = 0; j < 3; j++)
-                     {
-                        shopPanel.transform.GetChild(i).GetChild(j).GetComponent<TextMeshProUGUI>().text = "Closed.";
-                     }
+                     shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = null;
+                     shopPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+                     shopPanel.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = "Closed.";
+                     shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text = "";
                   }
                }
             }
@@ -277,15 +277,21 @@ namespace Shop.UI
             shopAudioSource.PlayOneShot(shopBuyItemAudioClip);
             
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
-            for (var j = 0; j < 3; j++)
-            {
-               shopPanel.transform.GetChild(buttonNumber).GetChild(j+1).GetComponent<TextMeshProUGUI>().text = "Closed.";
-            }
+            shopPanel.transform.GetChild(buttonNumber).GetChild(0).GetComponent<Image>().sprite = null;
+            shopPanel.transform.GetChild(buttonNumber).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+            shopPanel.transform.GetChild(buttonNumber).GetChild(2).GetComponent<TextMeshProUGUI>().text = "Closed.";
+            shopPanel.transform.GetChild(buttonNumber).GetChild(3).GetComponent<TextMeshProUGUI>().text = "";
 
-            if (currentNumberOfTakenObjects > maxNumberOfTakenObjects)
+            if (currentNumberOfTakenObjects == maxNumberOfTakenObjects)
             {
-               CloseShop();
-               PlayerController.Die();
+               for (var i = 0; i < 3; i++)
+               {
+                  effectsInTheShop[i] = EffectManager.Effect.None;
+                  shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = null;
+                  shopPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+                  shopPanel.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = "Closed.";
+                  shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text = "";
+               }
             }
          }
          else if (PlayerController.instance.currentEp <
