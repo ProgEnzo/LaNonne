@@ -269,9 +269,9 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in wallDownPos)
             {
-                if (Random.Range(0, 100) < 0)
+                if (Random.Range(0, 100) < 25)
                 {
-                    Instantiate(wallDownCusto[Random.Range(0, wallDownCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+                    Instantiate(wallDownCusto[Random.Range(0, wallDownCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 1.5f, 0), Quaternion.identity);
                 }
             }
         }
@@ -280,9 +280,9 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in wallRightPos)
             {
-                if (Random.Range(0, 100) < 0)
+                if (Random.Range(0, 100) < 25)
                 {
-                    Instantiate(wallRightCusto[Random.Range(0, wallRightCusto.Count)], new Vector3(pos.x, pos.y + 0.5f, 0), Quaternion.identity);
+                    Instantiate(wallRightCusto[Random.Range(0, wallRightCusto.Count)], new Vector3(pos.x - 0.5f, pos.y, 0), Quaternion.identity);
                 }
             }
         }

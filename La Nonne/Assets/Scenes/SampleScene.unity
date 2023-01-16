@@ -52831,8 +52831,9 @@ MonoBehaviour:
   prefabBoss: {fileID: 1944883718194242583, guid: 6324c300ef7da5d4c9994c5e35b03543, type: 3}
   prefabHub: {fileID: 1944883718194242583, guid: 65602389be7053442b3e70d81d64f372, type: 3}
   multiplierPerDistance:
+  - 0
   - 15
-  - 30
+  - 25
   - 45
   - 75
   - 100
@@ -52843,6 +52844,7 @@ MonoBehaviour:
   wallRightCusto:
   - {fileID: 58578500335332264, guid: 86c9e6abbc19bcd4484875111e234a30, type: 3}
   wallLeftCusto:
+  - {fileID: 6177970188248792291, guid: f4e0d19ecf9aec04eae40c86eff8a614, type: 3}
   - {fileID: 58578500335332264, guid: 86c9e6abbc19bcd4484875111e234a30, type: 3}
   floorCusto:
   - {fileID: 8663388399271273813, guid: a2a14f1be5917144e921ccf9b188ff94, type: 3}
@@ -52850,7 +52852,6 @@ MonoBehaviour:
   - {fileID: 9180321339612675835, guid: 1a64ecab4e594d44d9526295374a750b, type: 3}
   floorNearWallsUpCusto:
   - {fileID: 3801929322858841530, guid: d3355caee2f513a41b587dd02bb55f98, type: 3}
-  - {fileID: 6177970188248792291, guid: f4e0d19ecf9aec04eae40c86eff8a614, type: 3}
   floorNearWallsDownCusto:
   - {fileID: 8860681310838871273, guid: d7f776e4f6c17ed42b1e2897d46ff3be, type: 3}
   - {fileID: 4341264240199077637, guid: c5a0ed901f0f70141a62b3aef37cd07e, type: 3}
@@ -53068,6 +53069,18 @@ PrefabInstance:
     - target: {fileID: 763796126852084834, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916245845482332, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+      propertyPath: m_Color.b
+      value: 0.2392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916245845482332, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+      propertyPath: m_Color.g
+      value: 0.043137256
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916245845482332, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+      propertyPath: m_Color.r
+      value: 0.08627451
       objectReference: {fileID: 0}
     - target: {fileID: 1242916245884960323, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
       propertyPath: m_AnchoredPosition.x
