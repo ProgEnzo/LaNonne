@@ -54,7 +54,6 @@ namespace Shop.UI
          {
             whipModificationMenu.transform.GetChild(1).GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = ((EffectManager.Effect)i).ToString();
          }
-         ChangeEffectTexts();
       }
 
       private IEnumerator BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp()

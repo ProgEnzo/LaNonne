@@ -155,7 +155,7 @@ namespace Shop.UI
                   }
                   else
                   {
-                     shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = null;
+                     shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
                      shopPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
                      shopPanel.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = "Closed.";
                      shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text = "";
@@ -277,7 +277,7 @@ namespace Shop.UI
             shopAudioSource.PlayOneShot(shopBuyItemAudioClip);
             
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
-            shopPanel.transform.GetChild(buttonNumber).GetChild(0).GetComponent<Image>().sprite = null;
+            shopPanel.transform.GetChild(buttonNumber).GetChild(0).GetComponent<Image>().enabled = false;
             shopPanel.transform.GetChild(buttonNumber).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
             shopPanel.transform.GetChild(buttonNumber).GetChild(2).GetComponent<TextMeshProUGUI>().text = "Closed.";
             shopPanel.transform.GetChild(buttonNumber).GetChild(3).GetComponent<TextMeshProUGUI>().text = "";
@@ -287,7 +287,7 @@ namespace Shop.UI
                for (var i = 0; i < 3; i++)
                {
                   effectsInTheShop[i] = EffectManager.Effect.None;
-                  shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = null;
+                  shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
                   shopPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
                   shopPanel.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = "Closed.";
                   shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text = "";
