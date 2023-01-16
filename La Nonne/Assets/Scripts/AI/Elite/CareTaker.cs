@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI.So;
+using DG.Tweening;
 using Pathfinding;
 using UnityEngine;
 
@@ -16,8 +17,8 @@ namespace AI.Elite
         private bool blinkExecuted;
 
         [Header("Enemy Components")]
-        [SerializeField] private CircleCollider2D circle;
-        [SerializeField] private GameObject circleSprite;
+        [SerializeField] private GameObject circle;
+        [SerializeField] private GameObject greenCircleWarning;
         [SerializeField] private GameObject circleSpriteWarning;
         [SerializeField] private ParticleSystem particleHeal;
         [SerializeField] private ParticleSystem particleHeal2;
@@ -31,7 +32,7 @@ namespace AI.Elite
             GoToTheNearestMob();
             
             //Zones de heal / dégâts
-            circle.enabled = false;
+            circle.SetActive(false);
             
             particleHeal.Stop();
             particleHeal2.Stop();
@@ -61,19 +62,28 @@ namespace AI.Elite
         private IEnumerator BlinkCircle()
         {
             circleSpriteWarning.SetActive(true);
-            yield return new WaitForSeconds(0.8f);
+            greenCircleWarning.SetActive(true);
+            
+            circleSpriteWarning.transform.DOScale(new Vector3(0.35f, 0.35f, 0.35f), 0.5f);
+            yield return new WaitForSeconds(0.9f);
 
-            circleSpriteWarning.SetActive(false);
-            circle.enabled = true;
-            circleSprite.SetActive(true);
+            greenCircleWarning.SetActive(false);
+            circleSpriteWarning.transform.DOScale(new Vector3(0f, 0f, 0f), 0f);
+            
+            circleSpriteWarning.SetActive(true);
+            circle.SetActive(true);
+            
             particleHeal.Play();
             particleHeal2.Play();
+            
             currentHealth += soCaretaker.healAmount;
             yield return new WaitForSeconds(soCaretaker.timeBetweenCircleSpawn);
-            circle.enabled = false;
-            circleSprite.SetActive(false);
+            
+            circle.SetActive(false);
+            
             particleHeal.Stop();
             particleHeal2.Stop();
+            
             cooldownTimer = soCaretaker.timeBetweenCircleSpawn;
             blinkExecuted = false;
         }

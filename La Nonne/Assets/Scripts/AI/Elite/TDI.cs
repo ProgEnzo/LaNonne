@@ -106,8 +106,8 @@ namespace AI.Elite
             circleSpriteWarning.SetActive(true);
             greenCircleWarning.SetActive(true);
 
-            circleSpriteWarning.transform.DOScale(new Vector3(0.55f, 0.55f, 0.55f), 0.5f);
-            yield return new WaitForSeconds(0.8f);
+            circleSpriteWarning.transform.DOScale(new Vector3(0.55f, 0.55f, 0.55f), 1f);
+            yield return new WaitForSeconds(1.3f);
 
             greenCircleWarning.SetActive(false);
             circleSpriteWarning.transform.DOScale(new Vector3(0f, 0f, 0f), 0f);

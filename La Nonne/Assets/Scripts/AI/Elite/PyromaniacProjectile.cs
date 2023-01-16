@@ -24,8 +24,6 @@ namespace AI.Elite
         public AudioClip[] pyroProjectileExplosionAudioClip;
         private Coroutine soundExplosionProjectile;
 
-
-
         private void OnEnable()
         {
             GetComponent<SpriteRenderer>().enabled = true; //On réactive le sprite du projectile
