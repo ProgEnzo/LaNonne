@@ -144,14 +144,14 @@ namespace Shop.UI
                         effectManager.effectDictionary[(int)effectsInTheShop[i]][
                            EffectManager.instance.effectInventory[effectsInTheShop[i]]].image;
                      shopPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text =
-                        effectsInTheShop[i] + " - T" +
+                        effectsInTheShop[i] + " - Lv. " +
                         (EffectManager.instance.effectInventory[effectsInTheShop[i]] + 1);
                      shopPanel.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text =
                         "Cost : " + effectManager.effectDictionary[(int)effectsInTheShop[i]][
                            EffectManager.instance.effectInventory[effectsInTheShop[i]]].cost;
                      shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text =
                         effectManager.effectDictionary[(int)effectsInTheShop[i]][
-                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].effectDescription;
+                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].shopDescription;
                   }
                   else
                   {
