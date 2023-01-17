@@ -1,19 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Controller;
+using Manager;
 using UnityEngine;
 
 public class AnimationEvent : MonoBehaviour
 {
+    private InputManager inputManager;
+    
     [Header("SoundEffect")] 
-    public AudioSource bladeAudioSource;
-    public AudioClip[] walkSound;
+    public AudioSource footstepAudioSource;
+    public AudioClip[] footstepAudioClip;
     void Start()
     {
-        
+        inputManager = InputManager.instance;
     }
 
     void walkPlayerSound()
     {
-        bladeAudioSource.PlayOneShot(walkSound[Random.Range(0, walkSound.Length)]);
+        if (Input.GetKey(inputManager.leftMoveKey) || Input.GetKey(inputManager.rightMoveKey) || Input.GetKey(inputManager.upMoveKey) || Input.GetKey(inputManager.downMoveKey))
+        {
+            footstepAudioSource.PlayOneShot(footstepAudioClip[Random.Range(0, footstepAudioClip.Length)]);
+        }
     }
 }
