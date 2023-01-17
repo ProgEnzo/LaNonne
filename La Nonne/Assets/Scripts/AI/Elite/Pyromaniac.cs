@@ -260,30 +260,6 @@ namespace AI.Elite
             {
                 scriptAIPath.enabled = false;
             }
-
-            if (isStunned)
-            {
-                currentVelocitySpeed = 0f;
-                isDashing = false;
-                delayedIsDashing = false;
-                isImpactOn = false;
-                canBoxCast = false;
-                lineRenderer.enabled = false;
-                circleGameObject.SetActive(false); //On désactive le cercle
-                var transform1 = transform;
-                projectile.transform.position = transform1.position;
-                projectile.isExploded = false;
-                projectile.currentCoroutine = null;
-                projectile.gameObject.SetActive(false);
-                if (currentCoroutine != null)
-                {
-                    StopCoroutine(currentCoroutine);
-                    currentCoroutine = null;
-                }
-                
-                //Stop sound trail
-                pyroAudioSource.Stop();
-            }
         }
 
         private void OnDrawGizmos()
@@ -342,6 +318,12 @@ namespace AI.Elite
         {
             yield return new WaitForSeconds(0.1f);
             delayedIsDashing = true;
+        }
+
+        internal override void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
+        {
+            isKnockedBack = true;
+            rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
         }
     }
 }

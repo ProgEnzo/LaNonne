@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AI.Boss;
 using Shop;
 using UnityEngine;
@@ -7,12 +8,18 @@ namespace AI
     public class StackUIManager : MonoBehaviour
     {
         private Component entityController;
-        private SpriteRenderer[] squareSpriteRenderers = new SpriteRenderer[3];
+        private readonly SpriteRenderer[] squareSpriteRenderers = new SpriteRenderer[3];
+        private readonly SpriteRenderer[] otherSpriteRenderers = new SpriteRenderer[3];
+        [SerializeField] private List<Sprite> stackSprites = new();
         
         private void Start()
         {
             entityController = transform.parent.CompareTag("Boss") ? transform.parent.GetComponent<BossStateManager>() : GetComponentInParent<EnemyController>();
-            squareSpriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+            for (var i = 0; i < transform.childCount; i++)
+            {
+                squareSpriteRenderers[i] = transform.GetChild(i).GetComponent<SpriteRenderer>();
+                otherSpriteRenderers[i] = transform.GetChild(i).GetChild(0).GetComponent<SpriteRenderer>();
+            }
         }
 
         private void Update()
@@ -25,28 +32,28 @@ namespace AI
         
         private void StackSwitch(int i)
         {
-            bool isActive = false;
+            var isActive = false;
             
-            if (entityController is BossStateManager boss && boss.stacks[i].effect != EffectManager.Effect.None)
+            switch (entityController)
             {
-                isActive = true;
-            }
-            else if (entityController is EnemyController en && en.stacks[i].effect != EffectManager.Effect.None)
-            {
-                isActive = true;
+                case BossStateManager boss when boss.stacks[i].effect != EffectManager.Effect.None:
+                case EnemyController en when en.stacks[i].effect != EffectManager.Effect.None:
+                    isActive = true;
+                    break;
             }
 
             squareSpriteRenderers[i].enabled = isActive;
+            otherSpriteRenderers[i].enabled = isActive;
             
             if (squareSpriteRenderers[i].enabled)
             {
-                squareSpriteRenderers[i].color = (entityController is BossStateManager boss2 ? boss2.stacks[i].effect : ((EnemyController)entityController).stacks[i].effect) switch
+                squareSpriteRenderers[i].sprite = (entityController is BossStateManager boss2 ? boss2.stacks[i].effect : ((EnemyController)entityController).stacks[i].effect) switch
                 {
-                    EffectManager.Effect.Bleed => Color.red,
-                    EffectManager.Effect.Chill => Color.cyan,
-                    EffectManager.Effect.Target => Color.green,
-                    EffectManager.Effect.Wealth => Color.yellow,
-                    _ => Color.white
+                    EffectManager.Effect.Bleed => stackSprites[0],
+                    EffectManager.Effect.Chill => stackSprites[1],
+                    EffectManager.Effect.Target => stackSprites[2],
+                    EffectManager.Effect.Wealth => stackSprites[3],
+                    _ => null
                 };
             }
         }
