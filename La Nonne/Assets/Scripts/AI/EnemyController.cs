@@ -133,7 +133,7 @@ namespace AI
         }
         #endregion
         
-        internal void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
+        internal virtual void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
         {
             isKnockedBack = true;
             rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
