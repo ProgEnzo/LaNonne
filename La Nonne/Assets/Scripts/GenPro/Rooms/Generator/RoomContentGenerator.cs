@@ -258,7 +258,7 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in wallUpPos)
             {
-                if (Random.Range(0, 100) < 33)
+                if (Random.Range(0, 100) < 25)
                 {
                     Instantiate(wallUpCusto[Random.Range(0, wallUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
                 }
@@ -269,7 +269,7 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in wallDownPos)
             {
-                if (Random.Range(0, 100) < 25)
+                if (Random.Range(0, 100) < 15)
                 {
                     Instantiate(wallDownCusto[Random.Range(0, wallDownCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 1.5f, 0), Quaternion.identity);
                 }
@@ -280,7 +280,7 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in wallRightPos)
             {
-                if (Random.Range(0, 100) < 25)
+                if (Random.Range(0, 100) < 15)
                 {
                     Instantiate(wallRightCusto[Random.Range(0, wallRightCusto.Count)], new Vector3(pos.x - 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
                 }
@@ -291,9 +291,9 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in wallLeftPos)
             {
-                if (Random.Range(0, 100) < 0)
+                if (Random.Range(0, 100) < 15)
                 {
-                    Instantiate(wallLeftCusto[Random.Range(0, wallLeftCusto.Count)], new Vector3(pos.x +1f, pos.y + 0.5f, 0), Quaternion.identity);
+                    Instantiate(wallLeftCusto[Random.Range(0, wallLeftCusto.Count)], new Vector3(pos.x + 1.5f, pos.y + 0.5f, 0), Quaternion.identity);
                 }
             }
         }
@@ -302,7 +302,7 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in floorPos)
             {
-                if (Random.Range(0, 100) < 75)
+                if (Random.Range(0, 100) < 80)
                 {
                     Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
                 }

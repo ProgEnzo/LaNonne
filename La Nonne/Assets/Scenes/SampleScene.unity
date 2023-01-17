@@ -36502,6 +36502,10 @@ PrefabInstance:
       propertyPath: m_ChildCameras.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 519420030, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 519420031, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 2541503
@@ -52876,24 +52880,26 @@ MonoBehaviour:
   wallUpCusto:
   - {fileID: 9125075138894493168, guid: feb89ad780005374dad64d00a9b81c3e, type: 3}
   wallDownCusto:
-  - {fileID: 58578500335332264, guid: 86c9e6abbc19bcd4484875111e234a30, type: 3}
+  - {fileID: 8663388399271273813, guid: a2a14f1be5917144e921ccf9b188ff94, type: 3}
   wallRightCusto:
-  - {fileID: 58578500335332264, guid: 86c9e6abbc19bcd4484875111e234a30, type: 3}
+  - {fileID: 8663388399271273813, guid: a2a14f1be5917144e921ccf9b188ff94, type: 3}
   wallLeftCusto:
-  - {fileID: 6177970188248792291, guid: f4e0d19ecf9aec04eae40c86eff8a614, type: 3}
-  - {fileID: 58578500335332264, guid: 86c9e6abbc19bcd4484875111e234a30, type: 3}
+  - {fileID: 8663388399271273813, guid: a2a14f1be5917144e921ccf9b188ff94, type: 3}
   floorCusto:
   - {fileID: 8663388399271273813, guid: a2a14f1be5917144e921ccf9b188ff94, type: 3}
   - {fileID: 9030111100557875032, guid: 7f9cf41ec6f556546b0732ab864b4536, type: 3}
   - {fileID: 9180321339612675835, guid: 1a64ecab4e594d44d9526295374a750b, type: 3}
+  - {fileID: 1810574448651365468, guid: 907d9783611cefa428e8053025ef379f, type: 3}
   floorNearWallsUpCusto:
   - {fileID: 3801929322858841530, guid: d3355caee2f513a41b587dd02bb55f98, type: 3}
+  - {fileID: 7421016735077652925, guid: 0278dc6059c373c4aab5617d9be89e21, type: 3}
   floorNearWallsDownCusto:
   - {fileID: 8860681310838871273, guid: d7f776e4f6c17ed42b1e2897d46ff3be, type: 3}
   - {fileID: 4341264240199077637, guid: c5a0ed901f0f70141a62b3aef37cd07e, type: 3}
+  - {fileID: 58578500335332264, guid: 86c9e6abbc19bcd4484875111e234a30, type: 3}
   floorNearWallsRightCusto:
-  - {fileID: 7979019871931956729, guid: be468ca6a3fdf3b4bb0aeeee40f1a976, type: 3}
   - {fileID: 4341264240199077637, guid: c5a0ed901f0f70141a62b3aef37cd07e, type: 3}
+  - {fileID: 58578500335332264, guid: 86c9e6abbc19bcd4484875111e234a30, type: 3}
   floorNearWallsLeftCusto:
   - {fileID: 58578500335332264, guid: 86c9e6abbc19bcd4484875111e234a30, type: 3}
   - {fileID: 1810574448651365468, guid: 907d9783611cefa428e8053025ef379f, type: 3}

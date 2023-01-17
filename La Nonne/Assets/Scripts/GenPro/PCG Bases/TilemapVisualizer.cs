@@ -94,7 +94,7 @@ public class TilemapVisualizer : MonoBehaviour
         Debug.Log(a);
     }*/
 
-    //Appler cette fonction pour toute mes salles 
+    //Appeler cette fonction pour toute mes salles 
     public List<Vector2Int> GetWalls(int middleX, int middleY, PlacementType typeWanted) //surement remplacer le placement Type (actuellement mon script) 
     {
         int count = 25;
@@ -131,7 +131,7 @@ public class TilemapVisualizer : MonoBehaviour
                         }
                         break;
                     case PlacementType.WallDown:
-                        if (tile == wallBottom || tile == wallInnerCornerDownLeft || tile == wallInnerCornerDownRight)
+                        if (tile  == wallBottom || tile == wallInnerCornerDownLeft || tile == wallInnerCornerDownRight)
                         {
                             tileReturn.Add(new Vector2Int(cellX, cellY));
                         }
