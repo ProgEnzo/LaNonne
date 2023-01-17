@@ -85,6 +85,7 @@ public class TilemapVisualizer : MonoBehaviour
     public bool hasCorridor(int x, int y)
     {
         return floorTilemap.GetTile( new Vector3Int( x, y)) != null;
+        return wallTilemap.GetTile( new Vector3Int( x, y)) != null;
     }
     
     /*public void Update()
@@ -96,7 +97,7 @@ public class TilemapVisualizer : MonoBehaviour
     //Appler cette fonction pour toute mes salles 
     public List<Vector2Int> GetWalls(int middleX, int middleY, PlacementType typeWanted) //surement remplacer le placement Type (actuellement mon script) 
     {
-        int count = 14;
+        int count = 25;
         
         List<Vector2Int> tileReturn = new ();
 
@@ -144,13 +145,13 @@ public class TilemapVisualizer : MonoBehaviour
     
     public List<Vector2Int> GetFloors(int middleX, int middleY)
     {
-        int count = 25;
+        int count = 100;
         
         List<Vector2Int> tileReturn = new ();
 
-        for (int i = 0; i < count; i+=2)
+        for (int i = 0; i < count; i+=3)
         {
-            for (int j = 0; j < count; j+=2)
+            for (int j = 0; j < count; j+=3)
             {
                 var cellX = middleX - count / 2 + i;
                 var cellY = middleY - count / 2 + j;
@@ -174,11 +175,11 @@ public class TilemapVisualizer : MonoBehaviour
     
     public List<Vector2Int> GetFloorsNearWalls(int middleX, int middleY, PlacementType typeWanted)
     {
-        int count = 12; //verif si ca fonctionne
+        int count = 100; //verif si ca fonctionne
         
         List<Vector2Int> tileReturn = new ();
 
-        for (int i = 0; i < count; i+=1) //bypass les couloirs (trouver une solution plus clean) verif avec la fonction GetRoomFloorWithourCorridor
+        for (int i = 0; i < count; i+=1) //bypass les couloirs (trouver une solution plus clean) verif avec la fonction GetRoomFloorWithourCorridor //laisser 1/1
         {
             for (int j = 0; j < count; j+=1)
             {
@@ -187,23 +188,13 @@ public class TilemapVisualizer : MonoBehaviour
                 var cellX = middleX - count / 2 + i;
                 var cellY = middleY - count / 2 + j;
                 
-                var tile = floorTilemap.GetTile(new Vector3Int(cellX, cellY, 0)); 
                 var wallTile = wallTilemap.GetTile(new Vector3Int(cellX, cellY, 0));
                 
-                var tileX = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
-                var wallTileX = wallTilemap.GetTile(new Vector3Int(cellX +1, cellY, 0));
-                var tileXBis = floorTilemap.GetTile(new Vector3Int(cellX -1, cellY, 0));
-                var wallTileXBis = wallTilemap.GetTile(new Vector3Int(cellX -1, cellY, 0));
-                
-                var tileY = floorTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
-                var wallTileY = wallTilemap.GetTile(new Vector3Int(cellX, cellY -1, 0));
-                var tileYBis = floorTilemap.GetTile(new Vector3Int(cellX, cellY +1, 0));
-                var wallTileYBis = wallTilemap.GetTile(new Vector3Int(cellX, cellY +1, 0));
-                
-                var tileXY = floorTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
-                var wallTileXY = wallTilemap.GetTile(new Vector3Int(cellX +1, cellY -1, 0));
-                var tileXYBis = floorTilemap.GetTile(new Vector3Int(cellX -1, cellY +1, 0));
-                var wallTileXYBis = wallTilemap.GetTile(new Vector3Int(cellX -1, cellY +1, 0));
+                var tileX = floorTilemap.GetTile(new Vector3Int(cellX +2, cellY, 0)); //2 pour ne pas prendre les couloirs
+                var tileXBis = floorTilemap.GetTile(new Vector3Int(cellX -2, cellY, 0));
+
+                var tileY = floorTilemap.GetTile(new Vector3Int(cellX, cellY -2, 0));
+                var tileYBis = floorTilemap.GetTile(new Vector3Int(cellX, cellY +2, 0));
 
                 switch (typeWanted)
                 {
