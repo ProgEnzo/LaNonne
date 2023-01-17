@@ -43,7 +43,7 @@ namespace Shop.UI
          uiManager = UIManager.instance;
          isWhipModificationMenuOpened = false;
 
-         for (var i = 1; i < 4; i++)
+         for (var i = 1; i < 5; i++)
          {
             effectVariableTextComponents.Add(new List<TextMeshProUGUI>());
             for (var j = 0; j < EffectManager.instance.effectInventory.Count; j++)
@@ -177,12 +177,14 @@ namespace Shop.UI
                effectVariableTextComponents[0][i].text = "";
                effectVariableTextComponents[1][i].text = "Not acquired.";
                effectVariableTextComponents[2][i].text = "";
+               effectVariableTextComponents[3][i].text = "";
             }
             else
             {
-               effectVariableTextComponents[0][i].text = EffectManager.instance.effectDictionary[i][EffectManager.instance.effectInventory[(EffectManager.Effect)i]-1].superEffectDescription;
-               effectVariableTextComponents[1][i].text = "Level : " + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
-               effectVariableTextComponents[2][i].text = "Probability : " + EffectManager.instance.effectDictionary[i][EffectManager.instance.effectInventory[(EffectManager.Effect)i]-1].chanceToBeApplied + "%";
+               effectVariableTextComponents[0][i].text = "Applied effect : " + EffectManager.instance.effectDictionary[i][EffectManager.instance.effectInventory[(EffectManager.Effect)i]-1].effectDescription;
+               effectVariableTextComponents[1][i].text = "Imploded effect : " + EffectManager.instance.effectDictionary[i][EffectManager.instance.effectInventory[(EffectManager.Effect)i]-1].superEffectDescription;
+               effectVariableTextComponents[2][i].text = "Level : " + EffectManager.instance.effectInventory[(EffectManager.Effect)i];
+               effectVariableTextComponents[3][i].text = "Application probability : " + EffectManager.instance.effectDictionary[i][EffectManager.instance.effectInventory[(EffectManager.Effect)i]-1].chanceToBeApplied + "%";
             }
          }
       }
