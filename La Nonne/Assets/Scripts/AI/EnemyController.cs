@@ -39,6 +39,8 @@ namespace AI
         [SerializeField] private GameObject enemyPuppet;
         protected Coroutine currentIsHitCoroutine;
 
+        [SerializeField] private GameObject bloodDroplets;
+        
         [Header("SoundEffect")]
         [SerializeField] protected AudioSource hitAudioSource;
         [SerializeField] protected AudioClip[] hitRandomSound;
@@ -91,6 +93,10 @@ namespace AI
         public virtual void TakeDamageFromPlayer(int damage)
         {
             hitAudioSource.PlayOneShot(hitRandomSound[Random.Range(0, hitRandomSound.Length)]);
+            var dropletBloodObject = Instantiate(bloodDroplets, new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z), Quaternion.identity);
+            dropletBloodObject.GetComponent<ParticleSystem>().Play();
+            Destroy(dropletBloodObject, 2f);
+
             currentHealth -= damage * currentDamageMultiplier;
             EnemyDeath();
             
