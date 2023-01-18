@@ -75,6 +75,7 @@ namespace Controller
             {
                 //blade no hit
                 bladeAudioSource.PlayOneShot(bladeNoHitSound[0]);
+                bladeAudioSource.pitch = Random.Range(0.7f, 1.5f);
 
                 ZealousBladeStart();
             }
