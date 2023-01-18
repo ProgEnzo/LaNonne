@@ -314,6 +314,17 @@ MonoBehaviour:
   epSprite: {fileID: 5979404446761519199}
   autophageAudioSource: {fileID: 5587799858493148161}
   autophageMovementAudioClip: {fileID: 8300000, guid: 3233abe2b92e2004589675c55070d4e6, type: 3}
+  autophageEatingAudioClip:
+  - {fileID: 8300000, guid: 2cfb463cc01bee64b9f3ea77bc8160a7, type: 3}
+  - {fileID: 8300000, guid: 6c81aa34d6421ad4889d324b1b24637c, type: 3}
+  - {fileID: 8300000, guid: e2eb8d439a2d3da46ada49119557f99b, type: 3}
+  - {fileID: 8300000, guid: 2e949cf40b049fe4db3f512acdbbe977, type: 3}
+  - {fileID: 8300000, guid: 03e95a9415ba88f4fba044388af4b68c, type: 3}
+  - {fileID: 8300000, guid: 8633639ad79e10d4abe161430809883e, type: 3}
+  - {fileID: 8300000, guid: b8c0eaa26253e0e409e46d3f0252e776, type: 3}
+  - {fileID: 8300000, guid: 268a3a8a2074dd147b7b8dff9f28517e, type: 3}
+  - {fileID: 8300000, guid: 0b8c54cdecb6ca440a2357b0f3974b8b, type: 3}
+  - {fileID: 8300000, guid: 5ab33a34e81caf24e9137a10b4331596, type: 3}
 --- !u!114 &5813854497670849602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,7 +464,7 @@ AudioSource:
   m_GameObject: {fileID: 5813854497670849624}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 732588376339275379, guid: 0df7272459f49844dacff71dc7513221, type: 2}
+  OutputAudioMixerGroup: {fileID: 153413042902307816, guid: 0df7272459f49844dacff71dc7513221, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1

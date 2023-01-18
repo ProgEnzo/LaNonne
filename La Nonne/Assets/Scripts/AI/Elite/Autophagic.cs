@@ -20,6 +20,7 @@ namespace AI.Elite
         [Header("SoundEffect")]
         public AudioSource autophageAudioSource;
         public AudioClip autophageMovementAudioClip;
+        public AudioClip[] autophageEatingAudioClip;
 
         private void Awake()
         {
@@ -94,6 +95,8 @@ namespace AI.Elite
         private void TakeAutoDamage()
         {
             currentHealth -= (int)(soAutophagic.maxHealth * soAutophagic.autoDamagePart);
+            autophageAudioSource.PlayOneShot(autophageEatingAudioClip[Random.Range(0, autophageEatingAudioClip.Length)]);
+            
             EnemyDeath();
         }
         
