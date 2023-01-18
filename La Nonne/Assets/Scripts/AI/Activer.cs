@@ -8,9 +8,12 @@ namespace AI
     {
         [SerializeField] private GameObject activationParent;
         private const int DistanceActivation = 35;
+        private int modulo = 0;
         private void FixedUpdate()
         {
-            if (Time.frameCount % 15 != 0)
+            modulo++;
+            
+            if (modulo % 15 != 0)
             {
                 return;
             }
