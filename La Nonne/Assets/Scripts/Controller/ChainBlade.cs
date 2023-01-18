@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using DG.Tweening;
 using Manager;
 using Unity.VisualScripting;
@@ -31,6 +32,7 @@ namespace Controller
         private GameObject chainGameObject;
         private GameObject bladeGameObject;
         private GameObject warningGameObject;
+        private Animator animator;
 
         private AnimationManager animationManager;
         private InputManager inputManager;
@@ -42,6 +44,7 @@ namespace Controller
         public AudioClip whipchainSound;
         public AudioClip whipchainCooldownSound;
         private bool hasDoneFullCooldownBehavior;
+        private static readonly int WhipAnimState = Animator.StringToHash("whipAnimState");
 
 
         // Start is called before the first frame update
@@ -69,6 +72,7 @@ namespace Controller
             inquisitorialChainCooldownBar = GameObject.Find("InquisitorialChainCooldown").GetComponent<Image>();
             inquisitorialChainCooldownBar.fillAmount = 1f;
             hasDoneFullCooldownBehavior = true;
+            animator = GetComponent<Animator>();
         }
 
         // Update is called once per frame
@@ -165,6 +169,7 @@ namespace Controller
 
         private void InquisitorialChainStart()
         {
+            //StartCoroutine(ChangeAnimationState(1));
             currentTime = soController.inquisitorialChainCooldownTime;
             hasDoneFullCooldownBehavior = false;
             var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
@@ -219,6 +224,13 @@ namespace Controller
                     CamManager.instance.ChainBladeCamShakeState();
                 }
             }
+        }
+        
+        private IEnumerator ChangeAnimationState(int state)
+        {
+            animator.SetInteger(WhipAnimState, state);
+            yield return new WaitForNextFrameUnit();
+            animator.SetInteger(WhipAnimState, 0);
         }
     }
 }
