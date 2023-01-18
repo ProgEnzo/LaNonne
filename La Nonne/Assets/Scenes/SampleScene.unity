@@ -14739,28 +14739,6 @@ Transform:
   m_Father: {fileID: 963052496}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &479115726 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 287725542, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-  m_PrefabInstance: {fileID: 1680744655}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &479115729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 479115726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449ef5ebbe24720439ec31d15f7b6f3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FocusTracksTarget: 0
-  m_FocusTracking: 0
-  m_FocusTarget: {fileID: 0}
-  m_FocusOffset: 0
-  m_Profile: {fileID: 11400000, guid: bfbc3bc66e77099429d084acf342bdfe, type: 2}
 --- !u!1 &576200805
 GameObject:
   m_ObjectHideFlags: 0
@@ -36596,62 +36574,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 287725544, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_Lens.OrthographicSize
-      value: 2.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 314381887, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_ChildCameras.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 519420030, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_RenderPostProcessing
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 519420031, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 2541503
-      objectReference: {fileID: 0}
-    - target: {fileID: 1545729244, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_Lens.OrthographicSize
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1892912162, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_Lens.OrthographicSize
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2124689815, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_Lens.OrthographicSize
-      value: 2.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 2132173425, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2132173426, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2132173427, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_RenderPostProcessing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2132173429, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.5477038
-      objectReference: {fileID: 0}
-    - target: {fileID: 2132173429, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.5477038
-      objectReference: {fileID: 0}
-    - target: {fileID: 2132173429, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.6415094
-      objectReference: {fileID: 0}
-    - target: {fileID: 2132173429, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 2097224
-      objectReference: {fileID: 0}
     - target: {fileID: 3786407124578739001, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_Name
       value: GameManager
