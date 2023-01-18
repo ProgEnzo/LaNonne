@@ -66,6 +66,8 @@ namespace Controller
         private Sequence revealingDashSpeedSequence;
         private Guid revealingDashSpeedUid;
 
+        private bool hasDoneFullCooldownBehavior;
+        
         [Header("UI elements")]
         private Image healthBar;
         private Image revealingDashCooldownBar;
@@ -174,6 +176,8 @@ namespace Controller
             currentSlowMoPlayerAttackSpeedFactor = 1f;
             camManager.FocusCameraOnThePlayer(transform);
             visitedShopCount = 0;
+
+            hasDoneFullCooldownBehavior = true;
         }
 
         private void OnDestroy()
@@ -225,6 +229,17 @@ namespace Controller
                 currentRevealingDashCooldown -= Time.deltaTime;
             }
             revealingDashCooldownBar.fillAmount = 1 - currentRevealingDashCooldown / soController.revealingDashCooldown;
+
+            if (currentRevealingDashCooldown <= 0 && !hasDoneFullCooldownBehavior)
+            {
+                //Do some shit
+                var duplicateRevealingImage = Instantiate(revealingDashCooldownBar.transform.parent.gameObject, revealingDashCooldownBar.transform.position, Quaternion.identity, revealingDashCooldownBar.transform.parent.parent);
+                duplicateRevealingImage.GetComponent<RectTransform>().DOScale(new Vector3(2f, 2f, 2f), 1f);
+                duplicateRevealingImage.GetComponent<Image>().DOFade(0f, 1f);
+                duplicateRevealingImage.transform.GetChild(0).GetComponent<Image>().DOFade(0f, 1f);
+                Destroy(duplicateRevealingImage, 1f);
+                hasDoneFullCooldownBehavior = true;
+            }
         }
         
         public void FixedUpdate()
@@ -551,6 +566,7 @@ namespace Controller
                     revealingDashAimedEnemy = enemy.collider.gameObject;
                     revealingDashNewPosition = revealingDashAimedEnemy.transform.position;
                     isRevealingDashHitting = true;
+
                     revealingDashTotalDistance = Vector3.Distance(transform.position, revealingDashNewPosition);
                     
                     if (revealingDashTimeSequence != null)
@@ -635,6 +651,7 @@ namespace Controller
                     isRevealingDashOn = false;
                     camManager.ZoomDuringRevealingDash(0);
                     currentRevealingDashCooldown = soController.revealingDashCooldown;
+                    hasDoneFullCooldownBehavior = false;
                 }
             }
         }
@@ -653,6 +670,7 @@ namespace Controller
                     isRevealingDashOn = false;
                     camManager.ZoomDuringRevealingDash(0);
                     currentRevealingDashCooldown = soController.revealingDashCooldown;
+                    hasDoneFullCooldownBehavior = false;
                 }
                 currentRevealingDashFocusCooldown -= Time.deltaTime;
             }
@@ -666,6 +684,7 @@ namespace Controller
                 isRevealingDashOn = false;
                 camManager.ZoomDuringRevealingDash(0);
                 currentRevealingDashCooldown = soController.revealingDashCooldown;
+                hasDoneFullCooldownBehavior = false;
             }
         }
         
@@ -680,6 +699,7 @@ namespace Controller
                 isRevealingDashOn = false;
                 camManager.ZoomDuringRevealingDash(0);
                 currentRevealingDashCooldown = soController.revealingDashCooldown;
+                hasDoneFullCooldownBehavior = false;
             }
         }
 

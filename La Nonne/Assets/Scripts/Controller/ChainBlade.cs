@@ -1,5 +1,7 @@
 using System;
+using DG.Tweening;
 using Manager;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -38,6 +40,7 @@ namespace Controller
         [Header("SoundEffect")] 
         public AudioSource whipchainAudioSource;
         public AudioClip whipchainSound;
+        private bool hasDoneFullCooldownBehavior;
 
 
         // Start is called before the first frame update
@@ -64,6 +67,7 @@ namespace Controller
             currentTime = 0;
             inquisitorialChainCooldownBar = GameObject.Find("InquisitorialChainCooldown").GetComponent<Image>();
             inquisitorialChainCooldownBar.fillAmount = 1f;
+            hasDoneFullCooldownBehavior = true;
         }
 
         // Update is called once per frame
@@ -132,6 +136,17 @@ namespace Controller
             bladeLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));
             currentTime -= Time.deltaTime;
             inquisitorialChainCooldownBar.fillAmount = 1 - currentTime / soController.inquisitorialChainCooldownTime;
+
+            if (currentTime <= 0 && !hasDoneFullCooldownBehavior)
+            {
+                //Do some shit
+                var duplicateRevealingImage = Instantiate(inquisitorialChainCooldownBar.transform.parent.gameObject, inquisitorialChainCooldownBar.transform.position, Quaternion.identity, inquisitorialChainCooldownBar.transform.parent.parent);
+                duplicateRevealingImage.GetComponent<RectTransform>().DOScale(new Vector3(2f, 2f, 2f), 1f);
+                duplicateRevealingImage.GetComponent<Image>().DOFade(0f, 1f);
+                duplicateRevealingImage.transform.GetChild(0).GetComponent<Image>().DOFade(0f, 1f);
+                Destroy(duplicateRevealingImage, 1f);
+                hasDoneFullCooldownBehavior = true;
+            }
         }
 
         private void FixedUpdate()
@@ -149,6 +164,7 @@ namespace Controller
         private void InquisitorialChainStart()
         {
             currentTime = soController.inquisitorialChainCooldownTime;
+            hasDoneFullCooldownBehavior = false;
             var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             newDirection.z = 0;
             newDirection.Normalize();
