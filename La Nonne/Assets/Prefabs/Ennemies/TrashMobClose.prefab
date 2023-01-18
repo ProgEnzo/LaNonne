@@ -67,10 +67,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 39d3f97e3aa6e7145a0fa9cc44b7cc45, type: 3}
   - {fileID: 8300000, guid: c732791a2ef53cd42a4ae67201c21f0b, type: 3}
   - {fileID: 8300000, guid: 56ec1bcf451872c43a7e485973345ec1, type: 3}
-  trashMobAudioSource: {fileID: 4889137000042079974}
-  trashMobGrowlAudioClip:
-  - {fileID: 8300000, guid: e723aff1a7a36fe48b9e022c8e8b176b, type: 3}
-  - {fileID: 8300000, guid: ad00653d5e9af1644a7045602110ff45, type: 3}
 --- !u!114 &1593806974005075739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,7 +361,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2167468293837731665}
   m_RootOrder: 1
@@ -390,7 +386,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
