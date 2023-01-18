@@ -884,6 +884,7 @@ MonoBehaviour:
   soController: {fileID: 11400000, guid: 91058667c2ecd5a4789e6d7201645323, type: 2}
   whipchainAudioSource: {fileID: 1626340955724197861}
   whipchainSound: {fileID: 8300000, guid: ced9d627e9dce664a9e171b77f0b9837, type: 3}
+  whipchainCooldownSound: {fileID: 8300000, guid: 6577e9ad7b0b0a9469fe79d3167abe3c, type: 3}
 --- !u!82 &1626340955724197861
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1380,6 +1381,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4e363cac840ff7d46bdcd320c0d80b09, type: 3}
   epAudioSource: {fileID: 2281107392381866930}
   epAudioClip: {fileID: 8300000, guid: 55937d68f05025740ba9aae9aba9a459, type: 3}
+  cooldownRevealingDashAudioClip: {fileID: 8300000, guid: 6577e9ad7b0b0a9469fe79d3167abe3c, type: 3}
 --- !u!70 &3339834831573868976
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
