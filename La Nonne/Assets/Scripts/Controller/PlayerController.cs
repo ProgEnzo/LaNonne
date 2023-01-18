@@ -104,6 +104,7 @@ namespace Controller
 
         public AudioSource epAudioSource;
         public AudioClip epAudioClip;
+        public AudioClip cooldownRevealingDashAudioClip;
 
 
         // public Vector2 bossPos;
@@ -232,6 +233,7 @@ namespace Controller
 
             if (currentRevealingDashCooldown <= 0 && !hasDoneFullCooldownBehavior)
             {
+                playerAudioSource.PlayOneShot(cooldownRevealingDashAudioClip);
                 //Do some shit
                 var duplicateRevealingImage = Instantiate(revealingDashCooldownBar.transform.parent.gameObject, revealingDashCooldownBar.transform.position, Quaternion.identity, revealingDashCooldownBar.transform.parent.parent);
                 duplicateRevealingImage.GetComponent<RectTransform>().DOScale(new Vector3(2f, 2f, 2f), 1f);

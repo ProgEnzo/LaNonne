@@ -40,6 +40,7 @@ namespace Controller
         [Header("SoundEffect")] 
         public AudioSource whipchainAudioSource;
         public AudioClip whipchainSound;
+        public AudioClip whipchainCooldownSound;
         private bool hasDoneFullCooldownBehavior;
 
 
@@ -139,6 +140,7 @@ namespace Controller
 
             if (currentTime <= 0 && !hasDoneFullCooldownBehavior)
             {
+                whipchainAudioSource.PlayOneShot(whipchainCooldownSound);
                 //Do some shit
                 var duplicateRevealingImage = Instantiate(inquisitorialChainCooldownBar.transform.parent.gameObject, inquisitorialChainCooldownBar.transform.position, Quaternion.identity, inquisitorialChainCooldownBar.transform.parent.parent);
                 duplicateRevealingImage.GetComponent<RectTransform>().DOScale(new Vector3(2f, 2f, 2f), 1f);
