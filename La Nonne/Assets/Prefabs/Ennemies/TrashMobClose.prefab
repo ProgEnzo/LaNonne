@@ -67,6 +67,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 39d3f97e3aa6e7145a0fa9cc44b7cc45, type: 3}
   - {fileID: 8300000, guid: c732791a2ef53cd42a4ae67201c21f0b, type: 3}
   - {fileID: 8300000, guid: 56ec1bcf451872c43a7e485973345ec1, type: 3}
+  trashMobAudioSource: {fileID: 4889137000042079974}
+  trashMobGrowlAudioClip:
+  - {fileID: 8300000, guid: e723aff1a7a36fe48b9e022c8e8b176b, type: 3}
+  - {fileID: 8300000, guid: ad00653d5e9af1644a7045602110ff45, type: 3}
 --- !u!114 &1593806974005075739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,9 +214,9 @@ AudioSource:
   m_GameObject: {fileID: 1593806974005075729}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 732588376339275379, guid: 0df7272459f49844dacff71dc7513221, type: 2}
+  OutputAudioMixerGroup: {fileID: -2063663631233285250, guid: 0df7272459f49844dacff71dc7513221, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
