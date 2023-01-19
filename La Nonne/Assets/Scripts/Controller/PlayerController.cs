@@ -106,6 +106,8 @@ namespace Controller
         public AudioClip epAudioClip;
         public AudioClip cooldownRevealingDashAudioClip;
 
+        public AudioClip hitPlayerAudioClip;
+
 
         // public Vector2 bossPos;
         // public Vector2 currentPos;
@@ -236,7 +238,7 @@ namespace Controller
                 playerAudioSource.PlayOneShot(cooldownRevealingDashAudioClip);
                 //Do some shit
                 var duplicateRevealingImage = Instantiate(revealingDashCooldownBar.transform.parent.gameObject, revealingDashCooldownBar.transform.position, Quaternion.identity, revealingDashCooldownBar.transform.parent.parent);
-                duplicateRevealingImage.GetComponent<RectTransform>().DOScale(new Vector3(2f, 2f, 2f), 1f);
+                duplicateRevealingImage.GetComponent<RectTransform>().DOScale(new Vector3(3f, 3f, 3f), 1f);
                 duplicateRevealingImage.GetComponent<Image>().DOFade(0f, 1f);
                 duplicateRevealingImage.transform.GetChild(0).GetComponent<Image>().DOFade(0f, 1f);
                 Destroy(duplicateRevealingImage, 1f);
@@ -398,6 +400,8 @@ namespace Controller
         
         public void TakeDamage(int damage)
         {
+            playerAudioSource.PlayOneShot(hitPlayerAudioClip);
+            playerAudioSource.pitch = Random.Range(0.7f, 1.5f);
             currentHealth -= damage;
             healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
             
