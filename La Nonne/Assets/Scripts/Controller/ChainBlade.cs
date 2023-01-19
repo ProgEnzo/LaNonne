@@ -147,7 +147,7 @@ namespace Controller
                 whipchainAudioSource.PlayOneShot(whipchainCooldownSound);
                 //Do some shit
                 var duplicateRevealingImage = Instantiate(inquisitorialChainCooldownBar.transform.parent.gameObject, inquisitorialChainCooldownBar.transform.position, Quaternion.identity, inquisitorialChainCooldownBar.transform.parent.parent);
-                duplicateRevealingImage.GetComponent<RectTransform>().DOScale(new Vector3(2f, 2f, 2f), 1f);
+                duplicateRevealingImage.GetComponent<RectTransform>().DOScale(new Vector3(3f, 3f, 3f), 1f);
                 duplicateRevealingImage.GetComponent<Image>().DOFade(0f, 1f);
                 duplicateRevealingImage.transform.GetChild(0).GetComponent<Image>().DOFade(0f, 1f);
                 Destroy(duplicateRevealingImage, 1f);
