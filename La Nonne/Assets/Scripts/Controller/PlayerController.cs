@@ -28,6 +28,7 @@ namespace Controller
         private CapsuleCollider2D collider2d;
         private CapsuleCollider2D childrenCollider2d;
         internal ChainBlade chainBlade;
+        [SerializeField] private ParticleSystem particleSystemHeal;
     
         [Header("Scriptable Object")]
         [SerializeField][FormerlySerializedAs("SO_Controller")] internal SO_Controller soController;
@@ -107,6 +108,8 @@ namespace Controller
         public AudioClip cooldownRevealingDashAudioClip;
 
         public AudioClip hitPlayerAudioClip;
+        
+        
 
 
         // public Vector2 bossPos;
@@ -436,6 +439,7 @@ namespace Controller
         internal void HealPlayer(int heal)
         {
             currentHealth += heal;
+            particleSystemHeal.Play();
             healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
             
             if (currentSpriteCoroutine != null)
@@ -477,6 +481,7 @@ namespace Controller
                 spriteRenderer.color = Color.green;
             }
             healthBar.color = Color.green;
+            particleSystemHeal.Play();
             yield return new WaitForSeconds(0.2f);
             foreach (var spriteRenderer in playerSpriteRenderers)
             {
