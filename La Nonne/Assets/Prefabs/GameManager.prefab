@@ -1555,7 +1555,7 @@ MonoBehaviour:
   m_Priority: 9
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 9006283483999273122, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+  m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 34
     OrthographicSize: 4
@@ -1639,7 +1639,7 @@ MonoBehaviour:
   m_Priority: 9
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 9006283483999273122, guid: 119f91ed4fbfc7646a6a99ae42742c66, type: 3}
+  m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 34
     OrthographicSize: 4
@@ -3786,6 +3786,9 @@ MonoBehaviour:
   playerController: {fileID: 0}
   controller: {fileID: 0}
   roomContentGenerator: {fileID: 0}
+  uiAnimManager: {fileID: 0}
+  uiAnimPause: {fileID: 0}
+  uiManager: {fileID: 0}
 --- !u!1 &6385559912009310639
 GameObject:
   m_ObjectHideFlags: 0
