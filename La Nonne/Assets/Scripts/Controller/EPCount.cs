@@ -11,7 +11,7 @@ namespace Controller
         private ScoreManager scoreManager;
         
         private SpriteRenderer spriteRenderer;
-        private BoxCollider2D boxCollider2D;
+        private CircleCollider2D circleCollider2D;
         
         [Header("SoundEffect")]
         public AudioSource epAudioSource;
@@ -21,7 +21,7 @@ namespace Controller
             playerController = PlayerController.instance;
             scoreManager = ScoreManager.instance;
             spriteRenderer = GetComponent<SpriteRenderer>();
-            boxCollider2D = GetComponent<BoxCollider2D>();
+            circleCollider2D = GetComponent<CircleCollider2D>();
         }
     
         private void OnTriggerEnter2D(Collider2D col)
@@ -39,8 +39,9 @@ namespace Controller
         {
             //ep sound
             spriteRenderer.enabled = false;
-            boxCollider2D.enabled = false;
+            circleCollider2D.enabled = false;
             epAudioSource.PlayOneShot(epAudioClip);
+            epAudioSource.pitch = Random.Range(0.8f, 1.2f);
             yield return new WaitForSeconds(epAudioClip.length);
             
             Destroy(gameObject);
