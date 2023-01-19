@@ -30,6 +30,11 @@ namespace AI.Boss
         private PlayerController player;
         [SerializeField] private AIPath bossAI;
         [SerializeField] private AIDestinationSetter aiDestinationSetter;
+        [SerializeField] private GameObject bossPuppet;
+        [SerializeField] private GameObject chrysalisPuppet;
+        [SerializeField] private BoxCollider2D bossBoxCollider;
+        [SerializeField] private CapsuleCollider2D bossCapsuleCollider;
+        [SerializeField] private CapsuleCollider2D chrysalisCapsuleCollider;
         [SerializeField] private Animator animator;
         [SerializeField] private AnimationClip throwAnimation;
     
@@ -148,7 +153,7 @@ namespace AI.Boss
             aiDestinationSetter.target = PlayerController.instance.transform;
             shockwaveGameObject = GameObject.Find("Shockwave");
             
-            currentState = throwingState; //starting state for the boss state machine
+            currentState = dashingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
         
             //HEALTH
@@ -348,6 +353,8 @@ namespace AI.Boss
             
             animator.SetInteger(BossAnimState, 1);
 
+            rb.drag = 0f;
+            rb.angularDrag = 0.05f;
             rb.velocity = direction.normalized * currentVelocitySpeed; // DO DASH
 
             //HOW MANY MINES DURING DASH
@@ -362,6 +369,8 @@ namespace AI.Boss
             bossAI.enabled = true;
             
             animator.SetInteger(BossAnimState, 0);
+            rb.drag = 10f;
+            rb.angularDrag = 10f;
             
             switch (currentDashAmount)
             {
@@ -420,6 +429,7 @@ namespace AI.Boss
             currentAttackCircleAmount--;
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
+            rb.bodyType = RigidbodyType2D.Static;
             var circleObjectWarning = Instantiate(attackCircleWarning, player.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
@@ -428,6 +438,7 @@ namespace AI.Boss
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
             
             Destroy(circleObject);
+            rb.bodyType = RigidbodyType2D.Dynamic;
 
             switch (currentAttackCircleAmount)
             {
@@ -483,11 +494,13 @@ namespace AI.Boss
             var toxicAreaObject = Instantiate(toxicArea, bossPos, Quaternion.identity);
             toxicAreaObject.transform.DOScale(new Vector2(3.5f, 3.5f), 2f);
             
+            rb.bodyType = RigidbodyType2D.Static;
             animator.SetInteger(BossAnimState, 3);
             
             yield return new WaitForSeconds(vacuumCooldown);
             
             animator.SetInteger(BossAnimState, 0);
+            rb.bodyType = RigidbodyType2D.Dynamic;
 
             Destroy(vacuumGameObject);
             vacuumParticle.SetActive(false);
@@ -566,15 +579,21 @@ namespace AI.Boss
         
             camManager.ChangeBossCamState(1); //on laisse la priorité à la vCam du boss
             takingDamage = false;
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
 
-            
             camManager.ChangeBossCamState(2); //Boss lâche un cri qui annonce la transition
+            rb.bodyType = RigidbodyType2D.Static;
+            animator.SetInteger(BossAnimState, 3);
             yield return new WaitForSeconds(2f); //temps du cri
-        
             
             camManager.ChangeBossCamState(1); //on redonne la priorité à la vCam du BOSS
-            yield return new WaitForSeconds(3f); //transition BOSS to player
+            bossPuppet.SetActive(false);
+            chrysalisPuppet.SetActive(true);
+            bossBoxCollider.enabled = false;
+            bossCapsuleCollider.enabled = false;
+            chrysalisCapsuleCollider.enabled = true;
+            animator.SetInteger(BossAnimState, 0);
+            yield return new WaitForSeconds(1f); //transition BOSS to player
             
             camManager.ChangeBossCamState(0);
             player.enabled = true;
@@ -590,6 +609,12 @@ namespace AI.Boss
                 Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
             }
             yield return new WaitForSeconds(transitionCooldown);
+            bossPuppet.SetActive(true);
+            chrysalisPuppet.SetActive(false);
+            bossBoxCollider.enabled = true;
+            bossCapsuleCollider.enabled = true;
+            chrysalisCapsuleCollider.enabled = false;
+            rb.bodyType = RigidbodyType2D.Dynamic;
         
             //CODE FOR THE EXPLOSION AFTER THE TRANSITION HERE
             shockwaveGameObject.transform.DOScale(new Vector2(10f, 10f), 1f);
@@ -702,14 +727,18 @@ namespace AI.Boss
         private IEnumerator Throwing()
         {
             currentThrowAmount--;
-            yield return new WaitForSeconds(2f - throwAnimation.length * 0.8f);
+            yield return new WaitForSeconds(2f - throwAnimation.length * 0.9f);
             
+            rb.bodyType = RigidbodyType2D.Static;
             StartCoroutine(ChangeAnimation(4));
-            yield return new WaitForSeconds(throwAnimation.length * 0.8f);
+            yield return new WaitForSeconds(throwAnimation.length * 0.9f);
 
             var posBossBeforeSpawn = transform.position; //get la pos du boss 
             Instantiate(slug, new Vector2(posBossBeforeSpawn.x,posBossBeforeSpawn.y), Quaternion.identity);
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(throwAnimation.length * 0.1f);
+
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            yield return new WaitForSeconds(3f - throwAnimation.length * 0.1f);
             
             if (distanceBetweenPlayer < aggroBoxingRange && currentDamageTaken > maxDamageTaken)
             {
@@ -746,6 +775,7 @@ namespace AI.Boss
             if (currentDamageTaken > maxDamageTaken)
             {
                 animator.SetInteger(BossAnimState, 2);
+                rb.bodyType = RigidbodyType2D.Static;
                 
                 for (var i = 0; i < numberOfBoxingCircleWarning; i++)
                 {
@@ -782,6 +812,7 @@ namespace AI.Boss
                 
                 currentDamageTaken = 0;
                 animator.SetInteger(BossAnimState, 0);
+                rb.bodyType = RigidbodyType2D.Dynamic;
             }
 
             var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
