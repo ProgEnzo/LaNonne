@@ -436,7 +436,7 @@ MonoBehaviour:
   - {fileID: 9071314407910337641, guid: 81bbfcf0da448e04f83aa7c58174edda, type: 3}
   - {fileID: 1593806974005075729, guid: 358aa556e8a060a4a9b452adb90fb974, type: 3}
   currentHealth: 100
-  maxHealth: 1000
+  maxHealth: 5000
   playerNormalSpeed: 30
   bossNormalSpeed: 1
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
@@ -446,8 +446,8 @@ MonoBehaviour:
   timeBeforeDashing: 0.5
   waitEndDash: 0
   canShakeOnWallBump: 0
-  dashAmount: 3
-  currentDashAmount: 3
+  dashAmount: 2
+  currentDashAmount: 2
   numberOfMines: 3
   attackCircleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
   attackCircle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
@@ -482,7 +482,7 @@ MonoBehaviour:
   distanceBetweenPlayer: 3
   aggroBoxingRange: 3
   currentDamageTaken: 0
-  maxDamageTaken: 0
+  maxDamageTaken: 200
   numberOfBoxingCircleWarning: 5
   numberOfBoxingCircle: 5
   stackTimers:
