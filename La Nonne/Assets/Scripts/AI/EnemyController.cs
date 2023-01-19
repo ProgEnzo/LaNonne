@@ -94,6 +94,8 @@ namespace AI
         {
             hitAudioSource.PlayOneShot(hitRandomSound[Random.Range(0, hitRandomSound.Length)]);
             var dropletBloodObject = Instantiate(bloodDroplets, new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z), Quaternion.identity);
+            dropletBloodObject.transform.DORotateQuaternion(Quaternion.FromToRotation(Vector3.right, playerController.transform.position - transform.position), 0f); //Rotate scalpel to the player
+
             dropletBloodObject.GetComponent<ParticleSystem>().Play();
             Destroy(dropletBloodObject, 2f);
 
