@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -202,6 +203,7 @@ namespace AI.Boss
             var playerPosition = player.transform.position;
             distanceBetweenPlayer = Vector2.Distance(new Vector2(position.x, position.y), new Vector2(playerPosition.x, playerPosition.y));
 
+            CheckDirection();
             EffectCheck();
         }
         
@@ -828,6 +830,19 @@ namespace AI.Boss
             animator.SetInteger(BossAnimState, state);
             yield return new WaitForNextFrameUnit();
             animator.SetInteger(BossAnimState, 0);
+        }
+        
+        private void CheckDirection()
+        {
+            var puppetLocalScale = bossPuppet.transform.localScale;
+            if (rb.velocity.x != 0)
+            {
+                bossPuppet.transform.localScale = new Vector3(MathF.Sign(rb.velocity.x) * MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
+            }
+            else
+            {
+                bossPuppet.transform.localScale = player.transform.position.x > transform.position.x ? new Vector3(MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z) : new Vector3(-MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
+            }
         }
 
         #endregion
