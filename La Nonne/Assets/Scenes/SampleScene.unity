@@ -14739,11 +14739,6 @@ Transform:
   m_Father: {fileID: 963052496}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &435207417 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3786407124578739001, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
-  m_PrefabInstance: {fileID: 1680744655}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &576200805
 GameObject:
   m_ObjectHideFlags: 0
@@ -14956,27 +14951,23 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1029935344, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
   m_PrefabInstance: {fileID: 1680744655}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435207417}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee040d66388c0364ca0b89ef143b5556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &725024582
+--- !u!114 &725024582 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 725024582, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+  m_PrefabInstance: {fileID: 1680744655}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435207417}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5f1e2167e533cd46af91bdff40f8310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
-  controller: {fileID: 0}
-  roomContentGenerator: {fileID: 2000172895}
 --- !u!1 &732173202
 GameObject:
   m_ObjectHideFlags: 0
@@ -36594,6 +36585,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 725024582, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: roomContentGenerator
+      value: 
+      objectReference: {fileID: 2000172895}
     - target: {fileID: 3786407124578739001, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -53310,6 +53305,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 725024582}
+    - target: {fileID: 1146794140, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+      propertyPath: m_IsOn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1146794140, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
