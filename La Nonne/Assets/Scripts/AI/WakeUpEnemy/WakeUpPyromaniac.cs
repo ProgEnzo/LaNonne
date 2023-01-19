@@ -1,23 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using AI.Elite;
-using Pathfinding;
 using UnityEngine;
 
-public class WakeUpPyromaniac : MonoBehaviour
+namespace AI.WakeUpEnemy
 {
-    public Pyromaniac pyromaniac;
-    void Start()
+    public class WakeUpPyromaniac : MonoBehaviour
     {
-        pyromaniac = transform.parent.parent.GetComponent<Pyromaniac>();
-    }
+        private Pyromaniac pyromaniac;
 
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Player"))
+        private void Start()
         {
-            pyromaniac.enabled = true;
-            Destroy(gameObject);
+            pyromaniac = transform.parent.parent.GetComponent<Pyromaniac>();
+        }
+
+        private void OnTriggerEnter2D(Collider2D col)
+        {
+            if (col.gameObject.CompareTag("Player"))
+            {
+                pyromaniac.enabled = true;
+                Destroy(gameObject);
+            }
         }
     }
 }

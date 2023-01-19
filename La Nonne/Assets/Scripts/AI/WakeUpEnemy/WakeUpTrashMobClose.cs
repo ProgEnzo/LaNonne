@@ -1,22 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using AI.Trash;
 using UnityEngine;
 
-public class WakeUpTrashMobClose : MonoBehaviour
+namespace AI.WakeUpEnemy
 {
-    public TrashMobClose trashMobClose;
-    void Start()
+    public class WakeUpTrashMobClose : MonoBehaviour
     {
-        trashMobClose = transform.parent.parent.GetComponent<TrashMobClose>();
-    }
+        private TrashMobClose trashMobClose;
 
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Player"))
+        private void Start()
         {
-            trashMobClose.enabled = true;
-            Destroy(gameObject);
+            trashMobClose = transform.parent.parent.GetComponent<TrashMobClose>();
+        }
+
+        private void OnTriggerEnter2D(Collider2D col)
+        {
+            if (col.gameObject.CompareTag("Player"))
+            {
+                trashMobClose.enabled = true;
+                Destroy(gameObject);
+            }
         }
     }
 }
