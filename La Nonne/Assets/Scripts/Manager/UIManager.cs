@@ -22,7 +22,7 @@ namespace Manager
         public static GameObject settingsMenu;
         public GameObject gameOverMenu;
 
-        private static bool _isGamePausedStatic;
+        internal static bool _isGamePausedStatic;
         internal bool isGamePaused;
         internal bool isShopOpened;
         internal bool isWhipMenuOpened;
@@ -85,9 +85,10 @@ namespace Manager
             }
         }
 
-        private static void PauseMenu(bool isGamePaused)
+        public static void PauseMenu(bool isGamePaused)
         {
             //pauseMenu.SetActive(isGamePaused);
+            _isGamePausedStatic = isGamePaused;
             if (!isGamePaused)
             {
                 UIAnimPause.instance.CloseMenu();

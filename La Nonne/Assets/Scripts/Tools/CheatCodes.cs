@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Controller;
 using GenPro.Rooms.Generator;
+using Manager;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,6 +13,9 @@ public class CheatCodes : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private SO_Controller controller;
     [SerializeField] private RoomContentGenerator roomContentGenerator;
+    [SerializeField] private UiAnimManager uiAnimManager;
+    [SerializeField] private UIAnimPause uiAnimPause;
+    [SerializeField] private UIManager uiManager;
     
     private void Start()
     {
@@ -26,13 +30,21 @@ public class CheatCodes : MonoBehaviour
     public void TpToBoss()
     {
         var boss = roomContentGenerator.mapBoss;
-        playerController.transform.position = new Vector2(boss.x, boss.y);
+        playerController.transform.position = new Vector2(boss.x, boss.y - 5);
+        uiAnimManager.CloseMenu();
+        uiAnimPause.CloseMenu();
+        UIManager._isGamePausedStatic = false;
+        UIManager.PauseMenu(false);
     }
 
     public void TpToShop()
     {
         var shop = roomContentGenerator.lastShopPosition;
         playerController.transform.position = new Vector2(shop.x, shop.y);
+        uiAnimManager.CloseMenu();
+        uiAnimPause.CloseMenu();
+        //uiManager.isGamePaused = false;
+        UIManager.PauseMenu(false);
     }
 
     public void MoneyGlitch()
