@@ -1,16 +1,10 @@
-using AI.Boss;
-using UnityEngine;
-
-public class BossAttackCircleState : BossBaseState
+namespace AI.Boss
 {
-    public override void EnterState(BossStateManager boss)
+    public class BossAttackCircleState : BossBaseState
     {
-        boss.AttackCircleManager();
-        
-    }
-
-    public override void UpdateState(BossStateManager boss)
-    {
-        
+        public override void EnterState(BossStateManager boss)
+        {
+            boss.AttackCircleManager();
+        }
     }
 }

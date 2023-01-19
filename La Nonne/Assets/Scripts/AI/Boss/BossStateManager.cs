@@ -7,6 +7,7 @@ using Manager;
 using Pathfinding;
 using Shop;
 using Tools;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -16,22 +17,25 @@ namespace AI.Boss
     public class BossStateManager : MonoBehaviour
     {
         private BossBaseState currentState;
-        public BossDashingState DashingState = new();
-        public BossThrowingState ThrowingState = new();
-        public BossAttackCircleState AttackCircleState = new();
-        public BossVacuumState VacuumState = new();
-        public BossToxicMineState ToxicMineState = new();
-        public BossTransitionState TransitionState = new();
-        public BossBoxingState BoxingState = new();
-        public BossSpawnState SpawnState = new();
+        private readonly BossDashingState dashingState = new();
+        private readonly BossThrowingState throwingState = new();
+        private readonly BossAttackCircleState attackCircleState = new();
+        private readonly BossVacuumState vacuumState = new();
+        private readonly BossToxicMineState toxicMineState = new();
+        private readonly BossTransitionState transitionState = new();
+        private readonly BossBoxingState boxingState = new();
+        private readonly BossSpawnState spawnState = new();
 
-        public Rigidbody2D rb;
+        [SerializeField] private Rigidbody2D rb;
         private PlayerController player;
-        public AIPath bossAI;
+        [SerializeField] private AIPath bossAI;
+        [SerializeField] private AIDestinationSetter aiDestinationSetter;
+        [SerializeField] private Animator animator;
+        [SerializeField] private AnimationClip throwAnimation;
     
         //LIST
-        public List<BossBaseState> firstStatesList = new();
-        public List<BossBaseState> lastStatesList = new();
+        private readonly List<BossBaseState> firstStatesList = new();
+        private readonly List<BossBaseState> lastStatesList = new();
     
         public List<GameObject> spawnerList = new();
 
@@ -44,11 +48,7 @@ namespace AI.Boss
 
         [Header("Virtual Camera")]
         private CamManager camManager;
-        public CinemachineVirtualCamera vCamPlayer;
-        public CinemachineVirtualCamera vCamPlayerShake;
-        public CinemachineVirtualCamera vCamBoss;
-        public CinemachineVirtualCamera vCamBossShake;
-    
+
         [Header("----Dash----")] 
         public GameObject dashMine;
         public GameObject dashWarning;
@@ -78,8 +78,7 @@ namespace AI.Boss
         public float vacuumCooldown;
         public int vacuumAmount;
         public int currentVacuumAmount;
-
-
+        
         [Header("----TransitionState----")] 
         private GameObject shockwaveGameObject;
 
@@ -97,8 +96,7 @@ namespace AI.Boss
         public GameObject toxicMine;
         public GameObject toxicMineWarning;
         public GameObject toxicMineArea;
-    
-    
+
         public int numberOfToxicMines;
     
         public int toxicMineAmount;
@@ -117,17 +115,13 @@ namespace AI.Boss
         public GameObject circleBoxingWarning;
         public float distanceBetweenPlayer;
         public float aggroBoxingRange;
-        public float timerBeforeBoxing;
 
         public float currentDamageTaken;
         public float maxDamageTaken;
     
         public float numberOfBoxingCircleWarning;
         public float numberOfBoxingCircle;
-    
-    
-        public bool timerIsRunning;
-        
+
         [Header("----StackSystem----")]
         internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
         [SerializeField, ShowOnly] internal float[] stackTimers = new float[3];
@@ -142,6 +136,7 @@ namespace AI.Boss
         [Header("----HitStopAndKnockBack----")]
         private Coroutine currentHitStopCoroutine;
         private float lastVelocitySpeed;
+        private static readonly int BossAnimState = Animator.StringToHash("bossAnimState");
 
 
         private void Start()
@@ -150,11 +145,10 @@ namespace AI.Boss
             player = PlayerController.instance;
             effectManager = EffectManager.instance;
             camManager = CamManager.instance;
-            gameObject.GetComponent<AIDestinationSetter>().target = PlayerController.instance.transform;
+            aiDestinationSetter.target = PlayerController.instance.transform;
             shockwaveGameObject = GameObject.Find("Shockwave");
-        
-
-            currentState = DashingState; //starting state for the boss state machine
+            
+            currentState = throwingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
         
             //HEALTH
@@ -170,23 +164,21 @@ namespace AI.Boss
             currentVelocitySpeed = dashPower;
 
             //STATES
-            firstStatesList.Add(DashingState);
-            firstStatesList.Add(AttackCircleState);
-            firstStatesList.Add(VacuumState);
-            firstStatesList.Add(SpawnState);
+            firstStatesList.Add(dashingState);
+            firstStatesList.Add(attackCircleState);
+            firstStatesList.Add(vacuumState);
+            firstStatesList.Add(spawnState);
         
-            lastStatesList.Add(ThrowingState);
-            lastStatesList.Add(ToxicMineState);
-            lastStatesList.Add(SpawnState);
+            lastStatesList.Add(throwingState);
+            lastStatesList.Add(toxicMineState);
+            lastStatesList.Add(spawnState);
 
             //VIRTUAL CAMERA
-            vCamPlayer = GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
-            vCamPlayerShake = GameObject.Find("vCamPlayerShake").GetComponent<CinemachineVirtualCamera>();
-            vCamBoss = GameObject.Find("vCamBoss").GetComponent<CinemachineVirtualCamera>();
-            vCamBossShake = GameObject.Find("vCamBossShake").GetComponent<CinemachineVirtualCamera>();
+            GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
+            GameObject.Find("vCamPlayerShake").GetComponent<CinemachineVirtualCamera>();
+            GameObject.Find("vCamBoss").GetComponent<CinemachineVirtualCamera>();
+            GameObject.Find("vCamBossShake").GetComponent<CinemachineVirtualCamera>();
 
-            timerIsRunning = true;
-            
             //STACKS
             for (var i = 0; i < stacks.Length; i++)
             {
@@ -200,13 +192,14 @@ namespace AI.Boss
         private void Update()
         {
             bossAI.maxSpeed = aiPathSpeed;
-            
-            currentState.UpdateState(this); //will call any code in Update State from the current state every frame
 
-            distanceBetweenPlayer = Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(player.transform.position.x, player.transform.position.y));
+            var position = transform.position;
+            var playerPosition = player.transform.position;
+            distanceBetweenPlayer = Vector2.Distance(new Vector2(position.x, position.y), new Vector2(playerPosition.x, playerPosition.y));
 
             EffectCheck();
         }
+        
         private void OnCollisionEnter2D(Collision2D col)
         {
             if (col.gameObject.CompareTag("Player"))
@@ -226,14 +219,14 @@ namespace AI.Boss
             }
         }
 
-        public void SwitchState(BossBaseState state)
+        private void SwitchState(BossBaseState state)
         {
             Reinit();
             currentState = state;
             state.EnterState(this);
         }
 
-        void Reinit()
+        private void Reinit()
         {
             currentDashAmount = dashAmount;
             currentAttackCircleAmount = attackCircleAmount;
@@ -243,11 +236,11 @@ namespace AI.Boss
             currentThrowAmount = throwAmount;
         }
 
-        private void OnDrawGizmos()
+        /*private void OnDrawGizmos()
         {
-            // var position = transform.position;
-            // Gizmos.DrawWireSphere(position, aggroBoxingRange);
-        }
+            var position = transform.position;
+            Gizmos.DrawWireSphere(position, aggroBoxingRange);
+        }*/
 
         #region Health Boss
 
@@ -268,7 +261,7 @@ namespace AI.Boss
             }
         }
 
-        void Die()
+        private void Die()
         {
             Destroy(gameObject);
         }
@@ -334,6 +327,7 @@ namespace AI.Boss
             StartCoroutine(Dash());
             Debug.Log($"<color=green>DASHING STATE HAS BEGUN</color>");
         }
+        
         private IEnumerator Dash()
         {
             canShakeOnWallBump = true;
@@ -341,45 +335,59 @@ namespace AI.Boss
             aiPathSpeed = 0;
             
             //DO THE WARNING HERE
-            Vector2 direction = player.transform.position - transform.position;
-            var dashWarningObject = Instantiate(dashWarning, transform.position, Quaternion.identity);
-            dashWarningObject.transform.DORotateQuaternion(Quaternion.FromToRotation(Vector3.right, player.transform.position - dashWarningObject.transform.position), 0f); //Rotate warning to the player
+            var position = transform.position;
+            var playerPosition = player.transform.position;
+            Vector2 direction = playerPosition - position;
+            var dashWarningObject = Instantiate(dashWarning, position, Quaternion.identity);
+            dashWarningObject.transform.DORotateQuaternion(Quaternion.FromToRotation(Vector3.right, playerPosition - dashWarningObject.transform.position), 0f); //Rotate warning to the player
             yield return new WaitForSeconds(timeBeforeDashing);
 
             Destroy(dashWarningObject);
-            GetComponent<AIDestinationSetter>().enabled = false;
-            GetComponent<AIPath>().enabled = false;
+            aiDestinationSetter.enabled = false;
+            bossAI.enabled = false;
+            
+            animator.SetInteger(BossAnimState, 1);
 
             rb.velocity = direction.normalized * currentVelocitySpeed; // DO DASH
 
             //HOW MANY MINES DURING DASH
-            for (int i = 0; i < numberOfMines; i++)
+            for (var i = 0; i < numberOfMines; i++)
             {
                 StartCoroutine(DashMine());
                 yield return new WaitForSeconds(0.4f);
             }
 
             aiPathSpeed = currentAiPathSpeed;
-            GetComponent<AIDestinationSetter>().enabled = true;
-            GetComponent<AIPath>().enabled = true;
+            aiDestinationSetter.enabled = true;
+            bossAI.enabled = true;
             
-            if (currentDashAmount > 0 && currentHealth >= maxHealth / 2)
+            animator.SetInteger(BossAnimState, 0);
+            
+            switch (currentDashAmount)
             {
-                StartCoroutine(Dash());
-            }
-            else if (currentDashAmount == 0)
-            {
-                aiPathSpeed = 0;
-                yield return new WaitForSeconds(waitEndDash);
+                case > 0 when currentHealth >= maxHealth / 2:
+                    StartCoroutine(Dash());
+                    break;
+                case 0:
+                {
+                    aiPathSpeed = 0;
+                    yield return new WaitForSeconds(waitEndDash);
                 
-                aiPathSpeed = currentAiPathSpeed;
-                var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
+                    aiPathSpeed = currentAiPathSpeed;
+                    var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
-                SwitchState(nextState);
-            }
-            else if (currentHealth <= maxHealth / 2)
-            {
-                SwitchState(TransitionState);
+                    SwitchState(nextState);
+                    break;
+                }
+                default:
+                {
+                    if (currentHealth <= maxHealth / 2)
+                    {
+                        SwitchState(transitionState);
+                    }
+
+                    break;
+                }
             }
         }
 
@@ -391,7 +399,6 @@ namespace AI.Boss
             dashMineObject.transform.DOScale(new Vector2(3, 3), 1.5f);
             Destroy(dashMineObject, 1.5f);
             yield return new WaitForSeconds(0.3f);
-
         }
 
         #endregion
@@ -402,7 +409,7 @@ namespace AI.Boss
         {
             StartCoroutine(AttackCircle());
             var posBossBeforeSpawn = transform.position; //get la pos du boss
-            var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+            Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
 
             Debug.Log($"<color=green>ATTACK CIRCLE STATE HAS BEGUN</color>");
         }
@@ -422,20 +429,28 @@ namespace AI.Boss
             
             Destroy(circleObject);
 
-            if (currentAttackCircleAmount > 0 && currentHealth >= maxHealth / 2)
+            switch (currentAttackCircleAmount)
             {
-                StartCoroutine(AttackCircle());
-            }
-            else if (currentAttackCircleAmount == 0)
-            {
-                var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
+                case > 0 when currentHealth >= maxHealth / 2:
+                    StartCoroutine(AttackCircle());
+                    break;
+                case 0:
+                {
+                    var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
-                SwitchState(nextState);
-            }
-            else if (currentHealth <= maxHealth / 2)
-            {
-                aiPathSpeed = currentAiPathSpeed;
-                SwitchState(TransitionState);
+                    SwitchState(nextState);
+                    break;
+                }
+                default:
+                {
+                    if (currentHealth <= maxHealth / 2)
+                    {
+                        aiPathSpeed = currentAiPathSpeed;
+                        SwitchState(transitionState);
+                    }
+
+                    break;
+                }
             }
         }
 
@@ -447,7 +462,6 @@ namespace AI.Boss
         {
             StartCoroutine(Vacuum());
             Debug.Log($"<color=green>SHRINKING CIRCLE STATE HAS BEGUN</color>");
-
         }
     
         private IEnumerator Vacuum()
@@ -468,31 +482,43 @@ namespace AI.Boss
             //TOXIC AREA
             var toxicAreaObject = Instantiate(toxicArea, bossPos, Quaternion.identity);
             toxicAreaObject.transform.DOScale(new Vector2(3.5f, 3.5f), 2f);
+            
+            animator.SetInteger(BossAnimState, 3);
+            
             yield return new WaitForSeconds(vacuumCooldown);
+            
+            animator.SetInteger(BossAnimState, 0);
 
             Destroy(vacuumGameObject);
             vacuumParticle.SetActive(false);
             Destroy(toxicAreaObject);
             aiPathSpeed = currentAiPathSpeed; //Change the speed back to normal
-        
 
-            if (currentVacuumAmount > 0 && currentHealth >= maxHealth / 2)
+            switch (currentVacuumAmount)
             {
-                StartCoroutine(Vacuum());
-            }
-            else if(currentVacuumAmount == 0)
-            {
-                var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
+                case > 0 when currentHealth >= maxHealth / 2:
+                    StartCoroutine(Vacuum());
+                    break;
+                case 0:
+                {
+                    var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
-                SwitchState(nextState);
+                    SwitchState(nextState);
+                    break;
+                }
+                default:
+                {
+                    if (currentHealth <= maxHealth / 2)
+                    {
+                        aiPathSpeed = currentAiPathSpeed;
+                        SwitchState(transitionState);
+                    }
+
+                    break;
+                }
             }
-            else if (currentHealth <= maxHealth / 2)
-            {
-                aiPathSpeed = currentAiPathSpeed;
-                SwitchState(TransitionState);
-            }
-        
         }
+        
         #endregion
 
         #region SpawnEnemyState
@@ -501,12 +527,11 @@ namespace AI.Boss
         {
             StartCoroutine(SpawnEnemy());
         }
-
-
+        
         private IEnumerator SpawnEnemy()
         {
             var posBossBeforeSpawn = transform.position; //get la pos du boss
-            var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+            Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
             yield return new WaitForSeconds(1f);
 
             if (currentHealth >= maxHealth / 2)
@@ -519,7 +544,6 @@ namespace AI.Boss
                 var nextStateLast = lastStatesList[Random.Range(0, lastStatesList.Count)];
                 SwitchState(nextStateLast);
             }
-            
         }
         
         #endregion
@@ -558,12 +582,12 @@ namespace AI.Boss
             //player.soController.moveSpeed = 40f;
             yield return new WaitForSeconds(3f);
 
-            for (int i = 0; i < numberOfSpawn; i++)
+            for (var i = 0; i < numberOfSpawn; i++)
             {
                 yield return new WaitForSeconds(0.3f);
             
                 var posBossBeforeSpawn = transform.position; //get la pos du boss
-                var spawnEnemy = Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+                Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
             }
             yield return new WaitForSeconds(transitionCooldown);
         
@@ -575,8 +599,7 @@ namespace AI.Boss
             Destroy(shockwaveGameObject);
             aiPathSpeed = currentAiPathSpeed;
             takingDamage = true;
-            SwitchState(ThrowingState);
-
+            SwitchState(throwingState);
         }
 
         #endregion
@@ -587,15 +610,15 @@ namespace AI.Boss
         {
             StartCoroutine(ToxicMine());
             Debug.Log($"<color=red>TOXIC MINE STATE HAS BEGUN</color>");
-
         }
+        
         private IEnumerator ToxicMine()
         {
             currentToxicMineAmount--;
             yield return new WaitForSeconds(1f);
 
             //SPAWN TOXIC MINE 
-            for (int i = 0; i < numberOfToxicMines; i++)
+            for (var i = 0; i < numberOfToxicMines; i++)
             {
                 var posBossBeforeSpawn = transform.position; //get la pos du boss 
             
@@ -608,7 +631,7 @@ namespace AI.Boss
             yield return new WaitForSeconds(1.5f);
 
             //SPAWN TOXIC MINE AREA WARNING
-            for (int i = 0; i < numberOfToxicMines; i++)
+            for (var i = 0; i < numberOfToxicMines; i++)
             {
                 var toxicMineAreaWarningObject = Instantiate(toxicMineWarning, toxicMineList[i].transform.position, Quaternion.identity);
             
@@ -616,15 +639,15 @@ namespace AI.Boss
                 toxicMineAreaWarningList.Add(toxicMineAreaWarningObject);
             }
         
-            foreach (var VARIABLE in toxicMineAreaWarningList)
+            foreach (var variable in toxicMineAreaWarningList)
             {
-                Destroy(VARIABLE, 1f); //destroy toxic mine area warning
+                Destroy(variable, 1f); //destroy toxic mine area warning
             }
         
             yield return new WaitForSeconds(1f);
 
             //SPAWN TOXIC MINE AREA
-            for (int i = 0; i < numberOfToxicMines; i++)
+            for (var i = 0; i < numberOfToxicMines; i++)
             {
                 var toxicMineAreaObject = Instantiate(toxicMineArea, toxicMineList[i].transform.position, Quaternion.identity);
             
@@ -632,12 +655,12 @@ namespace AI.Boss
                 toxicMineAreaList.Add(toxicMineAreaObject);
             }
         
-            foreach (var VARIABLE in toxicMineAreaList)
+            foreach (var variable in toxicMineAreaList)
             {
-                Destroy(VARIABLE, 1f); //destroy toxic mine area
+                Destroy(variable, 1f); //destroy toxic mine area
             }
         
-            for (int i = 0; i < numberOfToxicMines; i++)
+            for (var i = 0; i < numberOfToxicMines; i++)
             {
                 Destroy(toxicMineList[i].gameObject, 1f); //destroy toxic mine
             }
@@ -650,21 +673,21 @@ namespace AI.Boss
             
             if(distanceBetweenPlayer < aggroBoxingRange && currentDamageTaken > maxDamageTaken)
             {
-                SwitchState(BoxingState);
+                SwitchState(boxingState);
             }
-            else if(currentToxicMineAmount > 0)
+            else switch (currentToxicMineAmount)
             {
-                StartCoroutine(ToxicMine());
+                case > 0:
+                    StartCoroutine(ToxicMine());
+                    break;
+                case 0:
+                {
+                    var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+                    SwitchState(nextState);
+                    break;
+                }
             }
-            else if(currentToxicMineAmount == 0)
-            { 
-                var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
-                SwitchState(nextState);
-            }
-            
         }
-
-    
 
         #endregion
 
@@ -674,29 +697,35 @@ namespace AI.Boss
         {
             StartCoroutine(Throwing());
             Debug.Log($"<color=red>THROWING STATE HAS BEGUN</color>");
-
         }
+        
         private IEnumerator Throwing()
         {
             currentThrowAmount--;
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(2f - throwAnimation.length * 0.8f);
+            
+            StartCoroutine(ChangeAnimation(4));
+            yield return new WaitForSeconds(throwAnimation.length * 0.8f);
 
             var posBossBeforeSpawn = transform.position; //get la pos du boss 
-            var slugObject = Instantiate(slug, new Vector2(posBossBeforeSpawn.x,posBossBeforeSpawn.y), Quaternion.identity);
+            Instantiate(slug, new Vector2(posBossBeforeSpawn.x,posBossBeforeSpawn.y), Quaternion.identity);
             yield return new WaitForSeconds(3f);
             
             if (distanceBetweenPlayer < aggroBoxingRange && currentDamageTaken > maxDamageTaken)
             {
-                SwitchState(BoxingState);
+                SwitchState(boxingState);
             }
-            else if(currentThrowAmount > 0)
+            else switch (currentThrowAmount)
             {
-                StartCoroutine(Throwing());
-            }
-            else if(currentThrowAmount == 0)
-            { 
-                var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
-                SwitchState(nextState);
+                case > 0:
+                    StartCoroutine(Throwing());
+                    break;
+                case 0:
+                {
+                    var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
+                    SwitchState(nextState);
+                    break;
+                }
             }
         }
 
@@ -716,7 +745,9 @@ namespace AI.Boss
 
             if (currentDamageTaken > maxDamageTaken)
             {
-                for (int i = 0; i < numberOfBoxingCircleWarning; i++)
+                animator.SetInteger(BossAnimState, 2);
+                
+                for (var i = 0; i < numberOfBoxingCircleWarning; i++)
                 {
                     var posPlayerBeforeSpawn = player.transform.position; //get la pos du boss
                     var circleBoxingWarningObject = Instantiate(circleBoxingWarning, new Vector2(posPlayerBeforeSpawn.x,posPlayerBeforeSpawn.y), Quaternion.identity);
@@ -725,7 +756,7 @@ namespace AI.Boss
                     yield return new WaitForSeconds(0.2f);
                 }
 
-                for (int i = 0; i < numberOfBoxingCircle; i++)
+                for (var i = 0; i < numberOfBoxingCircle; i++)
                 {
                     var circleBoxingObject = Instantiate(circleBoxing, circleBoxingWarningObjectList[i].transform.position, Quaternion.identity);
                     StartCoroutine(camManager.ShakeCam()); //DO SHAKE CAMERA
@@ -735,24 +766,37 @@ namespace AI.Boss
                     yield return new WaitForSeconds(0.2f);
                 }
 
-                foreach (var VARIABLEWARNING in circleBoxingWarningObjectList)
+                foreach (var variableWarning in circleBoxingWarningObjectList)
                 {
-                    Destroy(VARIABLEWARNING);
+                    Destroy(variableWarning);
                 }
 
-                foreach (var VARIABLE in circleBoxingObjectList)
+                foreach (var variable in circleBoxingObjectList)
                 {
-                    Destroy(VARIABLE);
+                    Destroy(variable);
                 }
                 
                 //Clear toutes les list
                 circleBoxingWarningObjectList.Clear();
                 circleBoxingObjectList.Clear();
+                
+                currentDamageTaken = 0;
+                animator.SetInteger(BossAnimState, 0);
             }
 
-            currentDamageTaken = 0;
             var nextState = lastStatesList[Random.Range(0, lastStatesList.Count)];
             SwitchState(nextState);
+        }
+
+        #endregion
+
+        #region Animator
+
+        private IEnumerator ChangeAnimation(int state)
+        {
+            animator.SetInteger(BossAnimState, state);
+            yield return new WaitForNextFrameUnit();
+            animator.SetInteger(BossAnimState, 0);
         }
 
         #endregion

@@ -1,16 +1,10 @@
-using AI.Boss;
-using UnityEngine;
-
-public class BossTransitionState : BossBaseState
+namespace AI.Boss
 {
-    
-    public override void EnterState(BossStateManager boss)
+    public class BossTransitionState : BossBaseState
     {
-        boss.TransitionManager();
-    }
-
-    public override void UpdateState(BossStateManager boss)
-    {
-        
+        public override void EnterState(BossStateManager boss)
+        {
+            boss.TransitionManager();
+        }
     }
 }

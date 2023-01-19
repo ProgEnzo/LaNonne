@@ -1,17 +1,10 @@
-using AI.Boss;
-using UnityEngine;
-
-public class BossVacuumState : BossBaseState
+namespace AI.Boss
 {
-    
-    public override void EnterState(BossStateManager boss)
+    public class BossVacuumState : BossBaseState
     {
-        boss.VacuumManager();
-
-    }
-
-    public override void UpdateState(BossStateManager boss)
-    {
-        
+        public override void EnterState(BossStateManager boss)
+        {
+            boss.VacuumManager();
+        }
     }
 }

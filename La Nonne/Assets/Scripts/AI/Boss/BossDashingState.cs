@@ -1,17 +1,10 @@
-using AI.Boss;
-using UnityEngine;
-
-public class BossDashingState : BossBaseState
+namespace AI.Boss
 {
-    
-    public override void EnterState(BossStateManager boss)
+    public class BossDashingState : BossBaseState
     {
-        boss.DashManager();
-        
-    }
-
-    public override void UpdateState(BossStateManager boss)
-    {
-
+        public override void EnterState(BossStateManager boss)
+        {
+            boss.DashManager();
+        }
     }
 }
