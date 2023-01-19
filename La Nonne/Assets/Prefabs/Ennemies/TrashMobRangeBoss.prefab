@@ -214,6 +214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPuppet: {fileID: 6214965070285778591}
   chrysalisPuppet: {fileID: 7305762493275570245}
+  stacks: {fileID: 3862121614712754866}
 --- !u!1 &9071314407910337641
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,6 +568,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4200116470e49414695d79ab6e1d410a, type: 3}
+--- !u!1 &3862121614712754866 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3523824643155443164, guid: 4200116470e49414695d79ab6e1d410a, type: 3}
+  m_PrefabInstance: {fileID: 395790043798826862}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3862121614712754867 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3523824643155443165, guid: 4200116470e49414695d79ab6e1d410a, type: 3}

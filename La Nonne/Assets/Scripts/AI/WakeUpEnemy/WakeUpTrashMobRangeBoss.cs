@@ -10,6 +10,7 @@ namespace AI.WakeUpEnemy
         private Rigidbody2D rb;
         [SerializeField] private GameObject enemyPuppet;
         [SerializeField] private GameObject chrysalisPuppet;
+        [SerializeField] private GameObject stacks;
 
         private void Start()
         {
@@ -24,6 +25,7 @@ namespace AI.WakeUpEnemy
             yield return new WaitForSeconds(2f);
             enemyPuppet.SetActive(true);
             chrysalisPuppet.SetActive(false);
+            stacks.SetActive(true);
             trashMobRange.enabled = true;
             rb.bodyType = RigidbodyType2D.Dynamic;
             Destroy(gameObject);
