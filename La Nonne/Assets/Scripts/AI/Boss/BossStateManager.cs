@@ -55,6 +55,9 @@ namespace AI.Boss
         [Header("Virtual Camera")]
         private CamManager camManager;
 
+        public CinemachineVirtualCamera vCamBoss;
+        public CinemachineVirtualCamera vCamBossShake;
+
         [Header("----Dash----")] 
         public GameObject dashMine;
         public GameObject dashWarning;
@@ -180,10 +183,10 @@ namespace AI.Boss
             lastStatesList.Add(spawnState);
 
             //VIRTUAL CAMERA
-            GameObject.Find("vCamPlayer").GetComponent<CinemachineVirtualCamera>();
-            GameObject.Find("vCamPlayerShake").GetComponent<CinemachineVirtualCamera>();
-            GameObject.Find("vCamBoss").GetComponent<CinemachineVirtualCamera>();
-            GameObject.Find("vCamBossShake").GetComponent<CinemachineVirtualCamera>();
+            vCamBoss = GameObject.Find("vCamBoss").GetComponent<CinemachineVirtualCamera>();
+            vCamBossShake = GameObject.Find("vCamBossShake").GetComponent<CinemachineVirtualCamera>();
+            vCamBoss.Follow = transform;
+            vCamBossShake.Follow = transform;
 
             //STACKS
             for (var i = 0; i < stacks.Length; i++)
