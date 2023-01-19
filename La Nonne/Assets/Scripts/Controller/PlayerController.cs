@@ -103,8 +103,7 @@ namespace Controller
         public AudioSource playerAudioSource;
         public AudioClip[] dashAudioClip;
 
-        public AudioSource epAudioSource;
-        public AudioClip epAudioClip;
+        
         public AudioClip cooldownRevealingDashAudioClip;
 
         public AudioClip hitPlayerAudioClip;
@@ -256,9 +255,6 @@ namespace Controller
         
         public void AddEp(int epGain)
         {
-            //ep sound
-            epAudioSource.PlayOneShot(epAudioClip);
-
             currentEp += epGain;
         }
     
