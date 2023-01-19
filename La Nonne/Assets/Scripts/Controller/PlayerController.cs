@@ -44,10 +44,11 @@ namespace Controller
         [SerializeField] private List<GameObject> ghostPrefabs;
 
         [Header("Health")]
-        private int currentHealth;
+        internal int currentHealth;
         [SerializeField] private List<GameObject> playerPuppets;
         private readonly List<SpriteRenderer> playerSpriteRenderers = new();
         private Coroutine currentSpriteCoroutine;
+        internal bool isGodModeOn;
 
         [Header("Revealing Dash")]
         internal bool isRevealingDashHitting;
@@ -415,7 +416,14 @@ namespace Controller
 
             if (currentHealth <= 0)
             {
-                Die();
+                if (isGodModeOn)
+                {
+                    currentHealth = soController.maxHealth;
+                }
+                else
+                {
+                    Die();
+                }
             }
         }
 
