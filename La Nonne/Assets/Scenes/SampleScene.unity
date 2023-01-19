@@ -14538,6 +14538,17 @@ Transform:
   m_Father: {fileID: 700255807}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &216521141 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6554426061171912166, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+  m_PrefabInstance: {fileID: 1242916246802691872}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab8f71ae573758e42adad8ebcdea7b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &271398295
 GameObject:
   m_ObjectHideFlags: 0
@@ -14739,6 +14750,17 @@ Transform:
   m_Father: {fileID: 963052496}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &538609690 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1180153866, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+  m_PrefabInstance: {fileID: 1242916246802691872}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277514f6edd90e94da4bb3ac15556cfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &576200805
 GameObject:
   m_ObjectHideFlags: 0
@@ -36585,6 +36607,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 314381887, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_ChildCameras.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 725024582, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: uiManager
+      value: 
+      objectReference: {fileID: 725024573}
+    - target: {fileID: 725024582, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: uiAnimPause
+      value: 
+      objectReference: {fileID: 216521141}
+    - target: {fileID: 725024582, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: uiAnimManager
+      value: 
+      objectReference: {fileID: 538609690}
     - target: {fileID: 725024582, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: roomContentGenerator
       value: 
