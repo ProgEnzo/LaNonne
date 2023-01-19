@@ -1,5 +1,6 @@
 using System.Collections;
 using AI.So;
+using DG.Tweening;
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -77,10 +78,12 @@ namespace AI.Trash
             cooldownTimer = soTrashMobRange.cooldownBetweenShots;
             
             animator.SetBool(IsAttacking, true);
-
+            
             var position = transform.position;
             var direction = playerController.transform.position - position; // direction entre player et enemy
             var bullet = Instantiate(bulletPrefab, position, Quaternion.identity); // spawn bullet
+            bullet.transform.DORotateQuaternion(Quaternion.FromToRotation(Vector3.right, position - playerController.transform.position), 0f); //Rotate scalpel to the player
+
             var rbBullet = bullet.GetComponent<Rigidbody2D>(); // chope le rb de la bullet 
             rbBullet.AddForce(direction.normalized * soTrashMobRange.bulletSpeed, ForceMode2D.Impulse); // Addforce avec la direction + le rb
 
