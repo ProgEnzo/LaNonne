@@ -1,23 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using AI.Elite;
-using Pathfinding;
 using UnityEngine;
 
-public class WakeUpAutophage : MonoBehaviour
+namespace AI.WakeUpEnemy
 {
-    public Autophagic autophage;
-    void Start()
+    public class WakeUpAutophage : MonoBehaviour
     {
-        autophage = transform.parent.parent.GetComponent<Autophagic>();
-    }
+        private Autophagic autophage;
 
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Player"))
+        private void Start()
         {
-            autophage.enabled = true;
-            Destroy(gameObject);
+            autophage = transform.parent.parent.GetComponent<Autophagic>();
+        }
+
+        private void OnTriggerEnter2D(Collider2D col)
+        {
+            if (col.gameObject.CompareTag("Player"))
+            {
+                autophage.enabled = true;
+                Destroy(gameObject);
+            }
         }
     }
 }

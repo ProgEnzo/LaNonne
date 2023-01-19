@@ -1,22 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using AI.Elite;
 using UnityEngine;
 
-public class WakeUpTDI : MonoBehaviour
+namespace AI.WakeUpEnemy
 {
-    public TDI tdi;
-    void Start()
+    public class WakeUpTDI : MonoBehaviour
     {
-        tdi = transform.parent.parent.GetComponent<TDI>();
-    }
+        private TDI tdi;
 
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Player"))
+        private void Start()
         {
-            tdi.enabled = true;
-            Destroy(gameObject);
+            tdi = transform.parent.parent.GetComponent<TDI>();
+        }
+
+        private void OnTriggerEnter2D(Collider2D col)
+        {
+            if (col.gameObject.CompareTag("Player"))
+            {
+                tdi.enabled = true;
+                Destroy(gameObject);
+            }
         }
     }
 }
