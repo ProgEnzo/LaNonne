@@ -36,7 +36,7 @@ namespace AI
 
         [SerializeField] private GameObject epDrop;
         private List<SpriteRenderer> enemySpriteRenderers = new();
-        [SerializeField] private GameObject enemyPuppet;
+        [SerializeField] protected GameObject enemyPuppet;
         protected Coroutine currentIsHitCoroutine;
 
         [SerializeField] private GameObject bloodDroplets;

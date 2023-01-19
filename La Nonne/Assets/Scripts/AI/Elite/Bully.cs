@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using AI.So;
 using Unity.VisualScripting;
@@ -15,6 +16,13 @@ namespace AI.Elite
         {
             soBully = (SoBully) soEnemy;
             animator = transform.GetChild(2).GetComponent<Animator>();
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            
+            CheckDirection();
         }
 
         private void OnCollisionEnter2D(Collision2D col) 
@@ -39,6 +47,19 @@ namespace AI.Elite
         {
             yield return new WaitForNextFrameUnit();
             animator.SetBool(IsAttacking, false);
+        }
+        
+        private void CheckDirection()
+        {
+            var puppetLocalScale = enemyPuppet.transform.localScale;
+            if (rb.velocity.x != 0)
+            {
+                enemyPuppet.transform.localScale = new Vector3(MathF.Sign(rb.velocity.x) * MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
+            }
+            else
+            {
+                enemyPuppet.transform.localScale = playerController.transform.position.x > transform.position.x ? new Vector3(MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z) : new Vector3(-MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
+            }
         }
     }
 }
