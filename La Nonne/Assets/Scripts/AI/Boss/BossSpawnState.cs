@@ -1,17 +1,10 @@
-using AI.Boss;
-using UnityEngine;
-
-public class BossSpawnState : BossBaseState
+namespace AI.Boss
 {
-    
-    public override void EnterState(BossStateManager boss)
+    public class BossSpawnState : BossBaseState
     {
-        boss.SpawnEnemyManager();
-
-    }
-
-    public override void UpdateState(BossStateManager boss)
-    {
-        
+        public override void EnterState(BossStateManager boss)
+        {
+            boss.SpawnEnemyManager();
+        }
     }
 }

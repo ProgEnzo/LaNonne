@@ -1,17 +1,10 @@
-using AI.Boss;
-using UnityEngine;
-
-public class BossToxicMineState : BossBaseState
+namespace AI.Boss
 {
-    
-    public override void EnterState(BossStateManager boss)
+    public class BossToxicMineState : BossBaseState
     {
-        boss.ToxicMineManager();
-
-    }
-
-    public override void UpdateState(BossStateManager boss)
-    {
-
+        public override void EnterState(BossStateManager boss)
+        {
+            boss.ToxicMineManager();
+        }
     }
 }
