@@ -266,7 +266,7 @@ namespace Controller
         
         private void ManageMove()
         {
-            var speed = timerDash <= 0 ? soController.moveSpeed : soController.dashSpeed;
+            var speed = !isDashOn ? soController.moveSpeed : soController.dashSpeed;
             var movingState = timerDash <= 0 ? 2 : 3;
 
             var nbInputs = (Input.GetKey(inputManager.upMoveKey) ? 1 : 0) + (Input.GetKey(inputManager.leftMoveKey) ? 1 : 0) +
