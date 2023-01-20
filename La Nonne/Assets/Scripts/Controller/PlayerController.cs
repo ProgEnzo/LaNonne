@@ -7,6 +7,7 @@ using Core.Scripts.Utils;
 using DG.Tweening;
 using Manager;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -100,11 +101,11 @@ namespace Controller
         private float minCA = 5f;
         private float maxCA = 15f; //Lerp the value between those 2 en fonction de la distance player/boss, donc dans un update
 
-        [Header("SoundEffect")]
+        [Header("SoundEffect")] 
+        public AudioMixerGroup mainAudioGroup;
         public AudioSource playerAudioSource;
         public AudioClip[] dashAudioClip;
 
-        
         public AudioClip cooldownRevealingDashAudioClip;
 
         public AudioClip hitPlayerAudioClip;
@@ -618,6 +619,8 @@ namespace Controller
                 //Dash
                 transform.position = Vector2.MoveTowards(position, revealingDashNewPosition, soController.revealingDashHitSpeed * Time.deltaTime);
 
+                mainAudioGroup.audioMixer.DOSetFloat("lowPassVolume", 300f, 1f);
+                
                 //Tant que l'ennemi n'est pas atteint, on ne passe pas à la suite
                 if (!(Vector3.Distance(transform.position, revealingDashNewPosition) < soController.revealingDashToleranceDistance)) return;
 
@@ -646,6 +649,7 @@ namespace Controller
                 
                 //Fin du dash
                 isRevealingDashHitting = false;
+                mainAudioGroup.audioMixer.DOSetFloat("lowPassVolume", 5000f, 2f);
 
                 if (revealingDashAimedEnemy != null)
                 {
