@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using AI;
 using AI.Boss;
 using Controller;
@@ -31,8 +30,7 @@ namespace Shop
         }
 
         internal new static EffectManager instance;
-        
-        private PlayerController playerController;
+
         [SerializeField] internal float effectDuration;
         [SerializeField] internal int effectMaxLevel;
         [SerializeField] internal int numberOfEffects;
@@ -62,12 +60,7 @@ namespace Shop
                 appliedEffects[i] = Effect.None;
             }
         }
-        
-        private void Start()
-        {
-            playerController = PlayerController.instance;
-        }
-        
+
         internal void EffectSwitch(Effect effect, int level, GameObject enemy, int stackIndex)
         {
             switch (effect)
