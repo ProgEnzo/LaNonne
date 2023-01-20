@@ -283,15 +283,20 @@ namespace AI.Boss
         internal void HitStopAndKnockBack(float hitStopDuration, float knockBackForce)
         {
             rb.AddForce((transform.position - player.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
+            HitStop(hitStopDuration);
+        }
+
+        internal void HitStop(float hitStopDuration)
+        {
             if (currentHitStopCoroutine != null)
             {
                 StopCoroutine(currentHitStopCoroutine);
                 currentVelocitySpeed = lastVelocitySpeed;
             }
-            currentHitStopCoroutine = StartCoroutine(HitStop(hitStopDuration));
+            currentHitStopCoroutine = StartCoroutine(HitStopCoroutine(hitStopDuration));
         }
         
-        private IEnumerator HitStop(float hitStopDuration)
+        private IEnumerator HitStopCoroutine(float hitStopDuration)
         {
             lastVelocitySpeed = currentVelocitySpeed;
             bossAI.canMove = false;

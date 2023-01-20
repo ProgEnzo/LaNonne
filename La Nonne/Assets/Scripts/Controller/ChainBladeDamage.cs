@@ -29,7 +29,9 @@ namespace Controller
             //DMG du player on Enemy
             if (o.CompareTag("Enemy"))
             {
-                o.GetComponent<EnemyController>().TakeDamageFromPlayer(damage);
+                var enemyScript = o.GetComponent<EnemyController>();
+                enemyScript.TakeDamageFromPlayer(damage);
+                enemyScript.HitStop(soController.inquisitorialChainHitStopDuration);
                 scoreManager.AddChainBladeHitScore(5);
                 
                 //Debug.Log("<color=orange>TRASH MOB CLOSE</color> HAS BEEN HIT, HEALTH REMAINING : " + other.gameObject.GetComponent<TrashMobClose>().currentHealth);
@@ -39,7 +41,9 @@ namespace Controller
             //DMG du player sur le BOSS
             if (o.CompareTag("Boss"))
             {
-                o.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(damage);
+                var bossScript = o.GetComponent<BossStateManager>();
+                bossScript.TakeDamageOnBossFromPlayer(damage);
+                bossScript.HitStop(soController.inquisitorialChainHitStopDuration);
                 scoreManager.AddChainBladeHitScore(5);
                 
                 ImplodeStacks(o, damage);

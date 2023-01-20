@@ -147,15 +147,20 @@ namespace AI
         {
             isKnockedBack = true;
             rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
+            HitStop(hitStopDuration);
+        }
+
+        internal virtual void HitStop(float hitStopDuration)
+        {
             if (currentHitStopCoroutine != null)
             {
                 StopCoroutine(currentHitStopCoroutine);
                 currentVelocitySpeed = lastVelocitySpeed;
             }
-            currentHitStopCoroutine = StartCoroutine(HitStop(hitStopDuration));
+            currentHitStopCoroutine = StartCoroutine(HitStopCoroutine(hitStopDuration));
         }
         
-        private IEnumerator HitStop(float hitStopDuration)
+        private IEnumerator HitStopCoroutine(float hitStopDuration)
         {
             lastVelocitySpeed = currentVelocitySpeed;
             aiPathComponent.canMove = false;

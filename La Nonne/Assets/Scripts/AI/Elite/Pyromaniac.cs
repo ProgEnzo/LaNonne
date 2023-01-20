@@ -325,5 +325,7 @@ namespace AI.Elite
             isKnockedBack = true;
             rb.AddForce((transform.position - playerController.transform.position).normalized * knockBackForce, ForceMode2D.Impulse);
         }
+
+        internal override void HitStop(float hitStopDuration) { }
     }
 }

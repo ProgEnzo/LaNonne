@@ -44,6 +44,7 @@ namespace Controller
         [SerializeField] public float inquisitorialChainHitSpeed;
         [SerializeField] public float inquisitorialChainToleranceAngle;
         [SerializeField] public float inquisitorialChainCooldownTime;
+        [SerializeField] public float inquisitorialChainHitStopDuration;
 
         [Header("Revealing Dash")]
         [SerializeField] public int revealingDashDamage;
