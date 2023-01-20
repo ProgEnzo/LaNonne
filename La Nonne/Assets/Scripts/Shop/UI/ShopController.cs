@@ -46,6 +46,8 @@ namespace Shop.UI
       public AudioSource shopAudioSource;
       public AudioClip shopBuyItemAudioClip;
       public AudioClip shopItemNotAffordableAudioClip;
+      public AudioClip[] shopkeeperVoiceLineTalking;
+      public AudioClip[] shopkeeperVoiceLineNice;
 
       private void Start()
       {
@@ -118,12 +120,16 @@ namespace Shop.UI
             {
                isShopOpened = true;
                uiManager.isShopOpened = true;
-               
+
                uiManager.DesactivateInGameUI();
                
                shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
                uiAnimShop.OpenMenu();
                Time.timeScale = 0;
+               
+               //sound voice "Nice" shopkeeper
+               shopAudioSource.PlayOneShot(shopkeeperVoiceLineNice[Random.Range(0, shopkeeperVoiceLineNice.Length)]);
+               
                if (!hasShopBeenOpened)
                {
                   hasShopBeenOpened = true;
@@ -206,6 +212,9 @@ namespace Shop.UI
          
          yield return new WaitForSecondsRealtime(shopAnimClip.length);
          
+         //sound voice "hello" shopkeeper
+         shopAudioSource.PlayOneShot(shopkeeperVoiceLineTalking[Random.Range(0, shopkeeperVoiceLineTalking.Length)]);
+         
          foreach (var character in text)
          {
             dialogueText.text += character;
@@ -277,6 +286,8 @@ namespace Shop.UI
             
             //SOUND AFFORDABLE
             shopAudioSource.PlayOneShot(shopBuyItemAudioClip);
+            //sound voice "Nice" shopkeeper
+            shopAudioSource.PlayOneShot(shopkeeperVoiceLineNice[Random.Range(0, shopkeeperVoiceLineNice.Length)]);
             
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
             shopPanel.transform.GetChild(buttonNumber).GetChild(0).GetComponent<Image>().enabled = false;
