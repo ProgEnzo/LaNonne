@@ -240,7 +240,8 @@ namespace Controller
             {
                 playerAudioSource.PlayOneShot(cooldownRevealingDashAudioClip);
                 //Do some shit
-                var duplicateRevealingImage = Instantiate(revealingDashCooldownBar.transform.parent.gameObject, revealingDashCooldownBar.transform.position, Quaternion.identity, revealingDashCooldownBar.transform.parent.parent);
+                var rdCooldownBarTransform = revealingDashCooldownBar.transform;
+                var duplicateRevealingImage = Instantiate(rdCooldownBarTransform.parent.gameObject, rdCooldownBarTransform.position, Quaternion.identity, rdCooldownBarTransform.parent.parent);
                 duplicateRevealingImage.GetComponent<RectTransform>().DOScale(new Vector3(3f, 3f, 3f), 1f);
                 duplicateRevealingImage.GetComponent<Image>().DOFade(0f, 1f);
                 duplicateRevealingImage.transform.GetChild(0).GetComponent<Image>().DOFade(0f, 1f);
@@ -576,6 +577,11 @@ namespace Controller
                 
                 foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
                 {
+                    if (isDashOn)
+                    {
+                        isDashOn = false;
+                    }
+                    
                     isRevealingDashOn = true;
                     camManager.ZoomDuringRevealingDash(1);
                     revealingDashAimedEnemy = enemy.collider.gameObject;
