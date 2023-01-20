@@ -48,6 +48,7 @@ namespace Shop.UI
       public AudioClip shopItemNotAffordableAudioClip;
       public AudioClip[] shopkeeperVoiceLineTalking;
       public AudioClip[] shopkeeperVoiceLineNice;
+      public AudioClip[] shopkeeperDoorbell;
 
       private void Start()
       {
@@ -129,6 +130,8 @@ namespace Shop.UI
                
                //sound voice "Nice" shopkeeper
                shopAudioSource.PlayOneShot(shopkeeperVoiceLineNice[Random.Range(0, shopkeeperVoiceLineNice.Length)]);
+               shopAudioSource.PlayOneShot(shopkeeperDoorbell[Random.Range(0, shopkeeperDoorbell.Length)]);
+
                
                if (!hasShopBeenOpened)
                {
