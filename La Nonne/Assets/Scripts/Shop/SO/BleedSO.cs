@@ -10,6 +10,6 @@ namespace Shop
         [SerializeField] internal float cooldown = 1f;
         
         [Header("Vampirism")]
-        [SerializeField] internal float healPart = 0.5f;
+        [SerializeField] internal float healPart = 100f;
     }
 }
