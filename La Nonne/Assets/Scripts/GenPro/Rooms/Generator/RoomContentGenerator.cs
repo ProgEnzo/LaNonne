@@ -259,7 +259,7 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in wallUpPos)
             {
-                if (Random.Range(0, 100) < 33) //25 = pourcentage d'apparition des props dans la section
+                if (Random.Range(0, 100) < 40) //25 = pourcentage d'apparition des props dans la section
                 {
                     Instantiate(wallUpCusto[Random.Range(0, wallUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
                 }
@@ -303,7 +303,7 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in floorPos)
             {
-                if (Random.Range(0, 100) < 55)
+                if (Random.Range(0, 100) < 45)
                 {
                     Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
                 }
@@ -336,7 +336,7 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in floorNearWallsRightPos)
             {
-                if (Random.Range(0, 100) < 15)
+                if (Random.Range(0, 100) < 10)
                 {
                     Instantiate(floorNearWallsRightCusto[Random.Range(0, floorNearWallsRightCusto.Count)], new Vector3(pos.x - 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
                 }

@@ -236,7 +236,7 @@ namespace Shop
         private void Vampirism(int level, int damage, float multiplier)
         {
             var bleedSo = (BleedSO)instance.effectDictionary[(int)Effect.Bleed][level-1];
-            playerController.HealPlayer((int)(damage * bleedSo.healPart * multiplier));
+            PlayerController.instance.HealPlayer((int)(damage * bleedSo.healPart * multiplier));
         }
         
         private IEnumerator Freeze(int level, GameObject enemy, float multiplier)
