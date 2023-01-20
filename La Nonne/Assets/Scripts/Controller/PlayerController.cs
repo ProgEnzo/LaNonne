@@ -104,6 +104,7 @@ namespace Controller
         [Header("SoundEffect")] 
         public AudioMixerGroup mainAudioGroup;
         public AudioSource playerAudioSource;
+        public AudioSource playerHitAudioSource;
         public AudioClip[] dashAudioClip;
 
         public AudioClip cooldownRevealingDashAudioClip;
@@ -402,7 +403,7 @@ namespace Controller
         
         public void TakeDamage(int damage)
         {
-            playerAudioSource.PlayOneShot(hitPlayerAudioClip);
+            playerHitAudioSource.PlayOneShot(hitPlayerAudioClip);
             playerAudioSource.pitch = Random.Range(0.7f, 1.5f);
             currentHealth -= damage;
             healthBar.fillAmount = (float)currentHealth / soController.maxHealth;
