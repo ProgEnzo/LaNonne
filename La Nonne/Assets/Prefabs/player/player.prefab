@@ -1365,6 +1365,7 @@ GameObject:
   - component: {fileID: -6509789667834273991}
   - component: {fileID: 3221706276323021389}
   - component: {fileID: 2281107392381866930}
+  - component: {fileID: 6175169185673902706}
   m_Layer: 7
   m_Name: player
   m_TagString: Player
@@ -1801,6 +1802,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6175169185673902706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8234393531196798958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 00000000
+  m_ShapePath:
+  - {x: -10, y: -10, z: 0}
+  - {x: -10, y: 10, z: 0}
+  - {x: 10, y: 10, z: 0}
+  - {x: 10, y: -10, z: 0}
+  m_ShapePathHash: 0
+  m_Mesh: {fileID: 0}
+  m_InstanceId: -763666
 --- !u!1 &8526164558638817393
 GameObject:
   m_ObjectHideFlags: 0
