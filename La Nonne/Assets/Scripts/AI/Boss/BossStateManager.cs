@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
 using Controller;
 using DG.Tweening;
@@ -38,6 +39,8 @@ namespace AI.Boss
         [SerializeField] private CapsuleCollider2D chrysalisCapsuleCollider;
         [SerializeField] private Animator animator;
         [SerializeField] private AnimationClip throwAnimation;
+        private List<SpriteRenderer> bossSpriteRenderers = new();
+        private Coroutine currentIsHitCoroutine;
     
         //LIST
         private readonly List<BossBaseState> firstStatesList = new();
@@ -196,6 +199,8 @@ namespace AI.Boss
                 stackTimers[i] = 0;
                 areStacksOn[i] = false;
             }
+            
+            bossSpriteRenderers = bossPuppet.GetComponentsInChildren<SpriteRenderer>(true).ToList();
         }
 
         private void Update()
@@ -269,11 +274,30 @@ namespace AI.Boss
             {
                 Die();
             }
+            
+            if (currentIsHitCoroutine != null)
+            {
+                StopCoroutine(currentIsHitCoroutine);
+            }
+            currentIsHitCoroutine = StartCoroutine(BossIsHit());
         }
 
         private void Die()
         {
             Destroy(gameObject);
+        }
+
+        private IEnumerator BossIsHit()
+        {
+            foreach (var spriteRenderer in bossSpriteRenderers)
+            {
+                spriteRenderer.color = Color.red;
+            }
+            yield return new WaitForSeconds(0.2f);
+            foreach (var spriteRenderer in bossSpriteRenderers)
+            {
+                spriteRenderer.color = Color.white;
+            }
         }
 
         #endregion
