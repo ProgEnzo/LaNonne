@@ -38,7 +38,7 @@ namespace AI.Trash
                 StopAndShoot();
             }
             
-            CheckDirection();
+            CheckDirection(true);
         }
 
         #region EnemyRangeBehavior
@@ -107,19 +107,6 @@ namespace AI.Trash
             var position = transform.position;
             Gizmos.DrawWireSphere(position, soTrashMobRange.shootingRange);
             Gizmos.DrawWireSphere(position, soTrashMobRange.aggroRange);
-        }
-        
-        private void CheckDirection()
-        {
-            var puppetLocalScale = enemyPuppet.transform.localScale;
-            if (rb.velocity.x != 0)
-            {
-                enemyPuppet.transform.localScale = new Vector3(MathF.Sign(rb.velocity.x) * MathF.Abs(puppetLocalScale.x) * -1, puppetLocalScale.y, puppetLocalScale.z);
-            }
-            else
-            {
-                enemyPuppet.transform.localScale = playerController.transform.position.x > transform.position.x ? new Vector3(-MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z) : new Vector3(MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
-            }
         }
         
         #endregion

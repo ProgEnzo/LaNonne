@@ -114,18 +114,5 @@ namespace AI.Elite
                 Destroy(gameObject); //Dies
             }
         }
-        
-        private void CheckDirection()
-        {
-            var puppetLocalScale = enemyPuppet.transform.localScale;
-            if (rb.velocity.x != 0)
-            {
-                enemyPuppet.transform.localScale = new Vector3(MathF.Sign(rb.velocity.x) * MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
-            }
-            else
-            {
-                enemyPuppet.transform.localScale = playerController.transform.position.x > transform.position.x ? new Vector3(MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z) : new Vector3(-MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
-            }
-        }
     }
 }

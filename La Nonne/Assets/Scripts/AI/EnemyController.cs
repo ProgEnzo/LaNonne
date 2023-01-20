@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using Manager;
 using Pathfinding;
 using Shop;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace AI
 {
@@ -203,6 +205,13 @@ namespace AI
             {
                 spriteRenderer.color = Color.white;
             }
+        }
+        
+        protected void CheckDirection(bool invert = false)
+        {
+            var invertValue = invert ? -1 : 1;
+            var puppetLocalScale = enemyPuppet.transform.localScale;
+            enemyPuppet.transform.localScale = playerController.transform.position.x > transform.position.x ? new Vector3(MathF.Abs(puppetLocalScale.x) * invertValue, puppetLocalScale.y, puppetLocalScale.z) : new Vector3(-MathF.Abs(puppetLocalScale.x) * invertValue, puppetLocalScale.y, puppetLocalScale.z);
         }
     }
 }
