@@ -259,7 +259,7 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in wallUpPos)
             {
-                if (Random.Range(0, 100) < 25) //25 = pourcentage d'apparition des props dans la section
+                if (Random.Range(0, 100) < 33) //25 = pourcentage d'apparition des props dans la section
                 {
                     Instantiate(wallUpCusto[Random.Range(0, wallUpCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
                 }
