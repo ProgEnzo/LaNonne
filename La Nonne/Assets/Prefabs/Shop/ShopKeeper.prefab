@@ -422,10 +422,27 @@ MonoBehaviour:
   uiAnimShop: {fileID: 8367047880321823878}
   shopAnimClip: {fileID: 7400000, guid: 5bbe1a5e1b4414545bc1ce75fadd38af, type: 2}
   dialogueText: {fileID: 3096433105055561718}
-  timeByCharacter: 0.02
+  timeByCharacter: 0.01
   shopAudioSource: {fileID: 4294473666520096373}
   shopBuyItemAudioClip: {fileID: 8300000, guid: 393abb8559c9ae745ae8dadb0e9aa495, type: 3}
   shopItemNotAffordableAudioClip: {fileID: 8300000, guid: eb5a0e215f075924ba07df1c6cc1f729, type: 3}
+  shopkeeperVoiceLineTalking:
+  - {fileID: 8300000, guid: 56dc9a0fd744a9e43881d0ce1ce3c43e, type: 3}
+  - {fileID: 8300000, guid: 03f2099a31ba7ab49b7e53cf8879a73d, type: 3}
+  - {fileID: 8300000, guid: 9b29e46379c22e047ab9f212c634e6c9, type: 3}
+  - {fileID: 8300000, guid: a909f71a31eff6148b0ee4cc5d300d22, type: 3}
+  - {fileID: 8300000, guid: a880e32e4261c364fb93b4d04b5d7679, type: 3}
+  - {fileID: 8300000, guid: 008d9880e15bea244b0861493886f8d8, type: 3}
+  shopkeeperVoiceLineNice:
+  - {fileID: 8300000, guid: ce6a68b1f968fa946b8c3984bf69e485, type: 3}
+  - {fileID: 8300000, guid: 1561b28b18453494e875260c4772335f, type: 3}
+  - {fileID: 8300000, guid: 291dbb6c713b4a846936d4dceac901c0, type: 3}
+  - {fileID: 8300000, guid: fdc3a8bff953c9340b2071f65ece2acd, type: 3}
+  - {fileID: 8300000, guid: c2bb011ddbfdf474e84152ae2b10822d, type: 3}
+  - {fileID: 8300000, guid: c3e6015039910b74fbaae7e3f011cad2, type: 3}
+  - {fileID: 8300000, guid: ba9bce3c1159fdb41bc5b84182750eb5, type: 3}
+  - {fileID: 8300000, guid: 5fa4f272cb2874746b6d35e6af3a90b6, type: 3}
+  - {fileID: 8300000, guid: 8fad2c8b238754848b16498df0fb3f2e, type: 3}
 --- !u!82 &4294473666520096373
 AudioSource:
   m_ObjectHideFlags: 0
@@ -437,7 +454,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -7628715237110009743, guid: 0df7272459f49844dacff71dc7513221, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

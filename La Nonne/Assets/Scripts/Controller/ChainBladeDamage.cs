@@ -72,8 +72,8 @@ namespace Controller
                     for (var i = 0; i < bossStacks.Length; i++)
                     {
                         if (bossStacks[i].effect == EffectManager.Effect.None) continue;
-                        effectManager.SuperEffectSwitch(bossStacks[i].effect, bossStacks[i].level, gameObject, damage, damageAndEffectMultiplier);
-                        enemy.GetComponent<EnemyController>().stacks[i].effect = EffectManager.Effect.None;
+                        effectManager.SuperEffectSwitch(bossStacks[i].effect, bossStacks[i].level, enemy, damage, damageAndEffectMultiplier);
+                        enemy.GetComponent<BossStateManager>().stacks[i].effect = EffectManager.Effect.None;
                     }
                     
                     break;
