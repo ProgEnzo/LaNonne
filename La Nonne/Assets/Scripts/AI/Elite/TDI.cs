@@ -17,6 +17,7 @@ namespace AI.Elite
         [SerializeField] public GameObject bully;
         [SerializeField] public GameObject caretaker;
         [SerializeField] private GameObject circle;
+        [SerializeField] private GameObject circleRedFrame;
         [SerializeField] private GameObject circleSpriteWarning;
         [SerializeField] private GameObject greenCircleWarning;
         [SerializeField] private ParticleSystem particleHeal;
@@ -110,9 +111,14 @@ namespace AI.Elite
             yield return new WaitForSeconds(1.3f);
 
             greenCircleWarning.SetActive(false);
+            circleRedFrame.SetActive(true);
+
             circleSpriteWarning.transform.DOScale(new Vector3(0f, 0f, 0f), 0f);
 
             circleSpriteWarning.SetActive(false);
+            yield return new WaitForSeconds(0.1f);
+
+            circleRedFrame.SetActive(false);
             circle.SetActive(true);
 
             particleHeal.Play();
