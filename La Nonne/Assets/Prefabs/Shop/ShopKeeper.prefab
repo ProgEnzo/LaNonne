@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: 2052201380943783585}
   - component: {fileID: 4294473666520096373}
   - component: {fileID: 94187372761377620}
+  - component: {fileID: 7724099610379234578}
   m_Layer: 0
   m_Name: ShopKeeper
   m_TagString: Untagged
@@ -426,11 +427,14 @@ MonoBehaviour:
   shopAnimClip: {fileID: 7400000, guid: 5bbe1a5e1b4414545bc1ce75fadd38af, type: 2}
   dialogueText: {fileID: 3096433105055561718}
   timeByCharacter: 0.01
+  shopMusic: {fileID: 7724099610379234578}
   shopAudioSource: {fileID: 4294473666520096373}
   bellAudioSource: {fileID: 94187372761377620}
+  inGameMusicAudioSource: {fileID: 2318456294535875246, guid: e51e286b93733404a80eb47f554cf73a, type: 3}
   shopBuyItemAudioClip: {fileID: 8300000, guid: 393abb8559c9ae745ae8dadb0e9aa495, type: 3}
   shopItemNotAffordableAudioClip: {fileID: 8300000, guid: eb5a0e215f075924ba07df1c6cc1f729, type: 3}
   shopLeaveAudioClip: {fileID: 8300000, guid: 3a6ff18a76f035a4ea82944c4207f1ba, type: 3}
+  shopMusicClip: {fileID: 8300000, guid: 6ecc67ce11e9f2140bad11a2d84708a1, type: 3}
   shopkeeperVoiceLineTalking:
   - {fileID: 8300000, guid: 56dc9a0fd744a9e43881d0ce1ce3c43e, type: 3}
   - {fileID: 8300000, guid: 03f2099a31ba7ab49b7e53cf8879a73d, type: 3}
@@ -562,6 +566,102 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.4
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &7724099610379234578
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4378271069584297667}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 6799615524561209548, guid: 0df7272459f49844dacff71dc7513221, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0

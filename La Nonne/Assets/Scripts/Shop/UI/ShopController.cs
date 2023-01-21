@@ -44,11 +44,14 @@ namespace Shop.UI
       [SerializeField] private float timeByCharacter;
       
       [Header("SoundEffect")]
+      public AudioSource shopMusic;
       public AudioSource shopAudioSource;
       public AudioSource bellAudioSource;
+      public AudioSource inGameMusicAudioSource;
       public AudioClip shopBuyItemAudioClip;
       public AudioClip shopItemNotAffordableAudioClip;
       public AudioClip shopLeaveAudioClip;
+      public AudioClip shopMusicClip;
       public AudioClip[] shopkeeperVoiceLineTalking;
       public AudioClip[] shopkeeperVoiceLineNice;
       public AudioClip[] shopkeeperDoorbell;
@@ -134,6 +137,10 @@ namespace Shop.UI
                //sound voice "Nice" shopkeeper
                shopAudioSource.PlayOneShot(shopkeeperVoiceLineNice[Random.Range(0, shopkeeperVoiceLineNice.Length)]);
                shopAudioSource.PlayOneShot(shopkeeperDoorbell[Random.Range(0, shopkeeperDoorbell.Length)]);
+               
+               //music shop
+               shopMusic.PlayOneShot(shopMusicClip);
+               inGameMusicAudioSource.Pause();
 
                
                if (!hasShopBeenOpened)
@@ -188,6 +195,11 @@ namespace Shop.UI
          yield return new WaitForSecondsRealtime(0.01f);
          
          uiManager.isShopOpened = false;
+         
+         //music shop
+         shopMusic.Stop();
+         inGameMusicAudioSource.UnPause();
+
 
          if (currentNumberOfTakenObjects > 0)
          {
@@ -199,7 +211,7 @@ namespace Shop.UI
       {
          bellAudioSource.PlayOneShot(shopLeaveAudioClip);
          shopObject.SetActive(false);
-         
+
          yield return new WaitForSeconds(shopLeaveAudioClip.length);
          
          Destroy(gameObject);
@@ -231,7 +243,7 @@ namespace Shop.UI
          
          //sound voice "hello" shopkeeper
          shopAudioSource.PlayOneShot(shopkeeperVoiceLineTalking[Random.Range(0, shopkeeperVoiceLineTalking.Length)]);
-         
+
          foreach (var character in text)
          {
             dialogueText.text += character;
@@ -305,7 +317,7 @@ namespace Shop.UI
             shopAudioSource.PlayOneShot(shopBuyItemAudioClip);
             //sound voice "Nice" shopkeeper
             shopAudioSource.PlayOneShot(shopkeeperVoiceLineNice[Random.Range(0, shopkeeperVoiceLineNice.Length)]);
-            
+
             effectsInTheShop[buttonNumber] = EffectManager.Effect.None;
             shopPanel.transform.GetChild(buttonNumber).GetChild(0).GetComponent<Image>().enabled = false;
             shopPanel.transform.GetChild(buttonNumber).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
