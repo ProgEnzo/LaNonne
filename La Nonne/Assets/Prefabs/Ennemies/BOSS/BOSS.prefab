@@ -432,6 +432,7 @@ MonoBehaviour:
   chrysalisCapsuleCollider: {fileID: 5583606251369764729}
   animator: {fileID: 7284837417457802756}
   throwAnimation: {fileID: 7400000, guid: 1a0e57fe5fc0aee4a884e472fa27626b, type: 2}
+  vacuumAnimation: {fileID: 7400000, guid: 64e256efcab055b4c872064df69affc2, type: 2}
   spawnerList:
   - {fileID: 1593806974005075729, guid: 1d99589abca1b404593ef50f9660004a, type: 3}
   - {fileID: 9071314407910337641, guid: 76831b2a51ef9fc4b9f77df5d7f3bb59, type: 3}
@@ -439,6 +440,8 @@ MonoBehaviour:
   maxHealth: 5000
   playerNormalSpeed: 30
   bossNormalSpeed: 1
+  vCamBoss: {fileID: 0}
+  vCamBossShake: {fileID: 0}
   dashMine: {fileID: 4593389576086251205, guid: a28b052557351bf41a04104054cf5e49, type: 3}
   dashWarning: {fileID: 2869619142739270497, guid: a424c7e5d50d4a9498ca3a75cb347711, type: 3}
   bodyDamage: 20
