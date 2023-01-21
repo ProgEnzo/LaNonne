@@ -20,6 +20,7 @@ namespace Shop
         [SerializeField] private int buttonNumber;
         private bool isDragging;
         internal static bool isAnyDragging;
+        [SerializeField] private GameObject blackPanel;
         
         [Header("SoundEffect")] 
         public AudioSource whipAudioSource;
@@ -59,6 +60,7 @@ namespace Shop
                 previousParent = transform.parent;
                 transform.SetParent(canvas.transform);
                 GetComponent<Image>().raycastTarget = false;
+                blackPanel.SetActive(true);
                 WhipModificationController.SelectEffect(buttonNumber);
             }
         }
@@ -79,8 +81,6 @@ namespace Shop
                 //SOUND DragSound.Stop() + PlayOneShot pour le drop
                 whipAudioSource.Stop();
                 StartCoroutine(WaitForSound());
-
-
 
                 if ((!Drop.isPointerOnSlot || EffectManager.instance.appliedEffects[slotIndex] != EffectManager.Effect.None) && !isSlotted)
                 {
@@ -121,6 +121,7 @@ namespace Shop
                 GetComponent<Image>().raycastTarget = true;
                 isDragging = false;
                 isAnyDragging = false;
+                blackPanel.SetActive(false);
             }
         }
 
