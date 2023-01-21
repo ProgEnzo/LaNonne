@@ -12,6 +12,9 @@ namespace Manager
         internal new static UIManager instance;
     
         [SerializeField] private TMP_Text epCount;
+        [SerializeField] private Texture2D mainCursorTexture;
+        [SerializeField] private Texture2D gameOverCursorTexture;
+        
         private InputManager inputManager;
         private PlayerController playerController;
         private ChainBlade chainBlade;
@@ -21,12 +24,12 @@ namespace Manager
 
         public static GameObject settingsMenu;
         public GameObject gameOverMenu;
-
-        internal static bool _isGamePausedStatic;
+        
+        internal static bool isGamePausedStatic;
         internal bool isGamePaused;
         internal bool isShopOpened;
         internal bool isWhipMenuOpened;
-        internal bool isGameOver;
+        private bool isGameOver;
 
         private void Awake()
         {
@@ -38,11 +41,16 @@ namespace Manager
             {
                 instance = this;
             }
+            
+            //Cursor
+            Cursor.SetCursor(mainCursorTexture, Vector2.zero, CursorMode.Auto);
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
         }
 
         private void Start()
         {
-            _isGamePausedStatic = false;
+            isGamePausedStatic = false;
             isShopOpened = false;
             isWhipMenuOpened = false;
             
@@ -65,8 +73,14 @@ namespace Manager
 
         private void Update()
         {
+            //Cursor
+            if (chainBlade != null)
+            {
+                Cursor.visible = chainBlade.isWarningOn || IsAnyMenuOpened();
+            }
+            
             PauseMenuInput();
-            isGamePaused = _isGamePausedStatic;
+            isGamePaused = isGamePausedStatic;
             
             if (playerController is null)
                 return;
@@ -80,15 +94,15 @@ namespace Manager
         {
             if (Input.GetKeyDown(inputManager.pauseKey) && !isShopOpened && !isWhipMenuOpened && !isGameOver)
             {
-                _isGamePausedStatic = !_isGamePausedStatic;
-                PauseMenu(_isGamePausedStatic);
+                isGamePausedStatic = !isGamePausedStatic;
+                PauseMenu(isGamePausedStatic);
             }
         }
 
         public static void PauseMenu(bool isGamePaused)
         {
             //pauseMenu.SetActive(isGamePaused);
-            _isGamePausedStatic = isGamePaused;
+            isGamePausedStatic = isGamePaused;
             if (!isGamePaused)
             {
                 UIAnimPause.instance.CloseMenu();
@@ -115,8 +129,8 @@ namespace Manager
     
         public static void Resume()
         {
-            _isGamePausedStatic = false;
-            PauseMenu(_isGamePausedStatic);
+            isGamePausedStatic = false;
+            PauseMenu(isGamePausedStatic);
         }
         
         #endregion
@@ -126,6 +140,10 @@ namespace Manager
             DesactivateInGameUI();
             gameOverMenu.SetActive(true);
             isGameOver = true;
+            
+            //Cursor
+            Cursor.SetCursor(gameOverCursorTexture, Vector2.zero, CursorMode.Auto);
+            
             Time.timeScale = 0;
         }
 
@@ -138,7 +156,7 @@ namespace Manager
     
         public void BackToMenu()
         {
-            Time.timeScale = 1; 
+            Time.timeScale = 1;
             SceneManager.LoadScene(0);
         }
 
@@ -157,6 +175,7 @@ namespace Manager
             bool Test() => PlayerController.instance == null;
             yield return new WaitWhile(Test);
             playerController = PlayerController.instance;
+            chainBlade = playerController.chainBlade;
         }
         
         public static void OptionsMenu()

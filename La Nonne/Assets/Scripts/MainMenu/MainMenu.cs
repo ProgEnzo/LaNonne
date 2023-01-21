@@ -1,36 +1,46 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+namespace MainMenu
 {
-   public GameObject SettingsMenu;
-
-   private void Start()
+   public class MainMenu : MonoBehaviour
    {
-      SettingsMenu.SetActive(false);
-   }
+      [SerializeField] private GameObject settingsMenu;
+      [SerializeField] private Texture2D mainCursorTexture;
 
-   public void LoadGame(string level)
-   {
-      LoadingScreen.instance.ShowLoadingScreen();
-      SceneManager.LoadScene(level);
-   }
+      private void Awake()
+      {
+         //Cursor
+         Cursor.SetCursor(mainCursorTexture, Vector2.zero, CursorMode.Auto);
+         Cursor.lockState = CursorLockMode.Confined;
+         Cursor.visible = true;
+      }
 
-   public void OptionsMenu()
-   {
-      SettingsMenu.SetActive(true);
-   }
+      private void Start()
+      {
+         settingsMenu.SetActive(false);
+      }
 
-   public void BackFromSettings()
-   {
-      SettingsMenu.SetActive(false);
-   }
+      public void LoadGame(string level)
+      {
+         LoadingScreen.instance.ShowLoadingScreen();
+         SceneManager.LoadScene(level);
+      }
 
-   public void Quit()
-   {
-      Application.Quit();
+      public void OptionsMenu()
+      {
+         settingsMenu.SetActive(true);
+      }
+
+      public void BackFromSettings()
+      {
+         settingsMenu.SetActive(false);
+      }
+
+      public void Quit()
+      {
+         Application.Quit();
+      }
    }
 }

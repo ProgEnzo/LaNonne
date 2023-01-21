@@ -33,7 +33,7 @@ public class CheatCodes : MonoBehaviour
         playerController.transform.position = new Vector2(boss.x, boss.y - 5);
         uiAnimManager.CloseMenu();
         uiAnimPause.CloseMenu();
-        UIManager._isGamePausedStatic = false;
+        UIManager.isGamePausedStatic = false;
         UIManager.PauseMenu(false);
     }
 
