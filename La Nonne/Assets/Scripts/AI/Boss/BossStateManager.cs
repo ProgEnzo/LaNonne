@@ -51,6 +51,7 @@ namespace AI.Boss
         public List<GameObject> spawnerList = new();
 
         [Header("Overall Stats")]
+        public GameObject bloodDroplets;
         private Image hpBossBar;
         public int currentHealth;
         public int maxHealth;
@@ -63,9 +64,6 @@ namespace AI.Boss
         public CinemachineVirtualCamera vCamBoss;
         public CinemachineVirtualCamera vCamBossShake;
 
-        [Header("----Start----")] 
-        public int currentStartAmount;
-        
         [Header("----Dash----")] 
         public GameObject dashMine;
         public GameObject dashWarning;
@@ -268,6 +266,11 @@ namespace AI.Boss
         {
             if (takingDamage)
             {
+                //VFX BLOOD
+                var dropletBloodObject = Instantiate(bloodDroplets, new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z), Quaternion.identity);
+                dropletBloodObject.GetComponent<ParticleSystem>().Play();
+                Destroy(dropletBloodObject, 2f);
+                
                 currentHealth -= (int)(damage * currentDamageMultiplier);
                 hpBossBar.DOFillAmount((float)currentHealth / maxHealth, 0.1f);
 
