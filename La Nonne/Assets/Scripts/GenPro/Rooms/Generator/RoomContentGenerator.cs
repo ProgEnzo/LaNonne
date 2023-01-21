@@ -65,10 +65,11 @@ namespace GenPro.Rooms.Generator
             StartCoroutine(DoScan(0));
             yield return new WaitForSeconds(1);
             LoadingScreen.instance.HideLoadingScreen();
-            
+
+            yield return null;
             Time.timeScale = 0;
             uiIntroduction.OpenMenu();
-            yield return new WaitForSeconds(animation.length);
+            yield return new WaitForSeconds(10f);
             Time.timeScale = 1;
         }
 
