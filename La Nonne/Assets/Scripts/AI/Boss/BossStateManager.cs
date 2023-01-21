@@ -39,6 +39,7 @@ namespace AI.Boss
         [SerializeField] private CapsuleCollider2D chrysalisCapsuleCollider;
         [SerializeField] private Animator animator;
         [SerializeField] private AnimationClip throwAnimation;
+        [SerializeField] private AnimationClip vacuumAnimation;
         private List<SpriteRenderer> bossSpriteRenderers = new();
         private Coroutine currentIsHitCoroutine;
     
@@ -531,9 +532,11 @@ namespace AI.Boss
             rb.bodyType = RigidbodyType2D.Static;
             animator.SetInteger(BossAnimState, 3);
             
-            yield return new WaitForSeconds(vacuumCooldown);
+            yield return new WaitForSeconds(vacuumCooldown - vacuumAnimation.length);
+
+            StartCoroutine(ChangeAnimation(6));
+            yield return new WaitForSeconds(vacuumAnimation.length);
             
-            animator.SetInteger(BossAnimState, 0);
             rb.bodyType = RigidbodyType2D.Dynamic;
 
             Destroy(vacuumGameObject);
