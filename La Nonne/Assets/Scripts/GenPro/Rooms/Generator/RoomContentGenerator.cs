@@ -28,6 +28,7 @@ namespace GenPro.Rooms.Generator
         [SerializeField, Space, Header("Animations")]
         private AnimationClip animation;
         [SerializeField] private UiIntroduction uiIntroduction;
+        [SerializeField] private GameObject introMenu;
 
         [Header("Transforms")]
         public Transform itemParent;
@@ -67,10 +68,10 @@ namespace GenPro.Rooms.Generator
             LoadingScreen.instance.HideLoadingScreen();
 
             yield return null;
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
             uiIntroduction.OpenMenu();
-            yield return new WaitForSeconds(10f);
-            Time.timeScale = 1;
+            //yield return new WaitForSeconds(5f);
+            //Time.timeScale = 1;
         }
 
         private IEnumerator DoScan(int size)

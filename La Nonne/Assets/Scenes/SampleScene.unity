@@ -36512,6 +36512,10 @@ PrefabInstance:
       propertyPath: m_ChildCameras.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 482504196, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 482504197, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_SizeDelta.x
       value: 100
@@ -36548,6 +36552,10 @@ PrefabInstance:
       propertyPath: roomContentGenerator
       value: 
       objectReference: {fileID: 2000172895}
+    - target: {fileID: 1458553799, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_text
+      value: Hey... you !
+      objectReference: {fileID: 0}
     - target: {fileID: 156448462569476295, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -36712,7 +36720,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7158330399008716804, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+    - {fileID: 6349458701594365691, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+    - {fileID: 6470433151069240955, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
 --- !u!1001 &1685224837
 PrefabInstance:
@@ -52994,6 +53005,7 @@ MonoBehaviour:
   graphTest: {fileID: 1903576186}
   animation: {fileID: 7400000, guid: 693900dd51e83424ea421ab4f7fa5b64, type: 2}
   uiIntroduction: {fileID: 482504201}
+  introMenu: {fileID: 482504196}
   itemParent: {fileID: 860808492}
   prefabShop: {fileID: 1944883718194242583, guid: fbd9691f6fed95540b9948633fe1b14e, type: 3}
   prefabBoss: {fileID: 1944883718194242583, guid: 6324c300ef7da5d4c9994c5e35b03543, type: 3}
