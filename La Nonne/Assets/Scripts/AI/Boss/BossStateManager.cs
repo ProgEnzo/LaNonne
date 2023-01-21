@@ -19,6 +19,7 @@ namespace AI.Boss
     public class BossStateManager : MonoBehaviour
     {
         private BossBaseState currentState;
+        private readonly BossStartingState startingState = new();
         private readonly BossDashingState dashingState = new();
         private readonly BossThrowingState throwingState = new();
         private readonly BossAttackCircleState attackCircleState = new();
@@ -39,6 +40,7 @@ namespace AI.Boss
         [SerializeField] private CapsuleCollider2D chrysalisCapsuleCollider;
         [SerializeField] private Animator animator;
         [SerializeField] private AnimationClip throwAnimation;
+        [SerializeField] private AnimationClip vacuumAnimation;
         private List<SpriteRenderer> bossSpriteRenderers = new();
         private Coroutine currentIsHitCoroutine;
     
@@ -49,6 +51,7 @@ namespace AI.Boss
         public List<GameObject> spawnerList = new();
 
         [Header("Overall Stats")]
+        public GameObject bloodDroplets;
         private Image hpBossBar;
         public int currentHealth;
         public int maxHealth;
@@ -133,6 +136,10 @@ namespace AI.Boss
     
         public float numberOfBoxingCircleWarning;
         public float numberOfBoxingCircle;
+        
+        [Header("SoundEffect")]
+        [SerializeField] private AudioSource bossAudioSource;
+        [SerializeField] private AudioClip[] bossGrowlClip;
 
         [Header("----StackSystem----")]
         internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
@@ -160,7 +167,7 @@ namespace AI.Boss
             aiDestinationSetter.target = PlayerController.instance.transform;
             shockwaveGameObject = GameObject.Find("Shockwave");
             
-            currentState = dashingState; //starting state for the boss state machine
+            currentState = startingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
         
             //HEALTH
@@ -263,6 +270,11 @@ namespace AI.Boss
         {
             if (takingDamage)
             {
+                //VFX BLOOD
+                var dropletBloodObject = Instantiate(bloodDroplets, new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z), Quaternion.identity);
+                dropletBloodObject.GetComponent<ParticleSystem>().Play();
+                Destroy(dropletBloodObject, 2f);
+                
                 currentHealth -= (int)(damage * currentDamageMultiplier);
                 hpBossBar.DOFillAmount((float)currentHealth / maxHealth, 0.1f);
 
@@ -356,6 +368,42 @@ namespace AI.Boss
                 areStacksOn[i] = true;
                 effectManager.EffectSwitch(stacks[i].effect, stacks[i].level, gameObject, i);
             }
+        }
+
+        #endregion
+
+        #region StartingState
+
+        public void StartManager()
+        {
+            StartCoroutine(Starting());
+        }
+
+        private IEnumerator Starting()
+        {
+            camManager.ChangeBossCamState(1); //on laisse la priorité à la vCam du boss
+            takingDamage = false;
+            yield return new WaitForSeconds(2f);
+
+            //Son du cri
+            bossAudioSource.PlayOneShot(bossGrowlClip[Random.Range(0, bossGrowlClip.Length)]);
+            
+            camManager.ChangeBossCamState(2); //Boss lâche un cri qui annonce la transition
+            rb.bodyType = RigidbodyType2D.Static;
+            animator.SetInteger(BossAnimState, 3);
+            yield return new WaitForSeconds(bossGrowlClip.Length); //temps du cri
+            
+            camManager.ChangeBossCamState(1); //on laisse la priorité à la vCam du boss
+            animator.SetInteger(BossAnimState, 0);
+            yield return new WaitForSeconds(0.01f); //transition BOSS to player
+            
+            camManager.ChangeBossCamState(0);
+            takingDamage = true;
+            yield return new WaitForSeconds(1f);
+            
+            var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
+            SwitchState(nextState);
+            
         }
 
         #endregion
@@ -531,9 +579,11 @@ namespace AI.Boss
             rb.bodyType = RigidbodyType2D.Static;
             animator.SetInteger(BossAnimState, 3);
             
-            yield return new WaitForSeconds(vacuumCooldown);
+            yield return new WaitForSeconds(vacuumCooldown - vacuumAnimation.length);
+
+            StartCoroutine(ChangeAnimation(6));
+            yield return new WaitForSeconds(vacuumAnimation.length);
             
-            animator.SetInteger(BossAnimState, 0);
             rb.bodyType = RigidbodyType2D.Dynamic;
 
             Destroy(vacuumGameObject);
@@ -652,7 +702,6 @@ namespace AI.Boss
         
             //CODE FOR THE EXPLOSION AFTER THE TRANSITION HERE
             shockwaveGameObject.transform.DOScale(new Vector2(10f, 10f), 1f);
-            Debug.Log("AFEPIAEPFIAEPFIAJEPFAFJEPAEJFPAEFJPAFJPAFJE");
             yield return new WaitForSeconds(1f);
 
             Destroy(shockwaveGameObject);

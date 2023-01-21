@@ -12,6 +12,7 @@ namespace Controller
         
         private SpriteRenderer spriteRenderer;
         private CircleCollider2D circleCollider2D;
+        private TrailRenderer trailRenderer;
         
         [Header("SoundEffect")]
         public AudioSource epAudioSource;
@@ -22,6 +23,7 @@ namespace Controller
             scoreManager = ScoreManager.instance;
             spriteRenderer = GetComponent<SpriteRenderer>();
             circleCollider2D = GetComponent<CircleCollider2D>();
+            trailRenderer = GetComponent<TrailRenderer>();
         }
     
         private void OnTriggerEnter2D(Collider2D col)
@@ -40,6 +42,7 @@ namespace Controller
             //ep sound
             spriteRenderer.enabled = false;
             circleCollider2D.enabled = false;
+            trailRenderer.enabled = false;
             epAudioSource.PlayOneShot(epAudioClip);
             epAudioSource.pitch = Random.Range(0.8f, 1.2f);
             yield return new WaitForSeconds(epAudioClip.length);

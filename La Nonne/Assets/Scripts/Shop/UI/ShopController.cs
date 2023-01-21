@@ -13,7 +13,8 @@ namespace Shop.UI
 {
    public class ShopController : MonoBehaviour
    {
-      [Header("References")]
+      [Header("References")] 
+      [SerializeField] private GameObject shopObject;
       [SerializeField] private GameObject shopPanel;
       public GameObject shopCanvas;
       public Image image;
@@ -44,8 +45,10 @@ namespace Shop.UI
       
       [Header("SoundEffect")]
       public AudioSource shopAudioSource;
+      public AudioSource bellAudioSource;
       public AudioClip shopBuyItemAudioClip;
       public AudioClip shopItemNotAffordableAudioClip;
+      public AudioClip shopLeaveAudioClip;
       public AudioClip[] shopkeeperVoiceLineTalking;
       public AudioClip[] shopkeeperVoiceLineNice;
       public AudioClip[] shopkeeperDoorbell;
@@ -188,8 +191,19 @@ namespace Shop.UI
 
          if (currentNumberOfTakenObjects > 0)
          {
-            Destroy(gameObject);
+            StartCoroutine(DisableSprite());
          }
+      }
+
+      private IEnumerator DisableSprite()
+      {
+         bellAudioSource.PlayOneShot(shopLeaveAudioClip);
+         shopObject.SetActive(false);
+         
+         yield return new WaitForSeconds(shopLeaveAudioClip.length);
+         
+         Destroy(gameObject);
+
       }
 
       private void ChooseDialogue()
