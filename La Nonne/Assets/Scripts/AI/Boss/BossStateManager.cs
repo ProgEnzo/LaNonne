@@ -136,6 +136,10 @@ namespace AI.Boss
     
         public float numberOfBoxingCircleWarning;
         public float numberOfBoxingCircle;
+        
+        [Header("SoundEffect")]
+        [SerializeField] private AudioSource bossAudioSource;
+        [SerializeField] private AudioClip[] bossGrowlClip;
 
         [Header("----StackSystem----")]
         internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
@@ -381,14 +385,17 @@ namespace AI.Boss
             takingDamage = false;
             yield return new WaitForSeconds(2f);
 
+            //Son du cri
+            bossAudioSource.PlayOneShot(bossGrowlClip[Random.Range(0, bossGrowlClip.Length)]);
+            
             camManager.ChangeBossCamState(2); //Boss lâche un cri qui annonce la transition
             rb.bodyType = RigidbodyType2D.Static;
             animator.SetInteger(BossAnimState, 3);
-            yield return new WaitForSeconds(2f); //temps du cri
+            yield return new WaitForSeconds(bossGrowlClip.Length); //temps du cri
             
             camManager.ChangeBossCamState(1); //on laisse la priorité à la vCam du boss
             animator.SetInteger(BossAnimState, 0);
-            yield return new WaitForSeconds(1f); //transition BOSS to player
+            yield return new WaitForSeconds(0.01f); //transition BOSS to player
             
             camManager.ChangeBossCamState(0);
             takingDamage = true;
