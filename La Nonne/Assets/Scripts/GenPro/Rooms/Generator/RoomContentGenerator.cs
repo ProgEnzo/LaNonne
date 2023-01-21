@@ -25,6 +25,10 @@ namespace GenPro.Rooms.Generator
         [SerializeField, Space, Header ("Dijkstra")]
         private GraphTest graphTest;
 
+        [SerializeField, Space, Header("Animations")]
+        private AnimationClip animation;
+        [SerializeField] private UiIntroduction uiIntroduction;
+
         [Header("Transforms")]
         public Transform itemParent;
 
@@ -61,6 +65,11 @@ namespace GenPro.Rooms.Generator
             StartCoroutine(DoScan(0));
             yield return new WaitForSeconds(1);
             LoadingScreen.instance.HideLoadingScreen();
+            
+            Time.timeScale = 0;
+            uiIntroduction.OpenMenu();
+            yield return new WaitForSeconds(animation.length);
+            Time.timeScale = 1;
         }
 
         private IEnumerator DoScan(int size)
