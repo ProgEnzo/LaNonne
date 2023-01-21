@@ -14,8 +14,8 @@ namespace Controller
         [FormerlySerializedAs("SO_Controller")] public SO_Controller soController;
         private bool isHitting;
         internal bool isWarningOn;
-        private LineRenderer chainLineRenderer;
-        private LineRenderer bladeLineRenderer;
+        // private LineRenderer chainLineRenderer;
+        // private LineRenderer bladeLineRenderer;
         private BoxCollider2D chainBoxCollider;
         private BoxCollider2D bladeBoxCollider;
         private Quaternion initialRotation;
@@ -33,6 +33,7 @@ namespace Controller
         private GameObject bladeGameObject;
         private GameObject warningGameObject;
         private Animator animator;
+        private SpriteRenderer spriteRenderer;
 
         private AnimationManager animationManager;
         private InputManager inputManager;
@@ -59,8 +60,8 @@ namespace Controller
             chainGameObject = transform.GetChild(0).gameObject;
             bladeGameObject = transform.GetChild(1).gameObject;
             warningGameObject = transform.GetChild(2).gameObject;
-            chainLineRenderer = chainGameObject.GetComponent<LineRenderer>();
-            bladeLineRenderer = bladeGameObject.GetComponent<LineRenderer>();
+            // chainLineRenderer = chainGameObject.GetComponent<LineRenderer>();
+            // bladeLineRenderer = bladeGameObject.GetComponent<LineRenderer>();
             chainBoxCollider = chainGameObject.GetComponent<BoxCollider2D>();
             bladeBoxCollider = bladeGameObject.GetComponent<BoxCollider2D>();
             chainGameObject.SetActive(false);
@@ -72,7 +73,9 @@ namespace Controller
             inquisitorialChainCooldownBar = GameObject.Find("InquisitorialChainCooldown").GetComponent<Image>();
             inquisitorialChainCooldownBar.fillAmount = 1f;
             hasDoneFullCooldownBehavior = true;
-            animator = GetComponent<Animator>();
+            animator = transform.GetChild(3).GetComponent<Animator>();
+            spriteRenderer = transform.GetChild(3).GetComponent<SpriteRenderer>();
+            animator.gameObject.SetActive(false);
         }
 
         // Update is called once per frame
@@ -136,9 +139,11 @@ namespace Controller
                 Time.fixedDeltaTime = 0.02f;
             }
 
-            chainLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));
-            bladeLineRenderer.SetPosition(0, new Vector3(0, (soController.inquisitorialChainChainHitLength-soController.inquisitorialChainBladeHitLength)/parentLocalScaleX, 0));
-            bladeLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));
+            // chainLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));
+            // bladeLineRenderer.SetPosition(0, new Vector3(0, (soController.inquisitorialChainChainHitLength-soController.inquisitorialChainBladeHitLength)/parentLocalScaleX, 0));
+            // bladeLineRenderer.SetPosition(1, new Vector3(0, soController.inquisitorialChainChainHitLength/parentLocalScaleX, 0));
+            animator.transform.localScale = Vector2.one * (soController.inquisitorialChainChainHitLength + soController.inquisitorialChainBladeHitLength);
+            spriteRenderer.flipX = parentLocalScaleX < 0;
             currentTime -= Time.deltaTime;
             inquisitorialChainCooldownBar.fillAmount = 1 - currentTime / soController.inquisitorialChainCooldownTime;
 
@@ -169,7 +174,8 @@ namespace Controller
 
         private void InquisitorialChainStart()
         {
-            //StartCoroutine(ChangeAnimationState(1));
+            animator.gameObject.SetActive(true);
+            StartCoroutine(ChangeAnimationState(1));
             currentTime = soController.inquisitorialChainCooldownTime;
             hasDoneFullCooldownBehavior = false;
             var newDirection = camera1!.ScreenToWorldPoint(Input.mousePosition) - transform.position;
@@ -220,6 +226,7 @@ namespace Controller
                     isHitting = false;
                     chainGameObject.SetActive(false);
                     bladeGameObject.SetActive(false);
+                    animator.gameObject.SetActive(false);
                     animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 0);
                     CamManager.instance.ChainBladeCamShakeState();
                 }
