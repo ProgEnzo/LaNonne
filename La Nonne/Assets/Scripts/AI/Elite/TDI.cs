@@ -125,9 +125,11 @@ namespace AI.Elite
             particleHeal2.Play();
             
             currentHealth += soTdi.healAmount;
+            yield return new WaitForSeconds(0.05f);
+
+            circle.SetActive(false);
             yield return new WaitForSeconds(soTdi.timeBetweenCircleSpawn);
             
-            circle.SetActive(false);
 
             
             particleHeal.Stop();
