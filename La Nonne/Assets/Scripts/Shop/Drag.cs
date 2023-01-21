@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Shop.UI;
 using UnityEngine;
@@ -21,6 +23,8 @@ namespace Shop
         private bool isDragging;
         internal static bool isAnyDragging;
         [SerializeField] private GameObject blackPanel;
+        [SerializeField] internal Color emplacementColor;
+        [SerializeField] private List<Image> emplacements;
         
         [Header("SoundEffect")] 
         public AudioSource whipAudioSource;
@@ -44,6 +48,8 @@ namespace Shop
             {
                 slotIndex = Drop.slotIndex;
             }
+            
+            CheckEmplacementColor();
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -143,7 +149,21 @@ namespace Shop
             yield return new WaitForSeconds(whipItemReleaseSound.length);
                 
             whipAudioSource.Stop();
-
+        }
+        
+        private void CheckEmplacementColor()
+        {
+            if (isSlotted)
+            {
+                emplacements[slotIndex].color = emplacementColor;
+            }
+            else
+            {
+                foreach (var emplacement in emplacements.Where(emplacement => emplacement.color == emplacementColor))
+                {
+                    emplacement.color = Color.white;
+                }
+            }
         }
     }
 }
