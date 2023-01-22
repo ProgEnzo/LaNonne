@@ -26,6 +26,7 @@ namespace AI
         internal float currentEpDropMultiplier;
 
         internal bool isStunned;
+        protected bool isDead;
         private AIPath aiPathComponent;
         protected Rigidbody2D rb;
         internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
@@ -112,8 +113,10 @@ namespace AI
 
         protected virtual void EnemyDeath()
         {
-            if (currentHealth <= 0)
+            if (currentHealth <= 0 && !isDead)
             {
+                isDead = true;
+                
                 EpDrop((int)(soEnemy.numberOfEp * currentEpDropMultiplier));
                 
                 scoreManager.AddKilledEnemyScore(soEnemy.scorePoint);
