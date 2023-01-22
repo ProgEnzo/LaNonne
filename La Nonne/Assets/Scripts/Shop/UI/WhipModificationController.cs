@@ -194,6 +194,10 @@ namespace Shop.UI
          for (var i = 0; i < EffectManager.instance.effectInventory.Count; i++)
          {
             var gem = gems[i];
+            var dragScript = gem.GetComponent<Drag>();
+
+            dragScript.isActivatedFrame = true;
+            
             if (EffectManager.instance.effectInventory[(EffectManager.Effect)i] == 0)
             {
                gem.SetActive(false);
@@ -201,7 +205,6 @@ namespace Shop.UI
             else
             {
                gem.SetActive(true);
-               var dragScript = gem.GetComponent<Drag>();
                gem.transform.SetParent(dragScript.initialParent);
                dragScript.rectTransform.localPosition = dragScript.initialLocalPosition;
                dragScript.isSlotted = false;
@@ -214,7 +217,7 @@ namespace Shop.UI
             {
                var gem = gems[(int)EffectManager.instance.appliedEffects[i]];
                var dragScript = gem.GetComponent<Drag>();
-               gem.transform.SetParent(whipModificationMenu.transform.GetChild(i + 3));
+               gem.transform.SetParent(whipModificationMenu.transform.GetChild(i + 4));
                dragScript.rectTransform.localPosition = Vector3.zero;
                dragScript.isSlotted = true;
                dragScript.slotIndex = i;

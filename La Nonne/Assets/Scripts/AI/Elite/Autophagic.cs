@@ -105,8 +105,10 @@ namespace AI.Elite
         
         protected override void EnemyDeath()
         {
-            if (currentHealth <= 0)
+            if (currentHealth <= 0 && !isDead)
             {
+                isDead = true;
+                
                 EpDrop((int)(soEnemy.numberOfEp * currentEpDropMultiplier * (totalTime - currentTotalTimer) / totalTime));
                 
                 scoreManager.AddKilledEnemyScore(soEnemy.scorePoint);
