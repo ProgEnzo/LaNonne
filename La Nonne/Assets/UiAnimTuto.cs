@@ -8,6 +8,7 @@ public class UiAnimTuto : MonoBehaviour
     public Animator anim;
     private bool menuOpen = false;
     public GameObject tutoMenu;
+    
 
     public void Jiggle()
     {
