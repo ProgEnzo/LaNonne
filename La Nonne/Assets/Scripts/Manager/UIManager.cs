@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using Controller;
 using Core.Scripts.Utils;
 using TMPro;
@@ -32,6 +33,7 @@ namespace Manager
         internal bool isShopOpened;
         internal bool isWhipMenuOpened;
         private bool isGameOver;
+        internal bool isVictory;
 
         private void Awake()
         {
@@ -193,7 +195,7 @@ namespace Manager
         
         internal bool IsAnyMenuOpened()
         {
-            return isGamePaused || isGameOver || isShopOpened || isWhipMenuOpened;
+            return isGamePaused || isGameOver || isShopOpened || isWhipMenuOpened || isVictory;
         }
     }
 }

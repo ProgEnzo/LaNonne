@@ -174,7 +174,7 @@ namespace AI.Boss
             
             currentState = startingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
-        
+
             //HEALTH
             currentHealth = maxHealth;
             currentDamageMultiplier = 1f;
@@ -293,6 +293,7 @@ namespace AI.Boss
             if (currentHealth <= 0)
             {
                 Die();
+                UiAnimVictory.instance.OpenMenu();
             }
             
             if (currentIsHitCoroutine != null)

@@ -441,7 +441,7 @@ MonoBehaviour:
   - {fileID: 9071314407910337641, guid: 76831b2a51ef9fc4b9f77df5d7f3bb59, type: 3}
   bloodDroplets: {fileID: 3222401287030010745, guid: 9e49cade658ef3a4da585adb352fd505, type: 3}
   currentHealth: 100
-  maxHealth: 5000
+  maxHealth: 1
   playerNormalSpeed: 30
   bossNormalSpeed: 1
   vCamBoss: {fileID: 0}
@@ -533,6 +533,7 @@ MonoBehaviour:
   currentAiPathSpeed: 0
   currentVelocitySpeed: 0
   currentDamageMultiplier: 0
+  uiAnimVictory: {fileID: 0}
 --- !u!114 &9006283483999273129
 MonoBehaviour:
   m_ObjectHideFlags: 0
