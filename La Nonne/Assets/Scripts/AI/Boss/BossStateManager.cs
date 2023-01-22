@@ -41,6 +41,7 @@ namespace AI.Boss
         [SerializeField] private Animator animator;
         [SerializeField] private AnimationClip throwAnimation;
         [SerializeField] private AnimationClip vacuumAnimation;
+        [SerializeField] private AnimationClip rootingAnimation;
         private List<SpriteRenderer> bossSpriteRenderers = new();
         private Coroutine currentIsHitCoroutine;
     
@@ -398,10 +399,13 @@ namespace AI.Boss
             camManager.ChangeBossCamState(2); //Boss lâche un cri qui annonce la transition
             rb.bodyType = RigidbodyType2D.Static;
             animator.SetInteger(BossAnimState, 3);
-            yield return new WaitForSeconds(bossGrowlClip.Length); //temps du cri
+            yield return new WaitForSeconds(bossGrowlClip.Length - vacuumAnimation.length); //temps du cri
+
+            StartCoroutine(ChangeAnimation(6));
+            yield return new WaitForSeconds(vacuumAnimation.length); //temps du cri
             
             camManager.ChangeBossCamState(1); //on laisse la priorité à la vCam du boss
-            animator.SetInteger(BossAnimState, 0);
+            rb.bodyType = RigidbodyType2D.Dynamic;
             yield return new WaitForSeconds(0.01f); //transition BOSS to player
             
             camManager.ChangeBossCamState(0);
@@ -520,17 +524,27 @@ namespace AI.Boss
             aiPathSpeed = 0;
             currentAttackCircleAmount--;
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
-        
+            
+            animator.SetInteger(BossAnimState, 5);
             rb.bodyType = RigidbodyType2D.Static;
             var circleObjectWarning = Instantiate(attackCircleWarning, player.transform.position, Quaternion.identity);
             yield return new WaitForSeconds(attackCircleSpacingCooldown);
         
             Destroy(circleObjectWarning);
             var circleObject = Instantiate(attackCircle, circleObjectWarning.transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(attackCircleSpacingCooldown);
+            
+            if (currentAttackCircleAmount == 0)
+            {
+                yield return new WaitForSeconds(attackCircleSpacingCooldown - rootingAnimation.length);
+                StartCoroutine(ChangeAnimation(7));
+                yield return new WaitForSeconds(rootingAnimation.length);
+            }
+            else
+            {
+                yield return new WaitForSeconds(attackCircleSpacingCooldown);
+            }
             
             Destroy(circleObject);
-            rb.bodyType = RigidbodyType2D.Dynamic;
 
             switch (currentAttackCircleAmount)
             {
@@ -539,6 +553,8 @@ namespace AI.Boss
                     break;
                 case 0:
                 {
+                    rb.bodyType = RigidbodyType2D.Dynamic;
+                    
                     var nextState = firstStatesList[Random.Range(0, firstStatesList.Count)];
             
                     SwitchState(nextState);
@@ -742,6 +758,10 @@ namespace AI.Boss
             currentToxicMineAmount--;
             yield return new WaitForSeconds(1f);
 
+            //Animation
+            animator.SetInteger(BossAnimState, 5);
+            rb.bodyType = RigidbodyType2D.Static;
+            
             //SPAWN TOXIC MINE 
             for (var i = 0; i < numberOfToxicMines; i++)
             {
@@ -785,16 +805,21 @@ namespace AI.Boss
                 Destroy(variable, 1f); //destroy toxic mine area
             }
         
-            for (var i = 0; i < numberOfToxicMines; i++)
+            foreach (var variable in toxicMineList)
             {
-                Destroy(toxicMineList[i].gameObject, 1f); //destroy toxic mine
+                Destroy(variable, 1f); //destroy toxic mine
             }
+
+            StartCoroutine(ChangeAnimation(7));
         
             //Clear toutes les list 
             toxicMineAreaWarningList.Clear();
             toxicMineAreaList.Clear();
             toxicMineList.Clear();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(rootingAnimation.length);
+            
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            yield return new WaitForSeconds(1f - rootingAnimation.length);
             
             if(distanceBetweenPlayer < aggroBoxingRange && currentDamageTaken > maxDamageTaken)
             {

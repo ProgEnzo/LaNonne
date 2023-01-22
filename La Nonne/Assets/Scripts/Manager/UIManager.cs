@@ -18,6 +18,8 @@ namespace Manager
         private InputManager inputManager;
         private PlayerController playerController;
         private ChainBlade chainBlade;
+
+        public static AudioSource musicAudioSource;
         
         [Header("Map & MiniMap")] 
         public GameObject inGameUI;
@@ -69,6 +71,8 @@ namespace Manager
             settingsMenu.SetActive(false);
 
             StartCoroutine(WaitForPlayer());
+
+            musicAudioSource = GameObject.Find("InGameMusic").GetComponent<AudioSource>();
         }
 
         private void Update()
@@ -96,6 +100,8 @@ namespace Manager
             {
                 isGamePausedStatic = !isGamePausedStatic;
                 PauseMenu(isGamePausedStatic);
+                
+                musicAudioSource.Pause();
             }
         }
 
@@ -131,6 +137,8 @@ namespace Manager
         {
             isGamePausedStatic = false;
             PauseMenu(isGamePausedStatic);
+            
+            musicAudioSource.UnPause();
         }
         
         #endregion
