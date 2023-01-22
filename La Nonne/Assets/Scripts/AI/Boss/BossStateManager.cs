@@ -679,10 +679,13 @@ namespace AI.Boss
             takingDamage = false;
             yield return new WaitForSeconds(1f);
 
+            //Son du cri
+            bossAudioSource.PlayOneShot(bossGrowlClip[Random.Range(0, bossGrowlClip.Length)]);
+            
             camManager.ChangeBossCamState(2); //Boss lâche un cri qui annonce la transition
             rb.bodyType = RigidbodyType2D.Static;
             animator.SetInteger(BossAnimState, 3);
-            yield return new WaitForSeconds(2f); //temps du cri
+            yield return new WaitForSeconds(bossGrowlClip.Length); //temps du cri
             
             camManager.ChangeBossCamState(1); //on redonne la priorité à la vCam du BOSS
             bossPuppet.SetActive(false);
