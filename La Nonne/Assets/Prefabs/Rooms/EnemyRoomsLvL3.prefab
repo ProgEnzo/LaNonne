@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6266878fcaa21743b4ec1504ed17f20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomCenter: {x: -36, y: 36}
+  roomCenter: {x: 0, y: 54}
   prefabPlacer: {fileID: 5034023443352483918, guid: 6d4056f1deba4a84f8b718e493848187, type: 3}
   enemyPlacementData:
   - minQuantity: 1
@@ -63,8 +63,8 @@ MonoBehaviour:
     maxQuantity: 1
     enemyPrefab: {fileID: 5813854497670849624, guid: 6c04951a7dec97141a5b2970091c43b9, type: 3}
     enemySize: {x: 1, y: 1}
-  - minQuantity: 1
-    maxQuantity: 1
+  - minQuantity: 0
+    maxQuantity: 0
     enemyPrefab: {fileID: 8989822120195747115, guid: bc44168feed2e2c419c911cd0e6d492e, type: 3}
     enemySize: {x: 1, y: 1}
   itemData: []
