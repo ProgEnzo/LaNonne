@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Manager;
 using UnityEngine;
 
 public class UiAnimTuto : MonoBehaviour

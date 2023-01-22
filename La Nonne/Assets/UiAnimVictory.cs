@@ -34,7 +34,7 @@ public class UiAnimVictory : MonoSingleton<UiAnimVictory>
         {
             UIManager.instance.isVictory = true;
             anim.SetBool("isWin", true);
-            UIManager.instance.isGamePaused = false;
+            menuOpen = true;
         }
     }
 }
