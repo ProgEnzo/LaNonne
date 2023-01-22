@@ -6,11 +6,17 @@ using UnityEngine;
 public class DashMineManager : MonoBehaviour
 {
     public int dashMineDamage;
+    public float timeBetweenDamage;
     private void OnTriggerStay2D(Collider2D col)
-    {       
-        if (col.gameObject.CompareTag("Player"))
+    {
+        timeBetweenDamage += Time.deltaTime;
+
+        if (col.gameObject.CompareTag("Player") && timeBetweenDamage >= 1f)
         {
             PlayerController.instance.TakeDamage(dashMineDamage);
+            timeBetweenDamage = 0f;
+
         }
+       
     }
 }
