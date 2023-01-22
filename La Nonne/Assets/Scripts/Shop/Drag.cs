@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using Shop.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,6 +19,7 @@ namespace Shop
         internal Transform initialParent;
         private Transform previousParent;
         [SerializeField] private int buttonNumber;
+        internal bool isActivatedFrame;
         private bool isDragging;
         internal static bool isAnyDragging;
         [SerializeField] private GameObject blackPanel;
@@ -48,8 +48,12 @@ namespace Shop
             {
                 slotIndex = Drop.slotIndex;
             }
-            
-            CheckEmplacementColor();
+
+            if (isActivatedFrame)
+            {
+                CheckEmplacementColor();
+                isActivatedFrame = false;
+            }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -124,6 +128,7 @@ namespace Shop
                     isSlotted = true;
                 }
             
+                CheckEmplacementColor();
                 GetComponent<Image>().raycastTarget = true;
                 isDragging = false;
                 isAnyDragging = false;
@@ -155,6 +160,11 @@ namespace Shop
         {
             if (isSlotted)
             {
+                foreach (var emplacement in emplacements.Where(emplacement => emplacement.color == emplacementColor))
+                {
+                    emplacement.color = Color.white;
+                }
+                
                 emplacements[slotIndex].color = emplacementColor;
             }
             else
