@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class WakeUpBoss : MonoBehaviour
 {
     public BossStateManager boss;
+    public Animator bossAnimator;
     public AIDestinationSetter bossAIDestinationSetter;
     public GameObject healthBarBoss;
     private Image hpBossBarImage;
@@ -20,6 +21,7 @@ public class WakeUpBoss : MonoBehaviour
         bossAIDestinationSetter = transform.parent.GetComponent<AIDestinationSetter>();
         healthBarBoss = GameObject.FindWithTag("Boss HealthBar");
         healthBarBoss.SetActive(false);
+        bossAnimator.enabled = false;
 
     }
 
@@ -27,6 +29,8 @@ public class WakeUpBoss : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
+            bossAnimator.enabled = true; //desac animator parce que le son se joue tous le temps à cause des animations events
+
             healthBarBoss.SetActive(true);
             boss.enabled = true;
             bossAIDestinationSetter.enabled = true;

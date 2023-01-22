@@ -23,4 +23,9 @@ public class AnimationEvent : MonoBehaviour
             footstepAudioSource.PlayOneShot(footstepAudioClip[Random.Range(0, footstepAudioClip.Length)]);
         }
     }
+
+    void walkBossSound()
+    {
+        footstepAudioSource.PlayOneShot(footstepAudioClip[Random.Range(0, footstepAudioClip.Length)]);
+    }
 }
