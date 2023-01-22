@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
+using AI.Boss;
 using Core.Scripts.Utils;
 using DG.Tweening;
 using Manager;
@@ -577,7 +578,7 @@ namespace Controller
                         .CompareTo(Vector3.Distance(position, y.transform.position));
                 });
                 
-                foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy")))
+                foreach (var enemy in enemiesInArea.Where(enemy => enemy.collider.CompareTag("Enemy") || enemy.collider.CompareTag("Boss")))
                 {
                     if (isDashOn)
                     {
@@ -646,7 +647,14 @@ namespace Controller
                 revealingDashRunningStunCoroutines.Add(revealingDashAimedEnemy, StartCoroutine(StunEnemy(revealingDashAimedEnemy)));
                 
                 //Dégâts
-                revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.revealingDashDamage);
+                if (revealingDashAimedEnemy.GetComponent<EnemyController>() != null)
+                {
+                    revealingDashAimedEnemy.GetComponent<EnemyController>().TakeDamageFromPlayer(soController.revealingDashDamage);
+                }
+                else
+                {
+                    revealingDashAimedEnemy.GetComponent<BossStateManager>().TakeDamageOnBossFromPlayer(soController.revealingDashDamage);
+                }
                 
                 //Fin du dash
                 isRevealingDashHitting = false;
@@ -764,10 +772,12 @@ namespace Controller
 
         private IEnumerator StunEnemy(GameObject enemy)
         {
-            enemy.GetComponent<EnemyController>().isStunned = true;
+            var enemyController = enemy.GetComponent<EnemyController>();
+            if (enemyController == null) yield break;
+            enemyController.isStunned = true;
             yield return new WaitForSeconds(soController.revealingDashStunDuration);
             if (!enemy) yield break;
-            enemy.GetComponent<EnemyController>().isStunned = false;
+            enemyController.isStunned = false;
         }
         
         #endregion
