@@ -5,6 +5,7 @@ using System.Linq;
 using Cinemachine;
 using Controller;
 using DG.Tweening;
+using GenPro.Rooms.Generator;
 using Manager;
 using Pathfinding;
 using Shop;
@@ -33,6 +34,7 @@ namespace AI.Boss
         private PlayerController player;
         [SerializeField] private AIPath bossAI;
         [SerializeField] private AIDestinationSetter aiDestinationSetter;
+        private RoomContentGenerator roomContentGenerator;
         [SerializeField] private GameObject bossPuppet;
         [SerializeField] private GameObject chrysalisPuppet;
         [SerializeField] private BoxCollider2D bossBoxCollider;
@@ -174,6 +176,11 @@ namespace AI.Boss
             
             currentState = startingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
+            
+            if (GameObject.Find("RoomContentGenerator") != null)
+            {
+                roomContentGenerator = GameObject.Find("RoomContentGenerator").GetComponent<RoomContentGenerator>();
+            }
 
             //HEALTH
             currentHealth = maxHealth;
@@ -659,6 +666,13 @@ namespace AI.Boss
         private IEnumerator SpawnEnemy()
         {
             var posBossBeforeSpawn = transform.position; //get la pos du boss
+            var spawnPosition = new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f));
+            
+            while (!(spawnPosition.x > roomContentGenerator.mapBoss.x - 7.5f && spawnPosition.x < roomContentGenerator.mapBoss.x + 7.5f && spawnPosition.y > roomContentGenerator.mapBoss.y - 6.5f && spawnPosition.y < roomContentGenerator.mapBoss.y + 5.5f))
+            {
+                spawnPosition = new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f));
+            }
+            
             Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
             yield return new WaitForSeconds(1f);
 
