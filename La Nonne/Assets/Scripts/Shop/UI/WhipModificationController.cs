@@ -214,7 +214,7 @@ namespace Shop.UI
             {
                var gem = gems[(int)EffectManager.instance.appliedEffects[i]];
                var dragScript = gem.GetComponent<Drag>();
-               gem.transform.SetParent(whipModificationMenu.transform.GetChild(i + 3));
+               gem.transform.SetParent(whipModificationMenu.transform.GetChild(i + 4));
                dragScript.rectTransform.localPosition = Vector3.zero;
                dragScript.isSlotted = true;
                dragScript.slotIndex = i;
