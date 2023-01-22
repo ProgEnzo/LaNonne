@@ -139,7 +139,11 @@ namespace AI.Boss
         
         [Header("SoundEffect")]
         [SerializeField] private AudioSource bossAudioSource;
+        [SerializeField] private AudioClip[] bossHitAudioClip;
         [SerializeField] private AudioClip[] bossGrowlClip;
+        [SerializeField] private AudioClip[] bossDashingAudioClip;
+        [SerializeField] private AudioClip[] bossBoxingAudioClip;
+        [SerializeField] private AudioClip bossVacuumAudioClip;
 
         [Header("----StackSystem----")]
         internal readonly (EffectManager.Effect effect, int level)[] stacks = new (EffectManager.Effect, int)[3];
@@ -277,6 +281,9 @@ namespace AI.Boss
                 
                 currentHealth -= (int)(damage * currentDamageMultiplier);
                 hpBossBar.DOFillAmount((float)currentHealth / maxHealth, 0.1f);
+                
+                //sound hit boss
+                bossAudioSource.PlayOneShot(bossHitAudioClip[Random.Range(0, bossHitAudioClip.Length)]);
 
                 currentDamageTaken += damage;
                 
@@ -427,6 +434,9 @@ namespace AI.Boss
             Vector2 direction = playerPosition - position;
             var dashWarningObject = Instantiate(dashWarning, position, Quaternion.identity);
             dashWarningObject.transform.DORotateQuaternion(Quaternion.FromToRotation(Vector3.right, playerPosition - dashWarningObject.transform.position), 0f); //Rotate warning to the player
+            
+            bossAudioSource.PlayOneShot(bossDashingAudioClip[Random.Range(0, bossDashingAudioClip.Length)]);
+            
             yield return new WaitForSeconds(timeBeforeDashing);
 
             Destroy(dashWarningObject);
@@ -571,6 +581,9 @@ namespace AI.Boss
             var vacuumGameObject = Instantiate(vacuumArea, bossPos, Quaternion.identity);
             vacuumGameObject.transform.parent = gameObject.transform; //set le prefab en child
             vacuumParticle.SetActive(true);
+            
+            //sound vacuum
+            bossAudioSource.PlayOneShot(bossVacuumAudioClip);
         
             //TOXIC AREA
             var toxicAreaObject = Instantiate(toxicArea, bossPos, Quaternion.identity);
@@ -579,7 +592,8 @@ namespace AI.Boss
             rb.bodyType = RigidbodyType2D.Static;
             animator.SetInteger(BossAnimState, 3);
             
-            yield return new WaitForSeconds(vacuumCooldown - vacuumAnimation.length);
+            yield return new WaitForSeconds(bossVacuumAudioClip.length - vacuumAnimation.length);
+            
 
             StartCoroutine(ChangeAnimation(6));
             yield return new WaitForSeconds(vacuumAnimation.length);
@@ -876,6 +890,8 @@ namespace AI.Boss
 
                     //ADD to the list 
                     circleBoxingObjectList.Add(circleBoxingObject);
+                    bossAudioSource.PlayOneShot(bossBoxingAudioClip[Random.Range(0, bossBoxingAudioClip.Length)]);
+
                     yield return new WaitForSeconds(0.2f);
                 }
 

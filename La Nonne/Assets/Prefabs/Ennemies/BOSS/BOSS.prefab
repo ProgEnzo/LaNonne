@@ -456,9 +456,9 @@ MonoBehaviour:
   numberOfMines: 3
   attackCircleWarning: {fileID: 6140255190438474285, guid: 3a6ebc6bbe74d8940aab0380d59d22c5, type: 3}
   attackCircle: {fileID: 6140255190438474285, guid: b23d111a5f9939644ab2d7cb39b0504b, type: 3}
-  attackCircleSpacingCooldown: 0.5
-  attackCircleAmount: 5
-  currentAttackCircleAmount: 5
+  attackCircleSpacingCooldown: 0.3
+  attackCircleAmount: 3
+  currentAttackCircleAmount: 3
   vacuumArea: {fileID: 4845308707281541438, guid: 25892a4d5b895b140833d989716c8ad7, type: 3}
   toxicArea: {fileID: 2696438898175031748, guid: 9a087c729841efe48808cf2c26a9b491, type: 3}
   vacuumParticle: {fileID: 8767533293606540559}
@@ -491,10 +491,37 @@ MonoBehaviour:
   numberOfBoxingCircleWarning: 5
   numberOfBoxingCircle: 5
   bossAudioSource: {fileID: 5560626926501226658}
+  bossHitAudioClip:
+  - {fileID: 8300000, guid: 986dc3329c72e57449dc6e0f9700f2ee, type: 3}
+  - {fileID: 8300000, guid: 92924d99d9d4e134488370206d5848c3, type: 3}
+  - {fileID: 8300000, guid: af0f2df309d98914f82e6b13ed702efd, type: 3}
+  - {fileID: 8300000, guid: 5410a8bef0a621243a5e7820d57a64bd, type: 3}
+  - {fileID: 8300000, guid: 98e1f316aa6ea7942ac42b643e853e7d, type: 3}
+  - {fileID: 8300000, guid: c77b3bb64d3576145afb8b1794ca96ec, type: 3}
+  - {fileID: 8300000, guid: de2d595fbea1cd740bd8c9f7172a9e1c, type: 3}
+  - {fileID: 8300000, guid: 4e845d2615cc135449da6f9711acf91d, type: 3}
+  - {fileID: 8300000, guid: 22f3183b535e8594983aad8802543483, type: 3}
+  - {fileID: 8300000, guid: cbfa0600955710145b9c7aaad40a6969, type: 3}
   bossGrowlClip:
   - {fileID: 8300000, guid: a2e130f9caea47949ad6e1a1657e28c7, type: 3}
   - {fileID: 8300000, guid: 8ea1ce3b0d132254d9244b44dc03bd17, type: 3}
   - {fileID: 8300000, guid: 0a899371f8fc2b54b9dfcdf356bed81c, type: 3}
+  bossDashingAudioClip:
+  - {fileID: 8300000, guid: 97ee0f897e55f5c44a0eae6890e0e760, type: 3}
+  - {fileID: 8300000, guid: 4aca490018232464e8e2ed8da41a4a26, type: 3}
+  - {fileID: 8300000, guid: 25b1b30ef8073f747a703c8dd0f4d450, type: 3}
+  bossBoxingAudioClip:
+  - {fileID: 8300000, guid: 35ac0d0b544d9c14ab119736941f7034, type: 3}
+  - {fileID: 8300000, guid: 0d836f608a9628d47a582d723b577a61, type: 3}
+  - {fileID: 8300000, guid: b8999e54a894d4442865c0cff2ba5793, type: 3}
+  - {fileID: 8300000, guid: 769ee9e3041ca924986c7df74d35ad7c, type: 3}
+  - {fileID: 8300000, guid: 67207a4e90de2064ba24fe03d53b6b2b, type: 3}
+  - {fileID: 8300000, guid: 7f0ccb064057a204089e0a2551ef3674, type: 3}
+  - {fileID: 8300000, guid: 0b510357de0f8974089096054c7d1287, type: 3}
+  - {fileID: 8300000, guid: 50225f6f9c20a444da7b81e30324ca30, type: 3}
+  - {fileID: 8300000, guid: eabd0139e1d67aa41854126e88289ada, type: 3}
+  - {fileID: 8300000, guid: a66367889df0e574da79158fa5cccd8c, type: 3}
+  bossVacuumAudioClip: {fileID: 8300000, guid: 460bd25863656fb44b3e45f966a7edd9, type: 3}
   stackTimers:
   - 0
   - 0
@@ -679,7 +706,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -4323063371800519414, guid: 0df7272459f49844dacff71dc7513221, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
