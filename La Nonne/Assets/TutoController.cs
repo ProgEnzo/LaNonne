@@ -13,11 +13,7 @@ public class TutoController : MonoBehaviour
       [Header("References")]
       [SerializeField] private GameObject tutoMenu;
       public GameObject tutoCanvas;
-      public Image image;
-
-      [SerializeField] private float timeToAccess;
-
-      private float timerInputPressed;
+      
       private bool isInTrigger;
 
       private UIManager uiManager;
@@ -30,7 +26,6 @@ public class TutoController : MonoBehaviour
          StartCoroutine(BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp());
          tutoCanvas.SetActive(false);
 
-         timerInputPressed = 0f;
          uiManager = UIManager.instance;
          isTutoOpen = false;
       }
@@ -55,11 +50,7 @@ public class TutoController : MonoBehaviour
       {
          if (other.gameObject.CompareTag("Player"))
          {
-            timerInputPressed = 0f;
             tutoCanvas.SetActive(false);
-
-            image.fillAmount = 0f;
-
             isInTrigger = false;
          }
       }
@@ -81,26 +72,14 @@ public class TutoController : MonoBehaviour
       {
          if (Input.GetKey(InputManager.instance.interactKey) && !uiManager.IsAnyMenuOpened() && !PlayerController.instance.isRevealingDashOn && !PlayerController.instance.chainBlade.isWarningOn)
          {
-            timerInputPressed += Time.deltaTime;
-            image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
-
-            if (timerInputPressed > timeToAccess - 0.05f && !isTutoOpen)
-            {
-               isTutoOpen = true;
-               uiManager.isWhipMenuOpened = true;
-               
-               uiManager.DesactivateInGameUI();
-               
-               tutoMenu.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
-               uiAnimTuto.OpenMenu();
-               Time.timeScale = 0;
-            }
-         }
-
-         if (Input.GetKeyUp(InputManager.instance.interactKey))
-         {
-            timerInputPressed = 0f;
-            image.DOFillAmount(0,0.5f);
+            isTutoOpen = true;
+            uiManager.isWhipMenuOpened = true;
+            
+            uiManager.DesactivateInGameUI();
+            
+            tutoMenu.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
+            uiAnimTuto.OpenMenu();
+            Time.timeScale = 0;
          }
       }
       
@@ -118,8 +97,6 @@ public class TutoController : MonoBehaviour
          StartCoroutine(DisableTutoOpenCoroutine());
          
          uiManager.ActivateInGameUI();
-
-         image.fillAmount = 0f;
 
          Time.timeScale = 1;
       }

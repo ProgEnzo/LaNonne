@@ -17,12 +17,8 @@ namespace Shop.UI
       [SerializeField] private GameObject shopObject;
       [SerializeField] private GameObject shopPanel;
       public GameObject shopCanvas;
-      public Image image;
       [SerializeField] private TextMeshProUGUI epCountText;
-   
-      [SerializeField] private float timeToAccess;
-
-      private float timerInputPressed;
+      
       private bool isInTrigger;
 
       [SerializeField] private int numberOfOfferedObjects;
@@ -63,7 +59,6 @@ namespace Shop.UI
 
          //image.DORectTransformMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutFlash); Merci Mathieu je vais voir ca ce soir !!
 
-         timerInputPressed = 0f;
          effectManager = EffectManager.instance;
          uiManager = UIManager.instance;
          scoreManager = ScoreManager.instance;
@@ -92,11 +87,7 @@ namespace Shop.UI
       {
          if (other.gameObject.CompareTag("Player"))
          {
-            timerInputPressed = 0f;
             shopCanvas.SetActive(false);
-
-            image.fillAmount = 0f;
-
             isInTrigger = false;
          }
       }
@@ -120,73 +111,60 @@ namespace Shop.UI
       {
          if (Input.GetKey(InputManager.instance.interactKey) && !uiManager.IsAnyMenuOpened() && !PlayerController.instance.isRevealingDashOn && !PlayerController.instance.chainBlade.isWarningOn)
          {
-            timerInputPressed += Time.deltaTime;
-            image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
+            isShopOpened = true;
+            uiManager.isShopOpened = true;
 
-            if (timerInputPressed > timeToAccess - 0.05f && !isShopOpened)
+            uiManager.DesactivateInGameUI();
+            
+            shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
+            uiAnimShop.OpenMenu();
+            Time.timeScale = 0;
+            
+            //sound voice "Nice" shopkeeper
+            shopAudioSource.PlayOneShot(shopkeeperVoiceLineNice[Random.Range(0, shopkeeperVoiceLineNice.Length)]);
+            shopAudioSource.PlayOneShot(shopkeeperDoorbell[Random.Range(0, shopkeeperDoorbell.Length)]);
+            
+            //music shop
+            shopMusic.PlayOneShot(shopMusicClip);
+            inGameMusicAudioSource.Pause();
+            
+            if (!hasShopBeenOpened)
             {
-               isShopOpened = true;
-               uiManager.isShopOpened = true;
-
-               uiManager.DesactivateInGameUI();
-               
-               shopPanel.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
-               uiAnimShop.OpenMenu();
-               Time.timeScale = 0;
-               
-               //sound voice "Nice" shopkeeper
-               shopAudioSource.PlayOneShot(shopkeeperVoiceLineNice[Random.Range(0, shopkeeperVoiceLineNice.Length)]);
-               shopAudioSource.PlayOneShot(shopkeeperDoorbell[Random.Range(0, shopkeeperDoorbell.Length)]);
-               
-               //music shop
-               shopMusic.PlayOneShot(shopMusicClip);
-               inGameMusicAudioSource.Pause();
-
-               
-               if (!hasShopBeenOpened)
+               hasShopBeenOpened = true;
+               PlayerController.instance.visitedShopCount += 1;
+               currentNumberOfTakenObjects = 0;
+               ShopObjectsSelector();
+            
+               //Mise en place du dialogue
+               ChooseDialogue();
+            }
+            
+            //Mise en place des objets dans le shop
+            for (var i = 0; i < effectsInTheShop.Length; i++)
+            {
+               if (effectsInTheShop[i] != EffectManager.Effect.None)
                {
-                  hasShopBeenOpened = true;
-                  PlayerController.instance.visitedShopCount += 1;
-                  currentNumberOfTakenObjects = 0;
-                  ShopObjectsSelector();
-               
-                  //Mise en place du dialogue
-                  ChooseDialogue();
+                  shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite =
+                     effectManager.effectDictionary[(int)effectsInTheShop[i]][
+                        EffectManager.instance.effectInventory[effectsInTheShop[i]]].image;
+                  shopPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+                     effectsInTheShop[i] + " - Lv. " +
+                     (EffectManager.instance.effectInventory[effectsInTheShop[i]] + 1);
+                  shopPanel.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text =
+                     "Cost : " + effectManager.effectDictionary[(int)effectsInTheShop[i]][
+                        EffectManager.instance.effectInventory[effectsInTheShop[i]]].cost;
+                  shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text =
+                     effectManager.effectDictionary[(int)effectsInTheShop[i]][
+                        EffectManager.instance.effectInventory[effectsInTheShop[i]]].shopDescription;
                }
-               
-               //Mise en place des objets dans le shop
-               for (var i = 0; i < effectsInTheShop.Length; i++)
+               else
                {
-                  if (effectsInTheShop[i] != EffectManager.Effect.None)
-                  {
-                     shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite =
-                        effectManager.effectDictionary[(int)effectsInTheShop[i]][
-                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].image;
-                     shopPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text =
-                        effectsInTheShop[i] + " - Lv. " +
-                        (EffectManager.instance.effectInventory[effectsInTheShop[i]] + 1);
-                     shopPanel.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text =
-                        "Cost : " + effectManager.effectDictionary[(int)effectsInTheShop[i]][
-                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].cost;
-                     shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text =
-                        effectManager.effectDictionary[(int)effectsInTheShop[i]][
-                           EffectManager.instance.effectInventory[effectsInTheShop[i]]].shopDescription;
-                  }
-                  else
-                  {
-                     shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
-                     shopPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
-                     shopPanel.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = "Closed.";
-                     shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text = "";
-                  }
+                  shopPanel.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
+                  shopPanel.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+                  shopPanel.transform.GetChild(i).GetChild(2).GetComponent<TextMeshProUGUI>().text = "Closed.";
+                  shopPanel.transform.GetChild(i).GetChild(3).GetComponent<TextMeshProUGUI>().text = "";
                }
             }
-         }
-
-         if (Input.GetKeyUp(InputManager.instance.interactKey))
-         {
-            timerInputPressed = 0f;
-            image.DOFillAmount(0,0.5f);
          }
       }
       
@@ -286,8 +264,6 @@ namespace Shop.UI
          StartCoroutine(DisableShopPanelCoroutine());
          
          uiManager.ActivateInGameUI();
-
-         image.fillAmount = 0f;
 
          Time.timeScale = 1;
       }

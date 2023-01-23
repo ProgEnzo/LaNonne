@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Controller;
-using DG.Tweening;
 using Manager;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Shop.UI
 {
@@ -15,11 +12,7 @@ namespace Shop.UI
       [Header("References")]
       [SerializeField] private GameObject whipModificationMenu;
       public GameObject shopCanvas;
-      public Image image;
 
-      [SerializeField] private float timeToAccess;
-
-      private float timerInputPressed;
       private bool isInTrigger;
 
       private UIManager uiManager;
@@ -39,7 +32,6 @@ namespace Shop.UI
 
          //image.DORectTransformMove(new Vector3(0, 0, 0), 1f).SetEase(Ease.OutFlash); Merci Mathieu je vais voir ca ce soir !!
 
-         timerInputPressed = 0f;
          uiManager = UIManager.instance;
          isWhipModificationMenuOpened = false;
 
@@ -79,10 +71,7 @@ namespace Shop.UI
       {
          if (other.gameObject.CompareTag("Player"))
          {
-            timerInputPressed = 0f;
             shopCanvas.SetActive(false);
-
-            image.fillAmount = 0f;
 
             isInTrigger = false;
          }
@@ -103,31 +92,19 @@ namespace Shop.UI
 
       private void OpenWhipModificationMenu()
       {
-         if (Input.GetKey(InputManager.instance.interactKey) && !uiManager.IsAnyMenuOpened() && !PlayerController.instance.isRevealingDashOn && !PlayerController.instance.chainBlade.isWarningOn)
+         if (Input.GetKeyDown(InputManager.instance.interactKey) && !uiManager.IsAnyMenuOpened() && !PlayerController.instance.isRevealingDashOn && !PlayerController.instance.chainBlade.isWarningOn)
          {
-            timerInputPressed += Time.deltaTime;
-            image.fillAmount = Mathf.Lerp(0, 1, timerInputPressed / timeToAccess);
+            isWhipModificationMenuOpened = true;
+            uiManager.isWhipMenuOpened = true;
+            
+            uiManager.DesactivateInGameUI();
+            
+            whipModificationMenu.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
+            uiAnimWhipModifMenu.OpenMenu();
+            Time.timeScale = 0;
 
-            if (timerInputPressed > timeToAccess - 0.05f && !isWhipModificationMenuOpened)
-            {
-               isWhipModificationMenuOpened = true;
-               uiManager.isWhipMenuOpened = true;
-               
-               uiManager.DesactivateInGameUI();
-               
-               whipModificationMenu.SetActive(true); // si c'était un Canvas shopPanel.enabled = true;
-               uiAnimWhipModifMenu.OpenMenu();
-               Time.timeScale = 0;
-
-               ChangeEffectTexts();
-               PlaceGems();
-            }
-         }
-
-         if (Input.GetKeyUp(InputManager.instance.interactKey))
-         {
-            timerInputPressed = 0f;
-            image.DOFillAmount(0,0.5f);
+            ChangeEffectTexts();
+            PlaceGems();
          }
       }
       
@@ -145,8 +122,6 @@ namespace Shop.UI
          StartCoroutine(DisableWhipMenuOpenedCoroutine());
          
          uiManager.ActivateInGameUI();
-
-         image.fillAmount = 0f;
 
          Time.timeScale = 1;
       }
