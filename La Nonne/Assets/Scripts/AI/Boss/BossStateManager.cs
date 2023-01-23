@@ -521,8 +521,7 @@ namespace AI.Boss
         public void AttackCircleManager()
         {
             StartCoroutine(AttackCircle());
-            var posBossBeforeSpawn = transform.position; //get la pos du boss
-            Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+            SpawnEnemyFunction();
 
             Debug.Log($"<color=green>ATTACK CIRCLE STATE HAS BEGUN</color>");
         }
@@ -665,15 +664,7 @@ namespace AI.Boss
         
         private IEnumerator SpawnEnemy()
         {
-            var posBossBeforeSpawn = transform.position; //get la pos du boss
-            var spawnPosition = new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f));
-            
-            while (!(spawnPosition.x > roomContentGenerator.mapBoss.x - 7.5f && spawnPosition.x < roomContentGenerator.mapBoss.x + 7.5f && spawnPosition.y > roomContentGenerator.mapBoss.y - 6.5f && spawnPosition.y < roomContentGenerator.mapBoss.y + 5.5f))
-            {
-                spawnPosition = new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f));
-            }
-            
-            Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+            SpawnEnemyFunction();
             yield return new WaitForSeconds(1f);
 
             if (currentHealth >= maxHealth / 2)
@@ -737,8 +728,7 @@ namespace AI.Boss
             {
                 yield return new WaitForSeconds(0.3f);
             
-                var posBossBeforeSpawn = transform.position; //get la pos du boss
-                Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f)), Quaternion.identity);
+                SpawnEnemyFunction();
             }
             yield return new WaitForSeconds(transitionCooldown);
             bossPuppet.SetActive(true);
@@ -961,6 +951,23 @@ namespace AI.Boss
             SwitchState(nextState);
         }
 
+        #endregion
+        
+        #region EnemySpawn
+        
+        private void SpawnEnemyFunction()
+        {
+            var posBossBeforeSpawn = transform.position; //get la pos du boss
+            var spawnPosition = new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f));
+            
+            while (!(spawnPosition.x > roomContentGenerator.mapBoss.x - 7.5f && spawnPosition.x < roomContentGenerator.mapBoss.x + 7.5f && spawnPosition.y > roomContentGenerator.mapBoss.y - 6.5f && spawnPosition.y < roomContentGenerator.mapBoss.y + 5.5f))
+            {
+                spawnPosition = new Vector2(posBossBeforeSpawn.x + Random.Range(-2f, 2f),posBossBeforeSpawn.y +  Random.Range(-2f, 2f));
+            }
+            
+            Instantiate(spawnerList[Random.Range(0, spawnerList.Count)], spawnPosition, Quaternion.identity);
+        }
+        
         #endregion
 
         #region Animator
