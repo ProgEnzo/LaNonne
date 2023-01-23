@@ -1577,7 +1577,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8168fd51509dc4441bd49e1a21cca18a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1685,6 +1685,7 @@ MonoBehaviour:
   - {fileID: 7094544789665752317}
   - {fileID: 6496909670973825487}
   - {fileID: 3887284229582273772}
+  healColor: {r: 0.6745098, g: 0.9882353, b: 0.37254903, a: 1}
   volume: {fileID: 0}
   mainAudioGroup: {fileID: 24300002, guid: 0df7272459f49844dacff71dc7513221, type: 2}
   playerAudioSource: {fileID: 3221706276323021389}
@@ -2067,7 +2068,7 @@ MonoBehaviour:
   - {x: 10, y: -10, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 116550
+  m_InstanceId: 159600
 --- !u!82 &889023668516236363
 AudioSource:
   m_ObjectHideFlags: 0

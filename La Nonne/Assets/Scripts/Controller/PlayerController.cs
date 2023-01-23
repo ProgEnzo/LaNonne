@@ -52,6 +52,7 @@ namespace Controller
         private readonly List<SpriteRenderer> playerSpriteRenderers = new();
         private Coroutine currentSpriteCoroutine;
         internal bool isGodModeOn;
+        [SerializeField] private Color healColor;
 
         [Header("Revealing Dash")]
         internal bool isRevealingDashHitting;
@@ -480,9 +481,10 @@ namespace Controller
 
         private IEnumerator PlayerIsHeal()
         {
+            var color = new Color(172, 252, 95);
             foreach (var spriteRenderer in playerSpriteRenderers)
             {
-                spriteRenderer.color = Color.green;
+                spriteRenderer.color = healColor;
             }
             healthBar.color = Color.green;
             particleSystemHeal.Play();
