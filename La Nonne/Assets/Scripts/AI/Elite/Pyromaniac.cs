@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AI.So;
 using Controller;
 using Pathfinding;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 // ReSharper disable CommentTypo
 
 namespace AI.Elite
@@ -31,6 +35,7 @@ namespace AI.Elite
         [SerializeField] private PyromaniacProjectile projectile;
         private CapsuleCollider2D capsuleCollider2D;
         private LineRenderer lineRenderer;
+        private Animator animator;
 
         [Header("SoundEffect")]
         public AudioSource pyroAudioSource;
@@ -39,7 +44,8 @@ namespace AI.Elite
         public AudioClip[] pyroFireTrailAudioClip;
         private Coroutine soundLaunchProjectile;
         private Coroutine soundFireTrail;
-        
+        private static readonly int PyroAnimState = Animator.StringToHash("pyroAnimState");
+
         protected override void Start()
         {
             base.Start();
@@ -50,6 +56,7 @@ namespace AI.Elite
             //Initialisation des components
             capsuleCollider2D = GetComponent<CapsuleCollider2D>();
             lineRenderer = GetComponent<LineRenderer>();
+            animator = enemyPuppet.GetComponent<Animator>();
             
             //Initialisation du déplacement
             aiDestinationSetter = GetComponent<AIDestinationSetter>();
@@ -81,6 +88,8 @@ namespace AI.Elite
                 rb.velocity = dashDirection * currentVelocitySpeed;
             }
             
+            CheckDirection();
+            
             //Initialisation de variables locales pour l'optimisation
             var playerPosition = playerController.transform.position; //Position du joueur
             var transform1 = transform;
@@ -96,6 +105,9 @@ namespace AI.Elite
                     //Si le joueur est dans le rayon de détection, on active le projectile
                     if (Vector3.Distance(position, playerPosition) <= soPyromaniac.detectionRadius)
                     {
+                        //Animation d'idle
+                        animator.SetInteger(PyroAnimState, 0);
+                        
                         //Initialisation des variables pour l'état de lancer
                         isProjectileOn = true; //Le projectile existe
                         aiDestinationSetter.enabled = false; //Le pyromane ne se déplace plus vers le joueur
@@ -119,6 +131,9 @@ namespace AI.Elite
                     //Sinon, le pyromane se déplace vers le joueur avec A*
                     else
                     {
+                        //Animation de marche
+                        animator.SetInteger(PyroAnimState, 1);
+                        
                         //Déplacement du pyromane
                         aiDestinationSetter.enabled = true; //Le pyromane se déplace vers le joueur
                         scriptAIPathState = true; //Le pyromane se déplace avec A*
@@ -191,6 +206,9 @@ namespace AI.Elite
 
         private void ThrowProjectile(Vector3 destination, Vector3 direction)
         {
+            //Animation de lancer
+            StartCoroutine(ChangeAnimation(2));
+            
             var transform1 = transform;
             projectile.transform.position = transform1.position;
             projectile.gameObject.SetActive(true);
@@ -201,6 +219,10 @@ namespace AI.Elite
         private IEnumerator DashToFireZone()
         {
             yield return new WaitForSeconds(0.5f);
+            
+            //Animation de dash
+            animator.SetInteger(PyroAnimState, 3);
+            
             var transform1 = transform;
             dashInitialPosition = transform1.position; //Position du pyromane
             isDashing = true;
@@ -277,11 +299,13 @@ namespace AI.Elite
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            Impact(isDashing);
+            if (!(other.gameObject.CompareTag("Player") && playerController.isRevealingDashOn))
+            {
+                Impact(isDashing);
             
-            pyroAudioSource.PlayOneShot(pyroImpactAudioClip);
+                pyroAudioSource.PlayOneShot(pyroImpactAudioClip);
+            }
 
-            
             if (other.gameObject.CompareTag("Player") && !playerController.isRevealingDashOn && !isStunned)
             {
                 other.gameObject.GetComponent<PlayerController>().TakeDamage(soEnemy.bodyDamage);
@@ -297,6 +321,9 @@ namespace AI.Elite
         {
             if (isDash && !isImpactOn)
             {
+                //Animation d'idle
+                animator.SetInteger(PyroAnimState, 0);
+                
                 currentVelocitySpeed = 0f;
                 isDashing = false;
                 delayedIsDashing = false;
@@ -327,5 +354,29 @@ namespace AI.Elite
         }
 
         internal override void HitStop(float hitStopDuration) { }
+        
+        #region Animator
+
+        private IEnumerator ChangeAnimation(int state)
+        {
+            animator.SetInteger(PyroAnimState, state);
+            yield return new WaitForNextFrameUnit();
+            animator.SetInteger(PyroAnimState, 0);
+        }
+        
+        private void CheckDirection()
+        {
+            var puppetLocalScale = enemyPuppet.transform.localScale;
+            if (rb.velocity.x != 0)
+            {
+                enemyPuppet.transform.localScale = new Vector3(-MathF.Sign(rb.velocity.x) * MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
+            }
+            else
+            {
+                enemyPuppet.transform.localScale = playerController.transform.position.x > transform.position.x ? new Vector3(-MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z) : new Vector3(MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
+            }
+        }
+
+        #endregion
     }
 }
