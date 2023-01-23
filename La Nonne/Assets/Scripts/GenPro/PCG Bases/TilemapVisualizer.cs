@@ -97,7 +97,7 @@ public class TilemapVisualizer : MonoBehaviour
     //Appeler cette fonction pour toute mes salles 
     public List<Vector2Int> GetWalls(int middleX, int middleY, PlacementType typeWanted) //surement remplacer le placement Type (actuellement mon script) 
     {
-        int count = 33;
+        int count = 35;
         
         List<Vector2Int> tileReturn = new ();
 
@@ -145,7 +145,7 @@ public class TilemapVisualizer : MonoBehaviour
     
     public List<Vector2Int> GetFloors(int middleX, int middleY)
     {
-        int count = 40;
+        int count = 55;
         
         List<Vector2Int> tileReturn = new ();
 
