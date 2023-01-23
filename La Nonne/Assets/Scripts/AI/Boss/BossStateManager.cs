@@ -174,9 +174,6 @@ namespace AI.Boss
             aiDestinationSetter.target = PlayerController.instance.transform;
             shockwaveGameObject = GameObject.Find("Shockwave");
             
-            currentState = throwingState; //starting state for the boss state machine
-            currentState.EnterState(this); //"this" is this Monobehavior script
-            
             if (GameObject.Find("RoomContentGenerator") != null)
             {
                 roomContentGenerator = GameObject.Find("RoomContentGenerator").GetComponent<RoomContentGenerator>();
@@ -220,6 +217,9 @@ namespace AI.Boss
             }
             
             bossSpriteRenderers = bossPuppet.GetComponentsInChildren<SpriteRenderer>(true).ToList();
+            
+            currentState = attackCircleState; //starting state for the boss state machine
+            currentState.EnterState(this); //"this" is this Monobehavior script
         }
 
         private void Update()
