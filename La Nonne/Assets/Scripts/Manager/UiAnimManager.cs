@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Manager;
 using UnityEngine;
 
 public class UiAnimManager : MonoBehaviour
@@ -27,6 +28,7 @@ public class UiAnimManager : MonoBehaviour
     {
         if (menuOpen)
         {
+            UIManager.isSettingsOn = false;
             anim.SetBool("isMenuOpen", false);
             menuOpen = false;
         }

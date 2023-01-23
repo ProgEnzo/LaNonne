@@ -39,6 +39,7 @@ namespace Manager
         [Header("Booleans")]
         internal static bool isGamePausedStatic;
         internal bool isGamePaused;
+        internal static bool isSettingsOn;
         internal bool isShopOpened;
         internal bool isWhipMenuOpened;
         private bool isGameOver;
@@ -109,7 +110,7 @@ namespace Manager
 
         private void PauseMenuInput()
         {
-            if (Input.GetKeyDown(inputManager.pauseKey) && !isShopOpened && !isWhipMenuOpened && !isGameOver)
+            if (Input.GetKeyDown(inputManager.pauseKey) && !isShopOpened && !isWhipMenuOpened && !isGameOver && !isSettingsOn)
             {
                 isGamePausedStatic = !isGamePausedStatic;
                 PauseMenu(isGamePausedStatic);
@@ -201,6 +202,7 @@ namespace Manager
         
         public static void OptionsMenu()
         {
+            isSettingsOn = true;
             _settingsMenu.SetActive(true);
         }
         
