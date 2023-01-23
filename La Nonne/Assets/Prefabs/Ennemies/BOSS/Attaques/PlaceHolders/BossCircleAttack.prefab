@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6140255190438474287}
   - component: {fileID: 6140255190438474284}
   - component: {fileID: 8210166506615440645}
+  - component: {fileID: 7621809630397992298}
   m_Layer: 0
   m_Name: BossCircleAttack
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6140255190438474285}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -52.41, y: 71.4, z: -1.7337537}
-  m_LocalScale: {x: 2, y: 2, z: 2.7059}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 2.7059}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,9 +48,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.43217468, y: -1.837964}
   serializedVersion: 2
-  m_Radius: 0.6000061
+  m_Radius: 4.005661
 --- !u!212 &6140255190438474284
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -115,3 +116,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   circleDamage: 20
+--- !u!95 &7621809630397992298
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6140255190438474285}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 61a98a3460a744742aeb385f7b3404db, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
