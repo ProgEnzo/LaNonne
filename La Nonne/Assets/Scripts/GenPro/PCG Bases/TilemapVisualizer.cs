@@ -145,13 +145,13 @@ public class TilemapVisualizer : MonoBehaviour
     
     public List<Vector2Int> GetFloors(int middleX, int middleY)
     {
-        int count = 55;
+        int count = 40; //55
         
         List<Vector2Int> tileReturn = new ();
 
-        for (int i = 0; i < count; i+=3)
+        for (int i = 0; i < count; i+=2) //3
         {
-            for (int j = 0; j < count; j+=3)
+            for (int j = 0; j < count; j+=2) //3
             {
                 var cellX = middleX - count / 2 + i;
                 var cellY = middleY - count / 2 + j;
