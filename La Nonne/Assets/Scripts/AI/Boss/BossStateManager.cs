@@ -218,7 +218,7 @@ namespace AI.Boss
             
             bossSpriteRenderers = bossPuppet.GetComponentsInChildren<SpriteRenderer>(true).ToList();
             
-            currentState = attackCircleState; //starting state for the boss state machine
+            currentState = startingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
         }
 
@@ -990,6 +990,8 @@ namespace AI.Boss
             {
                 bossPuppet.transform.localScale = player.transform.position.x > transform.position.x ? new Vector3(MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z) : new Vector3(-MathF.Abs(puppetLocalScale.x), puppetLocalScale.y, puppetLocalScale.z);
             }
+            bossBoxCollider.offset = new Vector2(MathF.Sign(bossPuppet.transform.localScale.x) * MathF.Abs(bossBoxCollider.offset.x), bossBoxCollider.offset.y);
+            bossCapsuleCollider.offset = new Vector2(MathF.Sign(bossPuppet.transform.localScale.x) * MathF.Abs(bossCapsuleCollider.offset.x), bossCapsuleCollider.offset.y);
         }
 
         #endregion
