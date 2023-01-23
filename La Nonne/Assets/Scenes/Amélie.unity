@@ -9258,6 +9258,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1669623905516271494, guid: 7bd99d608272a5d4ea19c2f784dfa891, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1669623906251750956, guid: 7bd99d608272a5d4ea19c2f784dfa891, type: 3}
       propertyPath: m_RootOrder
       value: 22
@@ -9305,6 +9309,10 @@ PrefabInstance:
     - target: {fileID: 1669623906251750959, guid: 7bd99d608272a5d4ea19c2f784dfa891, type: 3}
       propertyPath: m_Name
       value: Slash_Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669623906881432966, guid: 7bd99d608272a5d4ea19c2f784dfa891, type: 3}
+      propertyPath: VelocityModule.enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bd99d608272a5d4ea19c2f784dfa891, type: 3}

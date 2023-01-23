@@ -314,9 +314,9 @@ namespace GenPro.Rooms.Generator
         {
             foreach (var pos in floorPos)
             {
-                if (Random.Range(0, 100) < 45)
+                if (Random.Range(0, 100) < 40) //55
                 {
-                    Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity);
+                    Instantiate(floorCusto[Random.Range(0, floorCusto.Count)], new Vector3(pos.x + 0.5f, pos.y, 0), Quaternion.identity);
                 }
             }
         }
