@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using AI.So;
 using Pathfinding;
 using UnityEngine;
@@ -17,6 +18,8 @@ namespace AI.Elite
         private AIPath aiPath;
         private SoAutophagic soAutophagic;
         [SerializeField] private Image epSprite;
+        [SerializeField] private GameObject eatingHimselfVFX;
+
 
         [Header("SoundEffect")]
         public AudioSource autophageAudioSource;
@@ -100,9 +103,13 @@ namespace AI.Elite
             currentHealth -= (int)(soAutophagic.maxHealth * soAutophagic.autoDamagePart);
             autophageAudioSource.PlayOneShot(autophageEatingAudioClip[Random.Range(0, autophageEatingAudioClip.Length)]);
             
+            var dropletBloodObject = Instantiate(eatingHimselfVFX, new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z), Quaternion.identity);
+            dropletBloodObject.GetComponent<ParticleSystem>().Play();
+            Destroy(dropletBloodObject, 2f);
+            
             EnemyDeath();
         }
-        
+
         protected override void EnemyDeath()
         {
             if (currentHealth <= 0 && !isDead)
