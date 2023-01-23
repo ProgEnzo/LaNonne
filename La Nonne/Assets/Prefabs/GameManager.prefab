@@ -3598,7 +3598,6 @@ GameObject:
   - component: {fileID: 6466677163502996521}
   - component: {fileID: 8510578983025806950}
   - component: {fileID: 8766073958071307719}
-  - component: {fileID: 8534353583950134170}
   - component: {fileID: 725024582}
   m_Layer: 0
   m_Name: GameManager
@@ -3668,11 +3667,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee040d66388c0364ca0b89ef143b5556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  epCount: {fileID: 0}
   mainCursorTexture: {fileID: 2800000, guid: 54d3f6440cb1a96409cc972a788d0abf, type: 3}
   gameOverCursorTexture: {fileID: 2800000, guid: 20063eb80c3c58d4ca0cb656bd08fdda, type: 3}
-  inGameUI: {fileID: 0}
-  gameOverMenu: {fileID: 0}
+  detailedScoreMenuTextsGameObject: {fileID: 235752324279919952}
+  epCount: {fileID: 0}
+  globalScoreText: {fileID: 1750444886253724072}
+  detailedScoreMenuMainTexts:
+  - 'Purified enemy score: '
+  - 'Zealous Blade hit score: '
+  - 'Inquisitorial Chain hit score: '
+  - 'Revealing Dash blade hit score: '
+  - 'Collected pure energy score: '
+  - 'Bought item score: '
+  - 'Taken damage score: '
 --- !u!114 &3958210052896844946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3762,18 +3769,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialoguesSo: {fileID: 11400000, guid: 11db0e156637bd94f90a777f555d21a8, type: 2}
---- !u!114 &8534353583950134170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3786407124578739001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee5a3a0b38270ef49ba5e6b97050679e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &725024582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4251,6 +4246,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1374838898241193768, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1374838898241193768, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1843510505906400980, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
       propertyPath: m_fontColor.b
       value: 0.7729024
@@ -4363,6 +4366,18 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4291111121
       objectReference: {fileID: 0}
+    - target: {fileID: 5730500718314537709, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5730500718314537709, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5730500718314537709, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6089267493145843687, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
       propertyPath: m_fontColor.b
       value: 0.7729024
@@ -4458,6 +4473,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1242916246131896129, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
   m_PrefabInstance: {fileID: 1242916246330169327}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &235752324279919952 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1331436841387111103, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+  m_PrefabInstance: {fileID: 1242916246330169327}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1242916246656887698 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 328858749, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
@@ -4472,6 +4492,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 277514f6edd90e94da4bb3ac15556cfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1750444886253724072 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 681571745309603399, guid: 7585a6763a68ea44ea9ced11a09616c6, type: 3}
+  m_PrefabInstance: {fileID: 1242916246330169327}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5461254993286052361 stripped

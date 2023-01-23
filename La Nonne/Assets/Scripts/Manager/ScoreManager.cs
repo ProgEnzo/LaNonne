@@ -111,5 +111,20 @@ namespace Manager
                 score = 0;
             }
         }
+
+        internal int ScoreSwitch(int scoreIndex)
+        {
+            return scoreIndex switch
+            {
+                0 => killedEnemyScore,
+                1 => bladeHitScore,
+                2 => chainBladeHitScore,
+                3 => revealingDashBladeHitScore,
+                4 => epScore,
+                5 => boughtItemScore,
+                6 => takenHitScore,
+                _ => score
+            };
+        }
     }
 }

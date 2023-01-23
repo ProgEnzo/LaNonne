@@ -1,42 +1,52 @@
-using System;
-using System.IO;
-using Core.Scripts.Utils;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using File = System.IO.File;
 
 namespace Manager
 {
-    public class SaveManager : MonoSingleton<SaveManager>
+    public static class SaveManager
     {
-        internal new static SaveManager instance;
-
-        private void Awake()
+        internal static void SaveData(List<int> data, int newData)
         {
-            if (instance != null)
+            if (data != null)
             {
-                DestroyImmediate(gameObject);
+                for (var i = 0; i < data.Count; i++)
+                {
+                    if (newData > data[i])
+                    {
+                        data.Insert(i, newData);
+                        break;
+                    }
+
+                    if (i == data.Count - 1)
+                    {
+                        data.Add(newData);
+                    }
+                }
+
+                if (data.Count > 5)
+                {
+                    data.RemoveAt(5);
+                }
             }
             else
             {
-                instance = this;
+                data = new List<int> {newData};
+                for (var i = 0; i < 4; i++)
+                {
+                    data.Add(0);
+                }
             }
 
-            LoadData();
-            SaveData();
+            File.WriteAllLines(Application.dataPath + "/data.txt", data.ConvertAll(x => x.ToString()));
         }
         
-        private void SaveData()
+        internal static List<int> LoadData()
         {
-            File.WriteAllText(Application.dataPath + "/data.txt", "Hello World");
-        }
-        
-        private void LoadData()
-        {
-            if (File.Exists(Application.dataPath + "/data.txt"))
-            {
-                var data = File.ReadAllText(Application.dataPath + "/data.txt");
-                Debug.Log(data);
-            }
+            return File.Exists(Application.dataPath + "/data.txt") ? 
+                File.ReadAllLines(Application.dataPath + "/data.txt").ToList().Select(int.Parse).ToList() : 
+                null;
         }
     }
 }

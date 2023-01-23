@@ -1,31 +1,42 @@
 using System.Collections;
-using System.IO;
+using System.Collections.Generic;
 using Controller;
 using Core.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace Manager
 {
     public class UIManager : MonoSingleton<UIManager>
     {
+        [Header("Instance")]
         internal new static UIManager instance;
     
-        [SerializeField] private TMP_Text epCount;
+        [Header("Cursor textures")]
         [SerializeField] private Texture2D mainCursorTexture;
         [SerializeField] private Texture2D gameOverCursorTexture;
         
+        [Header("Script references")]
         private InputManager inputManager;
+        private ScoreManager scoreManager;
         private PlayerController playerController;
         private ChainBlade chainBlade;
         
-        [Header("Map & MiniMap")] 
-        public GameObject inGameUI;
+        [Header("Menus")]
+        private GameObject inGameUI;
+        private static GameObject _settingsMenu;
+        private GameObject gameOverMenu;
+        [SerializeField] private GameObject detailedScoreMenuTextsGameObject;
 
-        public static GameObject settingsMenu;
-        public GameObject gameOverMenu;
+        [Header("Texts")]
+        [SerializeField] private TMP_Text epCount;
+        [SerializeField] private TMP_Text globalScoreText;
+        private readonly List<TMP_Text> detailedScoreMenuTexts = new();
+        [SerializeField] private List<string> detailedScoreMenuMainTexts = new();
         
+        [Header("Booleans")]
         internal static bool isGamePausedStatic;
         internal bool isGamePaused;
         internal bool isShopOpened;
@@ -60,15 +71,19 @@ namespace Manager
             gameOverMenu = GameObject.Find("GameOverScreen");
         
             inputManager = InputManager.instance;
+            scoreManager = ScoreManager.instance;
             epCount = GameObject.Find("EP").transform.GetChild(0).GetComponent<TMP_Text>();
 
             GameObject.Find("PauseMenu");
-            settingsMenu = GameObject.Find("OptionsMenu");
-        
-            epCount.text = "EP COUNT : " + 0;
+            _settingsMenu = GameObject.Find("OptionsMenu");
+
+            for (var i = 1; i < detailedScoreMenuTextsGameObject.transform.childCount; i++)
+            { 
+                detailedScoreMenuTexts.Add(detailedScoreMenuTextsGameObject.transform.GetChild(i).GetComponent<TMP_Text>());
+            }
         
             gameOverMenu.SetActive(false);
-            settingsMenu.SetActive(false);
+            _settingsMenu.SetActive(false);
 
             StartCoroutine(WaitForPlayer());
         }
@@ -143,6 +158,10 @@ namespace Manager
             gameOverMenu.SetActive(true);
             isGameOver = true;
             
+            //Detailed score
+            PrintDetailedScore();
+            SaveManager.SaveData(SaveManager.LoadData(), scoreManager.ScoreSwitch(-1));
+
             //Cursor
             Cursor.SetCursor(gameOverCursorTexture, Vector2.zero, CursorMode.Auto);
             
@@ -182,12 +201,22 @@ namespace Manager
         
         public static void OptionsMenu()
         {
-            settingsMenu.SetActive(true);
+            _settingsMenu.SetActive(true);
         }
         
         internal bool IsAnyMenuOpened()
         {
             return isGamePaused || isGameOver || isShopOpened || isWhipMenuOpened || isVictory;
+        }
+
+        private void PrintDetailedScore()
+        {
+            globalScoreText.text = scoreManager.ScoreSwitch(-1).ToString();
+            
+            for (var i = 0; i < detailedScoreMenuTexts.Count; i++)
+            {
+                detailedScoreMenuTexts[i].text = detailedScoreMenuMainTexts[i] + scoreManager.ScoreSwitch(i);
+            }
         }
     }
 }
