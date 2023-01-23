@@ -11,7 +11,9 @@ namespace Manager
         {
             if (data != null)
             {
-                for (var i = 0; i < data.Count; i++)
+                var count = data.Count;
+                
+                for (var i = 0; i < count; i++)
                 {
                     if (newData > data[i])
                     {
@@ -19,13 +21,13 @@ namespace Manager
                         break;
                     }
 
-                    if (i == data.Count - 1)
+                    if (i == count - 1)
                     {
                         data.Add(newData);
                     }
                 }
 
-                if (data.Count > 5)
+                if (count > 5)
                 {
                     data.RemoveAt(5);
                 }

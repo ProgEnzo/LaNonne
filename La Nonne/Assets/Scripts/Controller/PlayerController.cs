@@ -177,7 +177,7 @@ namespace Controller
             isRevealingDashHitting = false;
             isRevealingDashOn = false;
             isRevealingDashFocusOn = false;
-            healthBar = GameObject.Find("HealthBar").transform.GetChild(0).GetComponent<Image>();
+            healthBar = GameObject.Find("HealthBar").transform.GetChild(1).GetComponent<Image>();
             healthBar.fillAmount = 1f;
             revealingDashCooldownBar = GameObject.Find("RevealingDashCooldown").GetComponent<Image>();
             revealingDashCooldownBar.fillAmount = 1f;
