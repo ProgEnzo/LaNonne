@@ -36503,17 +36503,61 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1208985055247649745, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1242916245893635784, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_text
       value: GO to Boss
       objectReference: {fileID: 0}
+    - target: {fileID: 1242916246678157798, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: introAudioClip1
+      value: 
+      objectReference: {fileID: 8300000, guid: 42fc0ef092845234daa437938677c4fe, type: 3}
+    - target: {fileID: 1242916246678157798, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: introFinalAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 9160adba20cd3104395baa90ae36a27e, type: 3}
     - target: {fileID: 1242916246678157803, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1242916246766726795, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 16777215
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916246770769494, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 16777215
+      objectReference: {fileID: 0}
     - target: {fileID: 1242916246803028578, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_text
       value: GO to Shop
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916246899270020, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 16777215
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916247081132466, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 16777215
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916247239570071, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 9322660
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916247430897158, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 16777215
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916247460607793, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 16777215
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242916247654208552, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 16777215
       objectReference: {fileID: 0}
     - target: {fileID: 1735588838933727548, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_AnchorMax.y
@@ -36617,6 +36661,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3786407124578739007, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4019698634618356773, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
+      propertyPath: m_Value
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6825607343276823810, guid: 629cf281900ec5d48a5743df2ce683d0, type: 3}
@@ -53347,6 +53395,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2318456294535875246, guid: e51e286b93733404a80eb47f554cf73a, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318456294535875247, guid: e51e286b93733404a80eb47f554cf73a, type: 3}
+      propertyPath: ambianceAudioClip.Array.data[6]
+      value: 
+      objectReference: {fileID: 8300000, guid: 869681f6b5788604d8e7a7c16698f611, type: 3}
+    - target: {fileID: 3204274896286243283, guid: e51e286b93733404a80eb47f554cf73a, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3204274896286243283, guid: e51e286b93733404a80eb47f554cf73a, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 7354469325471790150, guid: 0df7272459f49844dacff71dc7513221, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e51e286b93733404a80eb47f554cf73a, type: 3}
 --- !u!1001 &8216473805392398252

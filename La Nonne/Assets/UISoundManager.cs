@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class UISoundManager : MonoBehaviour
@@ -14,7 +15,6 @@ public class UISoundManager : MonoBehaviour
     {
         buttonAudioSource.PlayOneShot(buttonClickAudioClip);
     }
-
     public void SoundOnHover()
     {
         buttonAudioSource.PlayOneShot(buttonHoverAudioClip);

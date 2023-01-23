@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using Random = System.Random;
 
 public class UiIntroduction : MonoBehaviour
 {
       public Animator anim;
       private bool menuOpen = false;
       public GameObject intro;
+
+      public AudioSource introAudioSource;
+      public AudioClip introAudioClip1;
+      public AudioClip introFinalAudioClip;
   
       public void Jiggle()
       {
@@ -21,5 +26,15 @@ public class UiIntroduction : MonoBehaviour
               anim.SetBool("isIntroOn", true);
               menuOpen = true;
           }
+      }
+
+      public void PlayRandomSound1()
+      {
+          introAudioSource.PlayOneShot(introAudioClip1);
+      }
+      public void LastAudioClip()
+      {
+          introAudioSource.PlayOneShot(introFinalAudioClip);
+
       }
 }
