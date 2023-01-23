@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AI;
@@ -13,6 +14,11 @@ namespace Controller
     public class Blade : MonoBehaviour
     {
         private bool isHitting;
+
+        [SerializeField] private GameObject vfxGameObject;
+        [SerializeField] private SpriteRenderer slashVfx;
+        [SerializeField] private SpriteRenderer starVfx;
+        private bool isOpaque;
         private LineRenderer lineRenderer;
         private BoxCollider2D boxCollider;
         private Quaternion finalRotation1;
@@ -38,6 +44,7 @@ namespace Controller
         [Header("SoundEffect")] 
         public AudioSource bladeAudioSource;
         public AudioClip[] bladeNoHitSound;
+        
         private void Start()
         {
             playerController = PlayerController.instance;
@@ -56,7 +63,6 @@ namespace Controller
             currentDuringComboCooldown = 0;
             currentNextComboCooldown = 0;
             hitState = 0;
-
         }
 
         private void Update()
@@ -110,6 +116,9 @@ namespace Controller
                     _ => Vector2.right
                 };
             }
+            
+            vfxGameObject.transform.localScale = new Vector3(1 * MathF.Sign(playerController.transform.localScale.x), 1, 1);
+            
             var transform1 = transform;
             transform1.rotation = Quaternion.LookRotation(Vector3.forward, facingDirection);
             GameObject enemyToAim = null;
@@ -140,55 +149,80 @@ namespace Controller
             animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, hitState);
             finalRotation1 = newRotation * Quaternion.Euler(0, 0, soController.zealousBladeHitAngle / 2);
             finalRotation2 = newRotation * Quaternion.Euler(0, 0, -soController.zealousBladeHitAngle / 2);
-            lineRenderer.enabled = true;
+            // lineRenderer.enabled = true;
             boxCollider.enabled = true;
             isHitting = true;
 
             transform1.rotation = hitState % 2 == 1 ? finalRotation2 : finalRotation1;
+            // slashVfx.transform.rotation = hitState % 2 == 1 ? Quaternion.Euler(0f, 0f, soController.zealousBladeHitAngle * 0.05f) : Quaternion.Euler(0f, 0f, -soController.zealousBladeHitAngle * 0.05f);
         }
 
         private void ZealousBlade()
         {
             if (isHitting)
             {
+                var slashVfxColor = slashVfx.color;
+                var starVfxColor = starVfx.color;
+                slashVfx.color = isOpaque ? 
+                    new Color(slashVfxColor.r, slashVfxColor.g, slashVfxColor.b, Mathf.Lerp(slashVfxColor.a, 0, 0.8f)) : 
+                    new Color(slashVfxColor.r, slashVfxColor.g, slashVfxColor.b, Mathf.Lerp(slashVfxColor.a, 1, 0.8f));
+                starVfx.color = isOpaque ? 
+                    new Color(starVfxColor.r, starVfxColor.g, starVfxColor.b, Mathf.Lerp(starVfxColor.a, 0, 0.8f)) : 
+                    new Color(starVfxColor.r, starVfxColor.g, starVfxColor.b, Mathf.Lerp(starVfxColor.a, 1, 0.8f));
+                if (slashVfxColor.a >= 0.99f)
+                {
+                    isOpaque = true;
+                }
+                
                 if (hitState % 2 == 1)
                 {
                     transform.rotation = playerController.isRevealingDashFocusOn ?
-                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor * 3) : Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor);
+                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor * 3) : 
+                        Quaternion.RotateTowards(transform.rotation, finalRotation1, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor);
+                    
+                    // slashVfx.transform.localRotation = playerController.isRevealingDashFocusOn ?
+                    //     Quaternion.RotateTowards(finalRotation1, transform.rotation, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor * 3 * 0.001f) : 
+                    //     Quaternion.RotateTowards(finalRotation1, transform.rotation, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor * 0.001f);
+
                     if (transform.rotation.eulerAngles.z < finalRotation1.eulerAngles.z + soController.zealousBladeToleranceAngle &&
                         transform.rotation.eulerAngles.z > finalRotation1.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {
-                        isHitting = false;
-                        lineRenderer.enabled = false;
-                        boxCollider.enabled = false;
-                        animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 0);
-                        if (hitState == soController.zealousBladeMaxHitState)
-                        {
-                            currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
-                            hitState = 0;
-                            camManager.DezoomDuringCombo(hitState);
-                        }
+                        ZealousBladeEnd();
                     }
                 }
                 else
                 {
                     transform.rotation = playerController.isRevealingDashFocusOn ?
-                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor * 3) : Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor);
+                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor * 3) : 
+                        Quaternion.RotateTowards(transform.rotation, finalRotation2, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor);
+                    
+                    // slashVfx.transform.localRotation = playerController.isRevealingDashFocusOn ?
+                    //     Quaternion.RotateTowards(finalRotation2, transform.rotation, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor * 3 * 0.001f) : 
+                    //     Quaternion.RotateTowards(finalRotation2, transform.rotation, soController.zealousBladeHitSpeed * Time.unscaledDeltaTime * playerController.currentSlowMoPlayerAttackSpeedFactor * 0.001f);
+                    
                     if (transform.rotation.eulerAngles.z < finalRotation2.eulerAngles.z + soController.zealousBladeToleranceAngle &&
                         transform.rotation.eulerAngles.z > finalRotation2.eulerAngles.z - soController.zealousBladeToleranceAngle)
                     {
-                        isHitting = false;
-                        lineRenderer.enabled = false;
-                        boxCollider.enabled = false;
-                        animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab, ref playerController.currentAnimPrefabAnimator, AttackState, 0);
-                        if (hitState == soController.zealousBladeMaxHitState)
-                        {
-                            currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
-                            hitState = 0;
-                            camManager.DezoomDuringCombo(hitState);
-                        }
+                        ZealousBladeEnd();
                     }
                 }
+            }
+        }
+
+        private void ZealousBladeEnd()
+        {
+            isHitting = false;
+            // lineRenderer.enabled = false;
+            boxCollider.enabled = false;
+            isOpaque = false;
+            slashVfx.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            animationManager.AnimationControllerPlayer(playerController.animPrefabs, ref playerController.currentAnimPrefab,
+                ref playerController.currentAnimPrefabAnimator, AttackState, 0);
+            if (hitState == soController.zealousBladeMaxHitState)
+            {
+                currentNextComboCooldown = soController.zealousBladeMaxNextComboCooldown;
+                hitState = 0;
+                camManager.DezoomDuringCombo(hitState);
             }
         }
 
