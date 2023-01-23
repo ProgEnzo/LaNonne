@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace AI.Elite
 {
-    public class PyromaniacProjectile : MonoBehaviour
+    public class  PyromaniacProjectile : MonoBehaviour
     {
         private float explosionRadius;
         private float tolerance;
@@ -26,9 +26,15 @@ namespace AI.Elite
 
         private void OnEnable()
         {
+            //PLAY PARTICULE LANCER DE FLAMME
             GetComponent<SpriteRenderer>().enabled = true; //On réactive le sprite du projectile
+            
+            //RECUPERER LE PARTICULE SYSTEM D'EXPLOSION
             circleGameObject = transform.GetChild(0).gameObject; //Initialisation de l'accès au cercle
+            
+            //STOP PARTICULE EXPLOSION
             circleGameObject.SetActive(false); //On le désactive pour le moment
+            
             explosionRadius = soPyromaniac.explosionRadiusIndicator / 2; //On divise par 2 car le cercle est trop grand
             tolerance = soPyromaniac.explosionTolerance;
         }
