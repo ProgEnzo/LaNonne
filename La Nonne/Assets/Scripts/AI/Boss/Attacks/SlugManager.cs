@@ -57,6 +57,8 @@ namespace AI.Boss.Attacks
             for (var i = 0; i < numberOfBullets; i++)
             {
                 var slugBulletObject = Instantiate(slugBullet, transform.position, Quaternion.identity); //spawn slugBullet
+                slugBulletObject.transform.DORotateQuaternion(Quaternion.FromToRotation(Vector3.right, slugBulletObject.transform.position - transform.position), 0f); //Rotate slugBullet to the slug
+                
                 slugBulletObject.transform.localScale += localScaleProj - new Vector3(bulletMassReduction, bulletMassReduction, 0); //reduction masse bullet
             
                 var direction = player.transform.position - transform.position;

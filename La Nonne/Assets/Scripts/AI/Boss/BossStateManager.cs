@@ -41,6 +41,7 @@ namespace AI.Boss
         [SerializeField] private CapsuleCollider2D bossCapsuleCollider;
         [SerializeField] private CapsuleCollider2D chrysalisCapsuleCollider;
         [SerializeField] private Animator animator;
+        [SerializeField] private Animator animatorChrysalide;
         [SerializeField] private AnimationClip throwAnimation;
         [SerializeField] private AnimationClip vacuumAnimation;
         [SerializeField] private AnimationClip rootingAnimation;
@@ -174,7 +175,7 @@ namespace AI.Boss
             aiDestinationSetter.target = PlayerController.instance.transform;
             shockwaveGameObject = GameObject.Find("Shockwave");
             
-            currentState = startingState; //starting state for the boss state machine
+            currentState = dashingState; //starting state for the boss state machine
             currentState.EnterState(this); //"this" is this Monobehavior script
             
             if (GameObject.Find("RoomContentGenerator") != null)
@@ -737,6 +738,7 @@ namespace AI.Boss
             bossCapsuleCollider.enabled = true;
             chrysalisCapsuleCollider.enabled = false;
             rb.bodyType = RigidbodyType2D.Dynamic;
+            animatorChrysalide.SetBool("isDone", true); //chrysalide explose
         
             //CODE FOR THE EXPLOSION AFTER THE TRANSITION HERE
             shockwaveGameObject.transform.DOScale(new Vector2(10f, 10f), 1f);
