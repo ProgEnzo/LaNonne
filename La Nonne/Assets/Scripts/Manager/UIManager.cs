@@ -5,7 +5,6 @@ using Core.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 namespace Manager
 {
@@ -22,7 +21,6 @@ namespace Manager
         private InputManager inputManager;
         private ScoreManager scoreManager;
         private PlayerController playerController;
-        private ChainBlade chainBlade;
         
         [Header("Menus")]
         private GameObject inGameUI;
@@ -59,7 +57,6 @@ namespace Manager
             //Cursor
             Cursor.SetCursor(mainCursorTexture, Vector2.zero, CursorMode.Auto);
             Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = false;
         }
 
         private void Start()
@@ -91,12 +88,6 @@ namespace Manager
 
         private void Update()
         {
-            //Cursor
-            if (chainBlade != null)
-            {
-                Cursor.visible = chainBlade.isWarningOn || IsAnyMenuOpened();
-            }
-            
             PauseMenuInput();
             isGamePaused = isGamePausedStatic;
             
@@ -197,7 +188,6 @@ namespace Manager
             bool Test() => PlayerController.instance == null;
             yield return new WaitWhile(Test);
             playerController = PlayerController.instance;
-            chainBlade = playerController.chainBlade;
         }
         
         public static void OptionsMenu()

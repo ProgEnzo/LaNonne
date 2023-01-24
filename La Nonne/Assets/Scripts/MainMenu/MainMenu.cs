@@ -14,7 +14,6 @@ namespace MainMenu
          //Cursor
          Cursor.SetCursor(mainCursorTexture, Vector2.zero, CursorMode.Auto);
          Cursor.lockState = CursorLockMode.Confined;
-         Cursor.visible = true;
       }
 
       private void Start()
