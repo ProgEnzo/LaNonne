@@ -4,9 +4,9 @@ using UnityEngine.Events;
 public class MapRunTimeGenerator : MonoBehaviour
 {
     public UnityEvent OnStart;
-    void Start()
+
+    private void Start()
     {
         OnStart?.Invoke();
-        Debug.Log("ca fonctionne ?");
     }
 }

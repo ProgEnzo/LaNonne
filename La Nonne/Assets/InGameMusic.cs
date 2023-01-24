@@ -61,7 +61,6 @@ public class InGameMusic : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         ambianceAudioSource.PlayOneShot(ambianceAudioClip[UnityEngine.Random.Range(0, ambianceAudioClip.Length)]);
-        Debug.Log(ambianceAudioClip);
         yield return new WaitForSeconds(ambianceAudioClip.Length);
 
         StartCoroutine(RandomAmbianceSound());

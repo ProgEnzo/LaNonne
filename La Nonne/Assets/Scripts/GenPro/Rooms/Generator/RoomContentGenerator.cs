@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Manager;
 using Pathfinding;
 using UnityEngine;
 using Progress = Pathfinding.Progress;
@@ -68,10 +68,12 @@ namespace GenPro.Rooms.Generator
             LoadingScreen.instance.HideLoadingScreen();
 
             yield return null;
-            //Time.timeScale = 0;
+            Time.timeScale = 0;
+            UIManager.instance.isCinematicOn = true;
             uiIntroduction.OpenMenu();
-            //yield return new WaitForSeconds(5f);
-            //Time.timeScale = 1;
+            yield return new WaitForSecondsRealtime(animation.length);
+            UIManager.instance.isCinematicOn = false;
+            Time.timeScale = 1;
         }
 
         private IEnumerator DoScan(int size)

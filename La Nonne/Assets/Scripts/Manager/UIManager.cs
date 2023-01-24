@@ -42,6 +42,7 @@ namespace Manager
         internal bool isWhipMenuOpened;
         private bool isGameOver;
         internal bool isVictory;
+        internal bool isCinematicOn;
 
         private void Awake()
         {
@@ -198,7 +199,7 @@ namespace Manager
         
         internal bool IsAnyMenuOpened()
         {
-            return isGamePaused || isGameOver || isShopOpened || isWhipMenuOpened || isVictory;
+            return isGamePaused || isGameOver || isShopOpened || isWhipMenuOpened || isVictory || isCinematicOn;
         }
 
         private void PrintDetailedScore()
