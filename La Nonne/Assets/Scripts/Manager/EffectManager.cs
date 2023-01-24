@@ -123,21 +123,25 @@ namespace Shop
                 case "Enemy":
                     var enemyController = enemy.GetComponent<EnemyController>();
                     yield return new WaitForSeconds(bleedSo.cooldown);
+                    if (enemyController == null) yield break;
                     while (enemyController.stacks[stackIndex].effect == Effect.Bleed)
                     {
                         enemyController.TakeDamageFromPlayer(bleedSo.damage);
                         EffectVFXManager(enemyController, Effect.Bleed, false);
                         yield return new WaitForSeconds(bleedSo.cooldown);
+                        if (enemyController == null) yield break;
                     }
                     enemyController.areStacksOn[stackIndex] = false;
                     break;
                 case "Boss":
                     var bossController = enemy.GetComponent<BossStateManager>();
                     yield return new WaitForSeconds(bleedSo.cooldown);
+                    if (bossController == null) yield break;
                     while (bossController.stacks[stackIndex].effect == Effect.Bleed)
                     {
                         bossController.TakeDamageOnBossFromPlayer(bleedSo.damage);
                         yield return new WaitForSeconds(bleedSo.cooldown);
+                        if (bossController == null) yield break;
                     }
                     bossController.areStacksOn[stackIndex] = false;
                     break;
@@ -156,6 +160,7 @@ namespace Shop
                     EffectVFXManager(enemyController, Effect.Chill, false);
                     bool ConditionEnemy() => enemyController.stacks[stackIndex].effect != Effect.Chill;
                     yield return new WaitUntil(ConditionEnemy);
+                    if (enemyController == null) yield break;
                     enemyController.currentAiPathSpeed /= chillSo.rateOfBasicSpeed;
                     enemyController.currentVelocitySpeed /= chillSo.rateOfBasicSpeed;
                     EffectVFXManager(enemyController, Effect.Chill, false, false);
@@ -167,6 +172,7 @@ namespace Shop
                     bossController.currentVelocitySpeed *= chillSo.rateOfBasicSpeed;
                     bool ConditionBoss() => bossController.stacks[stackIndex].effect != Effect.Chill;
                     yield return new WaitUntil(ConditionBoss);
+                    if (bossController == null) yield break;
                     bossController.currentAiPathSpeed /= chillSo.rateOfBasicSpeed;
                     bossController.currentVelocitySpeed /= chillSo.rateOfBasicSpeed;
                     bossController.areStacksOn[stackIndex] = false;
@@ -184,6 +190,7 @@ namespace Shop
                     enemyController.currentDamageMultiplier *= targetSo.rateOfDamage;
                     bool ConditionEnemy() => enemyController.stacks[stackIndex].effect != Effect.Target;
                     yield return new WaitUntil(ConditionEnemy);
+                    if (enemyController == null) yield break;
                     enemyController.currentDamageMultiplier /= targetSo.rateOfDamage;
                     enemyController.areStacksOn[stackIndex] = false;
                     break;
@@ -192,6 +199,7 @@ namespace Shop
                     bossController.currentDamageMultiplier *= targetSo.rateOfDamage;
                     bool ConditionBoss() => bossController.stacks[stackIndex].effect != Effect.Target;
                     yield return new WaitUntil(ConditionBoss);
+                    if (bossController == null) yield break;
                     bossController.currentDamageMultiplier /= targetSo.rateOfDamage;
                     bossController.areStacksOn[stackIndex] = false;
                     break;
