@@ -35,6 +35,9 @@ public class UiAnimVictory : MonoSingleton<UiAnimVictory>
             UIManager.instance.isVictory = true;
             anim.SetBool("isWin", true);
             menuOpen = true;
+            
+            UIManager.instance.PrintDetailedScore();
+            SaveManager.SaveData(SaveManager.LoadData(), ScoreManager.instance.ScoreSwitch(-1));
         }
     }
 }

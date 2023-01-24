@@ -203,7 +203,7 @@ namespace Manager
             return isGamePaused || isGameOver || isShopOpened || isWhipMenuOpened || isVictory || isCinematicOn;
         }
 
-        private void PrintDetailedScore()
+        internal void PrintDetailedScore()
         {
             globalScoreText.text = scoreManager.ScoreSwitch(-1).ToString();
             
