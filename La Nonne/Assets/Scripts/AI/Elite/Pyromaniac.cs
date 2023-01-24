@@ -284,16 +284,15 @@ namespace AI.Elite
 
         private void OnDrawGizmos()
         {
-            // if (Application.isPlaying) return;
-            // var position = transform.position;
-            // Gizmos.DrawWireSphere(position, soPyromaniac.detectionRadius);
-            // Gizmos.DrawWireSphere(position, soPyromaniac.throwRadius);
-            // if (canBoxCast)
-            // {
-            //     Gizmos.DrawWireSphere(boxCastOrigin, transform.localScale.x * 0.5f);
-            //     Gizmos.DrawWireSphere(boxCastOrigin + (boxCastDestination - boxCastOrigin).normalized * currentFireTrailMaxLength, transform.localScale.x * 0.5f);
-            // }
-            Gizmos.DrawWireSphere(transform.position, soPyromaniac.explosionRadius*2.6f);
+            if (Application.isPlaying) return;
+            var position = transform.position;
+            Gizmos.DrawWireSphere(position, soPyromaniac.detectionRadius);
+            Gizmos.DrawWireSphere(position, soPyromaniac.throwRadius);
+            if (canBoxCast)
+            {
+                Gizmos.DrawWireSphere(boxCastOrigin, transform.localScale.x * 0.5f);
+                Gizmos.DrawWireSphere(boxCastOrigin + (boxCastDestination - boxCastOrigin).normalized * currentFireTrailMaxLength, transform.localScale.x * 0.5f);
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D other)

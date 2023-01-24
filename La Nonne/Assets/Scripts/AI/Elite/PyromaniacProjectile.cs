@@ -16,6 +16,7 @@ namespace AI.Elite
         private float explosionRadius;
         private float tolerance;
         internal Vector3 destination;
+        [SerializeField] private ParticleSystem throwVFX;
         [SerializeField] private ParticleSystem explosionVFX;
         internal bool isExploded;
         internal Coroutine currentCoroutine;
@@ -30,7 +31,7 @@ namespace AI.Elite
         private void OnEnable()
         {
             //PLAY PARTICULE LANCER DE FLAMME
-            GetComponent<SpriteRenderer>().enabled = true; //On réactive le sprite du projectile
+            throwVFX.Play(); //On réactive le sprite du projectile
 
             //STOP PARTICULE EXPLOSION
             explosionVFX.Stop();
@@ -84,7 +85,7 @@ namespace AI.Elite
                 }
 
                 yield return new WaitForSeconds(0.1f);
-                GetComponent<SpriteRenderer>().enabled = false; //On désactive le sprite du projectile
+                throwVFX.Stop(); //On désactive le sprite du projectile
                 yield return new WaitForSeconds(soPyromaniac.fireCooldown);
                 currentCoroutine = null;
             }
@@ -107,12 +108,6 @@ namespace AI.Elite
             yield return new WaitForSeconds(0.1f);
             yield return new WaitForSeconds(soPyromaniac.fireCooldown);
             currentCoroutine = null;
-        }
-
-        private void OnDrawGizmos()
-        {
-            var transform1 = transform;
-            Gizmos.DrawWireSphere(transform1.position, explosionRadius*transform1.parent.localScale.x*transform1.localScale.x * 1.8f);
         }
     }
 }
