@@ -64,10 +64,10 @@ namespace GenPro.Rooms.Generator
         {
             yield return null;
             StartCoroutine(DoScan(0));
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1f);
             LoadingScreen.instance.HideLoadingScreen();
 
-            yield return null;
+            //yield return null;
             Time.timeScale = 0;
             UIManager.instance.isCinematicOn = true;
             uiIntroduction.OpenMenu();
