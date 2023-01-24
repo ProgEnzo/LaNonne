@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: Pyromaniac
   m_EditorClassIdentifier: 
   maxHealth: 200
-  bodyDamage: 20
+  bodyDamage: 10
   aiPathBasicSpeed: 4
   velocityBasicSpeed: 10
   numberOfEp: 20
   scorePoint: 280
-  detectionRadius: 4.5
+  detectionRadius: 1.5
   throwRadius: 2.5
   projectileSpeed: 3
   fireTrailTolerance: 0.5
   fireTrailDisappearanceSpeed: 30
   explosionRadius: 0.35
-  fireCooldown: 1
+  fireCooldown: 2
   explosionTolerance: 0.1
   explosionRadiusIndicator: 5
-  knockBackPower: 0.2
+  knockBackPower: 15
