@@ -209,6 +209,7 @@ namespace Shop
                     EffectVFXManager(enemyController, Effect.Wealth, false);
                     bool ConditionEnemy() => enemyController.stacks[stackIndex].effect != Effect.Wealth;
                     yield return new WaitUntil(ConditionEnemy);
+                    if (enemyController == null) yield break;
                     enemyController.currentEpDropMultiplier /= wealthSo.epDropRate;
                     EffectVFXManager(enemyController, Effect.Wealth, false, false);
                     enemyController.areStacksOn[stackIndex] = false;

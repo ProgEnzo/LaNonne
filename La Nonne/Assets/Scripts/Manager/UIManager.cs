@@ -102,7 +102,7 @@ namespace Manager
 
         private void PauseMenuInput()
         {
-            if (Input.GetKeyDown(inputManager.pauseKey) && !isShopOpened && !isWhipMenuOpened && !isGameOver && !isSettingsOn)
+            if (Input.GetKeyDown(inputManager.pauseKey) && !isShopOpened && !isWhipMenuOpened && !isGameOver && !isSettingsOn && !isVictory && !isCinematicOn)
             {
                 isGamePausedStatic = !isGamePausedStatic;
                 PauseMenu(isGamePausedStatic);
