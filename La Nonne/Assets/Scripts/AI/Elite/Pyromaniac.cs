@@ -16,6 +16,7 @@ namespace AI.Elite
     public class Pyromaniac : EnemyController
     {
         private SoPyromaniac soPyromaniac;
+        [SerializeField] private ParticleSystem trailVFX;
         [SerializeField] private ParticleSystem explosionVFX;
         private Vector2 dashDirection;
         private float currentFireTrailMaxLength;
@@ -114,8 +115,9 @@ namespace AI.Elite
                         scriptAIPath.maxSpeed = 0f; //Le pyromane ne se déplace plus avec A*
                         scriptAIPathState = false; //Le pyromane ne se déplace plus avec A*
                         canBoxCast = false; //La zone de feu du pyromane est désactivée
-                        lineRenderer.enabled = false; //Le line renderer est désactivé
-                        
+                        // lineRenderer.enabled = false; //Le line renderer est désactivé
+                        trailVFX.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear); //Le trail de feu est désactivé
+
                         //Stop sound trail
                         pyroAudioSource.Stop();
                         
@@ -159,12 +161,12 @@ namespace AI.Elite
                 {
                     //La zone de feu est activée
                     canBoxCast = true;
-                    lineRenderer.enabled = true;
+                    // lineRenderer.enabled = true;
+                    trailVFX.Play();
                     
                     //Play sound trail
                     pyroAudioSource.clip = pyroFireTrailAudioClip[Random.Range(0, pyroFireTrailAudioClip.Length)];
                     pyroAudioSource.Play();
-
                 }
             }
             
@@ -179,7 +181,8 @@ namespace AI.Elite
                     if (currentFireTrailMaxLength <= soPyromaniac.fireTrailTolerance)
                     {
                         canBoxCast = false;
-                        lineRenderer.enabled = false;
+                        // lineRenderer.enabled = false;
+                        trailVFX.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
                         
                         //Stop sound trail
                         pyroAudioSource.Stop();
@@ -193,14 +196,14 @@ namespace AI.Elite
                 }
                 
                 var objectsInArea = new List<RaycastHit2D>();
-                Physics2D.CircleCast(boxCastOrigin, transform1.localScale.x * 0.5f, (boxCastDestination - boxCastOrigin).normalized, new ContactFilter2D(), objectsInArea, currentFireTrailMaxLength);
+                Physics2D.CircleCast(boxCastOrigin, transform1.localScale.x * 0.3f, (boxCastDestination - boxCastOrigin).normalized, new ContactFilter2D(), objectsInArea, currentFireTrailMaxLength);
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
                 {
                     currentHittingCoroutine ??= StartCoroutine(FireDamage());
                 }
                 //BoxCastDebug.DrawBoxCast2D(boxCastOrigin, Vector2.one * transform1.localScale * 2, 0f, (boxCastDestination - boxCastOrigin).normalized, currentFireTrailMaxLength, Color.magenta);
-                lineRenderer.SetPosition(0, Vector2.zero);
-                lineRenderer.SetPosition(1, (boxCastDestination - boxCastOrigin).normalized * currentFireTrailMaxLength);
+                // lineRenderer.SetPosition(0, Vector2.zero);
+                // lineRenderer.SetPosition(1, (boxCastDestination - boxCastOrigin).normalized * currentFireTrailMaxLength);
             }
         }
 
