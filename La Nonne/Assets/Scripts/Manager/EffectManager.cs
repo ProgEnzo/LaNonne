@@ -126,7 +126,7 @@ namespace Shop
                     while (enemyController.stacks[stackIndex].effect == Effect.Bleed)
                     {
                         enemyController.TakeDamageFromPlayer(bleedSo.damage);
-                        EffectVFXManager(enemy, Effect.Bleed, false);
+                        EffectVFXManager(enemyController, Effect.Bleed, false);
                         yield return new WaitForSeconds(bleedSo.cooldown);
                     }
                     enemyController.areStacksOn[stackIndex] = false;
@@ -153,12 +153,12 @@ namespace Shop
                     var enemyController = enemy.GetComponent<EnemyController>();
                     enemyController.currentAiPathSpeed *= chillSo.rateOfBasicSpeed;
                     enemyController.currentVelocitySpeed *= chillSo.rateOfBasicSpeed;
-                    EffectVFXManager(enemy, Effect.Chill, false);
+                    EffectVFXManager(enemyController, Effect.Chill, false);
                     bool ConditionEnemy() => enemyController.stacks[stackIndex].effect != Effect.Chill;
                     yield return new WaitUntil(ConditionEnemy);
                     enemyController.currentAiPathSpeed /= chillSo.rateOfBasicSpeed;
                     enemyController.currentVelocitySpeed /= chillSo.rateOfBasicSpeed;
-                    EffectVFXManager(enemy, Effect.Chill, false, false);
+                    EffectVFXManager(enemyController, Effect.Chill, false, false);
                     enemyController.areStacksOn[stackIndex] = false;
                     break;
                 case "Boss":
@@ -206,9 +206,11 @@ namespace Shop
                 case "Enemy":
                     var enemyController = enemy.GetComponent<EnemyController>();
                     enemyController.currentEpDropMultiplier *= wealthSo.epDropRate;
+                    EffectVFXManager(enemyController, Effect.Wealth, false);
                     bool ConditionEnemy() => enemyController.stacks[stackIndex].effect != Effect.Wealth;
                     yield return new WaitUntil(ConditionEnemy);
                     enemyController.currentEpDropMultiplier /= wealthSo.epDropRate;
+                    EffectVFXManager(enemyController, Effect.Wealth, false, false);
                     enemyController.areStacksOn[stackIndex] = false;
                     break;
                 /*case "Boss":
@@ -241,7 +243,7 @@ namespace Shop
                     var enemyController = enemy.GetComponent<EnemyController>();
                     enemyController.currentAiPathSpeed = 0;
                     enemyController.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
-                    EffectVFXManager(enemy, Effect.Chill, true);
+                    EffectVFXManager(enemyController, Effect.Chill, true);
                     yield return new WaitForSeconds(chillSo.freezeTime * multiplier);
                     if (currentFreezeCoroutineOnEnemies[enemy] == 0)
                     {
@@ -307,14 +309,14 @@ namespace Shop
 
         #region VFX
 
-        private static void EffectVFXManager(GameObject enemy, Effect effect, bool isSuperEffect, bool value = true)
+        private static void EffectVFXManager(EnemyController enemy, Effect effect, bool isSuperEffect, bool value = true)
         {
             switch (effect)
             {
                 case Effect.Bleed:
                     if (!isSuperEffect)
                     {
-                        enemy.GetComponent<EnemyController>().effectVFXGameObject.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+                        enemy.effectVFXGameObject.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
                     }
                     else
                     {
@@ -326,16 +328,33 @@ namespace Shop
                     {
                         if (value)
                         {
-                            enemy.GetComponent<EnemyController>().effectVFXGameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
+                            enemy.effectVFXGameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Play();
                         }
                         else
                         {
-                            enemy.GetComponent<EnemyController>().effectVFXGameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
+                            enemy.effectVFXGameObject.transform.GetChild(1).GetComponent<ParticleSystem>().Stop();
                         }
                     }
                     else
                     {
-                        enemy.GetComponent<EnemyController>().effectVFXGameObject.transform.GetChild(2).GetComponent<ParticleSystem>().Play();
+                        enemy.effectVFXGameObject.transform.GetChild(2).GetComponent<ParticleSystem>().Play();
+                    }
+                    break;
+                case Effect.Wealth:
+                    if (!isSuperEffect)
+                    {
+                        if (value)
+                        {
+                            enemy.effectVFXGameObject.transform.GetChild(3).GetComponent<ParticleSystem>().Play();
+                        }
+                        else
+                        {
+                            enemy.effectVFXGameObject.transform.GetChild(3).GetComponent<ParticleSystem>().Stop();
+                        }
+                    }
+                    else
+                    {
+                        //Missing
                     }
                     break;
             }
