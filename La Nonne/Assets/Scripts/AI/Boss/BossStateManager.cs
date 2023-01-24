@@ -290,11 +290,13 @@ namespace AI.Boss
                 currentHealth -= (int)(damage * currentDamageMultiplier);
                 hpBossBar.DOFillAmount((float)currentHealth / maxHealth, 0.1f);
                 
+                
                 //sound hit boss
                 bossAudioSource.PlayOneShot(bossHitAudioClip[Random.Range(0, bossHitAudioClip.Length)]);
 
                 currentDamageTaken += damage;
-                
+                StartCoroutine(BarHpBlinkRed());
+
             }
         
             if (currentHealth <= 0)
@@ -308,6 +310,15 @@ namespace AI.Boss
                 StopCoroutine(currentIsHitCoroutine);
             }
             currentIsHitCoroutine = StartCoroutine(BossIsHit());
+        }
+
+        private IEnumerator BarHpBlinkRed()
+        {
+            hpBossBar.color = Color.red;
+            yield return new WaitForSeconds(0.2f);
+            
+            hpBossBar.color = Color.white;
+
         }
 
         private void Die()
