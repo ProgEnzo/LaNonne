@@ -104,7 +104,7 @@ namespace Shop.UI
             CloseShop();
          }
          
-         epCountText.text = "EP : " + PlayerController.instance.currentEp;
+         epCountText.text = "x" + PlayerController.instance.currentEp;
       }
 
       private void OpenShop()
