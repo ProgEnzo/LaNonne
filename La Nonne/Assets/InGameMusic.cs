@@ -23,7 +23,7 @@ public class InGameMusic : MonoBehaviour
 
     private IEnumerator PlayAndRepeatMusic()
     {
-        yield return new WaitForSeconds(25.5f); //temps de l'intro
+        yield return new WaitForSeconds(10f); //temps de l'intro
 
         musicAudioSource.PlayOneShot(musicAudioClip);
         yield return new WaitForSeconds(musicAudioClip.length);
