@@ -1,12 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Controller;
-using DG.Tweening;
 using Manager;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TutoController : MonoBehaviour
 {
@@ -28,6 +23,7 @@ public class TutoController : MonoBehaviour
 
          uiManager = UIManager.instance;
          isTutoOpen = false;
+         uiManager.isTutoOpened = false;
       }
 
       private IEnumerator BecauseIAmReallyIrritatingSoINeedAFewTimeToWakeUp()
@@ -73,7 +69,7 @@ public class TutoController : MonoBehaviour
          if (Input.GetKey(InputManager.instance.interactKey) && !uiManager.IsAnyMenuOpened() && !PlayerController.instance.isRevealingDashOn && !PlayerController.instance.chainBlade.isWarningOn)
          {
             isTutoOpen = true;
-            uiManager.isWhipMenuOpened = true;
+            uiManager.isTutoOpened = true;
             
             uiManager.DesactivateInGameUI();
             
@@ -82,17 +78,10 @@ public class TutoController : MonoBehaviour
             Time.timeScale = 0;
          }
       }
-      
-      private IEnumerator DisableIsTutoOpen()
-      {
-         yield return new WaitForSecondsRealtime(0.01f);
-         uiManager.isWhipMenuOpened = false;
-      }
 
       public void CloseTutoMenu()
       {
          isTutoOpen = false;
-         StartCoroutine(DisableIsTutoOpen());
          uiAnimTuto.CloseMenu();
          StartCoroutine(DisableTutoOpenCoroutine());
          
@@ -104,6 +93,6 @@ public class TutoController : MonoBehaviour
       private IEnumerator DisableTutoOpenCoroutine()
       {
          yield return new WaitForSecondsRealtime(tutoAnimClip.length);
-         uiManager.isWhipMenuOpened = false;
+         uiManager.isTutoOpened = false;
       }
 }

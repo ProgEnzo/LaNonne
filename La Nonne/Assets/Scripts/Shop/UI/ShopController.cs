@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Controller;
-using DG.Tweening;
 using Manager;
 using TMPro;
 using UnityEngine;
@@ -16,6 +15,7 @@ namespace Shop.UI
       [Header("References")] 
       [SerializeField] private GameObject shopObject;
       [SerializeField] private GameObject shopPanel;
+      [SerializeField] private Sprite closedShopSprite;
       public GameObject shopCanvas;
       [SerializeField] private TextMeshProUGUI epCountText;
       
@@ -181,19 +181,16 @@ namespace Shop.UI
 
          if (currentNumberOfTakenObjects > 0)
          {
-            StartCoroutine(DisableSprite());
+            DisableSprite();
          }
       }
 
-      private IEnumerator DisableSprite()
+      private void DisableSprite()
       {
          bellAudioSource.PlayOneShot(shopLeaveAudioClip);
-         shopObject.SetActive(false);
-
-         yield return new WaitForSeconds(shopLeaveAudioClip.length);
-         
-         Destroy(gameObject);
-
+         shopObject.GetComponent<SpriteRenderer>().sprite = closedShopSprite;
+         GetComponent<CircleCollider2D>().enabled = false;
+         enabled = false;
       }
 
       private void ChooseDialogue()

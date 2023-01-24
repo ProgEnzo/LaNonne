@@ -40,6 +40,7 @@ namespace Manager
         internal static bool isSettingsOn;
         internal bool isShopOpened;
         internal bool isWhipMenuOpened;
+        internal bool isTutoOpened;
         private bool isGameOver;
         internal bool isVictory;
         internal bool isCinematicOn;
@@ -102,7 +103,7 @@ namespace Manager
 
         private void PauseMenuInput()
         {
-            if (Input.GetKeyDown(inputManager.pauseKey) && !isShopOpened && !isWhipMenuOpened && !isGameOver && !isSettingsOn)
+            if (Input.GetKeyDown(inputManager.pauseKey) && !isShopOpened && !isWhipMenuOpened && !isTutoOpened && !isGameOver && !isSettingsOn && !isVictory && !isCinematicOn)
             {
                 isGamePausedStatic = !isGamePausedStatic;
                 PauseMenu(isGamePausedStatic);

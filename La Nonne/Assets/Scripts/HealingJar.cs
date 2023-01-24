@@ -21,6 +21,7 @@ public class HealingJar : MonoBehaviour
     public SpriteRenderer jarSpriteRenderer2;
     private BoxCollider2D boxCollider2D;
     private Light2D light2DScript;
+    public GameObject particleSystemLight;
     
     [Header("SoundEffect")] 
     public AudioSource jarAudioSource;
@@ -57,7 +58,7 @@ public class HealingJar : MonoBehaviour
         jarSpriteRenderer2.enabled = false;
         boxCollider2D.enabled = false;
         light2DScript.enabled = false;
-        
+        particleSystemLight.SetActive(false);
         jarAudioSource.PlayOneShot(jarSound[Random.Range(0, jarSound.Length)]);
         yield return new WaitForSeconds(1f);
         
