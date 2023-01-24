@@ -37,6 +37,7 @@ namespace AI.Boss
         private RoomContentGenerator roomContentGenerator;
         [SerializeField] private GameObject bossPuppet;
         [SerializeField] private GameObject chrysalisPuppet;
+        [SerializeField] private GameObject chrysalisExplosionPuppet;
         [SerializeField] private BoxCollider2D bossBoxCollider;
         [SerializeField] private CapsuleCollider2D bossCapsuleCollider;
         [SerializeField] private CapsuleCollider2D chrysalisCapsuleCollider;
@@ -44,6 +45,7 @@ namespace AI.Boss
         [SerializeField] private AnimationClip throwAnimation;
         [SerializeField] private AnimationClip vacuumAnimation;
         [SerializeField] private AnimationClip rootingAnimation;
+        [SerializeField] private AnimationClip chrysalisExplosionAnimation;
         private List<SpriteRenderer> bossSpriteRenderers = new();
         private Coroutine currentIsHitCoroutine;
     
@@ -442,7 +444,6 @@ namespace AI.Boss
         public void DashManager()
         {
             StartCoroutine(Dash());
-            Debug.Log($"<color=green>DASHING STATE HAS BEGUN</color>");
         }
         
         private IEnumerator Dash()
@@ -533,8 +534,6 @@ namespace AI.Boss
         {
             StartCoroutine(AttackCircle());
             SpawnEnemyFunction();
-
-            Debug.Log($"<color=green>ATTACK CIRCLE STATE HAS BEGUN</color>");
         }
     
         private IEnumerator AttackCircle()
@@ -598,7 +597,6 @@ namespace AI.Boss
         public void VacuumManager()
         {
             StartCoroutine(Vacuum());
-            Debug.Log($"<color=green>SHRINKING CIRCLE STATE HAS BEGUN</color>");
         }
     
         private IEnumerator Vacuum()
@@ -697,7 +695,6 @@ namespace AI.Boss
         public void TransitionManager()
         {
             StartCoroutine(Transition());
-            Debug.Log($"<color=orange>TRANSITION STATE HAS BEGUN</color>");
         }
 
         private IEnumerator Transition()
@@ -741,9 +738,14 @@ namespace AI.Boss
             
                 SpawnEnemyFunction();
             }
-            yield return new WaitForSeconds(transitionCooldown);
-            bossPuppet.SetActive(true);
+            yield return new WaitForSeconds(transitionCooldown - chrysalisExplosionAnimation.length);
+            
             chrysalisPuppet.SetActive(false);
+            chrysalisExplosionPuppet.SetActive(true);
+            yield return new WaitForSeconds(chrysalisExplosionAnimation.length);
+            
+            bossPuppet.SetActive(true);
+            chrysalisExplosionPuppet.SetActive(false);
             bossBoxCollider.enabled = true;
             bossCapsuleCollider.enabled = true;
             chrysalisCapsuleCollider.enabled = false;
@@ -766,7 +768,6 @@ namespace AI.Boss
         public void ToxicMineManager()
         {
             StartCoroutine(ToxicMine());
-            Debug.Log($"<color=red>TOXIC MINE STATE HAS BEGUN</color>");
         }
         
         private IEnumerator ToxicMine()
@@ -862,7 +863,6 @@ namespace AI.Boss
         public void ThrowingManager()
         {
             StartCoroutine(Throwing());
-            Debug.Log($"<color=red>THROWING STATE HAS BEGUN</color>");
         }
         
         private IEnumerator Throwing()
@@ -906,7 +906,6 @@ namespace AI.Boss
         public void BoxingManager()
         {
             StartCoroutine(Boxing());
-            Debug.Log($"<color=red>COROUTINE Boxing HAS begun</color>");
         }
 
         private IEnumerator Boxing()
