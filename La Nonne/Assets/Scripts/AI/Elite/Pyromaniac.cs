@@ -16,7 +16,7 @@ namespace AI.Elite
     public class Pyromaniac : EnemyController
     {
         private SoPyromaniac soPyromaniac;
-        [SerializeField] private GameObject circleGameObject;
+        [SerializeField] private ParticleSystem explosionVFX;
         private Vector2 dashDirection;
         private float currentFireTrailMaxLength;
         private Vector3 boxCastOrigin;
@@ -241,14 +241,12 @@ namespace AI.Elite
         
         private IEnumerator BlinkFire()
         {
-            //Render d'un coup de feu
-            var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
-            var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
-            circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle
+            //Cercle d'explosion
+            explosionVFX.Play();
             
             //Dégâts de feu
             var objectsInArea = new List<RaycastHit2D>(); //Déclaration de la liste des objets dans la zone d'explosion
-            Physics2D.CircleCast(transform.position, soPyromaniac.explosionRadius, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
+            Physics2D.CircleCast(transform.position, soPyromaniac.explosionRadius * 2.6f, Vector2.zero, new ContactFilter2D(), objectsInArea); //On récupère les objets dans la zone d'explosion
             if (objectsInArea != new List<RaycastHit2D>()) //Si la liste n'est pas vide
             {
                 foreach (var unused in objectsInArea.Where(hit => hit.collider.CompareTag("Player")))
@@ -257,17 +255,17 @@ namespace AI.Elite
                 }
             }
             
-            yield return new WaitForSeconds(0.1f);
-            circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.25f); //Transparence du cercle
             yield return new WaitForSeconds(soPyromaniac.fireCooldown);
             
-            circleGameObject.SetActive(false); //On désactive le cercle
             isImpactOn = false;
             var transform1 = transform;
             projectile.transform.position = transform1.position;
             projectile.isExploded = false;
             projectile.currentCoroutine = null;
             projectile.gameObject.SetActive(false);
+            explosionVFX.Stop();
+            
+            yield return new WaitForSeconds(1f);
             
             currentCoroutine = null;
         }
@@ -286,15 +284,16 @@ namespace AI.Elite
 
         private void OnDrawGizmos()
         {
-            if (Application.isPlaying) return;
-            var position = transform.position;
-            Gizmos.DrawWireSphere(position, soPyromaniac.detectionRadius);
-            Gizmos.DrawWireSphere(position, soPyromaniac.throwRadius);
-            if (canBoxCast)
-            {
-                Gizmos.DrawWireSphere(boxCastOrigin, transform.localScale.x * 0.5f);
-                Gizmos.DrawWireSphere(boxCastOrigin + (boxCastDestination - boxCastOrigin).normalized * currentFireTrailMaxLength, transform.localScale.x * 0.5f);
-            }
+            // if (Application.isPlaying) return;
+            // var position = transform.position;
+            // Gizmos.DrawWireSphere(position, soPyromaniac.detectionRadius);
+            // Gizmos.DrawWireSphere(position, soPyromaniac.throwRadius);
+            // if (canBoxCast)
+            // {
+            //     Gizmos.DrawWireSphere(boxCastOrigin, transform.localScale.x * 0.5f);
+            //     Gizmos.DrawWireSphere(boxCastOrigin + (boxCastDestination - boxCastOrigin).normalized * currentFireTrailMaxLength, transform.localScale.x * 0.5f);
+            // }
+            Gizmos.DrawWireSphere(transform.position, soPyromaniac.explosionRadius*2.6f);
         }
 
         private void OnCollisionEnter2D(Collision2D other)
@@ -330,13 +329,6 @@ namespace AI.Elite
                 capsuleCollider2D.enabled = true;
                 isImpactOn = true;
                 
-                //Cercle d'explosion
-                circleGameObject.SetActive(true); //On active le cercle
-                circleGameObject.transform.localScale = Vector3.one * (soPyromaniac.explosionRadius * 8); //On le met à la bonne taille
-                var circleSpriteRenderer = circleGameObject.GetComponent<SpriteRenderer>(); //Accès au sprite renderer du cercle
-                var color = circleSpriteRenderer.color; //Accès à la couleur du cercle
-                circleSpriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f); //Opacité du cercle
-
                 StartCoroutine(BlinkFire());
             }
         }
